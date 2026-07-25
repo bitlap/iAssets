@@ -688,16 +688,12 @@ class StockPortfolioPageState extends State<StockPortfolioPage>
 
   String _buildSubtitle() {
     if (_lastRefreshTime == null) {
-      return StockConfig.homeSubtitle.replaceAll('{count}', '${stocks.length}');
+      return AssetConfig.assetSubtitleRefresh.replaceAll('{time}', '-');
     }
-    final t = _lastRefreshTime!;
-    final time =
-        '${t.year}-${t.month.toString().padLeft(2, '0')}-'
-        '${t.day.toString().padLeft(2, '0')} '
-        '${t.hour.toString().padLeft(2, '0')}:'
-        '${t.minute.toString().padLeft(2, '0')}:'
-        '${t.second.toString().padLeft(2, '0')}';
-    return StockConfig.homeSubtitleRefresh.replaceAll('{time}', time);
+    return StockConfig.homeSubtitleRefresh.replaceAll(
+      '{time}',
+      formatRefreshTime(_lastRefreshTime!),
+    );
   }
 
   @override

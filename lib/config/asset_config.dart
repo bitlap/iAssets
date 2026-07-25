@@ -75,6 +75,7 @@ class AssetConfig {
 
   // 头部/卡片
   static const String assetCountLabel = '共 {count} 项资产';
+  static const String assetSubtitleRefresh = '最近更新：{time}';
   static const String depositWealthLabel = '存款理财';
   static const String createdLabel = '创建:{date}';
   static const String updatedLabel = '更新:{date}';

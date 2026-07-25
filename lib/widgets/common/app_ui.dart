@@ -125,6 +125,19 @@ class TextStyles {
 }
 
 // ═══════════════════════════════════════
+//  通用工具函数
+// ═══════════════════════════════════════
+
+/// 格式化时间用于「最近更新」subtitle
+String formatRefreshTime(DateTime t) {
+  return '${t.year}-${t.month.toString().padLeft(2, '0')}-'
+      '${t.day.toString().padLeft(2, '0')} '
+      '${t.hour.toString().padLeft(2, '0')}:'
+      '${t.minute.toString().padLeft(2, '0')}:'
+      '${t.second.toString().padLeft(2, '0')}';
+}
+
+// ═══════════════════════════════════════
 //  标签组件
 // ═══════════════════════════════════════
 

@@ -36,6 +36,7 @@ class AssetsPage extends StatefulWidget {
 class AssetsPageState extends State<AssetsPage> {
   List<AssetBase> _assets = [];
   bool _isLoading = false;
+  DateTime? _lastRefreshTime;
   final Set<AssetType> _expandedTypes = {};
   List<AssetType> _sectionOrder = [
     AssetType.cash,
@@ -78,6 +79,7 @@ class AssetsPageState extends State<AssetsPage> {
       _expandedTypes.clear();
       _sectionOrder = order;
       _isLoading = false;
+      _lastRefreshTime = DateTime.now();
     });
     _rebuildFlatItems();
   }
@@ -350,10 +352,7 @@ class AssetsPageState extends State<AssetsPage> {
               SliverToBoxAdapter(
                 child: SectionTitle(
                   title: StockConfig.tabAsset,
-                  subtitle: AssetConfig.assetCountLabel.replaceAll(
-                    '{count}',
-                    '${_assets.length}',
-                  ),
+                  subtitle: _buildSubtitle(),
                 ),
               ),
               SliverToBoxAdapter(
@@ -792,5 +791,15 @@ class AssetsPageState extends State<AssetsPage> {
       case AssetType.providentFund:
         _onAddProvidentFund();
     }
+  }
+
+  String _buildSubtitle() {
+    if (_lastRefreshTime == null) {
+      return AssetConfig.assetSubtitleRefresh.replaceAll('{time}', '-');
+    }
+    return AssetConfig.assetSubtitleRefresh.replaceAll(
+      '{time}',
+      formatRefreshTime(_lastRefreshTime!),
+    );
   }
 }
