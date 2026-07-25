@@ -5,8 +5,8 @@ import 'package:path_provider/path_provider.dart';
 import 'package:workmanager/workmanager.dart';
 import '../config/app_config.dart';
 import '../models/stock_search_models.dart';
-import '../services/icloud_storage.dart';
 import '../services/settings_service.dart';
+import '../services/stock_data_manager.dart';
 import '../services/stock_quote_service.dart';
 import '../services/exchange_rate_service.dart';
 import '../utils/stock_calculator.dart';
@@ -16,7 +16,7 @@ import '../utils/currency_helper.dart';
 void callbackDispatcher() {
   Workmanager().executeTask((task, inputData) async {
     try {
-      final data = await IcloudStorage.loadStocks();
+      final data = await StockDataManager.loadStocks();
       final stocks = data.$1;
       final records = data.$2;
       final dividendRecords = data.$3;
@@ -71,7 +71,10 @@ void callbackDispatcher() {
         dividendRecords,
         currency,
       );
-      await IcloudStorage.recordProfitIfNeeded(summary.totalProfit, currency);
+      await StockDataManager.recordProfitIfNeeded(
+        summary.totalProfit,
+        currency,
+      );
       debugPrint(
         '[${DateTime.now().toString().substring(11, 19)}][WorkManager] ===> 后台任务执行成功 totalProfit: ${summary.totalProfit} ($currency)',
       );

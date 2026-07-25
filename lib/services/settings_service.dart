@@ -201,12 +201,12 @@ class SettingsService {
     await _save();
   }
 
-  /// 获取完整设置 Map（供 IcloudStorage 同步使用）
+  /// 获取完整设置 Map
   static Future<Map<String, dynamic>> getAll() async {
     return await _load();
   }
 
-  /// 用 Map 批量更新设置（从 iCloud 拉取后调用）
+  /// 用 Map 批量更新设置
   static Future<void> applyAll(Map<String, dynamic> data) async {
     final settings = await _load();
     settings.addAll(data);

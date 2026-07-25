@@ -4,6 +4,7 @@ import '../../models/stock_search_models.dart';
 import '../../models/calculator_models.dart';
 import '../../services/stock_quote_service.dart';
 import '../../services/exchange_rate_service.dart';
+import '../../services/icloud_storage.dart';
 import '../../utils/stock_calculator.dart';
 import '../../utils/currency_helper.dart';
 
@@ -84,6 +85,68 @@ class StockDataManager {
     final searchResults = buildSearchResults(stocks);
     return await quoteService.getStockQuotesBatch(searchResults);
   }
+
+  /// 拉取行情 → 应用 → 存盘，返回更新后的股票列表
+  static Future<List<StockModel>> fetchQuotesAndSave(
+    StockQuoteService quoteService,
+    List<StockModel> stocks,
+    Map<String, List<OperationRecord>> operationRecords,
+    Map<String, List<DividendRecord>> dividendRecords,
+  ) async {
+    if (stocks.isEmpty) return stocks;
+    final quotes = await fetchQuotes(quoteService, stocks);
+    if (quotes.isEmpty) return stocks;
+    final updated = applyQuotes(stocks, quotes, operationRecords);
+    await IcloudStorage.saveStocks(updated, operationRecords, dividendRecords);
+    return updated;
+  }
+
+  /// 从本地加载设置
+  static Future<void> loadSettings() => IcloudStorage.loadSettings();
+
+  /// 从本地加载股票 + 操作记录 + 派息记录
+  static Future<
+    (
+      List<StockModel>,
+      Map<String, List<OperationRecord>>,
+      Map<String, List<DividendRecord>>,
+    )
+  >
+  loadStocks() => IcloudStorage.loadStocks();
+
+  /// 保存股票 + 操作记录 + 派息记录 + 设置到本地
+  static Future<void> saveAll(
+    List<StockModel> stocks,
+    Map<String, List<OperationRecord>> operationRecords,
+    Map<String, List<DividendRecord>> dividendRecords,
+  ) async {
+    await Future.wait([
+      IcloudStorage.saveStocks(stocks, operationRecords, dividendRecords),
+      IcloudStorage.saveSettings(),
+    ]);
+  }
+
+  /// 记录收益快照
+  static Future<void> recordProfitIfNeeded(
+    double totalProfit,
+    String currency,
+  ) => IcloudStorage.recordProfitIfNeeded(totalProfit, currency);
+
+  /// 同步收益快照到 iCloud
+  static Future<void> syncProfitToCloud() => IcloudStorage.syncProfitToCloud();
+
+  /// 仅保存设置（给设置页回调用）
+  static Future<void> saveSettings() => IcloudStorage.saveSettings();
+
+  /// 加载天级收益快照历史
+  static Future<List<ProfitSnapshot>> loadDailyProfitHistory({
+    String targetCurrency = AppConfig.defaultCurrency,
+  }) => IcloudStorage.loadDailyProfitHistory(targetCurrency: targetCurrency);
+
+  /// 加载日内收益快照历史
+  static Future<List<ProfitSnapshot>> loadIntradayProfitHistory({
+    String targetCurrency = AppConfig.defaultCurrency,
+  }) => IcloudStorage.loadIntradayProfitHistory(targetCurrency: targetCurrency);
 
   /// 计算资产汇总
   static AssetSummary calculateAssetSummary(

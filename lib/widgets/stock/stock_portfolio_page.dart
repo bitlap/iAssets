@@ -9,7 +9,6 @@ import '../../utils/center_toast.dart';
 import '../../services/stock_quote_service.dart';
 import '../../services/exchange_rate_service.dart';
 import '../../services/settings_service.dart';
-import '../../services/icloud_storage.dart';
 import '../../services/stock_data_manager.dart';
 import '../common/empty_state_widget.dart';
 import '../common/draggable_fab.dart';
@@ -68,7 +67,7 @@ class StockPortfolioPageState extends State<StockPortfolioPage>
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
-    IcloudStorage.loadSettings().then((_) {
+    StockDataManager.loadSettings().then((_) {
       _loadSavedCurrency();
       _loadKeepStockSetting();
       _loadSortSettings();
@@ -105,7 +104,7 @@ class StockPortfolioPageState extends State<StockPortfolioPage>
 
   /// 从本地加载股票和记录，并尝试从 iCloud 拉取最新
   Future<void> _syncStockData() async {
-    final data = await IcloudStorage.loadStocks();
+    final data = await StockDataManager.loadStocks();
     if (!mounted) return;
     setState(() {
       stocks = data.$1;
@@ -142,10 +141,7 @@ class StockPortfolioPageState extends State<StockPortfolioPage>
   Future<void> _saveAll() async {
     _syncTimer?.cancel();
     if (!_dataDirty) return;
-    await Future.wait([
-      IcloudStorage.saveStocks(stocks, _operationRecords, _dividendRecords),
-      IcloudStorage.saveSettings(),
-    ]);
+    await StockDataManager.saveAll(stocks, _operationRecords, _dividendRecords);
     _dataDirty = false;
   }
 
@@ -188,11 +184,11 @@ class StockPortfolioPageState extends State<StockPortfolioPage>
     if (!_isForeground || !mounted) return;
     _collapseExpandedStock();
 
-    await IcloudStorage.loadSettings();
+    await StockDataManager.loadSettings();
     if (_dataDirty) await _saveAll();
     await StockDataManager.fetchExchangeRates(_exchangeRateService);
 
-    final data = await IcloudStorage.loadStocks();
+    final data = await StockDataManager.loadStocks();
     if (!mounted) return;
     setState(() {
       stocks = data.$1;
@@ -204,36 +200,26 @@ class StockPortfolioPageState extends State<StockPortfolioPage>
         ..addAll(data.$3);
     });
 
-    if (stocks.isNotEmpty && mounted) {
-      final quotes = await StockDataManager.fetchQuotes(_quoteService, stocks);
-      if (mounted) {
-        setState(
-          () => stocks = StockDataManager.applyQuotes(
-            stocks,
-            quotes,
-            _operationRecords,
-          ),
-        );
-      }
-    }
-
-    await IcloudStorage.recordProfitIfNeeded(totalProfit, selectedCurrency);
-    await IcloudStorage.syncProfitToCloud();
+    final updated = await StockDataManager.fetchQuotesAndSave(
+      _quoteService,
+      stocks,
+      _operationRecords,
+      _dividendRecords,
+    );
+    if (mounted) setState(() => stocks = updated);
+    await StockDataManager.recordProfitIfNeeded(totalProfit, selectedCurrency);
+    await StockDataManager.syncProfitToCloud();
   }
 
   Future<void> _recordProfitOnPaused() async {
     await StockDataManager.fetchExchangeRates(_exchangeRateService);
-    if (stocks.isNotEmpty) {
-      final quotes = await StockDataManager.fetchQuotes(_quoteService, stocks);
-      if (quotes.isNotEmpty) {
-        stocks = StockDataManager.applyQuotes(
-          stocks,
-          quotes,
-          _operationRecords,
-        );
-      }
-    }
-    await IcloudStorage.recordProfitIfNeeded(totalProfit, selectedCurrency);
+    stocks = await StockDataManager.fetchQuotesAndSave(
+      _quoteService,
+      stocks,
+      _operationRecords,
+      _dividendRecords,
+    );
+    await StockDataManager.recordProfitIfNeeded(totalProfit, selectedCurrency);
   }
 
   // 计算属性
@@ -658,7 +644,7 @@ class StockPortfolioPageState extends State<StockPortfolioPage>
           onSortDirectionChanged: _onSortDirectionChanged,
           onSyncToggled: _onSyncToggled,
           onKeepStockChanged: _onKeepStockChanged,
-          onSettingsChanged: () => IcloudStorage.saveSettings(),
+          onSettingsChanged: () => StockDataManager.saveSettings(),
         ),
       ),
     ).then((_) {

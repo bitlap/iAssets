@@ -3,7 +3,7 @@ class StockConfig {
 
   // StockHeaderCard 文案
   static const String assetTotalAssets = '总资产';
-  static const String assetTotalCost = '持仓总市值';
+  static const String assetTotalCost = '持仓市值';
   static const String assetTotalProfit = '总盈亏';
   static const String assetTotalDividends = '总股息';
   static const String assetExchangeRate = '汇率';
@@ -11,7 +11,7 @@ class StockConfig {
   static const String assetTotalCostHelp = '每股现价 × 持仓股数';
   static const String assetTotalRealizedPL = '已实现盈亏';
   static const String assetTotalProfitHelp = '持仓总浮盈 + 已实现盈亏';
-  static const String assetTotalAssetsHelp = '持仓总市值 + 已平仓总额（累计卖出金额）';
+  static const String assetTotalAssetsHelp = '持仓市值 + 已平仓总额';
   static const String assetTotalDividendsHelp = '税后总股息 / 总资产';
   static const String assetTotalSellAmount = '已平仓总额';
   static const String assetCostDetailLabel = '持仓总成本';
@@ -19,7 +19,7 @@ class StockConfig {
   static const String assetAfterTaxDividendsLabel = '税后总股息';
   static const String assetDividendRateLabel = '股息率';
   static const String assetPositionRatioLabel = '持仓比例';
-  static const String assetPositionRatioHelp = '持仓总市值 / 总资产';
+  static const String assetPositionRatioHelp = '持仓市值 / 总资产';
 
   // 首页 文案
   static const String homeTitle = '股票';

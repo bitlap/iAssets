@@ -6,9 +6,7 @@ import '../../utils/center_toast.dart';
 import '../../utils/asset_calculator.dart';
 import '../../utils/asset_reorder_util.dart';
 import '../../config/app_config.dart';
-import '../../config/asset_config.dart';
-import '../../services/icloud_storage.dart';
-import '../../services/settings_service.dart';
+import '../../services/asset_data_manager.dart';
 import '../common/empty_state_widget.dart';
 import '../common/currency_selector.dart';
 import '../common/confirm_delete_dialog.dart';
@@ -57,17 +55,11 @@ class _AssetsPageState extends State<AssetsPage> {
       AssetCalculator.getTotalByType(_assets, currency);
 
   void _rebuildFlatItems() {
-    _flatItems = [];
-    for (final type in _sectionOrder) {
-      final items = _assets.where((a) => a.type == type).toList();
-      if (items.isEmpty) continue;
-      _flatItems.add(SectionHeader(type, _expandedTypes.contains(type)));
-      if (_expandedTypes.contains(type)) {
-        for (final a in items) {
-          _flatItems.add(AssetCardItem(a));
-        }
-      }
-    }
+    _flatItems = AssetDataManager.buildFlatItems(
+      _assets,
+      _sectionOrder,
+      _expandedTypes,
+    );
   }
 
   @override
@@ -78,37 +70,19 @@ class _AssetsPageState extends State<AssetsPage> {
 
   Future<void> _load() async {
     setState(() => _isLoading = true);
-    final results = await Future.wait([
-      IcloudStorage.loadAssets(),
-      SettingsService.getAssetSectionOrder(),
-    ]);
-    final assets = results[0] as List<AssetBase>;
-    final savedOrder = results[1] as List<String>;
+    final (assets, order) = await AssetDataManager.loadAssetsAndOrder();
     if (!mounted) return;
     setState(() {
       _assets = assets;
       _expandedTypes.clear();
-      _sectionOrder = savedOrder
-          .map(
-            (s) => AssetType.values.firstWhere(
-              (t) => t.name == s,
-              orElse: () => AssetType.cash,
-            ),
-          )
-          .toList();
-      for (final type in AssetType.values) {
-        if (_assets.any((a) => a.type == type) &&
-            !_sectionOrder.contains(type)) {
-          _sectionOrder.add(type);
-        }
-      }
+      _sectionOrder = order;
       _isLoading = false;
     });
     _rebuildFlatItems();
   }
 
   Future<void> _save() async {
-    await IcloudStorage.saveAssets(_assets);
+    await AssetDataManager.saveAssets(_assets);
   }
 
   Future<void> _addAsset(AssetBase asset) async {
@@ -227,9 +201,7 @@ class _AssetsPageState extends State<AssetsPage> {
   }
 
   Future<void> _saveSectionOrder() async {
-    await SettingsService.setAssetSectionOrder(
-      _sectionOrder.map((t) => t.name).toList(),
-    );
+    await AssetDataManager.saveSectionOrder(_sectionOrder);
   }
 
   void _toggleSection(AssetType type) {

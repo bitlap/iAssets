@@ -2,7 +2,7 @@ import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../../config/app_config.dart';
-import '../../services/icloud_storage.dart';
+import '../../services/stock_data_manager.dart';
 import '../../models/stock_model.dart';
 import '../../utils/currency_helper.dart';
 
@@ -49,10 +49,10 @@ class _ProfitChartWidgetState extends State<ProfitChartWidget> {
   }
 
   Future<void> _loadSnapshots() async {
-    final daily = await IcloudStorage.loadDailyProfitHistory(
+    final daily = await StockDataManager.loadDailyProfitHistory(
       targetCurrency: widget.targetCurrency,
     );
-    final intraday = await IcloudStorage.loadIntradayProfitHistory(
+    final intraday = await StockDataManager.loadIntradayProfitHistory(
       targetCurrency: widget.targetCurrency,
     );
     if (!mounted) return;
