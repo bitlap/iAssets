@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:url_launcher/url_launcher.dart';
-import '../utils/currency_helper.dart';
+import '../utils/currency_util.dart';
+import '../services/exchange_rate_service.dart';
 import '../utils/center_toast.dart';
 import '../services/settings_service.dart';
 import '../config/app_config.dart';
@@ -93,7 +94,7 @@ class _SettingsPageState extends State<SettingsPage> {
         _syncSettings = syncSettings;
         _selectedFeeType = feeType;
         _feeValueController.text = feeValue > 0
-            ? CurrencyHelper.formatRate(feeValue)
+            ? CurrencyUtil.formatRate(feeValue)
             : '';
       });
     }
@@ -290,7 +291,7 @@ class _SettingsPageState extends State<SettingsPage> {
           ),
           const SizedBox(width: 8),
           Text(
-            '${CurrencyHelper.getSymbol(_selectedCurrency)} ${CurrencyHelper.formatRate(CurrencyHelper.getExchangeRate(_selectedCurrency))}',
+            '${CurrencyUtil.getSymbol(_selectedCurrency)} ${CurrencyUtil.formatRate(ExchangeRateService().effectiveRates[_selectedCurrency] ?? 1.0)}',
             style: TextStyle(
               fontSize: 12,
               color: Colors.grey[500],
@@ -304,14 +305,14 @@ class _SettingsPageState extends State<SettingsPage> {
         color: Colors.grey[500],
         size: 22,
       ),
-      children: CurrencyHelper.exchangeRates.keys.map((currency) {
+      children: ExchangeRateService.supportedCurrencies.map((currency) {
         final isSelected = currency == _selectedCurrency;
-        final rate = CurrencyHelper.exchangeRates[currency]!;
-        final symbol = CurrencyHelper.getSymbol(currency);
-        final isLast = currency == CurrencyHelper.exchangeRates.keys.last;
+        final rate = ExchangeRateService().effectiveRates[currency]!;
+        final symbol = CurrencyUtil.getSymbol(currency);
+        final isLast = currency == ExchangeRateService.supportedCurrencies.last;
         return SettingsSelectableItem(
           label: currency,
-          trailingText: '$symbol ${CurrencyHelper.formatRate(rate)}',
+          trailingText: '$symbol ${CurrencyUtil.formatRate(rate)}',
           isSelected: isSelected,
           isLast: isLast,
           onTap: () => _onCurrencySelected(currency),

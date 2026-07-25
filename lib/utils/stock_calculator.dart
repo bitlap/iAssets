@@ -1,7 +1,7 @@
 import '../config/app_config.dart';
 import '../models/stock_model.dart';
 import '../models/calculator_models.dart';
-import 'currency_helper.dart';
+import 'currency_util.dart';
 
 /// 持仓计算工具类 - 所有与操作记录相关的计算逻辑
 class StockCalculator {
@@ -85,7 +85,7 @@ class StockCalculator {
     double totalCost = 0.0;
 
     for (final stock in stocks) {
-      final mv = CurrencyHelper.convertCurrency(
+      final mv = CurrencyUtil.convertCurrency(
         stock.totalValue,
         stock.currency,
         targetCurrency,
@@ -93,14 +93,14 @@ class StockCalculator {
       totalMarketValue += mv;
 
       if (stock.shares > 0) {
-        final pl = CurrencyHelper.convertCurrency(
+        final pl = CurrencyUtil.convertCurrency(
           stock.profitLossAmount,
           stock.currency,
           targetCurrency,
         );
         unrealizedPL += pl;
       } else {
-        final pl = CurrencyHelper.convertCurrency(
+        final pl = CurrencyUtil.convertCurrency(
           stock.profitLossAmount,
           stock.currency,
           targetCurrency,
@@ -110,18 +110,18 @@ class StockCalculator {
 
       final records = operationRecords[stock.symbol] ?? [];
       final stats = calculateRecordStats(records);
-      totalBuyAmount += CurrencyHelper.convertCurrency(
+      totalBuyAmount += CurrencyUtil.convertCurrency(
         stats.totalBuyAmount,
         stock.currency,
         targetCurrency,
       );
-      totalSellAmount += CurrencyHelper.convertCurrency(
+      totalSellAmount += CurrencyUtil.convertCurrency(
         stats.totalSellAmount,
         stock.currency,
         targetCurrency,
       );
       if (stock.shares > 0) {
-        totalCost += CurrencyHelper.convertCurrency(
+        totalCost += CurrencyUtil.convertCurrency(
           stats.totalBuyAmount - stats.totalSellAmount,
           stock.currency,
           targetCurrency,
@@ -140,7 +140,7 @@ class StockCalculator {
       final divs = dividendRecords?[stock.symbol] ?? [];
       final stockDivTotal = divs.fold(0.0, (s, r) => s + r.afterTaxAmount);
       return sum +
-          CurrencyHelper.convertCurrency(
+          CurrencyUtil.convertCurrency(
             stockDivTotal,
             stock.currency,
             targetCurrency,
@@ -183,12 +183,12 @@ class StockCalculator {
           cmp = a.symbol.compareTo(b.symbol);
           break;
         case 'holdings':
-          final valueA = CurrencyHelper.convertCurrency(
+          final valueA = CurrencyUtil.convertCurrency(
             a.currentPrice * a.shares,
             a.currency,
             targetCurrency,
           );
-          final valueB = CurrencyHelper.convertCurrency(
+          final valueB = CurrencyUtil.convertCurrency(
             b.currentPrice * b.shares,
             b.currency,
             targetCurrency,
@@ -197,24 +197,24 @@ class StockCalculator {
           if (cmp == 0) cmp = a.shares.compareTo(b.shares);
           break;
         case 'profit':
-          final plA = CurrencyHelper.convertCurrency(
+          final plA = CurrencyUtil.convertCurrency(
             a.profitLossAmount,
             a.currency,
             targetCurrency,
           );
-          final plB = CurrencyHelper.convertCurrency(
+          final plB = CurrencyUtil.convertCurrency(
             b.profitLossAmount,
             b.currency,
             targetCurrency,
           );
           cmp = plA.compareTo(plB);
           if (cmp == 0) {
-            final valA = CurrencyHelper.convertCurrency(
+            final valA = CurrencyUtil.convertCurrency(
               a.totalValue,
               a.currency,
               targetCurrency,
             );
-            final valB = CurrencyHelper.convertCurrency(
+            final valB = CurrencyUtil.convertCurrency(
               b.totalValue,
               b.currency,
               targetCurrency,

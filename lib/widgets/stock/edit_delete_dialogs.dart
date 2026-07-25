@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../models/stock_model.dart';
 import '../../models/stock_search_models.dart';
-import '../../utils/currency_helper.dart';
+import '../../utils/currency_util.dart';
 import '../../utils/stock_calculator.dart';
 import '../../services/settings_service.dart';
 import '../../services/stock_quote_service.dart';
@@ -56,11 +56,11 @@ class _EditStockDialogState extends State<EditStockDialog> {
   void initState() {
     super.initState();
     _sharesController = TextEditingController(
-      text: widget.isAdd ? '' : CurrencyHelper.formatRate(widget.stock.shares),
+      text: widget.isAdd ? '' : CurrencyUtil.formatRate(widget.stock.shares),
     );
     _priceController = TextEditingController(
       text: widget.stock.currentPrice > 0
-          ? CurrencyHelper.formatRate(widget.stock.currentPrice)
+          ? CurrencyUtil.formatRate(widget.stock.currentPrice)
           : '',
     );
     _feeController = TextEditingController();
@@ -79,7 +79,7 @@ class _EditStockDialogState extends State<EditStockDialog> {
     final shares = double.tryParse(_sharesController.text);
     if (price == null || shares == null || price <= 0 || shares <= 0) return;
     final fee = price * shares * _feeSettingValue / 100;
-    _feeController.text = CurrencyHelper.formatRate(fee);
+    _feeController.text = CurrencyUtil.formatRate(fee);
     setState(() {});
   }
 
@@ -91,7 +91,7 @@ class _EditStockDialogState extends State<EditStockDialog> {
     _feeSettingValue = feeValue;
     if (feeValue <= 0) return;
     if (feeType == SettingsService.feeTypeFixed) {
-      _feeController.text = CurrencyHelper.formatRate(feeValue);
+      _feeController.text = CurrencyUtil.formatRate(feeValue);
       return;
     }
     _updateFeeFromInput();
@@ -113,7 +113,7 @@ class _EditStockDialogState extends State<EditStockDialog> {
       if (!mounted) return;
       final quote = quotes[secid];
       if (quote != null && quote.currentPrice > 0) {
-        _priceController.text = CurrencyHelper.formatRate(quote.currentPrice);
+        _priceController.text = CurrencyUtil.formatRate(quote.currentPrice);
       }
     } catch (_) {
     } finally {
@@ -297,20 +297,20 @@ class _EditStockDialogState extends State<EditStockDialog> {
           InfoRowWidget(
             label: StockConfig.searchRealtimePrice,
             value:
-                '${CurrencyHelper.getSymbol(widget.stock.currency)}${CurrencyHelper.formatRate(widget.stock.currentPrice)}',
+                '${CurrencyUtil.getSymbol(widget.stock.currency)}${CurrencyUtil.formatRate(widget.stock.currentPrice)}',
           ),
           const SizedBox(height: 8),
           InfoRowWidget(
             label: StockConfig.searchShares,
             value:
-                '${CurrencyHelper.formatRate(widget.stock.shares)}${StockConfig.stockSharesSuffix}',
+                '${CurrencyUtil.formatRate(widget.stock.shares)}${StockConfig.stockSharesSuffix}',
           ),
           if (_avgBuyPrice > 0) ...[
             const SizedBox(height: 8),
             InfoRowWidget(
               label: StockConfig.stockDetailAvgPrice,
               value:
-                  '${CurrencyHelper.getSymbol(widget.stock.currency)}${CurrencyHelper.formatRate(_avgBuyPrice)}',
+                  '${CurrencyUtil.getSymbol(widget.stock.currency)}${CurrencyUtil.formatRate(_avgBuyPrice)}',
             ),
           ],
         ],
@@ -602,7 +602,7 @@ class _DividendDialogState extends State<DividendDialog> {
           InfoRowWidget(
             label: StockConfig.searchShares,
             value:
-                '${CurrencyHelper.formatRate(widget.stock.shares)}${StockConfig.stockSharesSuffix}',
+                '${CurrencyUtil.formatRate(widget.stock.shares)}${StockConfig.stockSharesSuffix}',
           ),
         ],
       ),

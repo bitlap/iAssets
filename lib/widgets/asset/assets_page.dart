@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../models/asset_account.dart';
 import '../../models/asset_flat_item.dart';
-import '../../utils/currency_helper.dart';
+import '../../utils/currency_util.dart';
 import '../../utils/center_toast.dart';
 import '../../utils/asset_calculator.dart';
 import '../../utils/asset_reorder_util.dart';
@@ -482,7 +482,7 @@ class _AssetsPageState extends State<AssetsPage> {
       ),
     };
 
-    final sym = CurrencyHelper.getSymbol(widget.currency);
+    final sym = CurrencyUtil.getSymbol(widget.currency);
 
     return ReorderableDelayedDragStartListener(
       key: ValueKey('section_${type.name}'),
@@ -536,7 +536,7 @@ class _AssetsPageState extends State<AssetsPage> {
                     ),
                     const Spacer(),
                     Text(
-                      '$sym${CurrencyHelper.formatCompact(total)}',
+                      '$sym${CurrencyUtil.formatCompact(total)}',
                       style: TextStyle(
                         fontSize: 15,
                         fontWeight: FontWeight.w600,
@@ -613,7 +613,7 @@ class _AssetsPageState extends State<AssetsPage> {
   }
 
   Widget _buildCashCard(CashAccount cash, int index) {
-    final sym = CurrencyHelper.getSymbol(cash.currency);
+    final sym = CurrencyUtil.getSymbol(cash.currency);
     return AssetCardFrame(
       leading: ReorderableDragStartListener(
         index: index,
@@ -634,7 +634,7 @@ class _AssetsPageState extends State<AssetsPage> {
       trailing: Align(
         alignment: Alignment.centerRight,
         child: Text(
-          '$sym${CurrencyHelper.formatCompact(cash.balance)}',
+          '$sym${CurrencyUtil.formatCompact(cash.balance)}',
           style: const TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.w600,
@@ -672,7 +672,7 @@ class _AssetsPageState extends State<AssetsPage> {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              '${CurrencyHelper.getSymbol(td.currency)}${CurrencyHelper.formatCompact(td.totalValue)}',
+              '${CurrencyUtil.getSymbol(td.currency)}${CurrencyUtil.formatCompact(td.totalValue)}',
               style: const TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
@@ -716,7 +716,7 @@ class _AssetsPageState extends State<AssetsPage> {
       trailing: Align(
         alignment: Alignment.centerRight,
         child: Text(
-          '${CurrencyHelper.getSymbol(wp.currency)}${CurrencyHelper.formatCompact(wp.totalValue)}',
+          '${CurrencyUtil.getSymbol(wp.currency)}${CurrencyUtil.formatCompact(wp.totalValue)}',
           style: const TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.w600,
@@ -730,7 +730,7 @@ class _AssetsPageState extends State<AssetsPage> {
   }
 
   Widget _buildCurrentCard(CurrentAccount account, int index) {
-    final sym = CurrencyHelper.getSymbol(account.currency);
+    final sym = CurrencyUtil.getSymbol(account.currency);
     return AssetCardFrame(
       leading: ReorderableDragStartListener(
         index: index,
@@ -754,7 +754,7 @@ class _AssetsPageState extends State<AssetsPage> {
       trailing: Align(
         alignment: Alignment.centerRight,
         child: Text(
-          '$sym${CurrencyHelper.formatCompact(account.balance)}',
+          '$sym${CurrencyUtil.formatCompact(account.balance)}',
           style: const TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.w600,
@@ -768,7 +768,7 @@ class _AssetsPageState extends State<AssetsPage> {
   }
 
   Widget _buildProvidentFundCard(ProvidentFundAccount account, int index) {
-    final sym = CurrencyHelper.getSymbol(account.currency);
+    final sym = CurrencyUtil.getSymbol(account.currency);
     return AssetCardFrame(
       leading: ReorderableDragStartListener(
         index: index,
@@ -792,7 +792,7 @@ class _AssetsPageState extends State<AssetsPage> {
       trailing: Align(
         alignment: Alignment.centerRight,
         child: Text(
-          '$sym${CurrencyHelper.formatCompact(account.balance)}',
+          '$sym${CurrencyUtil.formatCompact(account.balance)}',
           style: const TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.w600,

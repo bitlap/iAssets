@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../config/app_config.dart';
-import '../../utils/currency_helper.dart';
+import '../../utils/currency_util.dart';
+import '../../services/exchange_rate_service.dart';
 
 /// 通用货币选择浮动弹窗 - 与股票汇总卡片的样式一致
 class CurrencySelector {
@@ -78,12 +79,13 @@ class CurrencySelector {
                       child: ListView(
                         padding: EdgeInsets.zero,
                         shrinkWrap: true,
-                        children: CurrencyHelper.exchangeRates.keys.map((
+                        children: ExchangeRateService.supportedCurrencies.map((
                           currency,
                         ) {
                           final isSelected = currency == selectedCurrency;
-                          final rate = CurrencyHelper.exchangeRates[currency]!;
-                          final symbol = CurrencyHelper.getSymbol(currency);
+                          final rate =
+                              ExchangeRateService().effectiveRates[currency]!;
+                          final symbol = CurrencyUtil.getSymbol(currency);
                           return InkWell(
                             onTap: () {
                               onCurrencyChanged(currency);
@@ -123,7 +125,7 @@ class CurrencySelector {
                                     ),
                                   ),
                                   Text(
-                                    '$symbol ${CurrencyHelper.formatRate(rate)}',
+                                    '$symbol ${CurrencyUtil.formatRate(rate)}',
                                     style: TextStyle(
                                       fontSize: 13,
                                       color: isSelected

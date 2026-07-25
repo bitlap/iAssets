@@ -6,7 +6,7 @@ import 'package:path_provider/path_provider.dart';
 import '../config/app_config.dart';
 import '../models/stock_model.dart';
 import '../models/asset_account.dart';
-import '../utils/currency_helper.dart';
+import '../utils/currency_util.dart';
 import 'serde/serde.dart';
 import 'settings_service.dart';
 
@@ -192,7 +192,7 @@ class IcloudStorage {
           .map(
             (s) => ProfitSnapshot(
               time: s.time,
-              totalProfit: CurrencyHelper.convertCurrency(
+              totalProfit: CurrencyUtil.convertCurrency(
                 s.totalProfit,
                 AppConfig.defaultCurrency,
                 targetCurrency,
@@ -226,7 +226,7 @@ class IcloudStorage {
           .map(
             (s) => ProfitSnapshot(
               time: s.time,
-              totalProfit: CurrencyHelper.convertCurrency(
+              totalProfit: CurrencyUtil.convertCurrency(
                 s.totalProfit,
                 AppConfig.defaultCurrency,
                 targetCurrency,
@@ -276,7 +276,7 @@ class IcloudStorage {
     final today = DateTime(now.year, now.month, now.day);
 
     // 转换为 defaultCurrency 存储
-    final profitInDefaultCurrency = CurrencyHelper.convertCurrency(
+    final profitInDefaultCurrency = CurrencyUtil.convertCurrency(
       totalProfit,
       sourceCurrency,
       AppConfig.defaultCurrency,

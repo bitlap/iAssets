@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import '../../models/stock_model.dart';
 import '../../models/calculator_models.dart';
 import '../../config/app_config.dart';
-import '../../utils/currency_helper.dart';
 import '../../utils/center_toast.dart';
 import '../../services/stock_quote_service.dart';
 import '../../services/exchange_rate_service.dart';
@@ -237,7 +236,8 @@ class StockPortfolioPageState extends State<StockPortfolioPage>
   double get totalSellAmount => _assetSummary.totalSellAmount;
   double get totalRealizedPL => _assetSummary.totalRealizedPL;
   double get totalProfitPercent => _assetSummary.totalProfitPercent;
-  double get exchangeRate => CurrencyHelper.getExchangeRate(selectedCurrency);
+  double get exchangeRate =>
+      ExchangeRateService().effectiveRates[selectedCurrency] ?? 1.0;
   List<StockModel> get _filteredStocks => _filterMarket == null
       ? stocks
       : stocks.where((s) => s.marketType == _filterMarket).toList();

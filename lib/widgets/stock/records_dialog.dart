@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../../models/stock_model.dart';
-import '../../utils/currency_helper.dart';
+import '../../utils/currency_util.dart';
 import '../../config/app_config.dart';
 import '../common/empty_state_widget.dart';
 import '../common/confirm_delete_dialog.dart';
@@ -383,7 +383,7 @@ class _OperationRecordsTabState extends State<_OperationRecordsTab> {
                               ),
                             ),
                             Text(
-                              '${isBuy ? "+" : "-"}${CurrencyHelper.formatRate(record.shares)}${StockConfig.stockSharesSuffix}',
+                              '${isBuy ? "+" : "-"}${CurrencyUtil.formatRate(record.shares)}${StockConfig.stockSharesSuffix}',
                               style: const TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 13,
@@ -398,7 +398,7 @@ class _OperationRecordsTabState extends State<_OperationRecordsTab> {
                             children: [
                               Expanded(
                                 child: Text(
-                                  '${StockConfig.recordsFormulaLabel}: ${CurrencyHelper.formatRate(record.amount)} × ${CurrencyHelper.formatRate(record.shares)}',
+                                  '${StockConfig.recordsFormulaLabel}: ${CurrencyUtil.formatRate(record.amount)} × ${CurrencyUtil.formatRate(record.shares)}',
                                   style: TextStyle(
                                     color: Colors.grey[500],
                                     fontSize: 11,
@@ -409,7 +409,7 @@ class _OperationRecordsTabState extends State<_OperationRecordsTab> {
                                 ),
                               ),
                               Text(
-                                '${StockConfig.recordsOpLabel}: ${CurrencyHelper.getSymbol(widget.stock.currency)}${CurrencyHelper.formatRate(record.amount * record.shares)}',
+                                '${StockConfig.recordsOpLabel}: ${CurrencyUtil.getSymbol(widget.stock.currency)}${CurrencyUtil.formatRate(record.amount * record.shares)}',
                                 style: TextStyle(
                                   color: isBuy
                                       ? Colors.redAccent
@@ -457,10 +457,10 @@ class _OperationRecordsTabState extends State<_OperationRecordsTab> {
     OperationRecord record,
   ) {
     final priceCtrl = TextEditingController(
-      text: CurrencyHelper.formatRate(record.amount),
+      text: CurrencyUtil.formatRate(record.amount),
     );
     final sharesCtrl = TextEditingController(
-      text: CurrencyHelper.formatRate(record.shares),
+      text: CurrencyUtil.formatRate(record.shares),
     );
 
     showDialog(
@@ -718,7 +718,7 @@ class _DividendRecordsTabState extends State<_DividendRecordsTab> {
                               ),
                             ),
                             Text(
-                              '${CurrencyHelper.getSymbol(widget.stock.currency)}${CurrencyHelper.formatRate(record.totalAmount)}',
+                              '${CurrencyUtil.getSymbol(widget.stock.currency)}${CurrencyUtil.formatRate(record.totalAmount)}',
                               style: const TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 13,
@@ -732,7 +732,7 @@ class _DividendRecordsTabState extends State<_DividendRecordsTab> {
                           children: [
                             Expanded(
                               child: Text(
-                                '${StockConfig.recordsFormulaLabel}: ${CurrencyHelper.formatRate(record.shares)} × ${CurrencyHelper.formatRate(record.amount)} × ${1 - record.taxRate}',
+                                '${StockConfig.recordsFormulaLabel}: ${CurrencyUtil.formatRate(record.shares)} × ${CurrencyUtil.formatRate(record.amount)} × ${1 - record.taxRate}',
                                 style: TextStyle(
                                   color: Colors.grey[500],
                                   fontSize: 11,
@@ -743,7 +743,7 @@ class _DividendRecordsTabState extends State<_DividendRecordsTab> {
                               ),
                             ),
                             Text(
-                              '${StockConfig.recordsDivLabel}: ${CurrencyHelper.getSymbol(widget.stock.currency)}${CurrencyHelper.formatRate(record.afterTaxAmount)}',
+                              '${StockConfig.recordsDivLabel}: ${CurrencyUtil.getSymbol(widget.stock.currency)}${CurrencyUtil.formatRate(record.afterTaxAmount)}',
                               style: const TextStyle(
                                 color: Colors.amber,
                                 fontWeight: FontWeight.w500,
@@ -788,10 +788,10 @@ class _DividendRecordsTabState extends State<_DividendRecordsTab> {
     DividendRecord record,
   ) {
     final amountCtrl = TextEditingController(
-      text: CurrencyHelper.formatRate(record.amount),
+      text: CurrencyUtil.formatRate(record.amount),
     );
     final sharesCtrl = TextEditingController(
-      text: CurrencyHelper.formatRate(record.shares),
+      text: CurrencyUtil.formatRate(record.shares),
     );
     DateTime selectedDate = record.date;
     double editTaxRate = record.taxRate * 100; // 显示为百分比（0~50）

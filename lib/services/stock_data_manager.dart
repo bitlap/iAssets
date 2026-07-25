@@ -6,7 +6,6 @@ import '../../services/stock_quote_service.dart';
 import '../../services/exchange_rate_service.dart';
 import '../../services/icloud_storage.dart';
 import '../../utils/stock_calculator.dart';
-import '../../utils/currency_helper.dart';
 
 class StockDataManager {
   /// 根据操作记录重算单只股票的股数、总金额、盈亏
@@ -73,8 +72,7 @@ class StockDataManager {
 
   /// 拉取汇率并更新缓存
   static Future<void> fetchExchangeRates(ExchangeRateService service) async {
-    final rates = await service.fetchRates();
-    if (rates != null) CurrencyHelper.updateRates(rates);
+    await service.fetchRates();
   }
 
   /// 拉取行情

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../config/app_config.dart';
-import '../../utils/currency_helper.dart';
+import '../../utils/currency_util.dart';
 import '../common/profit_chart.dart';
 import '../common/dialog_utils.dart';
 import '../common/currency_selector.dart';
@@ -99,7 +99,7 @@ class _StockHeaderCardState extends State<StockHeaderCard> {
           const SizedBox(height: 4),
           // 总金额（已经是目标币种，直接格式化）
           Text(
-            '${CurrencyHelper.getSymbol(widget.selectedCurrency)}${CurrencyHelper.formatCompact(widget.totalAssets)}',
+            '${CurrencyUtil.getSymbol(widget.selectedCurrency)}${CurrencyUtil.formatCompact(widget.totalAssets)}',
             style: const TextStyle(
               fontSize: 34,
               fontWeight: FontWeight.w700,
@@ -200,7 +200,7 @@ class _StockHeaderCardState extends State<StockHeaderCard> {
   }
 
   void _showTotalAssetsHelpDialog() {
-    final sellText = '${CurrencyHelper.formatCompact(widget.totalSellAmount)}';
+    final sellText = '${CurrencyUtil.formatCompact(widget.totalSellAmount)}';
     _helpDialogFrame(
       title: StockConfig.assetTotalAssets,
       icon: Icons.account_balance_wallet,
@@ -212,10 +212,10 @@ class _StockHeaderCardState extends State<StockHeaderCard> {
   }
 
   void _showTotalCostHelpDialog() {
-    final costText = '${CurrencyHelper.formatCompact(widget.totalCost)}';
+    final costText = '${CurrencyUtil.formatCompact(widget.totalCost)}';
     final floatPL = widget.totalMarketValue - widget.totalCost;
     final floatText =
-        '${floatPL >= 0 ? '+' : ''}${CurrencyHelper.formatCompact(floatPL)}';
+        '${floatPL >= 0 ? '+' : ''}${CurrencyUtil.formatCompact(floatPL)}';
     _helpDialogFrame(
       title: StockConfig.assetTotalCost,
       icon: Icons.account_balance,
@@ -269,7 +269,7 @@ class _StockHeaderCardState extends State<StockHeaderCard> {
 
   void _showProfitHelpDialog() {
     final realizedText =
-        '${widget.totalRealizedPL >= 0 ? '+' : ''}${CurrencyHelper.formatCompact(widget.totalRealizedPL)}';
+        '${widget.totalRealizedPL >= 0 ? '+' : ''}${CurrencyUtil.formatCompact(widget.totalRealizedPL)}';
     _helpDialogFrame(
       title: StockConfig.assetTotalProfit,
       icon: Icons.trending_up,
@@ -288,7 +288,7 @@ class _StockHeaderCardState extends State<StockHeaderCard> {
 
   Widget _buildTotalMarketText() {
     return Text(
-      '${CurrencyHelper.formatCompact(widget.totalMarketValue)}',
+      '${CurrencyUtil.formatCompact(widget.totalMarketValue)}',
       style: const TextStyle(
         fontSize: 15,
         fontWeight: FontWeight.w700,
@@ -315,7 +315,7 @@ class _StockHeaderCardState extends State<StockHeaderCard> {
 
   Widget _buildProfitText() {
     return Text(
-      '${widget.totalProfit >= 0 ? '+' : ''}${CurrencyHelper.formatCompact(widget.totalProfit)}',
+      '${widget.totalProfit >= 0 ? '+' : ''}${CurrencyUtil.formatCompact(widget.totalProfit)}',
       style: TextStyle(
         fontSize: 15,
         fontWeight: FontWeight.w700,
@@ -431,7 +431,7 @@ class _StockHeaderCardState extends State<StockHeaderCard> {
 
   Widget _buildDividendText() {
     return Text(
-      '${CurrencyHelper.formatCompact(widget.totalAfterTaxDividends)}',
+      '${CurrencyUtil.formatCompact(widget.totalAfterTaxDividends)}',
       style: const TextStyle(
         fontSize: 15,
         fontWeight: FontWeight.w700,

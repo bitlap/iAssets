@@ -1,5 +1,5 @@
 import '../models/asset_account.dart';
-import 'currency_helper.dart';
+import 'currency_util.dart';
 
 /// 资产计算工具类
 class AssetCalculator {
@@ -7,31 +7,31 @@ class AssetCalculator {
   static double getAssetValue(AssetBase asset, String targetCurrency) {
     switch (asset) {
       case CashAccount c:
-        return CurrencyHelper.convertCurrency(
+        return CurrencyUtil.convertCurrency(
           c.balance,
           c.currency,
           targetCurrency,
         );
       case CurrentAccount c:
-        return CurrencyHelper.convertCurrency(
+        return CurrencyUtil.convertCurrency(
           c.balance,
           c.currency,
           targetCurrency,
         );
       case ProvidentFundAccount c:
-        return CurrencyHelper.convertCurrency(
+        return CurrencyUtil.convertCurrency(
           c.balance,
           c.currency,
           targetCurrency,
         );
       case TimeDeposit t:
-        return CurrencyHelper.convertCurrency(
+        return CurrencyUtil.convertCurrency(
           t.totalValue,
           t.currency,
           targetCurrency,
         );
       case WealthProduct w:
-        return CurrencyHelper.convertCurrency(
+        return CurrencyUtil.convertCurrency(
           w.totalValue,
           w.currency,
           targetCurrency,

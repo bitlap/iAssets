@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../utils/currency_helper.dart';
+import '../../utils/currency_util.dart';
 import '../../config/app_config.dart';
 import '../../config/asset_config.dart';
 
@@ -88,7 +88,7 @@ class AssetHeader extends StatelessWidget {
           ),
           const SizedBox(height: 4),
           Text(
-            '${CurrencyHelper.getSymbol(currency)}${CurrencyHelper.formatCompact(totalAssets)}',
+            '${CurrencyUtil.getSymbol(currency)}${CurrencyUtil.formatCompact(totalAssets)}',
             style: const TextStyle(
               fontSize: 34,
               fontWeight: FontWeight.w700,
@@ -102,14 +102,14 @@ class AssetHeader extends StatelessWidget {
               _summaryChip(
                 Icons.show_chart,
                 StockConfig.tabStock,
-                CurrencyHelper.formatCompact(stockTotalValue),
+                CurrencyUtil.formatCompact(stockTotalValue),
                 iconColor: const Color(0xFF5B9CF6),
               ),
               const SizedBox(width: 8),
               _summaryChip(
                 Icons.account_balance,
                 AssetConfig.depositWealthLabel,
-                CurrencyHelper.formatCompact(totalAssets - stockTotalValue),
+                CurrencyUtil.formatCompact(totalAssets - stockTotalValue),
                 iconColor: const Color(0xFFFF9F0A),
               ),
             ],

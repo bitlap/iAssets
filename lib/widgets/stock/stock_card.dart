@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../models/stock_model.dart';
 import '../../config/app_config.dart';
-import '../../utils/currency_helper.dart';
+import '../../utils/currency_util.dart';
 import '../../utils/stock_calculator.dart';
 import '../../utils/logo_cacher.dart';
 
@@ -69,7 +69,7 @@ class StockCard extends StatelessWidget {
                     FittedBox(
                       fit: BoxFit.scaleDown,
                       child: Text(
-                        '${CurrencyHelper.getSymbol(stock.currency)}${CurrencyHelper.formatCompact(stock.totalValue)}',
+                        '${CurrencyUtil.getSymbol(stock.currency)}${CurrencyUtil.formatCompact(stock.totalValue)}',
                         style: const TextStyle(
                           fontSize: 13,
                           fontWeight: FontWeight.bold,
@@ -249,7 +249,7 @@ class StockCard extends StatelessWidget {
             fit: BoxFit.scaleDown,
             alignment: Alignment.centerLeft,
             child: Text(
-              '${CurrencyHelper.formatRate(stock.shares)}${StockConfig.stockSharesSuffix}',
+              '${CurrencyUtil.formatRate(stock.shares)}${StockConfig.stockSharesSuffix}',
               style: const TextStyle(
                 fontSize: 12,
                 fontWeight: FontWeight.bold,
@@ -267,7 +267,7 @@ class StockCard extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
-                  '${CurrencyHelper.formatRate(stock.currentPrice)}',
+                  '${CurrencyUtil.formatRate(stock.currentPrice)}',
                   style: const TextStyle(
                     fontSize: 12,
                     fontWeight: FontWeight.bold,
@@ -310,7 +310,7 @@ class StockCard extends StatelessWidget {
           fit: BoxFit.scaleDown,
           alignment: Alignment.centerRight,
           child: Text(
-            '${isPositive}${CurrencyHelper.formatCompact(stock.profitLossAmount.abs())}',
+            '${isPositive}${CurrencyUtil.formatCompact(stock.profitLossAmount.abs())}',
             style: TextStyle(
               fontSize: 12,
               color: profitColor,
@@ -400,19 +400,19 @@ class StockCard extends StatelessWidget {
     final items = [
       _DetailItem(
         StockConfig.stockDetailTotalCost,
-        CurrencyHelper.formatCompact(totalCost),
+        CurrencyUtil.formatCompact(totalCost),
       ),
       _DetailItem(
         StockConfig.stockDetailAvgPrice,
-        CurrencyHelper.formatRate(stats.avgBuyPrice),
+        CurrencyUtil.formatRate(stats.avgBuyPrice),
       ),
       _DetailItem(
         StockConfig.stockDetailMaxPrice,
-        CurrencyHelper.formatRate(stats.maxBuyPrice),
+        CurrencyUtil.formatRate(stats.maxBuyPrice),
       ),
       _DetailItem(
         StockConfig.stockDetailMinPrice,
-        CurrencyHelper.formatRate(stats.minBuyPrice),
+        CurrencyUtil.formatRate(stats.minBuyPrice),
       ),
       _DetailItem(
         StockConfig.stockDetailBuyCount,

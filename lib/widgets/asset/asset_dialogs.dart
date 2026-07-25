@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../models/asset_account.dart';
-import '../../utils/currency_helper.dart';
+import '../../utils/currency_util.dart';
+import '../../services/exchange_rate_service.dart';
 import '../../utils/center_toast.dart';
 import '../../config/app_config.dart';
 import '../../config/asset_config.dart';
@@ -162,7 +163,7 @@ class _BalanceDialogState extends State<_BalanceDialog> {
     nameCtrl = TextEditingController(text: a?.name ?? '');
     balanceCtrl = TextEditingController(
       text: a != null
-          ? CurrencyHelper.formatRate((a as dynamic).balance ?? 0)
+          ? CurrencyUtil.formatRate((a as dynamic).balance ?? 0)
           : '',
     );
     currency = a?.currency ?? widget.defaultCurrency;
@@ -374,7 +375,7 @@ class _TimeDepositDialogState extends State<_TimeDepositDialog> {
     final td = widget.td;
     nameCtrl = TextEditingController(text: td?.name ?? '');
     principalCtrl = TextEditingController(
-      text: td != null ? CurrencyHelper.formatRate(td.principal) : '',
+      text: td != null ? CurrencyUtil.formatRate(td.principal) : '',
     );
     rateCtrl = TextEditingController(
       text: td != null ? td.annualRate.toString() : '',
@@ -559,10 +560,10 @@ class _WealthProductDialogState extends State<_WealthProductDialog> {
     final wp = widget.wp;
     nameCtrl = TextEditingController(text: wp?.name ?? '');
     sharesCtrl = TextEditingController(
-      text: wp != null ? CurrencyHelper.formatRate(wp.shares) : '',
+      text: wp != null ? CurrencyUtil.formatRate(wp.shares) : '',
     );
     navCtrl = TextEditingController(
-      text: wp != null ? CurrencyHelper.formatRate(wp.nav) : '',
+      text: wp != null ? CurrencyUtil.formatRate(wp.nav) : '',
     );
     currency = wp?.currency ?? widget.defaultCurrency;
   }
@@ -720,7 +721,7 @@ Widget _currencySelector(
   String selected,
   ValueChanged<String> onChanged,
 ) {
-  final currencies = CurrencyHelper.exchangeRates.keys.toList();
+  final currencies = ExchangeRateService.supportedCurrencies.toList();
   return Builder(
     builder: (btnCtx) {
       return GestureDetector(

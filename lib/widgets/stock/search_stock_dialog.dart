@@ -7,7 +7,7 @@ import '../../services/settings_service.dart';
 import '../../services/stock_search_service.dart';
 import '../../services/stock_quote_service.dart';
 import '../../utils/center_toast.dart';
-import '../../utils/currency_helper.dart';
+import '../../utils/currency_util.dart';
 import '../../utils/logo_cacher.dart';
 import '../../config/app_config.dart';
 import '../common/app_number_field.dart';
@@ -218,7 +218,7 @@ class _SearchStockDialogState extends State<SearchStockDialog> {
       logoUrl: StockQuoteService.getLogoUrl(stock.code, stock.market),
       marketType: stock.market,
       changePercent: quote?.changePercent ?? 0.0,
-      currency: CurrencyHelper.currencyForMarket(stock.market),
+      currency: CurrencyUtil.currencyForMarket(stock.market),
       secid: stock.secid,
     );
 
@@ -684,9 +684,9 @@ class _SearchStockDialogState extends State<SearchStockDialog> {
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
                           Text(
-                            CurrencyHelper.formatCompact(
+                            CurrencyUtil.formatCompact(
                               quote.currentPrice,
-                              formatBase: CurrencyHelper.formatRate,
+                              formatBase: CurrencyUtil.formatRate,
                             ),
                             style: const TextStyle(
                               color: Colors.white,
@@ -819,7 +819,7 @@ class _AddStockConfirmDialogState extends State<_AddStockConfirmDialog> {
     super.initState();
     _priceController = TextEditingController(
       text: widget.defaultPrice > 0
-          ? CurrencyHelper.formatRate(widget.defaultPrice)
+          ? CurrencyUtil.formatRate(widget.defaultPrice)
           : '',
     );
     _sharesController = TextEditingController();
@@ -838,7 +838,7 @@ class _AddStockConfirmDialogState extends State<_AddStockConfirmDialog> {
     final shares = double.tryParse(_sharesController.text);
     if (price == null || shares == null || price <= 0 || shares <= 0) return;
     final fee = price * shares * _feeSettingValue / 100;
-    _feeController.text = CurrencyHelper.formatRate(fee);
+    _feeController.text = CurrencyUtil.formatRate(fee);
     setState(() {});
   }
 
@@ -850,7 +850,7 @@ class _AddStockConfirmDialogState extends State<_AddStockConfirmDialog> {
     _feeSettingValue = feeValue;
     if (feeValue <= 0) return;
     if (feeType == SettingsService.feeTypeFixed) {
-      _feeController.text = CurrencyHelper.formatRate(feeValue);
+      _feeController.text = CurrencyUtil.formatRate(feeValue);
       return;
     }
     _updateFeeFromInput();
@@ -944,7 +944,7 @@ class _AddStockConfirmDialogState extends State<_AddStockConfirmDialog> {
             const SizedBox(height: 8),
             InfoRowWidget(
               label: StockConfig.searchRealtimePrice,
-              value: CurrencyHelper.formatRate(widget.defaultPrice),
+              value: CurrencyUtil.formatRate(widget.defaultPrice),
             ),
           ],
         ],
