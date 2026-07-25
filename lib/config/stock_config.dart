@@ -152,4 +152,27 @@ class StockConfig {
   static const String profitRange30d = '30天';
   static const String profitRange180d = '180天';
   static const String profitRange360d = '360天';
+
+  // 全局股息页 文案
+  static const String dividendOverviewTitle = '股息记录';
+  static const String dividendOverviewEmpty = '暂无派息记录';
+  static const String dividendOverviewEmptyHint = '在股票卡片更多菜单中添加派息';
+  static const String dividendTabByStock = '按股票';
+  static const String dividendTabByRecord = '按记录';
+  static const String dividendCostYield = '成本股息率';
+  static const String dividendMarketYield = '现价股息率';
+  static const String dividendTotalAfterTax = '税后总股息';
+  static const String dividendTrailing12m = '近12月股息';
+  static const String dividendCurrentCost = '当前成本';
+  static const String dividendCurrentValue = '当前市值';
+  static const String dividendRecordCount = '条派息记录';
+  static const String dividendExpandAll = '展开全部记录';
+  static const String dividendLatestDate = '最新派息';
+  static const String dividendSortYield = '按现价股息率';
+  static const String dividendSortCostYield = '按成本股息率';
+  static const String dividendSortAmount = '按税后总股息';
+  static const String dividendSortDate = '按最近派息';
+  static const String dividendSortName = '按名称';
+  static const String dividendRecords = '派息记录';
+  static const String dividendAllMarkets = '全部市场';
 }

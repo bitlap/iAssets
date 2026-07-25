@@ -200,10 +200,6 @@ class _SettingsPageState extends State<SettingsPage> {
           ),
         ),
         centerTitle: true,
-        bottom: const PreferredSize(
-          preferredSize: Size.fromHeight(0.5),
-          child: Divider(height: 0.5, color: Color(0xFF1C1C1E), thickness: 0.5),
-        ),
       ),
       body: ListView(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),

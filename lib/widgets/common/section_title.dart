@@ -5,6 +5,7 @@ class SectionTitle extends StatelessWidget {
   final String subtitle;
   final VoidCallback? onAdd;
   final VoidCallback? onSettings;
+  final VoidCallback? onDividendOverview;
 
   const SectionTitle({
     super.key,
@@ -12,6 +13,7 @@ class SectionTitle extends StatelessWidget {
     required this.subtitle,
     this.onAdd,
     this.onSettings,
+    this.onDividendOverview,
   });
 
   @override
@@ -49,9 +51,9 @@ class SectionTitle extends StatelessWidget {
           Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              if (onAdd != null)
+              if (onDividendOverview != null)
                 GestureDetector(
-                  onTap: onAdd,
+                  onTap: onDividendOverview,
                   child: Container(
                     width: 32,
                     height: 32,
@@ -59,11 +61,16 @@ class SectionTitle extends StatelessWidget {
                       color: const Color(0xFF2C2C2E),
                       shape: BoxShape.circle,
                     ),
-                    child: const Icon(Icons.add, color: Colors.white, size: 18),
+                    child: const Icon(
+                      Icons.payments_outlined,
+                      color: Colors.white,
+                      size: 18,
+                    ),
                   ),
                 ),
-              if (onSettings != null) ...[
+              if (onDividendOverview != null && onAdd != null)
                 const SizedBox(width: 8),
+              if (onSettings != null)
                 GestureDetector(
                   onTap: onSettings,
                   child: Container(
@@ -80,7 +87,20 @@ class SectionTitle extends StatelessWidget {
                     ),
                   ),
                 ),
-              ],
+              if (onSettings != null && onAdd != null) const SizedBox(width: 8),
+              if (onAdd != null)
+                GestureDetector(
+                  onTap: onAdd,
+                  child: Container(
+                    width: 32,
+                    height: 32,
+                    decoration: BoxDecoration(
+                      color: const Color(0xFF2C2C2E),
+                      shape: BoxShape.circle,
+                    ),
+                    child: const Icon(Icons.add, color: Colors.white, size: 18),
+                  ),
+                ),
             ],
           ),
         ],

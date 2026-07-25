@@ -1,3 +1,5 @@
+import 'stock_model.dart';
+
 /// 操作记录统计结果
 class RecordStats {
   final double currentShares; // 当前持股数
@@ -41,5 +43,61 @@ class AssetSummary {
     this.totalProfitPercent = 0,
     this.totalSellAmount = 0,
     this.totalAfterTaxDividends = 0,
+  });
+}
+
+/// 单只股票的全局股息聚合结果（币种为股票自身币种）
+class GlobalDividendStockItem {
+  final String symbol;
+  final String companyName;
+  final String marketType;
+  final String currency;
+  final double currentShares;
+  final double currentCost; // 持仓成本（avgCost × shares，自身币种）
+  final double currentMarketValue; // 当前市值（自身币种）
+  final double totalAfterTaxDividends; // 全部历史税后股息（自身币种）
+  final double trailingAfterTaxDividends; // 近12月税后股息（自身币种）
+  final double costDividendYield; // 成本股息率 = trailing / currentCost
+  final double marketDividendYield; // 现价股息率 = trailing / currentMarketValue
+  final DateTime? latestDividendDate;
+  final int recordCount;
+  final List<DividendRecord> records;
+
+  const GlobalDividendStockItem({
+    required this.symbol,
+    required this.companyName,
+    required this.marketType,
+    required this.currency,
+    required this.currentShares,
+    required this.currentCost,
+    required this.currentMarketValue,
+    required this.totalAfterTaxDividends,
+    required this.trailingAfterTaxDividends,
+    required this.costDividendYield,
+    required this.marketDividendYield,
+    required this.latestDividendDate,
+    required this.recordCount,
+    required this.records,
+  });
+}
+
+/// 全局股息汇总结果（金额已转换为目标币种）
+class GlobalDividendOverview {
+  final List<GlobalDividendStockItem> items;
+  final double totalAfterTaxDividends;
+  final double trailingAfterTaxDividends;
+  final double totalCurrentCost;
+  final double totalCurrentMarketValue;
+  final double costDividendYield;
+  final double marketDividendYield;
+
+  const GlobalDividendOverview({
+    this.items = const [],
+    this.totalAfterTaxDividends = 0,
+    this.trailingAfterTaxDividends = 0,
+    this.totalCurrentCost = 0,
+    this.totalCurrentMarketValue = 0,
+    this.costDividendYield = 0,
+    this.marketDividendYield = 0,
   });
 }

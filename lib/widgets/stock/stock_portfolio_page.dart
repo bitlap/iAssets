@@ -19,6 +19,7 @@ import 'records_dialog.dart';
 import 'edit_delete_dialogs.dart';
 import 'search_stock_dialog.dart';
 import 'stock_header_card.dart';
+import 'global_dividend_page.dart';
 import '../settings_page.dart';
 
 /// 股票持仓主页 - 仅负责状态管理和页面组装
@@ -639,6 +640,23 @@ class StockPortfolioPageState extends State<StockPortfolioPage>
     }
   }
 
+  /// 打开全局股息页面
+  void _showDividendOverview() {
+    _collapseExpandedStock();
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => GlobalDividendPage(
+          stocks: stocks,
+          operationRecords: _operationRecords,
+          dividendRecords: _dividendRecords,
+          selectedCurrency: selectedCurrency,
+          onRefresh: _refreshAll,
+        ),
+      ),
+    );
+  }
+
   /// 打开全屏设置页面
   void _showSettingsPage() {
     _collapseExpandedStock();
@@ -709,6 +727,7 @@ class StockPortfolioPageState extends State<StockPortfolioPage>
                         '{count}',
                         '${stocks.length}',
                       ),
+                      onDividendOverview: () => _showDividendOverview(),
                       onAdd: _showSearchStockDialog,
                       onSettings: _showSettingsPage,
                     ),

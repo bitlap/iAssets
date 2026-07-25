@@ -276,4 +276,104 @@ class StockCalculator {
       isPositive: isPositive,
     );
   }
+
+  /// 计算单只股票的全局股息聚合项
+  static GlobalDividendStockItem calculateDividendItem(
+    StockModel stock,
+    List<OperationRecord> operationRecords,
+    List<DividendRecord> dividendRecords,
+  ) {
+    final stats = calculateRecordStats(operationRecords);
+    final shares = stock.shares;
+    final avgCost = stats.avgBuyPrice;
+    final currentCost = avgCost * shares;
+    final currentMarketValue = stock.currentPrice * shares;
+    final now = DateTime.now();
+    final trailingCutoff = DateTime(now.year - 1, now.month, now.day);
+    double totalAfterTax = 0;
+    double trailingAfterTax = 0;
+    DateTime? latestDate;
+    for (final r in dividendRecords) {
+      if (latestDate == null || r.date.isAfter(latestDate)) latestDate = r.date;
+      totalAfterTax += r.afterTaxAmount;
+      if (!r.date.isBefore(trailingCutoff)) {
+        trailingAfterTax += r.afterTaxAmount;
+      }
+    }
+    return GlobalDividendStockItem(
+      symbol: stock.symbol,
+      companyName: stock.companyName,
+      marketType: stock.marketType,
+      currency: stock.currency,
+      currentShares: shares,
+      currentCost: currentCost,
+      currentMarketValue: currentMarketValue,
+      totalAfterTaxDividends: totalAfterTax,
+      trailingAfterTaxDividends: trailingAfterTax,
+      costDividendYield: currentCost > 0
+          ? trailingAfterTax / currentCost * 100
+          : 0,
+      marketDividendYield: currentMarketValue > 0
+          ? trailingAfterTax / currentMarketValue * 100
+          : 0,
+      latestDividendDate: latestDate,
+      recordCount: dividendRecords.length,
+      records: dividendRecords,
+    );
+  }
+
+  /// 计算全局股息汇总
+  static GlobalDividendOverview calculateGlobalDividendOverview(
+    List<StockModel> stocks,
+    Map<String, List<OperationRecord>> operationRecords,
+    Map<String, List<DividendRecord>> dividendRecords,
+    String targetCurrency,
+  ) {
+    final items = <GlobalDividendStockItem>[];
+    double totalAfterTax = 0;
+    double trailingAfterTax = 0;
+    double totalCost = 0;
+    double totalMarketValue = 0;
+    for (final stock in stocks) {
+      final divs = dividendRecords[stock.symbol] ?? [];
+      if (divs.isEmpty) continue;
+      final item = calculateDividendItem(
+        stock,
+        operationRecords[stock.symbol] ?? [],
+        divs,
+      );
+      items.add(item);
+      totalAfterTax += CurrencyUtil.convertCurrency(
+        item.totalAfterTaxDividends,
+        item.currency,
+        targetCurrency,
+      );
+      trailingAfterTax += CurrencyUtil.convertCurrency(
+        item.trailingAfterTaxDividends,
+        item.currency,
+        targetCurrency,
+      );
+      totalCost += CurrencyUtil.convertCurrency(
+        item.currentCost,
+        item.currency,
+        targetCurrency,
+      );
+      totalMarketValue += CurrencyUtil.convertCurrency(
+        item.currentMarketValue,
+        item.currency,
+        targetCurrency,
+      );
+    }
+    return GlobalDividendOverview(
+      items: items,
+      totalAfterTaxDividends: totalAfterTax,
+      trailingAfterTaxDividends: trailingAfterTax,
+      totalCurrentCost: totalCost,
+      totalCurrentMarketValue: totalMarketValue,
+      costDividendYield: totalCost > 0 ? trailingAfterTax / totalCost * 100 : 0,
+      marketDividendYield: totalMarketValue > 0
+          ? trailingAfterTax / totalMarketValue * 100
+          : 0,
+    );
+  }
 }

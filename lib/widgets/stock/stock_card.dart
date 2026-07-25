@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import '../../models/stock_model.dart';
 import '../../config/app_config.dart';
+import '../../config/app_colors.dart';
 import '../../utils/currency_util.dart';
 import '../../utils/market_util.dart';
 import '../../utils/stock_calculator.dart';
 import '../../utils/logo_cacher.dart';
+import '../common/app_ui.dart';
 
 /// 股票卡片组件（纯UI展示）
 class StockCard extends StatelessWidget {
@@ -46,14 +48,9 @@ class StockCard extends StatelessWidget {
               children: [
                 Row(
                   children: [
-                    Text(
-                      stock.marketType,
-                      style: TextStyle(
-                        fontSize: 10,
-                        fontWeight: FontWeight.bold,
-                        color: MarketUtil.marketColor(stock.marketType),
-                        height: 1.2,
-                      ),
+                    MarketAndCurrencyBadges(
+                      market: stock.marketType,
+                      currency: stock.currency,
                     ),
                     const Spacer(),
                     Text(
@@ -216,10 +213,7 @@ class StockCard extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
-        Text(
-          stock.companyName,
-          style: TextStyle(fontSize: 11, color: Color(0xFF8E8E93), height: 1.2),
-        ),
+        Text(stock.companyName, style: TextStyles.caption),
         const SizedBox(height: 2),
         Text(
           stock.symbol,
@@ -461,7 +455,7 @@ class StockCard extends StatelessWidget {
                     ),
                   ),
                   TextSpan(
-                    text: ' :${item.label}',
+                    text: '${item.label}: ',
                     style: const TextStyle(
                       fontSize: 11,
                       color: Color(0xFF8E8E93),

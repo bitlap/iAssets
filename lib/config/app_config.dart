@@ -18,6 +18,7 @@ class AppConfig {
   static const String defaultLocaleCountry = 'CN';
 
   // UI 布局
+  static const double appBarHeight = 44.0;
   static const double dialogWidthRatio = 0.75;
 
   // 开发者信息
