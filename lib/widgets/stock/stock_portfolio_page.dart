@@ -165,9 +165,7 @@ class StockPortfolioPageState extends State<StockPortfolioPage>
         state == AppLifecycleState.inactive) {
       _isForeground = false;
       if (_dataDirty) _flushToCloud();
-      unawaited(
-        IcloudStorage.recordProfitIfNeeded(totalProfit, selectedCurrency),
-      );
+      unawaited(_recordProfitOnPaused());
     } else if (state == AppLifecycleState.resumed) {
       _isForeground = true;
       unawaited(_refreshAll());
@@ -221,6 +219,16 @@ class StockPortfolioPageState extends State<StockPortfolioPage>
 
     await IcloudStorage.recordProfitIfNeeded(totalProfit, selectedCurrency);
     unawaited(IcloudStorage.syncProfitToCloud());
+  }
+
+  /// 离开前台时：用缓存/最新行情刷新价格后记录利润快照
+  Future<void> _recordProfitOnPaused() async {
+    await _fetchExchangeRatesWithoutRebuild();
+    if (stocks.isNotEmpty) {
+      final quotes = await _fetchQuotesWithoutRebuild();
+      if (quotes.isNotEmpty) _applyQuotes(stocks, quotes);
+    }
+    await IcloudStorage.recordProfitIfNeeded(totalProfit, selectedCurrency);
   }
 
   /// 拉取行情但不触发 UI 重建
