@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import '../../config/app_colors.dart';
+import 'app_ui.dart';
 
 /// 设置页通用折叠卡片 - 统一设置页中所有 ExpansionTile 卡片的样式
 class SettingsExpansionCard extends StatefulWidget {
@@ -26,9 +28,9 @@ class _SettingsExpansionCardState extends State<SettingsExpansionCard> {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: const Color(0xFF000000),
+        color: AppColors.surface,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: const Color(0xFF1C1C1E)),
+        border: Border.all(color: AppColors.border, width: 0.5),
       ),
       child: Material(
         color: Colors.transparent,
@@ -77,9 +79,7 @@ class SettingsSelectableItem extends StatelessWidget {
         decoration: BoxDecoration(
           border: isLast
               ? null
-              : Border(
-                  bottom: BorderSide(color: Color(0xFF1C1C1E)!, width: 0.5),
-                ),
+              : Border(bottom: BorderSide(color: AppColors.border, width: 0.5)),
         ),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -96,7 +96,7 @@ class SettingsSelectableItem extends StatelessWidget {
                   : Icon(
                       Icons.circle_outlined,
                       size: 20,
-                      color: Color(0xFF636366),
+                      color: AppColors.textTertiary,
                     ),
             ),
             const SizedBox(width: 12),
@@ -105,7 +105,9 @@ class SettingsSelectableItem extends StatelessWidget {
                 label,
                 style: TextStyle(
                   fontSize: 15,
-                  color: isSelected ? Colors.white : Color(0xFF8E8E93),
+                  color: isSelected
+                      ? AppColors.textPrimary
+                      : AppColors.textSecondary,
                   fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
                   height: 1.2,
                 ),
@@ -116,7 +118,9 @@ class SettingsSelectableItem extends StatelessWidget {
                 trailingText!,
                 style: TextStyle(
                   fontSize: 13,
-                  color: isSelected ? Colors.white : Color(0xFF8E8E93),
+                  color: isSelected
+                      ? AppColors.textPrimary
+                      : AppColors.textSecondary,
                   height: 1.2,
                 ),
               ),

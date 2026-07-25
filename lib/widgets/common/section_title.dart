@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import '../../config/app_colors.dart';
+import 'app_ui.dart';
 
 class SectionTitle extends StatelessWidget {
   final String title;
@@ -28,21 +30,13 @@ class SectionTitle extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text(
-                title,
-                style: const TextStyle(
-                  fontSize: 22,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.white,
-                  height: 1.2,
-                ),
-              ),
+              Text(title, style: TextStyles.headline),
               const SizedBox(height: 2),
               Text(
                 subtitle,
                 style: const TextStyle(
                   fontSize: 13,
-                  color: Color(0xFF8E8E93),
+                  color: AppColors.textSecondary,
                   height: 1.2,
                 ),
               ),
@@ -58,17 +52,17 @@ class SectionTitle extends StatelessWidget {
                     width: 32,
                     height: 32,
                     decoration: BoxDecoration(
-                      color: const Color(0xFF2C2C2E),
+                      color: AppColors.surfaceElevated,
                       shape: BoxShape.circle,
                     ),
                     child: const Icon(
                       Icons.payments_outlined,
-                      color: Colors.white,
+                      color: AppColors.textPrimary,
                       size: 18,
                     ),
                   ),
                 ),
-              if (onDividendOverview != null && onAdd != null)
+              if (onDividendOverview != null && onSettings != null)
                 const SizedBox(width: 8),
               if (onSettings != null)
                 GestureDetector(
@@ -77,28 +71,14 @@ class SectionTitle extends StatelessWidget {
                     width: 32,
                     height: 32,
                     decoration: BoxDecoration(
-                      color: const Color(0xFF2C2C2E),
+                      color: AppColors.surfaceElevated,
                       shape: BoxShape.circle,
                     ),
                     child: const Icon(
                       Icons.settings,
-                      color: Colors.white,
+                      color: AppColors.textPrimary,
                       size: 18,
                     ),
-                  ),
-                ),
-              if (onSettings != null && onAdd != null) const SizedBox(width: 8),
-              if (onAdd != null)
-                GestureDetector(
-                  onTap: onAdd,
-                  child: Container(
-                    width: 32,
-                    height: 32,
-                    decoration: BoxDecoration(
-                      color: const Color(0xFF2C2C2E),
-                      shape: BoxShape.circle,
-                    ),
-                    child: const Icon(Icons.add, color: Colors.white, size: 18),
                   ),
                 ),
             ],

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../config/app_config.dart';
+import '../../config/app_colors.dart';
+import 'app_ui.dart';
 
 /// 通用删除确认弹窗 - 消除项目中所有删除确认弹窗的重复代码
 class ConfirmDeleteDialog extends StatelessWidget {
@@ -23,7 +25,7 @@ class ConfirmDeleteDialog extends StatelessWidget {
     return showDialog<bool>(
       context: context,
       builder: (ctx) => Dialog(
-        backgroundColor: const Color(0xFF000000),
+        backgroundColor: AppColors.surface,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         insetPadding: const EdgeInsets.symmetric(horizontal: 40, vertical: 24),
         child: SizedBox(
@@ -32,7 +34,7 @@ class ConfirmDeleteDialog extends StatelessWidget {
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(20),
-              border: Border.all(color: const Color(0xFF38383A)),
+              border: Border.all(color: AppColors.separator),
             ),
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -46,26 +48,19 @@ class ConfirmDeleteDialog extends StatelessWidget {
                   ),
                   child: const Icon(
                     Icons.delete_outline,
-                    color: Color(0xFFFF3B30),
+                    color: AppColors.danger,
                     size: 24,
                   ),
                 ),
                 const SizedBox(height: 12),
-                Text(
-                  title,
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
-                ),
+                Text(title, style: TextStyles.dialogTitle),
                 const SizedBox(height: 8),
                 Text(
                   content,
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 14,
-                    color: Color(0xFF8E8E93),
+                    color: AppColors.textSecondary,
                     height: 1.4,
                   ),
                 ),
@@ -79,14 +74,14 @@ class ConfirmDeleteDialog extends StatelessWidget {
                           padding: const EdgeInsets.symmetric(vertical: 12),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(12),
-                            border: Border.all(color: const Color(0xFF38383A)),
+                            border: Border.all(color: AppColors.separator),
                           ),
                           child: const Center(
                             child: Text(
                               AppConfig.btnCancel,
                               style: TextStyle(
                                 fontSize: 15,
-                                color: Color(0xFF8E8E93),
+                                color: AppColors.textSecondary,
                                 fontWeight: FontWeight.w500,
                               ),
                             ),
@@ -107,11 +102,7 @@ class ConfirmDeleteDialog extends StatelessWidget {
                           child: const Center(
                             child: Text(
                               AppConfig.btnDelete,
-                              style: TextStyle(
-                                fontSize: 15,
-                                color: Colors.white,
-                                fontWeight: FontWeight.w600,
-                              ),
+                              style: TextStyles.bodyMedium,
                             ),
                           ),
                         ),
@@ -130,7 +121,7 @@ class ConfirmDeleteDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Dialog(
-      backgroundColor: const Color(0xFF000000),
+      backgroundColor: AppColors.surface,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       insetPadding: const EdgeInsets.symmetric(horizontal: 40, vertical: 24),
       child: SizedBox(
@@ -139,7 +130,7 @@ class ConfirmDeleteDialog extends StatelessWidget {
           padding: const EdgeInsets.all(20),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20),
-            border: Border.all(color: const Color(0xFF38383A)),
+            border: Border.all(color: AppColors.separator),
           ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -153,26 +144,19 @@ class ConfirmDeleteDialog extends StatelessWidget {
                 ),
                 child: const Icon(
                   Icons.delete_outline,
-                  color: Color(0xFFFF3B30),
+                  color: AppColors.danger,
                   size: 24,
                 ),
               ),
               const SizedBox(height: 12),
-              Text(
-                title,
-                style: const TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                ),
-              ),
+              Text(title, style: TextStyles.dialogTitle),
               const SizedBox(height: 8),
               Text(
                 content,
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 14,
-                  color: Color(0xFF8E8E93),
+                  color: AppColors.textSecondary,
                   height: 1.4,
                 ),
               ),
@@ -186,14 +170,14 @@ class ConfirmDeleteDialog extends StatelessWidget {
                         padding: const EdgeInsets.symmetric(vertical: 12),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(12),
-                          border: Border.all(color: const Color(0xFF38383A)),
+                          border: Border.all(color: AppColors.separator),
                         ),
                         child: const Center(
                           child: Text(
                             AppConfig.btnCancel,
                             style: TextStyle(
                               fontSize: 15,
-                              color: Color(0xFF8E8E93),
+                              color: AppColors.textSecondary,
                               fontWeight: FontWeight.w500,
                             ),
                           ),
@@ -217,11 +201,7 @@ class ConfirmDeleteDialog extends StatelessWidget {
                         child: const Center(
                           child: Text(
                             AppConfig.btnDelete,
-                            style: TextStyle(
-                              fontSize: 15,
-                              color: Colors.white,
-                              fontWeight: FontWeight.w600,
-                            ),
+                            style: TextStyles.bodyMedium,
                           ),
                         ),
                       ),

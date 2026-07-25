@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import '../../config/app_colors.dart';
+import 'app_ui.dart';
 
 Widget buildPercentSelector(
   BuildContext context,
@@ -20,10 +22,10 @@ Widget buildPercentSelector(
                   button.size,
               Offset.zero & overlay.size,
             ),
-            color: const Color(0xFF000000),
+            color: AppColors.surface,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10),
-              side: const BorderSide(color: Color(0xFF1C1C1E)),
+              side: const BorderSide(color: AppColors.border),
             ),
             constraints: const BoxConstraints(maxHeight: 300),
             items: values.map((v) {
@@ -62,26 +64,19 @@ Widget buildPercentSelector(
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
           decoration: BoxDecoration(
-            color: const Color(0xFF000000),
+            color: AppColors.surface,
             borderRadius: BorderRadius.circular(12),
-            border: Border.all(color: const Color(0xFF1C1C1E)),
+            border: Border.all(color: AppColors.border),
           ),
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text(
-                '${selected.toInt()}%',
-                style: const TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.white,
-                ),
-              ),
+              Text('${selected.toInt()}%', style: TextStyles.bodyMedium),
               const SizedBox(width: 4),
               const Icon(
                 Icons.keyboard_arrow_down,
                 size: 18,
-                color: Color(0xFF636366),
+                color: AppColors.textTertiary,
               ),
             ],
           ),

@@ -77,6 +77,51 @@ class TextStyles {
     fontWeight: FontWeight.w500,
     height: 1.2,
   );
+
+  // ── 标题类 ──
+  static const dialogTitle = TextStyle(
+    fontSize: 18,
+    fontWeight: FontWeight.bold,
+    color: Colors.white,
+  );
+
+  static const sectionTitle = TextStyle(
+    fontSize: 16,
+    fontWeight: FontWeight.w600,
+    color: Colors.white,
+  );
+
+  static const sectionTitleRegular = TextStyle(
+    fontSize: 16,
+    color: Colors.white,
+  );
+
+  // ── 正文类 ──
+  static const subtitle = TextStyle(
+    fontSize: 14,
+    fontWeight: FontWeight.w600,
+    color: Colors.white,
+  );
+
+  static const subtitleRegular = TextStyle(fontSize: 14, color: Colors.white);
+
+  static const bodyMedium = TextStyle(
+    fontSize: 15,
+    fontWeight: FontWeight.w600,
+    color: Colors.white,
+  );
+
+  static const bodyRegular = TextStyle(fontSize: 15, color: Colors.white);
+
+  static const body13 = TextStyle(fontSize: 13, color: Colors.white);
+
+  // ── 小型强调 ──
+  static const smallBold = TextStyle(
+    fontSize: 12,
+    fontWeight: FontWeight.w600,
+    color: Colors.white,
+    height: 1.2,
+  );
 }
 
 // ═══════════════════════════════════════

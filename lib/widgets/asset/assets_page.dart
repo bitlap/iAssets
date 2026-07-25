@@ -6,12 +6,13 @@ import '../../utils/center_toast.dart';
 import '../../utils/asset_calculator.dart';
 import '../../utils/asset_reorder_util.dart';
 import '../../config/app_config.dart';
+import '../../config/app_colors.dart';
 import '../../services/asset_data_manager.dart';
 import '../common/empty_state_widget.dart';
 import '../common/currency_selector.dart';
 import '../common/confirm_delete_dialog.dart';
-import '../common/draggable_fab.dart';
 import '../common/section_title.dart';
+import '../common/app_ui.dart';
 import 'asset_card.dart';
 import 'asset_header.dart';
 import 'asset_dialogs.dart';
@@ -29,10 +30,10 @@ class AssetsPage extends StatefulWidget {
   });
 
   @override
-  State<AssetsPage> createState() => _AssetsPageState();
+  State<AssetsPage> createState() => AssetsPageState();
 }
 
-class _AssetsPageState extends State<AssetsPage> {
+class AssetsPageState extends State<AssetsPage> {
   List<AssetBase> _assets = [];
   bool _isLoading = false;
   final Set<AssetType> _expandedTypes = {};
@@ -338,116 +339,74 @@ class _AssetsPageState extends State<AssetsPage> {
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        final usableHeight = constraints.maxHeight;
-        return Stack(
-          children: [
-            RefreshIndicator(
-              onRefresh: _load,
-              color: Colors.white,
-              backgroundColor: const Color(0xFF000000),
-              child: CustomScrollView(
-                slivers: [
-                  SliverToBoxAdapter(
-                    child: SectionTitle(
-                      title: StockConfig.tabAsset,
-                      subtitle: AssetConfig.assetCountLabel.replaceAll(
-                        '{count}',
-                        '${_assets.length}',
-                      ),
-                      onAdd: () async {
-                        final type = await showAddAssetSheet(context);
-                        if (type == null) return;
-                        switch (type) {
-                          case AssetType.cash:
-                            _onAddCash();
-                          case AssetType.timeDeposit:
-                            _onAddTD();
-                          case AssetType.wealthProduct:
-                            _onAddWP();
-                          case AssetType.current:
-                            _onAddCurrent();
-                          case AssetType.providentFund:
-                            _onAddProvidentFund();
-                        }
-                      },
-                    ),
-                  ),
-                  SliverToBoxAdapter(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8),
-                      child: AssetHeader(
-                        totalAssets: _totalAssets,
-                        stockTotalValue: widget.stockTotalValue,
-                        currency: widget.currency,
-                        onCurrencyTap: _showCurrencyMenu,
-                      ),
-                    ),
-                  ),
-                  if (_flatItems.isEmpty)
-                    const SliverFillRemaining(
-                      hasScrollBody: false,
-                      child: EmptyStateWidget(
-                        icon: Icons.account_balance_wallet_outlined,
-                        title: AssetConfig.emptyTitle,
-                        subtitle: AssetConfig.emptySubtitle,
-                        iconSize: 64,
-                        padding: EdgeInsets.symmetric(vertical: 40),
-                      ),
-                    )
-                  else
-                    SliverReorderableList(
-                      itemCount: _flatItems.length,
-                      onReorder: _onFlatReorder,
-                      itemBuilder: (context, index) {
-                        final item = _flatItems[index];
-                        return switch (item) {
-                          SectionHeader(:final type, :final expanded) =>
-                            _buildSectionHeader(type, expanded, index),
-                          AssetCardItem(:final asset) => _buildAssetCardItem(
-                            asset,
-                            index,
-                          ),
-                        };
-                      },
-                    ),
-                  const SliverToBoxAdapter(child: SizedBox(height: 80)),
-                ],
-              ),
-            ),
-            if (_isLoading)
-              Positioned.fill(
-                child: Container(
-                  color: Colors.black26,
-                  alignment: Alignment.center,
-                  child: const CircularProgressIndicator(
-                    color: Color(0xFF8E8E93),
+    return Stack(
+      children: [
+        RefreshIndicator(
+          onRefresh: _load,
+          color: Colors.white,
+          backgroundColor: AppColors.surface,
+          child: CustomScrollView(
+            slivers: [
+              SliverToBoxAdapter(
+                child: SectionTitle(
+                  title: StockConfig.tabAsset,
+                  subtitle: AssetConfig.assetCountLabel.replaceAll(
+                    '{count}',
+                    '${_assets.length}',
                   ),
                 ),
               ),
-            DraggableFab(
-              onTap: () async {
-                final type = await showAddAssetSheet(context);
-                if (type == null) return;
-                switch (type) {
-                  case AssetType.cash:
-                    _onAddCash();
-                  case AssetType.timeDeposit:
-                    _onAddTD();
-                  case AssetType.wealthProduct:
-                    _onAddWP();
-                  case AssetType.current:
-                    _onAddCurrent();
-                  case AssetType.providentFund:
-                    _onAddProvidentFund();
-                }
-              },
-              maxHeight: usableHeight,
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8),
+                  child: AssetHeader(
+                    totalAssets: _totalAssets,
+                    stockTotalValue: widget.stockTotalValue,
+                    currency: widget.currency,
+                    onCurrencyTap: _showCurrencyMenu,
+                  ),
+                ),
+              ),
+              if (_flatItems.isEmpty)
+                const SliverFillRemaining(
+                  hasScrollBody: false,
+                  child: EmptyStateWidget(
+                    icon: Icons.account_balance_wallet_outlined,
+                    title: AssetConfig.emptyTitle,
+                    subtitle: AssetConfig.emptySubtitle,
+                    iconSize: 64,
+                    padding: EdgeInsets.symmetric(vertical: 40),
+                  ),
+                )
+              else
+                SliverReorderableList(
+                  itemCount: _flatItems.length,
+                  onReorder: _onFlatReorder,
+                  itemBuilder: (context, index) {
+                    final item = _flatItems[index];
+                    return switch (item) {
+                      SectionHeader(:final type, :final expanded) =>
+                        _buildSectionHeader(type, expanded, index),
+                      AssetCardItem(:final asset) => _buildAssetCardItem(
+                        asset,
+                        index,
+                      ),
+                    };
+                  },
+                ),
+              const SliverToBoxAdapter(child: SizedBox(height: 80)),
+            ],
+          ),
+        ),
+        if (_isLoading)
+          Container(
+            color: Colors.black26,
+            alignment: Alignment.center,
+            child: const CircularProgressIndicator(
+              color: AppColors.textSecondary,
             ),
-          ],
-        );
-      },
+          ),
+      ],
     );
   }
 
@@ -459,25 +418,25 @@ class _AssetsPageState extends State<AssetsPage> {
     final total = _totalByType(widget.currency)[type] ?? 0;
 
     final (icon, iconColor, label) = switch (type) {
-      AssetType.cash => (Icons.payments, Color(0xFF34C759), AssetConfig.cash),
+      AssetType.cash => (Icons.payments, AppColors.success, AssetConfig.cash),
       AssetType.timeDeposit => (
         Icons.savings,
-        Color(0xFFFF9F0A),
+        AppColors.warning,
         AssetConfig.timeDeposit,
       ),
       AssetType.wealthProduct => (
         Icons.trending_up,
-        Color(0xFF5B9CF6),
+        AppColors.accent,
         AssetConfig.wealthProduct,
       ),
       AssetType.current => (
         Icons.account_balance,
-        Color(0xFF5AC8FA),
+        AppColors.cyan,
         AssetConfig.current,
       ),
       AssetType.providentFund => (
         Icons.home_work,
-        Color(0xFFAF52DE),
+        AppColors.purple,
         AssetConfig.providentFund,
       ),
     };
@@ -491,7 +450,7 @@ class _AssetsPageState extends State<AssetsPage> {
         margin: const EdgeInsets.fromLTRB(16, 4, 16, 4),
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
         decoration: BoxDecoration(
-          color: iconColor.withOpacity(0.08),
+          color: iconColor.withValues(alpha: 0.08),
           borderRadius: BorderRadius.circular(10),
         ),
         child: Row(
@@ -505,7 +464,7 @@ class _AssetsPageState extends State<AssetsPage> {
                 child: Icon(
                   Icons.drag_indicator,
                   size: 20,
-                  color: iconColor.withOpacity(0.5),
+                  color: iconColor.withValues(alpha: 0.5),
                 ),
               ),
             ),
@@ -531,7 +490,7 @@ class _AssetsPageState extends State<AssetsPage> {
                       style: TextStyle(
                         fontSize: 13,
                         fontWeight: FontWeight.w500,
-                        color: Color(0xFF8E8E93),
+                        color: AppColors.textSecondary,
                       ),
                     ),
                     const Spacer(),
@@ -549,7 +508,7 @@ class _AssetsPageState extends State<AssetsPage> {
                           ? Icons.keyboard_arrow_up
                           : Icons.keyboard_arrow_down,
                       size: 18,
-                      color: Color(0xFF636366),
+                      color: AppColors.textTertiary,
                     ),
                   ],
                 ),
@@ -573,13 +532,13 @@ class _AssetsPageState extends State<AssetsPage> {
         background: Container(
           margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
           decoration: BoxDecoration(
-            color: Colors.red.withOpacity(0.2),
+            color: Colors.red.withValues(alpha: 0.2),
             borderRadius: BorderRadius.circular(14),
-            border: Border.all(color: Colors.red.withOpacity(0.4)),
+            border: Border.all(color: Colors.red.withValues(alpha: 0.4)),
           ),
           alignment: Alignment.centerRight,
           padding: const EdgeInsets.only(right: 20),
-          child: const Icon(Icons.delete, color: Color(0xFFFF3B30), size: 22),
+          child: const Icon(Icons.delete, color: AppColors.danger, size: 22),
         ),
         confirmDismiss: (_) => _confirmDelete(asset),
         onDismissed: (_) => _deleteAsset(asset.id),
@@ -621,11 +580,15 @@ class _AssetsPageState extends State<AssetsPage> {
           width: 28,
           height: 50,
           alignment: Alignment.center,
-          child: Icon(Icons.drag_indicator, size: 20, color: Color(0xFF48484A)),
+          child: Icon(
+            Icons.drag_indicator,
+            size: 20,
+            color: AppColors.iconMuted,
+          ),
         ),
       ),
       icon: Icons.payments,
-      iconColor: Color(0xFF34C759),
+      iconColor: AppColors.success,
       name: cash.name.isNotEmpty
           ? cash.name
           : AssetConfig.defaultNameCash.replaceAll('{currency}', cash.currency),
@@ -657,11 +620,15 @@ class _AssetsPageState extends State<AssetsPage> {
           width: 28,
           height: 50,
           alignment: Alignment.center,
-          child: Icon(Icons.drag_indicator, size: 20, color: Color(0xFF48484A)),
+          child: Icon(
+            Icons.drag_indicator,
+            size: 20,
+            color: AppColors.iconMuted,
+          ),
         ),
       ),
       icon: Icons.savings,
-      iconColor: Color(0xFFFF9F0A),
+      iconColor: AppColors.warning,
       name: td.name.isNotEmpty ? td.name : AssetConfig.defaultNameTD,
       createdAt: td.createdAt,
       updatedAt: td.updatedAt,
@@ -686,7 +653,9 @@ class _AssetsPageState extends State<AssetsPage> {
                   : AssetConfig.expired,
               style: TextStyle(
                 fontSize: 11,
-                color: daysLeft > 0 ? Color(0xFF8E8E93) : Color(0xFFFF9F0A),
+                color: daysLeft > 0
+                    ? AppColors.textSecondary
+                    : AppColors.warning,
               ),
             ),
           ],
@@ -705,11 +674,15 @@ class _AssetsPageState extends State<AssetsPage> {
           width: 28,
           height: 50,
           alignment: Alignment.center,
-          child: Icon(Icons.drag_indicator, size: 20, color: Color(0xFF48484A)),
+          child: Icon(
+            Icons.drag_indicator,
+            size: 20,
+            color: AppColors.iconMuted,
+          ),
         ),
       ),
       icon: Icons.trending_up,
-      iconColor: const Color(0xFF5B9CF6),
+      iconColor: AppColors.accent,
       name: wp.name.isNotEmpty ? wp.name : AssetConfig.defaultNameWP,
       createdAt: wp.createdAt,
       updatedAt: wp.updatedAt,
@@ -738,11 +711,15 @@ class _AssetsPageState extends State<AssetsPage> {
           width: 28,
           height: 50,
           alignment: Alignment.center,
-          child: Icon(Icons.drag_indicator, size: 20, color: Color(0xFF48484A)),
+          child: Icon(
+            Icons.drag_indicator,
+            size: 20,
+            color: AppColors.iconMuted,
+          ),
         ),
       ),
       icon: Icons.account_balance,
-      iconColor: const Color(0xFF5AC8FA),
+      iconColor: AppColors.cyan,
       name: account.name.isNotEmpty
           ? account.name
           : AssetConfig.defaultNameCurrent.replaceAll(
@@ -755,11 +732,7 @@ class _AssetsPageState extends State<AssetsPage> {
         alignment: Alignment.centerRight,
         child: Text(
           '$sym${CurrencyUtil.formatCompact(account.balance)}',
-          style: const TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w600,
-            color: Colors.white,
-          ),
+          style: TextStyles.sectionTitle,
         ),
       ),
       onTap: () => _onEditCurrent(account),
@@ -776,11 +749,15 @@ class _AssetsPageState extends State<AssetsPage> {
           width: 28,
           height: 50,
           alignment: Alignment.center,
-          child: Icon(Icons.drag_indicator, size: 20, color: Color(0xFF48484A)),
+          child: Icon(
+            Icons.drag_indicator,
+            size: 20,
+            color: AppColors.iconMuted,
+          ),
         ),
       ),
       icon: Icons.home_work,
-      iconColor: const Color(0xFFAF52DE),
+      iconColor: AppColors.purple,
       name: account.name.isNotEmpty
           ? account.name
           : AssetConfig.defaultNameProvidentFund.replaceAll(
@@ -793,15 +770,27 @@ class _AssetsPageState extends State<AssetsPage> {
         alignment: Alignment.centerRight,
         child: Text(
           '$sym${CurrencyUtil.formatCompact(account.balance)}',
-          style: const TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w600,
-            color: Colors.white,
-          ),
+          style: TextStyles.sectionTitle,
         ),
       ),
       onTap: () => _onEditProvidentFund(account),
       onLongPress: () {},
     );
+  }
+
+  /// 由底部 + 号按钮调用
+  void onAddAsset(AssetType type) {
+    switch (type) {
+      case AssetType.cash:
+        _onAddCash();
+      case AssetType.timeDeposit:
+        _onAddTD();
+      case AssetType.wealthProduct:
+        _onAddWP();
+      case AssetType.current:
+        _onAddCurrent();
+      case AssetType.providentFund:
+        _onAddProvidentFund();
+    }
   }
 }

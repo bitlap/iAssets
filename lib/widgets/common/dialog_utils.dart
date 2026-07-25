@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import '../../config/app_config.dart';
+import '../../config/app_colors.dart';
+import 'app_ui.dart';
 
-Color get _bg => const Color(0xFF000000);
-Color get _borderColor => const Color(0xFF1C1C1E);
+Color get _bg => AppColors.surface;
+Color get _borderColor => AppColors.border;
 
 BorderRadius _radius20 = BorderRadius.circular(20);
 BorderRadius _radius12 = BorderRadius.circular(12);
@@ -78,7 +80,7 @@ Widget cancelButton({required VoidCallback onTap, String? text}) {
           text ?? AppConfig.btnCancel,
           style: const TextStyle(
             fontSize: 15,
-            color: Color(0xFF8E8E93),
+            color: AppColors.textSecondary,
             fontWeight: FontWeight.w500,
           ),
         ),
@@ -193,10 +195,10 @@ class InfoDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      backgroundColor: const Color(0xFF000000),
+      backgroundColor: AppColors.surface,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
-        side: const BorderSide(color: Color(0xFF1C1C1E), width: 0.5),
+        side: const BorderSide(color: AppColors.border, width: 0.5),
       ),
       title: title,
       content: content,
@@ -205,7 +207,7 @@ class InfoDialog extends StatelessWidget {
           onPressed: () => Navigator.pop(context),
           child: Text(
             closeText ?? AppConfig.btnClose,
-            style: const TextStyle(color: Colors.white),
+            style: TextStyles.body13,
           ),
         ),
       ],
@@ -235,8 +237,7 @@ class HintRow extends StatelessWidget {
               children: [
                 TextSpan(
                   text: '$label：',
-                  style: TextStyle(
-                    fontSize: 13,
+                  style: TextStyles.body13.copyWith(
                     color: color,
                     fontWeight: FontWeight.w600,
                   ),
@@ -245,7 +246,7 @@ class HintRow extends StatelessWidget {
                   text: desc,
                   style: TextStyle(
                     fontSize: 13,
-                    color: Color(0xFF8E8E93),
+                    color: AppColors.textSecondary,
                     height: 1.5,
                   ),
                 ),
@@ -276,7 +277,7 @@ Future<DateTime?> showDatePickerDialog(
           colorScheme: const ColorScheme.dark(
             primary: Colors.white,
             onPrimary: Colors.white,
-            surface: Color(0xFF000000),
+            surface: AppColors.surface,
             onSurface: Colors.white,
           ),
         ),
@@ -303,15 +304,7 @@ Future<void> showHelpDialog(
           Icon(icon, color: iconColor ?? Colors.white, size: 28),
           const SizedBox(height: 8),
         ],
-        Text(
-          title,
-          textAlign: TextAlign.center,
-          style: const TextStyle(
-            color: Colors.white,
-            fontSize: 14,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
+        Text(title, textAlign: TextAlign.center, style: TextStyles.subtitle),
       ],
     ),
     content: content,

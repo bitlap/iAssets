@@ -6,7 +6,9 @@ import '../services/exchange_rate_service.dart';
 import '../utils/center_toast.dart';
 import '../services/settings_service.dart';
 import '../config/app_config.dart';
+import '../config/app_colors.dart';
 import '../config/sort_options.dart';
+import '../widgets/common/app_ui.dart';
 import '../models/settings/open_source_lib.dart';
 import 'common/app_number_field.dart';
 import 'common/settings_expansion_card.dart';
@@ -118,7 +120,7 @@ class _SettingsPageState extends State<SettingsPage> {
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
-        backgroundColor: const Color(0xFF000000),
+        backgroundColor: AppColors.surface,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         content: Column(
           mainAxisSize: MainAxisSize.min,
@@ -128,20 +130,15 @@ class _SettingsPageState extends State<SettingsPage> {
               value
                   ? SettingsConfig.keepStockOnLabel
                   : SettingsConfig.keepStockOffLabel,
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
-              ),
+              style: TextStyles.sectionTitle,
             ),
             const SizedBox(height: 8),
             Text(
               value
                   ? SettingsConfig.keepStockOnDesc
                   : SettingsConfig.keepStockOffDesc,
-              style: TextStyle(
+              style: TextStyles.body13.copyWith(
                 color: Colors.grey[400],
-                fontSize: 13,
                 height: 1.4,
               ),
             ),
@@ -150,9 +147,9 @@ class _SettingsPageState extends State<SettingsPage> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx),
-            child: const Text(
+            child: Text(
               AppConfig.btnCancel,
-              style: TextStyle(color: Colors.grey),
+              style: TextStyles.body13.copyWith(color: Colors.grey),
             ),
           ),
           TextButton(
@@ -164,7 +161,7 @@ class _SettingsPageState extends State<SettingsPage> {
             },
             child: const Text(
               AppConfig.btnClose,
-              style: TextStyle(color: Color(0xFF5B9CF6)),
+              style: TextStyle(color: AppColors.accent),
             ),
           ),
         ],
@@ -181,9 +178,9 @@ class _SettingsPageState extends State<SettingsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF000000),
+      backgroundColor: AppColors.surface,
       appBar: AppBar(
-        backgroundColor: const Color(0xFF000000),
+        backgroundColor: AppColors.surface,
         elevation: 0,
         toolbarHeight: 44,
         scrolledUnderElevation: 0,
@@ -191,13 +188,9 @@ class _SettingsPageState extends State<SettingsPage> {
           icon: const Icon(Icons.arrow_back_ios, color: Colors.white, size: 18),
           onPressed: () => Navigator.pop(context),
         ),
-        title: const Text(
+        title: Text(
           SettingsConfig.settingsTitle,
-          style: TextStyle(
-            fontSize: 17,
-            fontWeight: FontWeight.w600,
-            color: Colors.white,
-          ),
+          style: TextStyles.sectionTitle.copyWith(fontSize: 17),
         ),
         centerTitle: true,
       ),
@@ -233,13 +226,11 @@ class _SettingsPageState extends State<SettingsPage> {
       padding: const EdgeInsets.only(left: 6),
       child: Row(
         children: [
-          Icon(icon, size: 14, color: const Color(0xFF5B9CF6)),
+          Icon(icon, size: 14, color: AppColors.accent),
           const SizedBox(width: 6),
           Text(
             title,
-            style: const TextStyle(
-              fontSize: 12,
-              color: Colors.white,
+            style: TextStyles.smallBold.copyWith(
               fontWeight: FontWeight.w500,
               letterSpacing: 0.5,
             ),
@@ -262,7 +253,7 @@ class _SettingsPageState extends State<SettingsPage> {
             width: 32,
             height: 32,
             decoration: BoxDecoration(
-              color: const Color(0xFF5B9CF6).withValues(alpha: 0.15),
+              color: AppColors.accent.withValues(alpha: 0.15),
               borderRadius: BorderRadius.circular(8),
             ),
             child: Center(
@@ -271,7 +262,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 style: const TextStyle(
                   fontSize: 13,
                   fontWeight: FontWeight.w700,
-                  color: Color(0xFF5B9CF6),
+                  color: AppColors.accent,
                 ),
               ),
             ),
@@ -279,21 +270,12 @@ class _SettingsPageState extends State<SettingsPage> {
           const SizedBox(width: 10),
           Text(
             _selectedCurrency,
-            style: const TextStyle(
-              fontSize: 15,
-              fontWeight: FontWeight.w600,
-              color: Colors.white,
-              height: 1.2,
-            ),
+            style: TextStyles.bodyMedium.copyWith(height: 1.2),
           ),
           const SizedBox(width: 8),
           Text(
             '${CurrencyUtil.getSymbol(_selectedCurrency)} ${CurrencyUtil.formatRate(effectiveRates[_selectedCurrency] ?? 1.0)}',
-            style: TextStyle(
-              fontSize: 12,
-              color: Colors.grey[500],
-              height: 1.2,
-            ),
+            style: TextStyles.bodySmall,
           ),
         ],
       ),
@@ -321,9 +303,9 @@ class _SettingsPageState extends State<SettingsPage> {
   Widget _buildStockSettingsGroup() {
     return Container(
       decoration: BoxDecoration(
-        color: const Color(0xFF000000),
+        color: AppColors.surface,
         borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: const Color(0xFF1C1C1E), width: 0.5),
+        border: Border.all(color: AppColors.border, width: 0.5),
       ),
       child: Material(
         color: Colors.transparent,
@@ -372,11 +354,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 children: [
                   const Text(
                     SettingsConfig.sectionFee,
-                    style: TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.white,
-                    ),
+                    style: TextStyles.bodyMedium,
                   ),
                   const SizedBox(width: 4),
                   GestureDetector(
@@ -453,12 +431,12 @@ class _SettingsPageState extends State<SettingsPage> {
         decoration: BoxDecoration(
           color: isSelected
               ? Colors.teal.withValues(alpha: 0.2)
-              : const Color(0xFF000000),
+              : AppColors.surface,
           borderRadius: BorderRadius.circular(8),
           border: Border.all(
             color: isSelected
                 ? Colors.teal.withValues(alpha: 0.5)
-                : const Color(0xFF1C1C1E),
+                : AppColors.border,
             width: 0.5,
           ),
         ),
@@ -529,7 +507,7 @@ class _SettingsPageState extends State<SettingsPage> {
   Widget _buildGroupDivider() {
     return const Padding(
       padding: EdgeInsets.only(left: 48),
-      child: Divider(height: 1, color: Color(0xFF1C1C1E), thickness: 0.5),
+      child: Divider(height: 1, color: AppColors.border, thickness: 0.5),
     );
   }
 
@@ -555,11 +533,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 Flexible(
                   child: Text(
                     SettingsConfig.keepStockLabel,
-                    style: const TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.white,
-                    ),
+                    style: TextStyles.bodyMedium,
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
@@ -578,8 +552,8 @@ class _SettingsPageState extends State<SettingsPage> {
           Switch(
             value: _keepStockAfterClose,
             onChanged: _onKeepStockChanged,
-            activeTrackColor: const Color(0xFF5B9CF6).withValues(alpha: 0.6),
-            activeThumbColor: const Color(0xFF5B9CF6),
+            activeTrackColor: AppColors.accent.withValues(alpha: 0.6),
+            activeThumbColor: AppColors.accent,
             inactiveThumbColor: Colors.grey[600],
             inactiveTrackColor: Colors.grey[800],
           ),
@@ -617,18 +591,11 @@ class _SettingsPageState extends State<SettingsPage> {
               ),
             ),
             const SizedBox(width: 10),
-            const Text(
-              SettingsConfig.sortLabel,
-              style: TextStyle(
-                fontSize: 15,
-                fontWeight: FontWeight.w600,
-                color: Colors.white,
-              ),
-            ),
+            const Text(SettingsConfig.sortLabel, style: TextStyles.bodyMedium),
             const SizedBox(width: 8),
             Text(
               sortLabel,
-              style: TextStyle(fontSize: 13, color: Colors.grey[500]),
+              style: TextStyles.body13.copyWith(color: Colors.grey[500]),
             ),
           ],
         ),
@@ -651,7 +618,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 ),
                 decoration: BoxDecoration(
                   color: isSelected
-                      ? const Color(0xFF5B9CF6).withValues(alpha: 0.08)
+                      ? AppColors.accent.withValues(alpha: 0.08)
                       : null,
                 ),
                 child: Row(
@@ -663,7 +630,7 @@ class _SettingsPageState extends State<SettingsPage> {
                         style: TextStyle(
                           fontSize: 14,
                           color: isSelected
-                              ? const Color(0xFF5B9CF6)
+                              ? AppColors.accent
                               : Colors.grey[300],
                           fontWeight: isSelected
                               ? FontWeight.w600
@@ -675,7 +642,7 @@ class _SettingsPageState extends State<SettingsPage> {
                       const Icon(
                         Icons.check,
                         size: 18,
-                        color: Color(0xFF5B9CF6),
+                        color: AppColors.accent,
                       ),
                   ],
                 ),
@@ -685,16 +652,18 @@ class _SettingsPageState extends State<SettingsPage> {
           // 排序方向切换
           const Padding(
             padding: EdgeInsets.only(left: 56),
-            child: Divider(height: 1, color: Color(0xFF1C1C1E), thickness: 0.5),
+            child: Divider(height: 1, color: AppColors.border, thickness: 0.5),
           ),
           Padding(
             padding: const EdgeInsets.fromLTRB(14, 8, 14, 12),
             child: Row(
               children: [
                 const SizedBox(width: 42),
-                const Text(
+                Text(
                   SettingsConfig.sortDirectionLabel,
-                  style: TextStyle(fontSize: 14, color: Colors.grey),
+                  style: TextStyles.subtitleRegular.copyWith(
+                    color: Colors.grey,
+                  ),
                 ),
                 const Spacer(),
                 Row(
@@ -708,15 +677,15 @@ class _SettingsPageState extends State<SettingsPage> {
                         ),
                         decoration: BoxDecoration(
                           color: _isSortAscending
-                              ? const Color(0xFF5B9CF6).withValues(alpha: 0.25)
-                              : const Color(0xFF000000),
+                              ? AppColors.accent.withValues(alpha: 0.25)
+                              : AppColors.surface,
                           borderRadius: const BorderRadius.horizontal(
                             left: Radius.circular(8),
                           ),
                           border: Border.all(
                             color: _isSortAscending
-                                ? const Color(0xFF5B9CF6).withValues(alpha: 0.5)
-                                : const Color(0xFF1C1C1E),
+                                ? AppColors.accent.withValues(alpha: 0.5)
+                                : AppColors.border,
                             width: 0.5,
                           ),
                         ),
@@ -727,7 +696,7 @@ class _SettingsPageState extends State<SettingsPage> {
                               Icons.arrow_upward,
                               size: 14,
                               color: _isSortAscending
-                                  ? const Color(0xFF5B9CF6)
+                                  ? AppColors.accent
                                   : Colors.grey[400],
                             ),
                             const SizedBox(width: 4),
@@ -736,7 +705,7 @@ class _SettingsPageState extends State<SettingsPage> {
                               style: TextStyle(
                                 fontSize: 13,
                                 color: _isSortAscending
-                                    ? const Color(0xFF5B9CF6)
+                                    ? AppColors.accent
                                     : Colors.grey[300],
                                 fontWeight: _isSortAscending
                                     ? FontWeight.w600
@@ -756,15 +725,15 @@ class _SettingsPageState extends State<SettingsPage> {
                         ),
                         decoration: BoxDecoration(
                           color: !_isSortAscending
-                              ? const Color(0xFF5B9CF6).withValues(alpha: 0.25)
-                              : const Color(0xFF000000),
+                              ? AppColors.accent.withValues(alpha: 0.25)
+                              : AppColors.surface,
                           borderRadius: const BorderRadius.horizontal(
                             right: Radius.circular(8),
                           ),
                           border: Border.all(
                             color: !_isSortAscending
-                                ? const Color(0xFF5B9CF6).withValues(alpha: 0.5)
-                                : const Color(0xFF1C1C1E),
+                                ? AppColors.accent.withValues(alpha: 0.5)
+                                : AppColors.border,
                             width: 0.5,
                           ),
                         ),
@@ -775,7 +744,7 @@ class _SettingsPageState extends State<SettingsPage> {
                               Icons.arrow_downward,
                               size: 14,
                               color: !_isSortAscending
-                                  ? const Color(0xFF5B9CF6)
+                                  ? AppColors.accent
                                   : Colors.grey[400],
                             ),
                             const SizedBox(width: 4),
@@ -784,7 +753,7 @@ class _SettingsPageState extends State<SettingsPage> {
                               style: TextStyle(
                                 fontSize: 13,
                                 color: !_isSortAscending
-                                    ? const Color(0xFF5B9CF6)
+                                    ? AppColors.accent
                                     : Colors.grey[300],
                                 fontWeight: !_isSortAscending
                                     ? FontWeight.w600
@@ -808,9 +777,9 @@ class _SettingsPageState extends State<SettingsPage> {
   Widget _buildSyncGroup() {
     return Container(
       decoration: BoxDecoration(
-        color: const Color(0xFF000000),
+        color: AppColors.surface,
         borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: const Color(0xFF1C1C1E), width: 0.5),
+        border: Border.all(color: AppColors.border, width: 0.5),
       ),
       child: Column(
         children: [
@@ -850,7 +819,7 @@ class _SettingsPageState extends State<SettingsPage> {
           ),
           const SizedBox(height: 12),
           const HintRow(
-            color: Color(0xFF4CAF50),
+            color: AppColors.greenAccent,
             label: SettingsConfig.syncItemStocks,
             desc: SettingsConfig.syncHelpStocksDesc,
           ),
@@ -863,11 +832,7 @@ class _SettingsPageState extends State<SettingsPage> {
           const SizedBox(height: 16),
           Text(
             SettingsConfig.syncPrivacyNote,
-            style: TextStyle(
-              color: Colors.grey[500],
-              fontSize: 12,
-              height: 1.5,
-            ),
+            style: TextStyles.bodySmall.copyWith(height: 1.5),
           ),
         ],
       ),
@@ -903,11 +868,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 Flexible(
                   child: Text(
                     label,
-                    style: TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.white,
-                    ),
+                    style: TextStyles.bodyMedium,
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
@@ -924,8 +885,8 @@ class _SettingsPageState extends State<SettingsPage> {
           Switch(
             value: value,
             onChanged: onChanged,
-            activeTrackColor: const Color(0xFF5B9CF6).withValues(alpha: 0.6),
-            activeThumbColor: const Color(0xFF5B9CF6),
+            activeTrackColor: AppColors.accent.withValues(alpha: 0.6),
+            activeThumbColor: AppColors.accent,
             inactiveThumbColor: Colors.grey[600],
             inactiveTrackColor: Colors.grey[800],
           ),
@@ -958,30 +919,28 @@ class _SettingsPageState extends State<SettingsPage> {
     showDialog(
       context: context,
       builder: (ctx) => Dialog(
-        backgroundColor: const Color(0xFF000000),
+        backgroundColor: AppColors.surface,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         child: Container(
           constraints: const BoxConstraints(maxWidth: 400, maxHeight: 420),
           padding: const EdgeInsets.all(20),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20),
-            border: Border.all(color: const Color(0xFF1C1C1E), width: 0.5),
+            border: Border.all(color: AppColors.border, width: 0.5),
           ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Text(
+              Text(
                 SettingsConfig.sectionFormula,
-                style: TextStyle(
-                  fontSize: 18,
+                style: TextStyles.dialogTitle.copyWith(
                   fontWeight: FontWeight.w600,
-                  color: Colors.white,
                 ),
               ),
               const SizedBox(height: 4),
               Text(
                 SettingsConfig.formulaDialogSubtitle,
-                style: TextStyle(fontSize: 12, color: Colors.grey[500]),
+                style: TextStyles.bodySmall,
               ),
               const SizedBox(height: 16),
               Flexible(
@@ -991,12 +950,9 @@ class _SettingsPageState extends State<SettingsPage> {
                     return Container(
                       margin: const EdgeInsets.only(bottom: 8),
                       decoration: BoxDecoration(
-                        color: const Color(0xFF000000),
+                        color: AppColors.surface,
                         borderRadius: BorderRadius.circular(12),
-                        border: Border.all(
-                          color: const Color(0xFF1C1C1E),
-                          width: 0.5,
-                        ),
+                        border: Border.all(color: AppColors.border, width: 0.5),
                       ),
                       padding: const EdgeInsets.symmetric(
                         horizontal: 12,
@@ -1005,22 +961,9 @@ class _SettingsPageState extends State<SettingsPage> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            f.label,
-                            style: const TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w600,
-                              color: Colors.white,
-                            ),
-                          ),
+                          Text(f.label, style: TextStyles.subtitle),
                           const SizedBox(height: 2),
-                          Text(
-                            f.formula,
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: Colors.grey[500],
-                            ),
-                          ),
+                          Text(f.formula, style: TextStyles.bodySmall),
                         ],
                       ),
                     );
@@ -1033,14 +976,14 @@ class _SettingsPageState extends State<SettingsPage> {
                 child: TextButton(
                   onPressed: () => Navigator.pop(ctx),
                   style: TextButton.styleFrom(
-                    backgroundColor: const Color(0xFF1A56DB),
+                    backgroundColor: AppColors.blueDark,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
                   child: const Text(
                     AppConfig.btnClose,
-                    style: TextStyle(color: Colors.white),
+                    style: TextStyles.body13,
                   ),
                 ),
               ),
@@ -1054,9 +997,9 @@ class _SettingsPageState extends State<SettingsPage> {
   Widget _buildOtherGroup() {
     return Container(
       decoration: BoxDecoration(
-        color: const Color(0xFF000000),
+        color: AppColors.surface,
         borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: const Color(0xFF1C1C1E), width: 0.5),
+        border: Border.all(color: AppColors.border, width: 0.5),
       ),
       child: Material(
         color: Colors.transparent,
@@ -1080,7 +1023,7 @@ class _SettingsPageState extends State<SettingsPage> {
             _buildGroupDivider(),
             _buildGroupItem(
               icon: Icons.code,
-              iconColor: const Color(0xFF64B5F6),
+              iconColor: AppColors.lightBlue,
               label: SettingsConfig.openSourceLabel,
               onTap: _showOpenSourceDialog,
             ),
@@ -1120,21 +1063,9 @@ class _SettingsPageState extends State<SettingsPage> {
               child: Icon(icon, size: 18, color: iconColor),
             ),
             const SizedBox(width: 10),
-            Expanded(
-              child: Text(
-                label,
-                style: TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.white,
-                ),
-              ),
-            ),
+            Expanded(child: Text(label, style: TextStyles.bodyMedium)),
             if (trailing != null)
-              Text(
-                trailing,
-                style: TextStyle(fontSize: 14, color: Colors.grey[500]),
-              )
+              Text(trailing, style: TextStyles.caption.copyWith(fontSize: 14))
             else if (onTap != null)
               Icon(Icons.chevron_right, size: 18, color: Colors.grey[600]),
           ],
@@ -1147,15 +1078,11 @@ class _SettingsPageState extends State<SettingsPage> {
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
-        backgroundColor: const Color(0xFF000000),
+        backgroundColor: AppColors.surface,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         title: Text(
           SettingsConfig.feedbackTitle,
-          style: const TextStyle(
-            color: Colors.white,
-            fontSize: 16,
-            fontWeight: FontWeight.w600,
-          ),
+          style: TextStyles.sectionTitle,
         ),
         content: Column(
           mainAxisSize: MainAxisSize.min,
@@ -1163,9 +1090,8 @@ class _SettingsPageState extends State<SettingsPage> {
           children: [
             Text(
               SettingsConfig.feedbackHint,
-              style: TextStyle(
+              style: TextStyles.body13.copyWith(
                 color: Colors.grey[400],
-                fontSize: 13,
                 height: 1.4,
               ),
             ),
@@ -1191,10 +1117,7 @@ class _SettingsPageState extends State<SettingsPage> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx),
-            child: const Text(
-              AppConfig.btnClose,
-              style: TextStyle(color: Colors.white),
-            ),
+            child: const Text(AppConfig.btnClose, style: TextStyles.body13),
           ),
         ],
       ),
@@ -1215,13 +1138,13 @@ class _SettingsPageState extends State<SettingsPage> {
           const SizedBox(width: 8),
           Text(
             '$label：',
-            style: TextStyle(color: Colors.grey[400], fontSize: 13),
+            style: TextStyles.body13.copyWith(color: Colors.grey[400]),
           ),
           Text(
             value,
             style: TextStyle(
               fontSize: 13,
-              color: onTap != null ? const Color(0xFF5B9CF6) : Colors.white,
+              color: onTap != null ? AppColors.accent : Colors.white,
             ),
           ),
         ],
@@ -1251,31 +1174,26 @@ class _SettingsPageState extends State<SettingsPage> {
     showDialog(
       context: context,
       builder: (ctx) => Dialog(
-        backgroundColor: const Color(0xFF000000),
+        backgroundColor: AppColors.surface,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         child: Container(
           constraints: const BoxConstraints(maxWidth: 400, maxHeight: 560),
           padding: const EdgeInsets.all(20),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20),
-            border: Border.all(color: const Color(0xFF1C1C1E), width: 0.5),
+            border: Border.all(color: AppColors.border, width: 0.5),
           ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Text(
+              Text(
                 SettingsConfig.openSourceTitle,
-                style: TextStyle(
-                  fontSize: 18,
+                style: TextStyles.dialogTitle.copyWith(
                   fontWeight: FontWeight.w600,
-                  color: Colors.white,
                 ),
               ),
               const SizedBox(height: 4),
-              Text(
-                SettingsConfig.openSourceDesc,
-                style: TextStyle(fontSize: 12, color: Colors.grey[500]),
-              ),
+              Text(SettingsConfig.openSourceDesc, style: TextStyles.bodySmall),
               const SizedBox(height: 16),
               Flexible(
                 child: ListView(
@@ -1299,14 +1217,14 @@ class _SettingsPageState extends State<SettingsPage> {
                 child: TextButton(
                   onPressed: () => Navigator.pop(ctx),
                   style: TextButton.styleFrom(
-                    backgroundColor: const Color(0xFF1A56DB),
+                    backgroundColor: AppColors.blueDark,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
                   child: const Text(
                     AppConfig.btnClose,
-                    style: TextStyle(color: Colors.white),
+                    style: TextStyles.body13,
                   ),
                 ),
               ),
@@ -1323,8 +1241,7 @@ class _SettingsPageState extends State<SettingsPage> {
       children: [
         Text(
           title,
-          style: TextStyle(
-            fontSize: 13,
+          style: TextStyles.body13.copyWith(
             color: Colors.grey[500],
             fontWeight: FontWeight.w500,
           ),
@@ -1332,9 +1249,9 @@ class _SettingsPageState extends State<SettingsPage> {
         const SizedBox(height: 6),
         Container(
           decoration: BoxDecoration(
-            color: const Color(0xFF000000),
+            color: AppColors.surface,
             borderRadius: BorderRadius.circular(12),
-            border: Border.all(color: const Color(0xFF1C1C1E), width: 0.5),
+            border: Border.all(color: AppColors.border, width: 0.5),
           ),
           child: Column(
             children: libs.map((lib) {
@@ -1349,14 +1266,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     Row(
                       children: [
                         Expanded(
-                          child: Text(
-                            lib.name,
-                            style: const TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w600,
-                              color: Colors.white,
-                            ),
-                          ),
+                          child: Text(lib.name, style: TextStyles.subtitle),
                         ),
                         Container(
                           padding: const EdgeInsets.symmetric(
@@ -1371,7 +1281,7 @@ class _SettingsPageState extends State<SettingsPage> {
                             lib.license,
                             style: const TextStyle(
                               fontSize: 10,
-                              color: Color(0xFF5B9CF6),
+                              color: AppColors.accent,
                             ),
                           ),
                         ),
@@ -1380,7 +1290,9 @@ class _SettingsPageState extends State<SettingsPage> {
                     const SizedBox(height: 2),
                     Text(
                       '${lib.author} · ${lib.description}',
-                      style: TextStyle(fontSize: 11, color: Colors.grey[600]),
+                      style: TextStyles.caption.copyWith(
+                        color: Colors.grey[600],
+                      ),
                     ),
                   ],
                 ),

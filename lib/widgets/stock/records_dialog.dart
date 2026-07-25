@@ -3,6 +3,8 @@ import 'package:intl/intl.dart';
 import '../../models/stock_model.dart';
 import '../../utils/currency_util.dart';
 import '../../config/app_config.dart';
+import '../../config/app_colors.dart';
+import '../common/app_ui.dart';
 import '../common/empty_state_widget.dart';
 import '../common/confirm_delete_dialog.dart';
 import '../common/app_number_field.dart';
@@ -64,12 +66,12 @@ class _RecordsDialogState extends State<RecordsDialog>
   Widget build(BuildContext context) {
     return Container(
       decoration: const BoxDecoration(
-        color: Color(0xFF000000),
+        color: AppColors.surface,
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
         border: Border(
-          top: BorderSide(color: Color(0xFF1C1C1E), width: 0.5),
-          left: BorderSide(color: Color(0xFF1C1C1E), width: 0.5),
-          right: BorderSide(color: Color(0xFF1C1C1E), width: 0.5),
+          top: BorderSide(color: AppColors.border, width: 0.5),
+          left: BorderSide(color: AppColors.border, width: 0.5),
+          right: BorderSide(color: AppColors.border, width: 0.5),
         ),
       ),
       child: Column(
@@ -107,14 +109,14 @@ class _RecordsDialogState extends State<RecordsDialog>
                     vertical: 2,
                   ),
                   decoration: BoxDecoration(
-                    color: Colors.blue.withOpacity(0.15),
+                    color: Colors.blue.withValues(alpha: 0.15),
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: const Text(
                     StockConfig.stockRecord,
                     style: TextStyle(
                       fontSize: 12,
-                      color: Color(0xFF5B9CF6),
+                      color: AppColors.accent,
                       fontWeight: FontWeight.w500,
                     ),
                   ),
@@ -126,12 +128,9 @@ class _RecordsDialogState extends State<RecordsDialog>
                     width: 28,
                     height: 28,
                     decoration: BoxDecoration(
-                      color: const Color(0xFF000000),
+                      color: AppColors.surface,
                       shape: BoxShape.circle,
-                      border: Border.all(
-                        color: const Color(0xFF1C1C1E),
-                        width: 0.5,
-                      ),
+                      border: Border.all(color: AppColors.border, width: 0.5),
                     ),
                     child: const Icon(
                       Icons.close,
@@ -147,26 +146,22 @@ class _RecordsDialogState extends State<RecordsDialog>
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Container(
               decoration: BoxDecoration(
-                color: const Color(0xFF000000),
+                color: AppColors.surface,
                 borderRadius: BorderRadius.circular(10),
               ),
               child: TabBar(
                 controller: _tabController,
                 indicator: BoxDecoration(
-                  color: _selectedTab == 0
-                      ? const Color(0xFF2962FF)
-                      : const Color(0xFF2962FF),
+                  color: AppColors.blueAccent,
                   borderRadius: BorderRadius.circular(10),
                 ),
                 indicatorSize: TabBarIndicatorSize.tab,
                 labelColor: Colors.white,
                 unselectedLabelColor: Colors.grey,
-                labelStyle: const TextStyle(
-                  fontSize: 13,
+                labelStyle: TextStyles.body13.copyWith(
                   fontWeight: FontWeight.w600,
                 ),
-                unselectedLabelStyle: const TextStyle(
-                  fontSize: 13,
+                unselectedLabelStyle: TextStyles.body13.copyWith(
                   fontWeight: FontWeight.w400,
                 ),
                 dividerColor: Colors.transparent,
@@ -186,7 +181,7 @@ class _RecordsDialogState extends State<RecordsDialog>
                             size: 14,
                             color: _selectedTab == 0
                                 ? Colors.white
-                                : const Color(0xFF2962FF),
+                                : AppColors.blueAccent,
                           ),
                         ),
                       ],
@@ -206,7 +201,7 @@ class _RecordsDialogState extends State<RecordsDialog>
                             size: 14,
                             color: _selectedTab == 1
                                 ? Colors.white
-                                : const Color(0xFF2962FF),
+                                : AppColors.blueAccent,
                           ),
                         ),
                       ],
@@ -246,7 +241,7 @@ class _RecordsDialogState extends State<RecordsDialog>
       context,
       title: StockConfig.recordsOpTab,
       icon: Icons.info_outline,
-      iconColor: const Color(0xFF5B9CF6),
+      iconColor: AppColors.accent,
       content: Text(
         StockConfig.recordsDeleteHint,
         style: TextStyle(color: Colors.grey[400], fontSize: 13, height: 1.4),
@@ -314,8 +309,8 @@ class _OperationRecordsTabState extends State<_OperationRecordsTab> {
         final isBuy = record.type == StockConfig.opBuy;
         final iconColor = isBuy ? Colors.redAccent : Colors.greenAccent;
         final iconBgColor = isBuy
-            ? Colors.red.withOpacity(0.15)
-            : Colors.green.withOpacity(0.15);
+            ? Colors.red.withValues(alpha: 0.15)
+            : Colors.green.withValues(alpha: 0.15);
         final icon = isBuy ? Icons.arrow_upward : Icons.arrow_downward;
         return Dismissible(
           key: ValueKey(
@@ -325,9 +320,9 @@ class _OperationRecordsTabState extends State<_OperationRecordsTab> {
           background: Container(
             margin: const EdgeInsets.only(bottom: 8),
             decoration: BoxDecoration(
-              color: Colors.red.withOpacity(0.2),
+              color: Colors.red.withValues(alpha: 0.2),
               borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: Colors.red.withOpacity(0.4)),
+              border: Border.all(color: Colors.red.withValues(alpha: 0.4)),
             ),
             alignment: Alignment.centerRight,
             padding: const EdgeInsets.only(right: 16),
@@ -348,9 +343,9 @@ class _OperationRecordsTabState extends State<_OperationRecordsTab> {
               margin: const EdgeInsets.only(bottom: 8),
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
-                color: const Color(0xFF000000),
+                color: AppColors.surface,
                 borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: const Color(0xFF1C1C1E), width: 0.5),
+                border: Border.all(color: AppColors.border, width: 0.5),
               ),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -498,7 +493,7 @@ class _OperationRecordsTabState extends State<_OperationRecordsTab> {
               style: const TextStyle(fontSize: 16, color: Colors.white),
               decoration: InputDecoration(
                 filled: true,
-                fillColor: const Color(0xFF000000),
+                fillColor: AppColors.surface,
                 contentPadding: const EdgeInsets.symmetric(
                   horizontal: 12,
                   vertical: 12,
@@ -506,14 +501,14 @@ class _OperationRecordsTabState extends State<_OperationRecordsTab> {
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
                   borderSide: const BorderSide(
-                    color: Color(0xFF1C1C1E),
+                    color: AppColors.border,
                     width: 0.5,
                   ),
                 ),
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
                   borderSide: const BorderSide(
-                    color: Color(0xFF1C1C1E),
+                    color: AppColors.border,
                     width: 0.5,
                   ),
                 ),
@@ -537,7 +532,7 @@ class _OperationRecordsTabState extends State<_OperationRecordsTab> {
               style: const TextStyle(fontSize: 16, color: Colors.white),
               decoration: InputDecoration(
                 filled: true,
-                fillColor: const Color(0xFF000000),
+                fillColor: AppColors.surface,
                 contentPadding: const EdgeInsets.symmetric(
                   horizontal: 12,
                   vertical: 12,
@@ -545,14 +540,14 @@ class _OperationRecordsTabState extends State<_OperationRecordsTab> {
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
                   borderSide: const BorderSide(
-                    color: Color(0xFF1C1C1E),
+                    color: AppColors.border,
                     width: 0.5,
                   ),
                 ),
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
                   borderSide: const BorderSide(
-                    color: Color(0xFF1C1C1E),
+                    color: AppColors.border,
                     width: 0.5,
                   ),
                 ),
@@ -583,7 +578,7 @@ class _OperationRecordsTabState extends State<_OperationRecordsTab> {
               },
               confirmText: AppConfig.btnClose,
               confirmGradient: const LinearGradient(
-                colors: [Color(0xFF1A56DB), Color(0xFF2962FF)],
+                colors: [AppColors.blueDark, AppColors.blueAccent],
               ),
             ),
           ],
@@ -655,9 +650,9 @@ class _DividendRecordsTabState extends State<_DividendRecordsTab> {
           background: Container(
             margin: const EdgeInsets.only(bottom: 8),
             decoration: BoxDecoration(
-              color: Colors.red.withOpacity(0.2),
+              color: Colors.red.withValues(alpha: 0.2),
               borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: Colors.red.withOpacity(0.4)),
+              border: Border.all(color: Colors.red.withValues(alpha: 0.4)),
             ),
             alignment: Alignment.centerRight,
             padding: const EdgeInsets.only(right: 16),
@@ -678,9 +673,9 @@ class _DividendRecordsTabState extends State<_DividendRecordsTab> {
               margin: const EdgeInsets.only(bottom: 8),
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
-                color: const Color(0xFF000000),
+                color: AppColors.surface,
                 borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: const Color(0xFF1C1C1E), width: 0.5),
+                border: Border.all(color: AppColors.border, width: 0.5),
               ),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -689,7 +684,7 @@ class _DividendRecordsTabState extends State<_DividendRecordsTab> {
                     width: 36,
                     height: 36,
                     decoration: BoxDecoration(
-                      color: Colors.amber.withOpacity(0.15),
+                      color: Colors.amber.withValues(alpha: 0.15),
                       borderRadius: BorderRadius.circular(10),
                     ),
                     child: const Icon(
@@ -841,12 +836,9 @@ class _DividendRecordsTabState extends State<_DividendRecordsTab> {
                     vertical: 12,
                   ),
                   decoration: BoxDecoration(
-                    color: const Color(0xFF000000),
+                    color: AppColors.surface,
                     borderRadius: BorderRadius.circular(12),
-                    border: Border.all(
-                      color: const Color(0xFF1C1C1E),
-                      width: 0.5,
-                    ),
+                    border: Border.all(color: AppColors.border, width: 0.5),
                   ),
                   child: Row(
                     children: [
@@ -926,7 +918,7 @@ class _DividendRecordsTabState extends State<_DividendRecordsTab> {
                 },
                 confirmText: AppConfig.btnClose,
                 confirmGradient: const LinearGradient(
-                  colors: [Color(0xFF1A56DB), Color(0xFF2962FF)],
+                  colors: [AppColors.blueDark, AppColors.blueAccent],
                 ),
               ),
             ],

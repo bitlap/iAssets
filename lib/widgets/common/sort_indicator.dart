@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import '../../config/app_colors.dart';
+import 'app_ui.dart';
 
 class SortIndicator extends StatelessWidget {
   final bool isActive;

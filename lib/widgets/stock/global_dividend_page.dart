@@ -65,9 +65,9 @@ class _GlobalDividendPageState extends State<GlobalDividendPage> {
   }
 
   List<GlobalDividendStockItem> get _sortedItems {
-    final filtered = _overview.items.where(
-      (i) => MarketUtil.matchesFilter(_filterMarket, i.marketType),
-    ).toList();
+    final filtered = _overview.items
+        .where((i) => MarketUtil.matchesFilter(_filterMarket, i.marketType))
+        .toList();
     filtered.sort((a, b) {
       int cmp;
       switch (_sortKey) {
@@ -126,9 +126,9 @@ class _GlobalDividendPageState extends State<GlobalDividendPage> {
   Widget build(BuildContext context) {
     final items = _sortedItems;
     return Scaffold(
-      backgroundColor: const Color(0xFF000000),
+      backgroundColor: AppColors.surface,
       appBar: AppBar(
-        backgroundColor: const Color(0xFF000000),
+        backgroundColor: AppColors.surface,
         elevation: 0,
         toolbarHeight: AppConfig.appBarHeight,
         scrolledUnderElevation: 0,
@@ -149,11 +149,7 @@ class _GlobalDividendPageState extends State<GlobalDividendPage> {
             ),
             Text(
               '${_overview.items.length} ${StockConfig.tabStock} · ${widget.selectedCurrency}',
-              style: const TextStyle(
-                fontSize: 11,
-                color: Color(0xFF8E8E93),
-                fontWeight: FontWeight.w400,
-              ),
+              style: TextStyles.caption,
             ),
           ],
         ),
@@ -161,8 +157,8 @@ class _GlobalDividendPageState extends State<GlobalDividendPage> {
       ),
       body: RefreshIndicator(
         onRefresh: _handleRefresh,
-        color: const Color(0xFF8E8E93),
-        backgroundColor: const Color(0xFF000000),
+        color: AppColors.textSecondary,
+        backgroundColor: AppColors.surface,
         child: SingleChildScrollView(
           physics: const AlwaysScrollableScrollPhysics(),
           padding: const EdgeInsets.only(bottom: 40),
@@ -342,9 +338,9 @@ class _GlobalDividendPageState extends State<GlobalDividendPage> {
         },
         child: Container(
           decoration: BoxDecoration(
-            color: const Color(0xFF000000),
+            color: AppColors.surface,
             borderRadius: BorderRadius.circular(12),
-            border: Border.all(color: const Color(0xFF1C1C1E), width: 0.5),
+            border: Border.all(color: AppColors.border, width: 0.5),
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -360,22 +356,13 @@ class _GlobalDividendPageState extends State<GlobalDividendPage> {
                         children: [
                           Text(
                             item.companyName,
-                            style: const TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w600,
-                              color: Colors.white,
-                              height: 1.2,
-                            ),
+                            style: TextStyles.subtitle.copyWith(height: 1.2),
                             overflow: TextOverflow.ellipsis,
                           ),
                           const SizedBox(height: 2),
                           Text(
                             '${item.symbol} · ${item.recordCount} ${StockConfig.dividendRecordCount}',
-                            style: const TextStyle(
-                              fontSize: 12,
-                              color: Color(0xFF8E8E93),
-                              height: 1.2,
-                            ),
+                            style: TextStyles.bodySmall,
                           ),
                         ],
                       ),
@@ -428,19 +415,12 @@ class _GlobalDividendPageState extends State<GlobalDividendPage> {
                     Expanded(
                       child: Text(
                         '${StockConfig.dividendLatestDate} ${item.latestDividendDate != null ? DateFormat('yyyy-MM-dd').format(item.latestDividendDate!) : '-'}',
-                        style: const TextStyle(
-                          fontSize: 11,
-                          color: Color(0xFF8E8E93),
-                        ),
+                        style: TextStyles.caption,
                       ),
                     ),
                     Text(
                       StockConfig.dividendExpandAll,
-                      style: const TextStyle(
-                        fontSize: 11,
-                        color: Color(0xFF5B9CF6),
-                        fontWeight: FontWeight.w500,
-                      ),
+                      style: TextStyles.accentLink,
                     ),
                   ],
                 ),
@@ -484,24 +464,11 @@ class _GlobalDividendPageState extends State<GlobalDividendPage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          label,
-          style: const TextStyle(
-            fontSize: 10,
-            color: Color(0xFF8E8E93),
-            height: 1.2,
-          ),
-        ),
+        Text(label, style: TextStyles.label),
         const SizedBox(height: 2),
         Text(
           value,
-          style: const TextStyle(
-            fontSize: 12,
-            fontWeight: FontWeight.w600,
-            color: Colors.white,
-            height: 1.2,
-            fontFamily: 'SFMono',
-          ),
+          style: TextStyles.valueSmallMono,
           overflow: TextOverflow.ellipsis,
         ),
       ],
@@ -512,10 +479,7 @@ class _GlobalDividendPageState extends State<GlobalDividendPage> {
     if (item.records.isEmpty) {
       return const Padding(
         padding: EdgeInsets.fromLTRB(12, 0, 12, 12),
-        child: Text(
-          StockConfig.profitNoData,
-          style: TextStyle(fontSize: 12, color: Color(0xFF8E8E93)),
-        ),
+        child: Text(StockConfig.profitNoData, style: TextStyles.bodySmall),
       );
     }
     // 时间倒序
@@ -523,7 +487,7 @@ class _GlobalDividendPageState extends State<GlobalDividendPage> {
       ..sort((a, b) => b.date.compareTo(a.date));
     return Column(
       children: [
-        const Divider(color: Color(0xFF1C1C1E), thickness: 0.5, height: 0.5),
+        const Divider(color: AppColors.border, thickness: 0.5, height: 0.5),
         const SizedBox(height: 4),
         ...sorted.map((r) => _buildRecordItem(r, item.currency)),
       ],
@@ -542,7 +506,7 @@ class _GlobalDividendPageState extends State<GlobalDividendPage> {
             height: 8,
             margin: const EdgeInsets.only(top: 6),
             decoration: BoxDecoration(
-              color: const Color(0xFFFF9F0A),
+              color: AppColors.warning,
               shape: BoxShape.circle,
             ),
           ),
@@ -555,19 +519,14 @@ class _GlobalDividendPageState extends State<GlobalDividendPage> {
                   children: [
                     Text(
                       DateFormat('yyyy-MM-dd').format(record.date),
-                      style: const TextStyle(
-                        fontSize: 12,
-                        color: Colors.white,
-                        fontWeight: FontWeight.w500,
-                        height: 1.2,
-                      ),
+                      style: TextStyles.valueSmall,
                     ),
                     const Spacer(),
                     Text(
                       '${StockConfig.recordsDivLabel}: $sym${CurrencyUtil.formatCompact(record.afterTaxAmount)}',
                       style: const TextStyle(
                         fontSize: 12,
-                        color: Color(0xFFFF9F0A),
+                        color: AppColors.warning,
                         fontWeight: FontWeight.w600,
                         height: 1.2,
                       ),
@@ -577,11 +536,7 @@ class _GlobalDividendPageState extends State<GlobalDividendPage> {
                 const SizedBox(height: 2),
                 Text(
                   '${CurrencyUtil.formatRate(record.shares)}${StockConfig.stockSharesSuffix} × ${CurrencyUtil.formatRate(record.amount)}/${StockConfig.recordsDivAmountPerShare} × ${(1 - record.taxRate) * 100}%',
-                  style: const TextStyle(
-                    fontSize: 11,
-                    color: Color(0xFF8E8E93),
-                    height: 1.2,
-                  ),
+                  style: TextStyles.caption,
                 ),
               ],
             ),

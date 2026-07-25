@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import '../../config/app_colors.dart';
+import 'app_ui.dart';
 
 class DraggableFab extends StatefulWidget {
   final VoidCallback onTap;
@@ -40,10 +42,13 @@ class _DraggableFabState extends State<DraggableFab> {
           width: _fabSize,
           height: _fabSize,
           decoration: BoxDecoration(
-            color: const Color(0xFF2C2C2E),
+            color: AppColors.surfaceElevated,
             shape: BoxShape.circle,
             boxShadow: [
-              BoxShadow(color: Colors.black.withOpacity(0.3), blurRadius: 8),
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.3),
+                blurRadius: 8,
+              ),
             ],
           ),
           child: const Icon(Icons.add, color: Colors.white, size: 28),

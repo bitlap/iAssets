@@ -11,6 +11,7 @@ import '../../utils/currency_util.dart';
 import '../../utils/logo_cacher.dart';
 import '../../utils/market_util.dart';
 import '../../config/app_config.dart';
+import '../../config/app_colors.dart';
 import '../common/app_number_field.dart';
 import '../common/info_row_widget.dart';
 import '../common/dialog_utils.dart';
@@ -241,10 +242,10 @@ class _SearchStockDialogState extends State<SearchStockDialog> {
   @override
   Widget build(BuildContext context) {
     return Dialog(
-      backgroundColor: const Color(0xFF000000),
+      backgroundColor: AppColors.surface,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
-        side: BorderSide(color: Color(0xFF1C1C1E)!),
+        side: BorderSide(color: AppColors.border),
       ),
       insetPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 60),
       child: ConstrainedBox(
@@ -257,7 +258,7 @@ class _SearchStockDialogState extends State<SearchStockDialog> {
           mainAxisSize: MainAxisSize.min,
           children: [
             _buildSearchBar(),
-            const Divider(thickness: 0.5, color: Color(0xFF1C1C1E)),
+            Divider(thickness: 0.5, color: AppColors.border),
             FlexibleChild(child: _buildResultsList()),
           ],
         ),
@@ -287,7 +288,7 @@ class _SearchStockDialogState extends State<SearchStockDialog> {
                 onTap: () => Navigator.of(context).pop(),
                 child: const Icon(
                   Icons.close,
-                  color: Color(0xFF8E8E93),
+                  color: AppColors.textSecondary,
                   size: 22,
                 ),
               ),
@@ -296,14 +297,18 @@ class _SearchStockDialogState extends State<SearchStockDialog> {
           const SizedBox(height: 12),
           Container(
             decoration: BoxDecoration(
-              color: const Color(0xFF000000),
+              color: AppColors.surface,
               borderRadius: BorderRadius.circular(10),
-              border: Border.all(color: const Color(0xFF1C1C1E)),
+              border: Border.all(color: AppColors.border),
             ),
             child: Row(
               children: [
                 const SizedBox(width: 12),
-                const Icon(Icons.search, color: Color(0xFF8E8E93), size: 20),
+                const Icon(
+                  Icons.search,
+                  color: AppColors.textSecondary,
+                  size: 20,
+                ),
                 const SizedBox(width: 8),
                 Expanded(
                   child: TextField(
@@ -314,7 +319,7 @@ class _SearchStockDialogState extends State<SearchStockDialog> {
                     decoration: const InputDecoration(
                       hintText: StockConfig.searchHint,
                       hintStyle: TextStyle(
-                        color: Color(0xFF8E8E93),
+                        color: AppColors.textSecondary,
                         fontSize: 14,
                       ),
                       border: InputBorder.none,
@@ -337,7 +342,7 @@ class _SearchStockDialogState extends State<SearchStockDialog> {
                       padding: EdgeInsets.only(right: 12),
                       child: Icon(
                         Icons.clear,
-                        color: Color(0xFF8E8E93),
+                        color: AppColors.textSecondary,
                         size: 18,
                       ),
                     ),
@@ -391,20 +396,20 @@ class _SearchStockDialogState extends State<SearchStockDialog> {
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
         decoration: BoxDecoration(
           color: isSelected
-              ? Color(0xFF2C2C2E).withValues(alpha: 0.5)
-              : Color(0xFF2C2C2E).withValues(alpha: 0.2),
+              ? AppColors.surfaceElevated.withValues(alpha: 0.5)
+              : AppColors.surfaceElevated.withValues(alpha: 0.2),
           borderRadius: BorderRadius.circular(6),
           border: Border.all(
             color: isSelected
-                ? Color(0xFF2C2C2E).withValues(alpha: 0.7)
-                : Color(0xFF2C2C2E).withValues(alpha: 0.3),
+                ? AppColors.surfaceElevated.withValues(alpha: 0.7)
+                : AppColors.surfaceElevated.withValues(alpha: 0.3),
           ),
         ),
         child: Text(
           label,
           style: TextStyle(
             fontSize: 12,
-            color: isSelected ? Colors.white : Color(0xFF8E8E93),
+            color: isSelected ? Colors.white : AppColors.textSecondary,
             fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
           ),
         ),
@@ -470,7 +475,7 @@ class _SearchStockDialogState extends State<SearchStockDialog> {
       return const Center(
         child: Padding(
           padding: EdgeInsets.all(40),
-          child: CircularProgressIndicator(color: Color(0xFF8E8E93)),
+          child: CircularProgressIndicator(color: AppColors.textSecondary),
         ),
       );
     }
@@ -482,11 +487,18 @@ class _SearchStockDialogState extends State<SearchStockDialog> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Icon(Icons.search_off, color: Color(0xFF8E8E93), size: 48),
+              const Icon(
+                Icons.search_off,
+                color: AppColors.textSecondary,
+                size: 48,
+              ),
               const SizedBox(height: 12),
               Text(
                 _errorMessage,
-                style: const TextStyle(color: Color(0xFF8E8E93), fontSize: 14),
+                style: const TextStyle(
+                  color: AppColors.textSecondary,
+                  fontSize: 14,
+                ),
               ),
             ],
           ),
@@ -503,18 +515,18 @@ class _SearchStockDialogState extends State<SearchStockDialog> {
             children: [
               Icon(
                 Icons.tips_and_updates_outlined,
-                color: Color(0xFF8E8E93),
+                color: AppColors.textSecondary,
                 size: 48,
               ),
               SizedBox(height: 12),
               Text(
                 StockConfig.searchInitHint,
-                style: TextStyle(color: Color(0xFF8E8E93), fontSize: 14),
+                style: TextStyle(color: AppColors.textSecondary, fontSize: 14),
               ),
               SizedBox(height: 6),
               Text(
                 StockConfig.searchInitExample,
-                style: TextStyle(color: Color(0xFF8E8E93), fontSize: 12),
+                style: TextStyle(color: AppColors.textSecondary, fontSize: 12),
               ),
             ],
           ),
@@ -554,9 +566,7 @@ class _SearchStockDialogState extends State<SearchStockDialog> {
   ) {
     final changePercent = quote?.changePercent ?? 0.0;
     final isPositive = changePercent >= 0;
-    final priceColor = isPositive
-        ? const Color(0xFFFF5252)
-        : const Color(0xFF4CAF50);
+    final priceColor = isPositive ? AppColors.redAccent : AppColors.greenAccent;
 
     return InkWell(
       onTap: isExisting ? null : () => _addStock(stock),
@@ -564,7 +574,7 @@ class _SearchStockDialogState extends State<SearchStockDialog> {
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         decoration: BoxDecoration(
           border: Border(
-            bottom: BorderSide(color: Color(0xFF1C1C1E)!, width: 0.5),
+            bottom: BorderSide(color: AppColors.border, width: 0.5),
           ),
         ),
         child: Row(
@@ -574,7 +584,7 @@ class _SearchStockDialogState extends State<SearchStockDialog> {
               width: 36,
               height: 36,
               decoration: BoxDecoration(
-                color: const Color(0xFF000000),
+                color: AppColors.surface,
                 borderRadius: BorderRadius.circular(8),
               ),
               child: ClipRRect(
@@ -604,7 +614,7 @@ class _SearchStockDialogState extends State<SearchStockDialog> {
                         return Container(
                           width: 36,
                           height: 36,
-                          color: const Color(0xFF2C2C2E),
+                          color: AppColors.surfaceElevated,
                         );
                       },
                     );
@@ -644,7 +654,7 @@ class _SearchStockDialogState extends State<SearchStockDialog> {
                   Text(
                     stock.name,
                     style: const TextStyle(
-                      color: Color(0xFF8E8E93),
+                      color: AppColors.textSecondary,
                       fontSize: 13,
                     ),
                     maxLines: 1,
@@ -668,7 +678,7 @@ class _SearchStockDialogState extends State<SearchStockDialog> {
                       height: 16,
                       child: CircularProgressIndicator(
                         strokeWidth: 2,
-                        color: Color(0xFF8E8E93),
+                        color: AppColors.textSecondary,
                       ),
                     )
                   else if (isFailedQuote)
@@ -676,7 +686,7 @@ class _SearchStockDialogState extends State<SearchStockDialog> {
                       child: Text(
                         StockConfig.searchQuoteUnavailable,
                         style: TextStyle(
-                          color: Color(0xFF636366),
+                          color: AppColors.textTertiary,
                           fontSize: 11,
                         ),
                         overflow: TextOverflow.ellipsis,
@@ -714,7 +724,7 @@ class _SearchStockDialogState extends State<SearchStockDialog> {
                       height: 16,
                       child: CircularProgressIndicator(
                         strokeWidth: 2,
-                        color: Color(0xFF8E8E93),
+                        color: AppColors.textSecondary,
                       ),
                     ),
                   // 添加按钮
@@ -726,13 +736,13 @@ class _SearchStockDialogState extends State<SearchStockDialog> {
                         vertical: 5,
                       ),
                       decoration: BoxDecoration(
-                        color: Color(0xFF1C1C1E)!,
+                        color: AppColors.border,
                         borderRadius: BorderRadius.circular(6),
                       ),
                       child: const Text(
                         AppConfig.btnAdded,
                         style: TextStyle(
-                          color: Color(0xFF8E8E93),
+                          color: AppColors.textSecondary,
                           fontSize: 12,
                         ),
                       ),
@@ -744,10 +754,12 @@ class _SearchStockDialogState extends State<SearchStockDialog> {
                         vertical: 5,
                       ),
                       decoration: BoxDecoration(
-                        color: Color(0xFF2C2C2E).withValues(alpha: 0.5),
+                        color: AppColors.surfaceElevated.withValues(alpha: 0.5),
                         borderRadius: BorderRadius.circular(6),
                         border: Border.all(
-                          color: Color(0xFF2C2C2E).withValues(alpha: 0.5),
+                          color: AppColors.surfaceElevated.withValues(
+                            alpha: 0.5,
+                          ),
                         ),
                       ),
                       child: const Text(
@@ -767,7 +779,7 @@ class _SearchStockDialogState extends State<SearchStockDialog> {
   Widget _buildLogoFallback(StockSearchResult stock) {
     final firstChar = stock.name.isNotEmpty ? stock.name[0] : stock.code[0];
     return Container(
-      color: const Color(0xFF2C2C2E),
+      color: AppColors.surfaceElevated,
       child: Center(
         child: Text(
           firstChar,
@@ -918,7 +930,7 @@ class _AddStockConfirmDialogState extends State<_AddStockConfirmDialog> {
               onConfirm: _onConfirm,
               confirmText: AppConfig.btnConfirmAdd,
               confirmGradient: const LinearGradient(
-                colors: [Color(0xFF1A56DB), Color(0xFF2962FF)],
+                colors: [AppColors.blueDark, AppColors.blueAccent],
               ),
             ),
           ],
@@ -931,9 +943,9 @@ class _AddStockConfirmDialogState extends State<_AddStockConfirmDialog> {
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: const Color(0xFF000000),
+        color: AppColors.surface,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: const Color(0xFF1C1C1E)),
+        border: Border.all(color: AppColors.border),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

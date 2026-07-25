@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import '../../config/app_colors.dart';
+import 'app_ui.dart';
 
 /// 通用数字输入框 - 统一项目中所有数字输入框的样式
 class AppNumberField extends StatelessWidget {
@@ -20,22 +22,22 @@ class AppNumberField extends StatelessWidget {
   static InputDecoration _decoration(String hintText) {
     return InputDecoration(
       filled: true,
-      fillColor: const Color(0xFF000000),
+      fillColor: AppColors.surface,
       contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),
-        borderSide: const BorderSide(color: Color(0xFF1C1C1E)),
+        borderSide: const BorderSide(color: AppColors.border),
       ),
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),
-        borderSide: const BorderSide(color: Color(0xFF1C1C1E)),
+        borderSide: const BorderSide(color: AppColors.border),
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),
-        borderSide: const BorderSide(color: Color(0xFF636366)),
+        borderSide: const BorderSide(color: AppColors.textTertiary),
       ),
       hintText: hintText,
-      hintStyle: TextStyle(color: Color(0xFF636366)),
+      hintStyle: TextStyle(color: AppColors.textTertiary),
     );
   }
 
@@ -50,7 +52,7 @@ class AppNumberField extends StatelessWidget {
             label!,
             style: const TextStyle(
               fontSize: 13,
-              color: Color(0xFF8E8E93),
+              color: AppColors.textSecondary,
               height: 1.2,
             ),
           ),
@@ -62,7 +64,7 @@ class AppNumberField extends StatelessWidget {
           inputFormatters: [
             FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d*$')),
           ],
-          style: const TextStyle(fontSize: 16, color: Colors.white),
+          style: const TextStyle(fontSize: 16, color: AppColors.textPrimary),
           decoration: _decoration(hintText),
         ),
       ],

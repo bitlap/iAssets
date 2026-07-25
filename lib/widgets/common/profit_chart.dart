@@ -1,10 +1,12 @@
 import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import '../../config/app_colors.dart';
 import '../../config/app_config.dart';
 import '../../services/stock_data_manager.dart';
 import '../../models/stock_model.dart';
 import '../../utils/currency_util.dart';
+import 'app_ui.dart';
 
 class ProfitChartWidget extends StatefulWidget {
   final double totalProfit;
@@ -99,21 +101,17 @@ class _ProfitChartWidgetState extends State<ProfitChartWidget> {
           }),
           child: Row(
             children: [
-              const Icon(Icons.timeline, size: 12, color: Color(0xFFFF9F0A)),
+              const Icon(Icons.timeline, size: 12, color: AppColors.warning),
               const SizedBox(width: 4),
               const Text(
                 StockConfig.profitChartTitle,
-                style: TextStyle(
-                  fontSize: 11,
-                  color: Color(0xFF8E8E93),
-                  height: 1.2,
-                ),
+                style: TextStyles.caption,
               ),
               const Spacer(),
               Icon(
                 _isExpanded ? Icons.expand_less : Icons.expand_more,
                 size: 16,
-                color: Color(0xFF8E8E93),
+                color: AppColors.textSecondary,
               ),
             ],
           ),
@@ -144,11 +142,11 @@ class _ProfitChartWidgetState extends State<ProfitChartWidget> {
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
               decoration: BoxDecoration(
                 color: isSelected
-                    ? Color(0xFFFF9F0A).withOpacity(0.3)
-                    : Colors.white.withOpacity(0.15),
+                    ? AppColors.warning.withValues(alpha: 0.3)
+                    : AppColors.textPrimary.withValues(alpha: 0.15),
                 borderRadius: BorderRadius.circular(8),
                 border: isSelected
-                    ? Border.all(color: Color(0xFFFF9F0A), width: 1.5)
+                    ? Border.all(color: AppColors.warning, width: 1.5)
                     : null,
               ),
               child: Text(
@@ -156,7 +154,7 @@ class _ProfitChartWidgetState extends State<ProfitChartWidget> {
                 style: TextStyle(
                   fontSize: 10,
                   fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
-                  color: Colors.white,
+                  color: AppColors.textPrimary,
                   height: 1.2,
                 ),
               ),
@@ -175,7 +173,7 @@ class _ProfitChartWidgetState extends State<ProfitChartWidget> {
         alignment: Alignment.center,
         child: Text(
           StockConfig.profitNoData,
-          style: TextStyle(fontSize: 12, color: Color(0xFF8E8E93)),
+          style: TextStyle(fontSize: 12, color: AppColors.textSecondary),
         ),
       );
     }
@@ -186,7 +184,7 @@ class _ProfitChartWidgetState extends State<ProfitChartWidget> {
         borderRadius: BorderRadius.circular(12),
         child: Container(
           decoration: BoxDecoration(
-            color: Colors.white.withOpacity(0.08),
+            color: AppColors.textPrimary.withValues(alpha: 0.08),
             borderRadius: BorderRadius.circular(12),
           ),
           child: Padding(
@@ -264,7 +262,7 @@ class _ProfitChartPainter extends CustomPainter {
     final paintHeight = size.height;
     final minVal = data.reduce((a, b) => a < b ? a : b);
     final maxVal = data.reduce((a, b) => a > b ? a : b);
-    final color = Color(0xFFFF9F0A);
+    final color = AppColors.warning;
 
     double scaleY(double val) {
       if (minVal == maxVal) return paintHeight / 2;
@@ -284,7 +282,10 @@ class _ProfitChartPainter extends CustomPainter {
       final tp = TextPainter(
         text: TextSpan(
           text: CurrencyUtil.formatCompact(val),
-          style: TextStyle(color: Colors.white.withOpacity(0.4), fontSize: 9),
+          style: TextStyle(
+            color: AppColors.textPrimary.withValues(alpha: 0.4),
+            fontSize: 9,
+          ),
         ),
         textDirection: ui.TextDirection.ltr,
       )..layout(maxWidth: 60);
@@ -293,7 +294,7 @@ class _ProfitChartPainter extends CustomPainter {
 
     // grid lines
     final gridPaint = Paint()
-      ..color = Colors.white.withOpacity(0.06)
+      ..color = AppColors.textPrimary.withValues(alpha: 0.06)
       ..strokeWidth = 0.5;
     for (int i = 1; i < 4; i++) {
       final y = paintHeight * i / 4;
@@ -304,7 +305,7 @@ class _ProfitChartPainter extends CustomPainter {
     if (minVal < 0 && maxVal > 0) {
       final zeroY = scaleY(0);
       final zeroPaint = Paint()
-        ..color = Colors.white.withOpacity(0.15)
+        ..color = AppColors.textPrimary.withValues(alpha: 0.15)
         ..strokeWidth = 1;
       canvas.drawLine(Offset(0, zeroY), Offset(paintWidth, zeroY), zeroPaint);
     }
@@ -314,7 +315,7 @@ class _ProfitChartPainter extends CustomPainter {
       ..shader = LinearGradient(
         begin: Alignment.topCenter,
         end: Alignment.bottomCenter,
-        colors: [color.withOpacity(0.3), color.withOpacity(0.02)],
+        colors: [color.withValues(alpha: 0.3), color.withValues(alpha: 0.02)],
       ).createShader(Rect.fromLTWH(0, 0, paintWidth, paintHeight));
 
     final path = Path();
@@ -334,7 +335,7 @@ class _ProfitChartPainter extends CustomPainter {
 
     // line
     final linePaint = Paint()
-      ..color = color.withOpacity(0.8)
+      ..color = color.withValues(alpha: 0.8)
       ..strokeWidth = 2
       ..style = PaintingStyle.stroke
       ..strokeCap = StrokeCap.round;
@@ -359,7 +360,10 @@ class _ProfitChartPainter extends CustomPainter {
       canvas.drawCircle(
         Offset(x, y),
         isSel ? 4 : 1.5,
-        Paint()..color = isSel ? color.withOpacity(1) : color.withOpacity(0.4),
+        Paint()
+          ..color = isSel
+              ? color.withValues(alpha: 1)
+              : color.withValues(alpha: 0.4),
       );
     }
 
@@ -371,7 +375,7 @@ class _ProfitChartPainter extends CustomPainter {
 
       // dashed vertical line from top to bottom of chart container
       final dashPaint = Paint()
-        ..color = Colors.white.withOpacity(0.5)
+        ..color = AppColors.textPrimary.withValues(alpha: 0.5)
         ..strokeWidth = 1.5
         ..style = PaintingStyle.stroke;
       const dashLen = 5.0;
@@ -394,7 +398,7 @@ class _ProfitChartPainter extends CustomPainter {
         text: TextSpan(
           text: valueText,
           style: TextStyle(
-            color: color.withOpacity(0.95),
+            color: color.withValues(alpha: 0.95),
             fontSize: 11,
             fontWeight: FontWeight.w700,
           ),
@@ -408,11 +412,11 @@ class _ProfitChartPainter extends CustomPainter {
         Rect.fromLTWH(labelX, 0, labelW, labelH),
         const Radius.circular(4),
       );
-      canvas.drawRRect(labelRect, Paint()..color = const Color(0xFF1C1C1E));
+      canvas.drawRRect(labelRect, Paint()..color = AppColors.border);
       canvas.drawRRect(
         labelRect,
         Paint()
-          ..color = color.withOpacity(0.9)
+          ..color = color.withValues(alpha: 0.9)
           ..style = PaintingStyle.stroke
           ..strokeWidth = 1,
       );
@@ -426,7 +430,7 @@ class _ProfitChartPainter extends CustomPainter {
         text: TextSpan(
           text: dateText,
           style: TextStyle(
-            color: Colors.white.withOpacity(0.7),
+            color: AppColors.textPrimary.withValues(alpha: 0.7),
             fontSize: 10,
             fontWeight: FontWeight.w500,
           ),
@@ -444,11 +448,11 @@ class _ProfitChartPainter extends CustomPainter {
         Rect.fromLTWH(dateLabelX, dateLabelY, dateLabelW, dateLabelH),
         const Radius.circular(4),
       );
-      canvas.drawRRect(dateRect, Paint()..color = const Color(0xFF1C1C1E));
+      canvas.drawRRect(dateRect, Paint()..color = AppColors.border);
       canvas.drawRRect(
         dateRect,
         Paint()
-          ..color = Colors.white.withOpacity(0.3)
+          ..color = AppColors.textPrimary.withValues(alpha: 0.3)
           ..style = PaintingStyle.stroke
           ..strokeWidth = 0.5,
       );

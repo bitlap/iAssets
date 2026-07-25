@@ -7,9 +7,11 @@ import '../../services/settings_service.dart';
 import '../../services/stock_quote_service.dart';
 import '../../utils/center_toast.dart';
 import '../../config/app_config.dart';
+import '../../config/app_colors.dart';
 import '../common/app_number_field.dart';
 import '../common/info_row_widget.dart';
 import '../common/confirm_delete_dialog.dart';
+import '../common/app_ui.dart';
 import '../common/dialog_utils.dart';
 import '../common/percent_selector.dart';
 
@@ -145,11 +147,7 @@ class _EditStockDialogState extends State<EditStockDialog> {
                 widget.isAdd
                     ? StockConfig.opAddPosition
                     : StockConfig.opReducePosition,
-                style: const TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                ),
+                style: TextStyles.dialogTitle,
               ),
             ),
             const SizedBox(height: 16),
@@ -161,7 +159,7 @@ class _EditStockDialogState extends State<EditStockDialog> {
                   StockConfig.editPriceHint,
                   style: TextStyle(
                     fontSize: 13,
-                    color: Color(0xFF8E8E93),
+                    color: AppColors.textSecondary,
                     height: 1.2,
                   ),
                 ),
@@ -206,8 +204,8 @@ class _EditStockDialogState extends State<EditStockDialog> {
                   ? AppConfig.btnConfirmBuy
                   : AppConfig.btnConfirmSell,
               confirmBgColor: widget.isAdd
-                  ? const Color(0xFFFF3B30)
-                  : const Color(0xFF34C759),
+                  ? AppColors.danger
+                  : AppColors.success,
             ),
           ],
         ),
@@ -277,9 +275,9 @@ class _EditStockDialogState extends State<EditStockDialog> {
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: const Color(0xFF000000),
+        color: AppColors.surface,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: const Color(0xFF1C1C1E)),
+        border: Border.all(color: AppColors.border),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -362,7 +360,7 @@ class MoreOptionsDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Dialog(
-      backgroundColor: const Color(0xFF000000),
+      backgroundColor: AppColors.surface,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       insetPadding: const EdgeInsets.symmetric(horizontal: 40, vertical: 24),
       child: SizedBox(
@@ -371,7 +369,7 @@ class MoreOptionsDialog extends StatelessWidget {
           padding: const EdgeInsets.symmetric(vertical: 8),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: const Color(0xFF1C1C1E)),
+            border: Border.all(color: AppColors.border),
           ),
           child: Material(
             color: Colors.transparent,
@@ -389,11 +387,11 @@ class MoreOptionsDialog extends StatelessWidget {
                     ),
                   ),
                 ),
-                Divider(thickness: 0.5, color: const Color(0xFF1C1C1E)),
+                Divider(thickness: 0.5, color: AppColors.border),
                 ListTile(
                   leading: const Icon(
                     Icons.add_circle,
-                    color: Color(0xFFFF3B30),
+                    color: AppColors.danger,
                   ),
                   title: const Text(
                     StockConfig.opAddPosition,
@@ -404,11 +402,11 @@ class MoreOptionsDialog extends StatelessWidget {
                     onAdd();
                   },
                 ),
-                Divider(thickness: 0.5, color: const Color(0xFF1C1C1E)),
+                Divider(thickness: 0.5, color: AppColors.border),
                 ListTile(
                   leading: const Icon(
                     Icons.remove_circle,
-                    color: Color(0xFF34C759),
+                    color: AppColors.success,
                   ),
                   title: const Text(
                     StockConfig.opReducePosition,
@@ -419,27 +417,27 @@ class MoreOptionsDialog extends StatelessWidget {
                     onReduce();
                   },
                 ),
-                Divider(thickness: 0.5, color: const Color(0xFF1C1C1E)),
+                Divider(thickness: 0.5, color: AppColors.border),
                 ListTile(
                   leading: const Icon(
                     Icons.monetization_on,
-                    color: Color(0xFFFF9F0A),
+                    color: AppColors.warning,
                   ),
-                  title: const Text(
+                  title: Text(
                     StockConfig.opDividend,
-                    style: TextStyle(color: Colors.white, fontSize: 15),
+                    style: TextStyles.bodyRegular,
                   ),
                   onTap: () {
                     Navigator.pop(context);
                     onDividend();
                   },
                 ),
-                Divider(thickness: 0.5, color: const Color(0xFF1C1C1E)),
+                Divider(thickness: 0.5, color: AppColors.border),
                 ListTile(
-                  leading: const Icon(Icons.delete, color: Color(0xFFFF3B30)),
+                  leading: const Icon(Icons.delete, color: AppColors.danger),
                   title: const Text(
                     StockConfig.opDeleteStock,
-                    style: TextStyle(color: Color(0xFFFF3B30), fontSize: 15),
+                    style: TextStyle(color: AppColors.danger, fontSize: 15),
                   ),
                   onTap: () {
                     Navigator.pop(context);
@@ -513,11 +511,7 @@ class _DividendDialogState extends State<DividendDialog> {
           Center(
             child: Text(
               StockConfig.dividendTitle,
-              style: const TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
-              ),
+              style: TextStyles.dialogTitle,
             ),
           ),
           const SizedBox(height: 16),
@@ -527,7 +521,7 @@ class _DividendDialogState extends State<DividendDialog> {
             StockConfig.dividendDateLabel,
             style: TextStyle(
               fontSize: 13,
-              color: Color(0xFF8E8E93),
+              color: AppColors.textSecondary,
               height: 1.2,
             ),
           ),
@@ -538,7 +532,7 @@ class _DividendDialogState extends State<DividendDialog> {
             StockConfig.dividendAmountLabel,
             style: const TextStyle(
               fontSize: 13,
-              color: Color(0xFF8E8E93),
+              color: AppColors.textSecondary,
               height: 1.2,
             ),
           ),
@@ -571,7 +565,7 @@ class _DividendDialogState extends State<DividendDialog> {
               widget.onConfirm(_selectedDate, amount, _taxRate / 100);
             },
             confirmText: StockConfig.dividendConfirm,
-            confirmBgColor: Color(0xFFFF9F0A),
+            confirmBgColor: AppColors.warning,
           ),
         ],
       ),
@@ -582,9 +576,9 @@ class _DividendDialogState extends State<DividendDialog> {
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: const Color(0xFF000000),
+        color: AppColors.surface,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: const Color(0xFF1C1C1E)),
+        border: Border.all(color: AppColors.border),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -615,18 +609,18 @@ class _DividendDialogState extends State<DividendDialog> {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
         decoration: BoxDecoration(
-          color: const Color(0xFF000000),
+          color: AppColors.surface,
           borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: const Color(0xFF1C1C1E)),
+          border: Border.all(color: AppColors.border),
         ),
         child: Row(
           children: [
             Text(
               _formatDate(_selectedDate),
-              style: const TextStyle(fontSize: 16, color: Colors.white),
+              style: TextStyles.sectionTitleRegular,
             ),
             const Spacer(),
-            Icon(Icons.calendar_today, size: 18, color: Color(0xFF636366)),
+            Icon(Icons.calendar_today, size: 18, color: AppColors.textTertiary),
           ],
         ),
       ),

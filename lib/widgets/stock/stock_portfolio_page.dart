@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import '../../models/stock_model.dart';
 import '../../models/calculator_models.dart';
 import '../../config/app_config.dart';
+import '../../config/app_colors.dart';
 import '../../utils/center_toast.dart';
 import '../../utils/market_util.dart';
 import '../../services/stock_quote_service.dart';
@@ -11,7 +12,7 @@ import '../../services/exchange_rate_service.dart';
 import '../../services/settings_service.dart';
 import '../../services/stock_data_manager.dart';
 import '../common/empty_state_widget.dart';
-import '../common/draggable_fab.dart';
+import '../common/app_ui.dart';
 import '../common/section_title.dart';
 import 'stock_card.dart';
 import 'stock_list_header.dart';
@@ -63,6 +64,7 @@ class StockPortfolioPageState extends State<StockPortfolioPage>
   Timer? _syncTimer;
 
   final ScrollController _scrollController = ScrollController();
+  DateTime? _lastRefreshTime;
 
   @override
   void initState() {
@@ -209,6 +211,7 @@ class StockPortfolioPageState extends State<StockPortfolioPage>
     );
     if (mounted) setState(() => stocks = updated);
     await StockDataManager.recordProfitIfNeeded(totalProfit, selectedCurrency);
+    if (mounted) setState(() => _lastRefreshTime = DateTime.now());
   }
 
   Future<void> _recordProfitOnPaused() async {
@@ -280,15 +283,12 @@ class StockPortfolioPageState extends State<StockPortfolioPage>
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
-        backgroundColor: const Color(0xFF000000),
+        backgroundColor: AppColors.surface,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16),
-          side: const BorderSide(color: Color(0xFF1C1C1E), width: 0.5),
+          side: const BorderSide(color: AppColors.border, width: 0.5),
         ),
-        title: const Text(
-          '筛选市场',
-          style: TextStyle(fontSize: 16, color: Colors.white),
-        ),
+        title: const Text('筛选市场', style: TextStyles.sectionTitleRegular),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: List.generate(markets.length, (i) {
@@ -308,7 +308,7 @@ class StockPortfolioPageState extends State<StockPortfolioPage>
                   ),
                   decoration: BoxDecoration(
                     color: selected
-                        ? Color(0xFF2C2C2E).withOpacity(0.5)
+                        ? AppColors.surfaceElevated.withValues(alpha: 0.5)
                         : Colors.transparent,
                     borderRadius: BorderRadius.circular(10),
                   ),
@@ -325,14 +325,16 @@ class StockPortfolioPageState extends State<StockPortfolioPage>
                                   : Colors.white)
                             : (markets[i] != null
                                   ? MarketUtil.marketColor(markets[i])
-                                  : const Color(0xFF8E8E93)),
+                                  : AppColors.textSecondary),
                       ),
                       const SizedBox(width: 12),
                       Text(
                         labels[i],
                         style: TextStyle(
                           fontSize: 14,
-                          color: selected ? Colors.white : Color(0xFF8E8E93),
+                          color: selected
+                              ? Colors.white
+                              : AppColors.textSecondary,
                         ),
                       ),
                       if (selected) const Spacer(),
@@ -576,7 +578,7 @@ class StockPortfolioPageState extends State<StockPortfolioPage>
     );
   }
 
-  void _showSearchStockDialog() {
+  void showSearchStockDialog() {
     _collapseExpandedStock();
     final existingSymbols = stocks.map((s) => s.symbol).toSet();
     showDialog(
@@ -683,20 +685,26 @@ class StockPortfolioPageState extends State<StockPortfolioPage>
   }
 
   // 页面组装（仅股票内容，不含外壳/底部 Tab）
+
+  String _buildSubtitle() {
+    if (_lastRefreshTime == null) {
+      return StockConfig.homeSubtitle.replaceAll('{count}', '${stocks.length}');
+    }
+    final t = _lastRefreshTime!;
+    final time =
+        '${t.year}-${t.month.toString().padLeft(2, '0')}-'
+        '${t.day.toString().padLeft(2, '0')} '
+        '${t.hour.toString().padLeft(2, '0')}:'
+        '${t.minute.toString().padLeft(2, '0')}:'
+        '${t.second.toString().padLeft(2, '0')}';
+    return StockConfig.homeSubtitleRefresh.replaceAll('{time}', time);
+  }
+
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
-        final usableHeight = constraints.maxHeight;
-        return Stack(
-          children: [
-            _buildStockTab(),
-            DraggableFab(
-              onTap: _showSearchStockDialog,
-              maxHeight: usableHeight,
-            ),
-          ],
-        );
+        return _buildStockTab();
       },
     );
   }
@@ -705,8 +713,8 @@ class StockPortfolioPageState extends State<StockPortfolioPage>
   Widget _buildStockTab() {
     return RefreshIndicator(
       onRefresh: _refreshAll,
-      color: Color(0xFF8E8E93),
-      backgroundColor: const Color(0xFF000000),
+      color: AppColors.textSecondary,
+      backgroundColor: AppColors.surface,
       child: LayoutBuilder(
         builder: (context, constraints) {
           return SingleChildScrollView(
@@ -723,12 +731,8 @@ class StockPortfolioPageState extends State<StockPortfolioPage>
                   children: [
                     SectionTitle(
                       title: StockConfig.homeTitle,
-                      subtitle: StockConfig.homeSubtitle.replaceAll(
-                        '{count}',
-                        '${stocks.length}',
-                      ),
+                      subtitle: _buildSubtitle(),
                       onDividendOverview: () => _showDividendOverview(),
-                      onAdd: _showSearchStockDialog,
                       onSettings: _showSettingsPage,
                     ),
                     const SizedBox(height: 8),
@@ -752,6 +756,7 @@ class StockPortfolioPageState extends State<StockPortfolioPage>
                       onColumnTap: _onColumnTap,
                       filterMarket: _filterMarket,
                       onFilterTap: _showMarketFilter,
+                      stockCount: _sortedStocks.length,
                     ),
                     const SizedBox(height: 2),
                     if (_sortedStocks.isEmpty) ...[

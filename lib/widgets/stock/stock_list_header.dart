@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../config/app_colors.dart';
 import '../../config/app_config.dart';
 import '../../utils/market_util.dart';
 import '../common/sort_indicator.dart';
@@ -9,6 +10,7 @@ class StockListHeader extends StatelessWidget {
   final ValueChanged<String> onColumnTap;
   final String? filterMarket;
   final VoidCallback onFilterTap;
+  final int stockCount;
 
   const StockListHeader({
     super.key,
@@ -17,6 +19,7 @@ class StockListHeader extends StatelessWidget {
     required this.onColumnTap,
     required this.filterMarket,
     required this.onFilterTap,
+    this.stockCount = 0,
   });
 
   @override
@@ -52,10 +55,19 @@ class StockListHeader extends StatelessWidget {
                     style: const TextStyle(
                       fontSize: 13,
                       fontWeight: FontWeight.w600,
-                      color: Color(0xFF8E8E93),
+                      color: AppColors.textSecondary,
                       height: 1.2,
                     ),
                   ),
+                  if (stockCount > 0)
+                    Text(
+                      '($stockCount)',
+                      style: const TextStyle(
+                        fontSize: 13,
+                        color: AppColors.textSecondary,
+                        height: 1.2,
+                      ),
+                    ),
                   SortIndicator(
                     isActive: sortColumn == 'name',
                     isAscending: sortAscending,
@@ -79,7 +91,7 @@ class StockListHeader extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.bold,
-                        color: Color(0xFF8E8E93),
+                        color: AppColors.textSecondary,
                         height: 1.2,
                       ),
                     ),
@@ -111,7 +123,7 @@ class StockListHeader extends StatelessWidget {
                       style: const TextStyle(
                         fontSize: 13,
                         fontWeight: FontWeight.w600,
-                        color: Color(0xFF8E8E93),
+                        color: AppColors.textSecondary,
                         height: 1.2,
                       ),
                     ),

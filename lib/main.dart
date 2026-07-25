@@ -4,9 +4,11 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:workmanager/workmanager.dart';
 
 import 'config/app_config.dart';
+import 'config/app_colors.dart';
 import 'utils/logo_cacher.dart';
 import 'widgets/stock/stock_portfolio_page.dart';
 import 'widgets/asset/assets_page.dart';
+import 'widgets/asset/asset_dialogs.dart';
 import 'task/profit_task.dart';
 
 void main() async {
@@ -82,6 +84,19 @@ class _AppShell extends StatefulWidget {
 class _AppShellState extends State<_AppShell> {
   int _currentIndex = 0;
   final GlobalKey<StockPortfolioPageState> _stockKey = GlobalKey();
+  final GlobalKey<AssetsPageState> _assetKey = GlobalKey();
+
+  void _onAddTap() {
+    switch (_currentIndex) {
+      case 0:
+        _stockKey.currentState?.showSearchStockDialog();
+      case 1:
+        showAddAssetSheet(context).then((type) {
+          if (type == null || !mounted) return;
+          _assetKey.currentState?.onAddAsset(type);
+        });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -96,6 +111,7 @@ class _AppShellState extends State<_AppShell> {
               children: [
                 StockPortfolioPage(key: _stockKey),
                 AssetsPage(
+                  key: _assetKey,
                   stockTotalValue: _stockKey.currentState?.totalAssets ?? 0,
                   currency:
                       _stockKey.currentState?.selectedCurrency ??
@@ -125,36 +141,43 @@ class _AppShellState extends State<_AppShell> {
     return Padding(
       padding: const EdgeInsets.only(bottom: 4),
       child: Center(
-        child: Container(
-          decoration: BoxDecoration(
-            color: const Color(0xFF000000),
-            borderRadius: BorderRadius.circular(24),
-            border: Border.all(color: const Color(0xFF1C1C1E), width: 0.5),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withValues(alpha: 0.4),
-                blurRadius: 12,
-                offset: const Offset(0, -2),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                color: AppColors.surface,
+                borderRadius: BorderRadius.circular(24),
+                border: Border.all(color: AppColors.border, width: 0.5),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.4),
+                    blurRadius: 12,
+                    offset: const Offset(0, -2),
+                  ),
+                ],
               ),
-            ],
-          ),
-          padding: const EdgeInsets.all(4),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              _buildTabItem(
-                icon: Icons.show_chart,
-                label: StockConfig.tabStock,
-                index: 0,
+              padding: const EdgeInsets.all(4),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  _buildTabItem(
+                    icon: Icons.show_chart,
+                    label: StockConfig.tabStock,
+                    index: 0,
+                  ),
+                  const SizedBox(width: 4),
+                  _buildTabItem(
+                    icon: Icons.account_balance_wallet,
+                    label: StockConfig.tabAsset,
+                    index: 1,
+                  ),
+                  const SizedBox(width: 4),
+                  _buildAddItem(),
+                ],
               ),
-              const SizedBox(width: 4),
-              _buildTabItem(
-                icon: Icons.account_balance_wallet,
-                label: StockConfig.tabAsset,
-                index: 1,
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
@@ -172,10 +195,10 @@ class _AppShellState extends State<_AppShell> {
         duration: const Duration(milliseconds: 200),
         padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
         decoration: BoxDecoration(
-          color: isSelected ? const Color(0xFF2C2C2E) : Colors.transparent,
+          color: isSelected ? AppColors.surfaceElevated : Colors.transparent,
           borderRadius: BorderRadius.circular(20),
           border: isSelected
-              ? Border.all(color: const Color(0xFF3A3A3C), width: 0.5)
+              ? Border.all(color: AppColors.tertiaryBg, width: 0.5)
               : null,
         ),
         child: Column(
@@ -184,9 +207,7 @@ class _AppShellState extends State<_AppShell> {
             Icon(
               icon,
               size: 18,
-              color: index == 0
-                  ? const Color(0xFF5B9CF6)
-                  : const Color(0xFFFF9F0A),
+              color: index == 0 ? AppColors.accent : AppColors.warning,
             ),
             const SizedBox(height: 2),
             Text(
@@ -194,7 +215,36 @@ class _AppShellState extends State<_AppShell> {
               style: TextStyle(
                 fontSize: 11,
                 fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
-                color: isSelected ? Colors.white : const Color(0xFF8E8E93),
+                color: isSelected ? Colors.white : AppColors.textSecondary,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildAddItem() {
+    return GestureDetector(
+      onTap: _onAddTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+        decoration: BoxDecoration(
+          color: AppColors.surfaceElevated,
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(color: AppColors.tertiaryBg, width: 0.5),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Icon(Icons.add, color: Colors.white, size: 18),
+            const SizedBox(height: 2),
+            const Text(
+              '添加',
+              style: TextStyle(
+                fontSize: 11,
+                fontWeight: FontWeight.w600,
+                color: Colors.white,
               ),
             ),
           ],

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import '../../config/app_colors.dart';
+import 'app_ui.dart';
 
 /// 通用空状态组件 - 居中显示图标 + 标题 + 副标题
 class EmptyStateWidget extends StatelessWidget {
@@ -25,12 +27,12 @@ class EmptyStateWidget extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(icon, size: iconSize, color: Color(0xFF48484A)),
+            Icon(icon, size: iconSize, color: AppColors.iconMuted),
             const SizedBox(height: 12),
             Text(
               title,
               style: TextStyle(
-                color: Color(0xFF8E8E93),
+                color: AppColors.textSecondary,
                 fontSize: 14,
                 fontWeight: FontWeight.w500,
               ),
@@ -39,7 +41,7 @@ class EmptyStateWidget extends StatelessWidget {
               const SizedBox(height: 6),
               Text(
                 subtitle!,
-                style: TextStyle(color: Color(0xFF636366), fontSize: 12),
+                style: TextStyle(color: AppColors.textTertiary, fontSize: 12),
               ),
             ],
           ],

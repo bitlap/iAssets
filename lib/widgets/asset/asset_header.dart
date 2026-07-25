@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import '../../utils/currency_util.dart';
 import '../../config/app_config.dart';
+import '../../config/app_colors.dart';
 import '../../config/asset_config.dart';
+import '../common/app_ui.dart';
 
 // Header (Summary Card)
 
@@ -25,16 +27,16 @@ class AssetHeader extends StatelessWidget {
       margin: const EdgeInsets.symmetric(horizontal: 16),
       padding: const EdgeInsets.fromLTRB(12, 10, 12, 12),
       decoration: BoxDecoration(
-        color: Color(0xFF000000),
+        color: AppColors.surface,
         borderRadius: BorderRadius.circular(24),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.6),
+            color: Colors.black.withValues(alpha: 0.6),
             blurRadius: 20,
             offset: const Offset(0, 8),
           ),
         ],
-        border: Border.all(color: Color(0xFF1C1C1E), width: 0.5),
+        border: Border.all(color: AppColors.border, width: 0.5),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -47,7 +49,7 @@ class AssetHeader extends StatelessWidget {
                 StockConfig.assetTotalAssets,
                 style: const TextStyle(
                   fontSize: 13,
-                  color: Color(0xFF8E8E93),
+                  color: AppColors.textSecondary,
                   height: 1.2,
                 ),
               ),
@@ -59,7 +61,7 @@ class AssetHeader extends StatelessWidget {
                     vertical: 4,
                   ),
                   decoration: BoxDecoration(
-                    color: Color(0xFF3A3A3C),
+                    color: AppColors.tertiaryBg,
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: Row(
@@ -103,14 +105,14 @@ class AssetHeader extends StatelessWidget {
                 Icons.show_chart,
                 StockConfig.tabStock,
                 CurrencyUtil.formatCompact(stockTotalValue),
-                iconColor: const Color(0xFF5B9CF6),
+                iconColor: AppColors.accent,
               ),
               const SizedBox(width: 8),
               _summaryChip(
                 Icons.account_balance,
                 AssetConfig.depositWealthLabel,
                 CurrencyUtil.formatCompact(totalAssets - stockTotalValue),
-                iconColor: const Color(0xFFFF9F0A),
+                iconColor: AppColors.warning,
               ),
             ],
           ),
@@ -124,7 +126,7 @@ Widget _summaryChip(
   IconData icon,
   String label,
   String value, {
-  Color iconColor = const Color(0xFF8E8E93),
+  Color iconColor = AppColors.textSecondary,
 }) {
   return Expanded(
     child: Column(
@@ -139,7 +141,7 @@ Widget _summaryChip(
               label,
               style: const TextStyle(
                 fontSize: 11,
-                color: Color(0xFF8E8E93),
+                color: AppColors.textSecondary,
                 height: 1.2,
               ),
             ),
@@ -148,10 +150,8 @@ Widget _summaryChip(
         const SizedBox(height: 4),
         Text(
           value,
-          style: const TextStyle(
-            fontSize: 15,
+          style: TextStyles.bodyRegular.copyWith(
             fontWeight: FontWeight.w700,
-            color: Colors.white,
             height: 1.1,
           ),
         ),

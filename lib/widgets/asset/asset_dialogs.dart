@@ -4,9 +4,11 @@ import '../../utils/currency_util.dart';
 import '../../services/exchange_rate_service.dart';
 import '../../utils/center_toast.dart';
 import '../../config/app_config.dart';
+import '../../config/app_colors.dart';
 import '../../config/asset_config.dart';
 import '../common/app_number_field.dart';
 import '../common/dialog_utils.dart';
+import '../common/app_ui.dart';
 
 // Add Asset Sheet
 
@@ -22,31 +24,31 @@ class _AssetOption {
 const _assetOptions = [
   _AssetOption(
     Icons.payments,
-    Color(0xFF34C759),
+    AppColors.success,
     AssetConfig.cash,
     AssetType.cash,
   ),
   _AssetOption(
     Icons.account_balance,
-    Color(0xFF5AC8FA),
+    AppColors.cyan,
     AssetConfig.current,
     AssetType.current,
   ),
   _AssetOption(
     Icons.savings,
-    Color(0xFFFF9F0A),
+    AppColors.warning,
     AssetConfig.timeDeposit,
     AssetType.timeDeposit,
   ),
   _AssetOption(
     Icons.trending_up,
-    Color(0xFF5B9CF6),
+    AppColors.accent,
     AssetConfig.wealthProduct,
     AssetType.wealthProduct,
   ),
   _AssetOption(
     Icons.home_work,
-    Color(0xFFAF52DE),
+    AppColors.purple,
     AssetConfig.providentFund,
     AssetType.providentFund,
   ),
@@ -61,24 +63,13 @@ Future<AssetType?> showAddAssetSheet(BuildContext context) {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const Text(
-            AssetConfig.titleAddAsset,
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
-            ),
-          ),
+          const Text(AssetConfig.titleAddAsset, style: TextStyles.dialogTitle),
           const SizedBox(height: 16),
-          Divider(thickness: 0.5, height: 20, color: const Color(0xFF1C1C1E)),
+          Divider(thickness: 0.5, height: 20, color: AppColors.border),
           const SizedBox(height: 4),
           for (final option in _assetOptions) ...[
             if (option != _assetOptions.first)
-              Divider(
-                thickness: 0.5,
-                height: 20,
-                color: const Color(0xFF1C1C1E),
-              ),
+              Divider(thickness: 0.5, height: 20, color: AppColors.border),
             _addOption(
               option.icon,
               option.color,
@@ -107,16 +98,13 @@ Widget _addOption(
         width: 36,
         height: 36,
         decoration: BoxDecoration(
-          color: color.withOpacity(0.15),
+          color: color.withValues(alpha: 0.15),
           borderRadius: BorderRadius.circular(10),
         ),
         child: Icon(icon, size: 18, color: color),
       ),
-      title: Text(
-        label,
-        style: const TextStyle(fontSize: 15, color: Colors.white),
-      ),
-      trailing: const Icon(Icons.chevron_right, color: Color(0xFF8E8E93)),
+      title: Text(label, style: TextStyles.bodyRegular),
+      trailing: const Icon(Icons.chevron_right, color: AppColors.textSecondary),
       onTap: onTap,
       contentPadding: const EdgeInsets.symmetric(horizontal: 4),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
@@ -226,24 +214,20 @@ class _BalanceDialogState extends State<_BalanceDialog> {
           Center(
             child: Text(
               isEdit ? widget.titleEdit : widget.titleAdd,
-              style: const TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
-              ),
+              style: TextStyles.dialogTitle,
             ),
           ),
           const SizedBox(height: 16),
           const Text(
             AssetConfig.fieldName,
-            style: TextStyle(fontSize: 13, color: Color(0xFF8E8E93)),
+            style: TextStyle(fontSize: 13, color: AppColors.textSecondary),
           ),
           const SizedBox(height: 6),
           _dialogTextField(nameCtrl, widget.hintName),
           const SizedBox(height: 12),
           const Text(
             AssetConfig.fieldBalance,
-            style: TextStyle(fontSize: 13, color: Color(0xFF8E8E93)),
+            style: TextStyle(fontSize: 13, color: AppColors.textSecondary),
           ),
           const SizedBox(height: 6),
           Row(
@@ -275,7 +259,7 @@ class _BalanceDialogState extends State<_BalanceDialog> {
             },
             confirmText: isEdit ? AppConfig.btnClose : AppConfig.btnAdd,
             confirmGradient: const LinearGradient(
-              colors: [Color(0xFF1A56DB), Color(0xFF2962FF)],
+              colors: [AppColors.blueDark, AppColors.blueAccent],
             ),
           ),
         ],
@@ -405,11 +389,7 @@ class _TimeDepositDialogState extends State<_TimeDepositDialog> {
           Center(
             child: Text(
               isEdit ? AssetConfig.titleEditTD : AssetConfig.titleAddTD,
-              style: const TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
-              ),
+              style: TextStyles.dialogTitle,
             ),
           ),
           const SizedBox(height: 16),
@@ -419,7 +399,7 @@ class _TimeDepositDialogState extends State<_TimeDepositDialog> {
           const SizedBox(height: 12),
           const Text(
             AssetConfig.fieldPrincipal,
-            style: TextStyle(fontSize: 13, color: Color(0xFF8E8E93)),
+            style: TextStyle(fontSize: 13, color: AppColors.textSecondary),
           ),
           const SizedBox(height: 6),
           Row(
@@ -441,7 +421,7 @@ class _TimeDepositDialogState extends State<_TimeDepositDialog> {
           const SizedBox(height: 12),
           const Text(
             AssetConfig.fieldAnnualRate,
-            style: TextStyle(fontSize: 13, color: Color(0xFF8E8E93)),
+            style: TextStyle(fontSize: 13, color: AppColors.textSecondary),
           ),
           const SizedBox(height: 6),
           AppNumberField(controller: rateCtrl, hintText: '2.5'),
@@ -506,7 +486,7 @@ class _TimeDepositDialogState extends State<_TimeDepositDialog> {
             },
             confirmText: isEdit ? AppConfig.btnClose : AppConfig.btnAdd,
             confirmGradient: const LinearGradient(
-              colors: [Color(0xFF1A56DB), Color(0xFF2962FF)],
+              colors: [AppColors.blueDark, AppColors.blueAccent],
             ),
           ),
         ],
@@ -602,14 +582,14 @@ class _WealthProductDialogState extends State<_WealthProductDialog> {
           const SizedBox(height: 12),
           const Text(
             AssetConfig.fieldShares,
-            style: TextStyle(fontSize: 13, color: Color(0xFF8E8E93)),
+            style: TextStyle(fontSize: 13, color: AppColors.textSecondary),
           ),
           const SizedBox(height: 6),
           AppNumberField(controller: sharesCtrl, hintText: '0.00'),
           const SizedBox(height: 12),
           const Text(
             AssetConfig.fieldNav,
-            style: TextStyle(fontSize: 13, color: Color(0xFF8E8E93)),
+            style: TextStyle(fontSize: 13, color: AppColors.textSecondary),
           ),
           const SizedBox(height: 6),
           Row(
@@ -655,7 +635,7 @@ class _WealthProductDialogState extends State<_WealthProductDialog> {
             },
             confirmText: isEdit ? AppConfig.btnClose : AppConfig.btnAdd,
             confirmGradient: const LinearGradient(
-              colors: [Color(0xFF1A56DB), Color(0xFF2962FF)],
+              colors: [AppColors.blueDark, AppColors.blueAccent],
             ),
           ),
         ],
@@ -685,7 +665,7 @@ Future<WealthProduct?> showWealthProductDialog(
 Widget _label(String text) {
   return Text(
     text,
-    style: const TextStyle(fontSize: 13, color: Color(0xFF8E8E93)),
+    style: const TextStyle(fontSize: 13, color: AppColors.textSecondary),
   );
 }
 
@@ -693,24 +673,24 @@ Widget _dialogTextField(TextEditingController ctrl, String hint) {
   return TextField(
     controller: ctrl,
     keyboardType: TextInputType.text,
-    style: const TextStyle(fontSize: 16, color: Colors.white),
+    style: TextStyles.sectionTitleRegular,
     decoration: InputDecoration(
       hintText: hint,
-      hintStyle: TextStyle(color: Color(0xFF636366)),
+      hintStyle: TextStyle(color: AppColors.textTertiary),
       filled: true,
-      fillColor: const Color(0xFF000000),
+      fillColor: AppColors.surface,
       contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),
-        borderSide: const BorderSide(color: Color(0xFF1C1C1E)),
+        borderSide: const BorderSide(color: AppColors.border),
       ),
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),
-        borderSide: const BorderSide(color: Color(0xFF1C1C1E)),
+        borderSide: const BorderSide(color: AppColors.border),
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),
-        borderSide: const BorderSide(color: Color(0xFF636366)),
+        borderSide: const BorderSide(color: AppColors.textTertiary),
       ),
     ),
   );
@@ -736,10 +716,10 @@ Widget _currencySelector(
                   button.size,
               Offset.zero & overlay.size,
             ),
-            color: const Color(0xFF000000),
+            color: AppColors.surface,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10),
-              side: const BorderSide(color: Color(0xFF1C1C1E)),
+              side: const BorderSide(color: AppColors.border),
             ),
             constraints: const BoxConstraints(maxHeight: 300),
             items: currencies.map((c) {
@@ -780,19 +760,16 @@ Widget _currencySelector(
           padding: const EdgeInsets.symmetric(horizontal: 8),
           alignment: Alignment.center,
           decoration: BoxDecoration(
-            color: const Color(0xFF000000),
+            color: AppColors.surface,
             borderRadius: BorderRadius.circular(12),
-            border: Border.all(color: const Color(0xFF1C1C1E)),
+            border: Border.all(color: AppColors.border),
           ),
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text(
-                selected,
-                style: const TextStyle(color: Colors.white, fontSize: 14),
-              ),
+              Text(selected, style: TextStyles.subtitleRegular),
               const SizedBox(width: 4),
-              Icon(Icons.expand_more, color: Color(0xFF8E8E93), size: 20),
+              Icon(Icons.expand_more, color: AppColors.textSecondary, size: 20),
             ],
           ),
         ),
@@ -808,18 +785,18 @@ Widget _dateButton(DateTime date, VoidCallback onTap) {
       height: 48,
       padding: const EdgeInsets.symmetric(horizontal: 12),
       decoration: BoxDecoration(
-        color: const Color(0xFF000000),
+        color: AppColors.surface,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: const Color(0xFF1C1C1E)),
+        border: Border.all(color: AppColors.border),
       ),
       child: Row(
         children: [
           Text(
             '${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}',
-            style: const TextStyle(fontSize: 14, color: Colors.white),
+            style: TextStyles.subtitleRegular,
           ),
           const Spacer(),
-          Icon(Icons.calendar_today, size: 16, color: Color(0xFF636366)),
+          Icon(Icons.calendar_today, size: 16, color: AppColors.textTertiary),
         ],
       ),
     ),
@@ -842,10 +819,10 @@ Widget _durationSelector(int selected, ValueChanged<int> onChanged) {
                   button.size,
               Offset.zero & overlay.size,
             ),
-            color: const Color(0xFF000000),
+            color: AppColors.surface,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10),
-              side: const BorderSide(color: Color(0xFF1C1C1E)),
+              side: const BorderSide(color: AppColors.border),
             ),
             constraints: const BoxConstraints(maxHeight: 300),
             items: options.map((m) {
@@ -886,19 +863,19 @@ Widget _durationSelector(int selected, ValueChanged<int> onChanged) {
           padding: const EdgeInsets.symmetric(horizontal: 8),
           alignment: Alignment.center,
           decoration: BoxDecoration(
-            color: const Color(0xFF000000),
+            color: AppColors.surface,
             borderRadius: BorderRadius.circular(12),
-            border: Border.all(color: const Color(0xFF1C1C1E)),
+            border: Border.all(color: AppColors.border),
           ),
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
                 AssetConfig.durationMonths.replaceAll('{m}', '$selected'),
-                style: const TextStyle(color: Colors.white, fontSize: 14),
+                style: TextStyles.subtitleRegular,
               ),
               const SizedBox(width: 4),
-              Icon(Icons.expand_more, color: Color(0xFF8E8E93), size: 20),
+              Icon(Icons.expand_more, color: AppColors.textSecondary, size: 20),
             ],
           ),
         ),

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import '../../config/app_colors.dart';
 import '../../config/app_config.dart';
 import '../../utils/currency_util.dart';
 import '../../services/exchange_rate_service.dart';
+import 'app_ui.dart';
 
 /// 通用货币选择浮动弹窗 - 与股票汇总卡片的样式一致
 class CurrencySelector {
@@ -26,7 +28,7 @@ class CurrencySelector {
             child: GestureDetector(
               behavior: HitTestBehavior.translucent,
               onTap: _close,
-              child: Container(color: Colors.black.withOpacity(0.4)),
+              child: Container(color: Colors.black.withValues(alpha: 0.4)),
             ),
           ),
           Center(
@@ -36,12 +38,12 @@ class CurrencySelector {
                 width: dropdownWidth,
                 constraints: BoxConstraints(maxHeight: screenHeight * 0.6),
                 decoration: BoxDecoration(
-                  color: const Color(0xFF000000),
+                  color: AppColors.surface,
                   borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: const Color(0xFF1C1C1E)),
+                  border: Border.all(color: AppColors.border),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.6),
+                      color: Colors.black.withValues(alpha: 0.6),
                       blurRadius: 20,
                       spreadRadius: 2,
                     ),
@@ -59,22 +61,22 @@ class CurrencySelector {
                             style: const TextStyle(
                               fontSize: 15,
                               fontWeight: FontWeight.w600,
-                              color: Colors.white,
+                              color: AppColors.textPrimary,
                             ),
                           ),
                           const Spacer(),
                           GestureDetector(
                             onTap: _close,
-                            child: Icon(
+                            child: const Icon(
                               Icons.close,
                               size: 18,
-                              color: Color(0xFF8E8E93),
+                              color: AppColors.textSecondary,
                             ),
                           ),
                         ],
                       ),
                     ),
-                    Divider(thickness: 0.5, color: Color(0xFF1C1C1E)),
+                    Divider(thickness: 0.5, color: AppColors.border),
                     Flexible(
                       child: ListView(
                         padding: EdgeInsets.zero,
@@ -105,7 +107,7 @@ class CurrencySelector {
                                         ? const Icon(
                                             Icons.check,
                                             size: 16,
-                                            color: Colors.white,
+                                            color: AppColors.textPrimary,
                                           )
                                         : null,
                                   ),
@@ -115,9 +117,7 @@ class CurrencySelector {
                                       currency,
                                       style: TextStyle(
                                         fontSize: 15,
-                                        color: isSelected
-                                            ? Colors.white
-                                            : Colors.white,
+                                        color: AppColors.textPrimary,
                                         fontWeight: isSelected
                                             ? FontWeight.w600
                                             : FontWeight.normal,
@@ -129,8 +129,8 @@ class CurrencySelector {
                                     style: TextStyle(
                                       fontSize: 13,
                                       color: isSelected
-                                          ? Colors.white
-                                          : Color(0xFF8E8E93),
+                                          ? AppColors.textPrimary
+                                          : AppColors.textSecondary,
                                     ),
                                   ),
                                 ],

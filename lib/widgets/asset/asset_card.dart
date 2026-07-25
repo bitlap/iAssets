@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../config/asset_config.dart';
+import '../../config/app_colors.dart';
+import '../common/app_ui.dart';
 
 class AssetCardFrame extends StatelessWidget {
   final IconData icon;
@@ -39,13 +41,13 @@ class AssetCardFrame extends StatelessWidget {
           if (c != null)
             Text(
               AssetConfig.createdLabel.replaceAll('{date}', _f(c)),
-              style: TextStyle(fontSize: 10, color: Color(0xFF636366)),
+              style: TextStyles.label.copyWith(color: AppColors.textTertiary),
             ),
           if (c != null && u != null) const SizedBox(height: 2),
           if (u != null)
             Text(
               AssetConfig.updatedLabel.replaceAll('{date}', _f(u)),
-              style: TextStyle(fontSize: 10, color: Color(0xFF636366)),
+              style: TextStyles.label.copyWith(color: AppColors.textTertiary),
             ),
         ],
       ),
@@ -57,9 +59,9 @@ class AssetCardFrame extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.fromLTRB(0, 12, 12, 12),
       decoration: BoxDecoration(
-        color: const Color(0xFF000000),
+        color: AppColors.surface,
         borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: const Color(0xFF1C1C1E)),
+        border: Border.all(color: AppColors.border),
       ),
       child: GestureDetector(
         onTap: onTap,
@@ -78,7 +80,7 @@ class AssetCardFrame extends StatelessWidget {
                       width: 36,
                       height: 36,
                       decoration: BoxDecoration(
-                        color: iconColor.withOpacity(0.15),
+                        color: iconColor.withValues(alpha: 0.15),
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: Icon(icon, size: 18, color: iconColor),

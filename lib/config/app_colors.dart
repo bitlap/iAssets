@@ -30,4 +30,19 @@ class AppColors {
   static const Color marketUS = Color(0xFFFF3B30);
   static const Color marketHK = Color(0xFF34C759);
   static const Color marketA = Color(0xFFFF9500);
+
+  // 资产分类色
+  static const Color cyan = Color(0xFF5AC8FA);
+  static const Color purple = Color(0xFFAF52DE);
+
+  // 业务专用色
+  static const Color blueDark = Color(0xFF1A56DB);
+  static const Color blueAccent = Color(0xFF2962FF);
+  static const Color greenAccent = Color(0xFF4CAF50);
+  static const Color redAccent = Color(0xFFFF5252);
+  static const Color lightBlue = Color(0xFF64B5F6);
+
+  // 分割线/背景
+  static const Color separator = Color(0xFF38383A);
+  static const Color tertiaryBg = Color(0xFF3A3A3C);
 }

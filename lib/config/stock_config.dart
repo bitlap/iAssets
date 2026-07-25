@@ -24,6 +24,7 @@ class StockConfig {
   // 首页 文案
   static const String homeTitle = '股票';
   static const String homeSubtitle = '共 {count} 只 · 实时更新';
+  static const String homeSubtitleRefresh = '最近更新：{time}';
   static const String homeEmptyTitle = '暂无股票持仓';
   static const String homeEmptySubtitle = '点击右上角 + 添加股票开始投资';
   static const String homeStockHeader = '股票';

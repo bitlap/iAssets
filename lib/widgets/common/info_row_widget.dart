@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import '../../config/app_colors.dart';
+import 'app_ui.dart';
 
 /// 通用信息行组件 - 左侧标签 + 右侧值，用于弹窗中的信息展示
 class InfoRowWidget extends StatelessWidget {
@@ -22,14 +24,17 @@ class InfoRowWidget extends StatelessWidget {
           width: labelWidth,
           child: Text(
             label,
-            style: const TextStyle(color: Color(0xFF8E8E93), fontSize: 13),
+            style: const TextStyle(
+              color: AppColors.textSecondary,
+              fontSize: 13,
+            ),
           ),
         ),
         Expanded(
           child: Text(
             value,
             style: const TextStyle(
-              color: Colors.white,
+              color: AppColors.textPrimary,
               fontSize: 13,
               fontWeight: FontWeight.w500,
             ),
