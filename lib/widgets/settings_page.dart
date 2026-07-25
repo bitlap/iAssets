@@ -254,6 +254,7 @@ class _SettingsPageState extends State<SettingsPage> {
   }
 
   Widget _buildCurrencySection() {
+    final effectiveRates = ExchangeRateService().effectiveRates;
     return SettingsExpansionCard(
       initiallyExpanded: _isCurrencyExpanded,
       onExpansionChanged: (expanded) =>
@@ -291,7 +292,7 @@ class _SettingsPageState extends State<SettingsPage> {
           ),
           const SizedBox(width: 8),
           Text(
-            '${CurrencyUtil.getSymbol(_selectedCurrency)} ${CurrencyUtil.formatRate(ExchangeRateService().effectiveRates[_selectedCurrency] ?? 1.0)}',
+            '${CurrencyUtil.getSymbol(_selectedCurrency)} ${CurrencyUtil.formatRate(effectiveRates[_selectedCurrency] ?? 1.0)}',
             style: TextStyle(
               fontSize: 12,
               color: Colors.grey[500],
@@ -307,7 +308,7 @@ class _SettingsPageState extends State<SettingsPage> {
       ),
       children: ExchangeRateService.supportedCurrencies.map((currency) {
         final isSelected = currency == _selectedCurrency;
-        final rate = ExchangeRateService().effectiveRates[currency]!;
+        final rate = effectiveRates[currency]!;
         final symbol = CurrencyUtil.getSymbol(currency);
         final isLast = currency == ExchangeRateService.supportedCurrencies.last;
         return SettingsSelectableItem(

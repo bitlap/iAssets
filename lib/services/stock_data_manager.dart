@@ -124,14 +124,11 @@ class StockDataManager {
     ]);
   }
 
-  /// 记录收益快照
+  /// 记录收益快照（自动同步到 iCloud）
   static Future<void> recordProfitIfNeeded(
     double totalProfit,
     String currency,
   ) => IcloudStorage.recordProfitIfNeeded(totalProfit, currency);
-
-  /// 同步收益快照到 iCloud
-  static Future<void> syncProfitToCloud() => IcloudStorage.syncProfitToCloud();
 
   /// 仅保存设置（给设置页回调用）
   static Future<void> saveSettings() => IcloudStorage.saveSettings();

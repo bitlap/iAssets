@@ -319,5 +319,6 @@ class IcloudStorage {
       ProfitSnapshot(time: now, totalProfit: profitInDefaultCurrency),
     );
     await saveIntradayProfitHistory(intraday);
+    await syncProfitToCloud();
   }
 }

@@ -207,7 +207,6 @@ class StockPortfolioPageState extends State<StockPortfolioPage>
     );
     if (mounted) setState(() => stocks = updated);
     await StockDataManager.recordProfitIfNeeded(totalProfit, selectedCurrency);
-    await StockDataManager.syncProfitToCloud();
   }
 
   Future<void> _recordProfitOnPaused() async {
@@ -237,7 +236,7 @@ class StockPortfolioPageState extends State<StockPortfolioPage>
   double get totalRealizedPL => _assetSummary.totalRealizedPL;
   double get totalProfitPercent => _assetSummary.totalProfitPercent;
   double get exchangeRate =>
-      ExchangeRateService().effectiveRates[selectedCurrency] ?? 1.0;
+      _exchangeRateService.effectiveRates[selectedCurrency] ?? 1.0;
   List<StockModel> get _filteredStocks => _filterMarket == null
       ? stocks
       : stocks.where((s) => s.marketType == _filterMarket).toList();
