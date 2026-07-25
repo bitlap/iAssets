@@ -20,7 +20,7 @@ import 'records_dialog.dart';
 import 'edit_delete_dialogs.dart';
 import 'search_stock_dialog.dart';
 import 'stock_header_card.dart';
-import 'global_dividend_page.dart';
+import '../dividend/global_dividend_page.dart';
 import '../settings_page.dart';
 
 /// 股票持仓主页 - 仅负责状态管理和页面组装
