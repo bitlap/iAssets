@@ -1,10 +1,12 @@
 # 资产管理（iAssets）
 
+<p align="center">
+  <img src="ios/Runner/Assets.xcassets/AppIcon.appiconset/icon_1024.png" width="128" height="128" alt="iAssets Logo">
+</p>
+
 一款使用 Flutter 开发的个人资产管理 iOS APP，支持实时行情、多币种切换、盈亏统计、操作记录追踪、**多类型资产管理**等功能，采用 Material 3 暗色主题设计。
 
-已在[App Store](https://apps.apple.com/cn/app/iassets/id6790114856) 上线，欢迎使用。
-
-> 无内购无广告，使用公开 API，不保证严格实时。
+已在[App Store](https://apps.apple.com/cn/app/iassets/id6790114856) 上线，欢迎支持和使用。 无内购无广告，使用公开 API，不保证严格实时。
 
 ## 功能特性
 
@@ -29,72 +31,6 @@
 - **排序与偏好** — 排序方式（盈亏/持仓/名称）、排序方向（升/降序）、平仓保留持仓开关
 - **手续费** — 设置默认手续费（比例或固定金额），加仓/减仓自动填入
 - **其他** — 意见反馈（邮箱唤起客户端、微信一键复制）、开源软件说明
-
-## 项目结构
-
-```
-lib/
-├── main.dart                          # 入口 + 全局状态管理 + 页面组装
-├── config/
-│   ├── app_config.dart                # 应用级常量 + 市场→币种映射（barrel 导出各子配置）
-│   ├── stock_config.dart              # 股票相关常量（卡片、搜索、记录、派息、交易所等）
-│   ├── settings_config.dart           # 设置页常量（手续费、排序、公式、开源/数据来源等）
-│   ├── asset_config.dart              # 资产模块常量（分类、字段、对话框、默认名称等）
-│   └── sort_options.dart              # 排序选项（key -> 显示文案 映射）
-├── models/
-│   ├── asset_account.dart             # 资产数据模型（AssetBase / Cash / Current / TD / WP / ProvidentFund）
-│   ├── asset_flat_item.dart           # 资产列表扁平化模型（SectionHeader / AssetCardItem）
-│   ├── stock_model.dart               # 数据模型（Stock / Record / Dividend / ProfitSnapshot）
-│   ├── calculator_models.dart         # 计算模型（AssetSummary）
-│   └── settings/
-│       └── open_source_lib.dart       # OpenSourceLib 模型 + 开源库/数据来源列表
-├── services/
-│   ├── exchange_rate_service.dart     # 实时汇率（缓存 + 熔断）
-│   ├── settings_service.dart          # 用户设置持久化（文件系统 JSON）
-│   ├── stock_search_service.dart      # 股票搜索（缓存 + 熔断）
-│   ├── stock_quote_service.dart       # 行情路由（腾讯 + 东方财富）
-│   ├── east_money_quote_service.dart  # 东方财富行情实现
-│   ├── tencent_quote_service.dart     # 腾讯行情实现
-│   ├── circuit_breaker.dart           # API 熔断保护
-│   └── icloud_storage.dart            # 本地持久化 + iCloud 同步
-├── task/
-│   └── profit_task.dart               # WorkManager 后台收益快照任务
-├── utils/
-│   ├── asset_calculator.dart          # 资产价值计算（换算 / 汇总 / 排序 / 按类型汇总）
-│   ├── asset_reorder_util.dart        # 资产拖拽排序纯函数（分类/资产重排）
-│   ├── center_toast.dart              # 居中 Toast 提示
-│   ├── currency_helper.dart           # 汇率换算 / 货币符号
-│   ├── logo_cacher.dart               # Logo 图片缓存
-│   └── stock_calculator.dart          # 盈亏 / 均成本 / 资产汇总计算
-└── widgets/
-    ├── asset/
-    │   ├── asset_card.dart            # 资产卡片通用框架
-    │   ├── asset_dialogs.dart         # 资产添加/编辑对话框（现金/定期/理财/活期/公积金）
-    │   ├── asset_header.dart          # 资产页标题 + 总资产摘要卡片
-    │   └── assets_page.dart           # 资产主页（分组折叠列表 + 拖拽排序）
-    ├── common/
-    │   ├── app_number_field.dart      # 统一数字输入框
-    │   ├── confirm_delete_dialog.dart # 统一删除确认弹窗
-    │   ├── currency_selector.dart     # 货币选择器
-    │   ├── dialog_utils.dart          # 对话框工具
-    │   ├── draggable_fab.dart         # 可拖拽悬浮按钮
-    │   ├── empty_state_widget.dart    # 统一空状态组件
-    │   ├── info_row_widget.dart       # 统一信息行组件
-    │   ├── percent_selector.dart      # 百分比选择器
-    │   ├── profit_chart.dart          # 收益曲线组件
-    │   ├── section_title.dart         # 分类标题组件
-    │   ├── settings_expansion_card.dart # 统一设置折叠卡片
-    │   └── sort_indicator.dart        # 排序指示器
-    ├── settings_page.dart             # 全屏设置页
-    └── stock/
-        ├── edit_delete_dialogs.dart   # 加仓/减仓/删除对话框
-        ├── records_dialog.dart        # 操作/派息记录底部弹窗
-        ├── search_stock_dialog.dart   # 股票搜索与添加
-        ├── stock_card.dart            # 股票卡片（展开详情）
-        ├── stock_header_card.dart     # 股票表头卡片
-        ├── stock_list_header.dart     # 股票列表表头
-        └── stock_portfolio_page.dart  # 股票持仓主页
-```
 
 ## 技术栈
 
@@ -164,7 +100,7 @@ dart format lib/
 | 行情缓存      | 15 分钟                                   | 行情数据缓存有效期                              |
 | 汇率缓存      | 24 小时                                   | 汇率缓存有效期                                |
 | 搜索缓存      | 5 分钟                                    | 搜索结果缓存有效期                              |
-| 首次刷新延迟    | 10 秒                                    | 启动后延迟，避免冷启动阻塞                          |
+| 首次刷新延迟    | 3 秒                                     | 启动后延迟，避免冷启动阻塞                          |
 | 搜索防抖      | 1 秒                                     | 输入停止后延迟搜索                              |
 | API 熔断    | 3 次/5 分钟                                | 连续失败后冷却，保护 API 配额                      |
 | HTTP 超时   | 15 秒                                    | 单次请求超时上限                               |

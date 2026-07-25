@@ -2,16 +2,15 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 import '../../models/stock_model.dart';
-import '../../models/stock_search_models.dart';
 import '../../models/calculator_models.dart';
 import '../../config/app_config.dart';
 import '../../utils/currency_helper.dart';
 import '../../utils/center_toast.dart';
-import '../../utils/stock_calculator.dart';
 import '../../services/stock_quote_service.dart';
 import '../../services/exchange_rate_service.dart';
 import '../../services/settings_service.dart';
 import '../../services/icloud_storage.dart';
+import '../../services/stock_data_manager.dart';
 import '../common/empty_state_widget.dart';
 import '../common/draggable_fab.dart';
 import '../common/section_title.dart';
@@ -69,7 +68,7 @@ class StockPortfolioPageState extends State<StockPortfolioPage>
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
-    _syncSettingsFromCloud().then((_) {
+    IcloudStorage.loadSettings().then((_) {
       _loadSavedCurrency();
       _loadKeepStockSetting();
       _loadSortSettings();
@@ -116,9 +115,14 @@ class StockPortfolioPageState extends State<StockPortfolioPage>
       _dividendRecords
         ..clear()
         ..addAll(data.$3);
-      for (final stock in stocks) {
-        _recalculateStockFromRecords(stock.symbol);
-      }
+      stocks = stocks
+          .map(
+            (s) => StockDataManager.recalculateStock(
+              s,
+              _operationRecords[s.symbol],
+            ),
+          )
+          .toList();
     });
   }
 
@@ -129,13 +133,13 @@ class StockPortfolioPageState extends State<StockPortfolioPage>
     _syncTimer?.cancel();
     _syncTimer = Timer(const Duration(seconds: 3), () {
       if (_dataDirty && mounted) {
-        _flushToCloud();
+        _saveAll();
       }
     });
   }
 
   /// 真正写入本地（同步到 iCloud 由内部按配置处理）
-  Future<void> _flushToCloud() async {
+  Future<void> _saveAll() async {
     _syncTimer?.cancel();
     if (!_dataDirty) return;
     await Future.wait([
@@ -143,11 +147,6 @@ class StockPortfolioPageState extends State<StockPortfolioPage>
       IcloudStorage.saveSettings(),
     ]);
     _dataDirty = false;
-  }
-
-  /// 从 iCloud 下载设置覆盖本地
-  Future<void> _syncSettingsFromCloud() async {
-    await IcloudStorage.loadSettings();
   }
 
   @override
@@ -164,7 +163,7 @@ class StockPortfolioPageState extends State<StockPortfolioPage>
     if (state == AppLifecycleState.paused ||
         state == AppLifecycleState.inactive) {
       _isForeground = false;
-      if (_dataDirty) _flushToCloud();
+      if (_dataDirty) _saveAll();
       unawaited(_recordProfitOnPaused());
     } else if (state == AppLifecycleState.resumed) {
       _isForeground = true;
@@ -172,13 +171,6 @@ class StockPortfolioPageState extends State<StockPortfolioPage>
     }
   }
 
-  /// 拉取汇率
-  Future<void> _fetchExchangeRatesWithoutRebuild() async {
-    final rates = await _exchangeRateService.fetchRates();
-    if (rates != null) CurrencyHelper.updateRates(rates);
-  }
-
-  /// 拉取行情
   void _startRefresh() {
     Future.delayed(Duration(seconds: AppConfig.refreshInitialDelaySec), () {
       if (mounted) _refreshAll();
@@ -196,9 +188,9 @@ class StockPortfolioPageState extends State<StockPortfolioPage>
     if (!_isForeground || !mounted) return;
     _collapseExpandedStock();
 
-    await _syncSettingsFromCloud();
-    if (_dataDirty) await _flushToCloud();
-    await _fetchExchangeRatesWithoutRebuild();
+    await IcloudStorage.loadSettings();
+    if (_dataDirty) await _saveAll();
+    await StockDataManager.fetchExchangeRates(_exchangeRateService);
 
     final data = await IcloudStorage.loadStocks();
     if (!mounted) return;
@@ -213,98 +205,39 @@ class StockPortfolioPageState extends State<StockPortfolioPage>
     });
 
     if (stocks.isNotEmpty && mounted) {
-      final quotes = await _fetchQuotesWithoutRebuild();
-      if (mounted) setState(() => _applyQuotes(stocks, quotes));
-    }
-
-    await IcloudStorage.recordProfitIfNeeded(totalProfit, selectedCurrency);
-    unawaited(IcloudStorage.syncProfitToCloud());
-  }
-
-  /// 离开前台时：用缓存/最新行情刷新价格后记录利润快照
-  Future<void> _recordProfitOnPaused() async {
-    await _fetchExchangeRatesWithoutRebuild();
-    if (stocks.isNotEmpty) {
-      final quotes = await _fetchQuotesWithoutRebuild();
-      if (quotes.isNotEmpty) _applyQuotes(stocks, quotes);
-    }
-    await IcloudStorage.recordProfitIfNeeded(totalProfit, selectedCurrency);
-  }
-
-  /// 拉取行情但不触发 UI 重建
-  Future<Map<String, StockQuote?>> _fetchQuotesWithoutRebuild() async {
-    debugPrint(
-      '[${DateTime.now().toString().substring(11, 19)}][首页] ===> 开始刷新行情: ${stocks.length}只股票',
-    );
-    final searchResults = stocks
-        .map(
-          (stock) => StockSearchResult(
-            code: stock.symbol,
-            name: stock.companyName,
-            market: stock.marketType,
-            secid:
-                stock.secid ??
-                '${stock.marketType == StockConfig.searchMarketUS ? StockConfig.secidUS : StockConfig.secidHK}.${stock.symbol}',
+      final quotes = await StockDataManager.fetchQuotes(_quoteService, stocks);
+      if (mounted) {
+        setState(
+          () => stocks = StockDataManager.applyQuotes(
+            stocks,
+            quotes,
+            _operationRecords,
           ),
-        )
-        .toList();
-    final quotes = await _quoteService.getStockQuotesBatch(searchResults);
-    debugPrint(
-      '[${DateTime.now().toString().substring(11, 19)}][首页] ===> 行情拉取完成',
-    );
-    return quotes;
-  }
-
-  /// 将行情数据应用到股票列表（在 setState 内调用）
-  void _applyQuotes(
-    List<StockModel> stockList,
-    Map<String, StockQuote?> quotes,
-  ) {
-    for (final stock in stockList) {
-      final secid =
-          stock.secid ??
-          '${stock.marketType == StockConfig.searchMarketUS ? StockConfig.secidUS : StockConfig.secidHK}.${stock.symbol}';
-      final quote = quotes[secid];
-      if (quote != null) {
-        final index = stockList.indexWhere((s) => s.symbol == stock.symbol);
-        if (index != -1) {
-          stockList[index] = stock.copyWith(
-            currentPrice: quote.currentPrice,
-            changePercent: quote.changePercent,
-          );
-          _recalculateStockFromRecords(stock.symbol);
-        }
+        );
       }
     }
+
+    await IcloudStorage.recordProfitIfNeeded(totalProfit, selectedCurrency);
+    await IcloudStorage.syncProfitToCloud();
   }
 
-  /// 根据操作记录重算单只股票的股数、总金额、盈亏
-  void _recalculateStockFromRecords(String symbol) {
-    final records = _operationRecords[symbol];
-    final stockIndex = stocks.indexWhere((s) => s.symbol == symbol);
-    if (stockIndex == -1) return;
-
-    if (records == null || records.isEmpty) {
-      // 记录被删空，归零持仓数据
-      stocks[stockIndex] = stocks[stockIndex].copyWith(
-        shares: 0,
-        totalValue: 0,
-        profitLossAmount: 0,
-        profitLossPercent: 0,
-        isPositive: true,
-      );
-      return;
+  Future<void> _recordProfitOnPaused() async {
+    await StockDataManager.fetchExchangeRates(_exchangeRateService);
+    if (stocks.isNotEmpty) {
+      final quotes = await StockDataManager.fetchQuotes(_quoteService, stocks);
+      if (quotes.isNotEmpty) {
+        stocks = StockDataManager.applyQuotes(
+          stocks,
+          quotes,
+          _operationRecords,
+        );
+      }
     }
-
-    final updated = StockCalculator.recalculateFromRecords(
-      stocks[stockIndex],
-      records,
-    );
-    stocks[stockIndex] = updated;
+    await IcloudStorage.recordProfitIfNeeded(totalProfit, selectedCurrency);
   }
 
   // 计算属性
-  AssetSummary get _assetSummary => StockCalculator.calculateAssetSummary(
+  AssetSummary get _assetSummary => StockDataManager.calculateAssetSummary(
     stocks,
     _operationRecords,
     _dividendRecords,
@@ -323,7 +256,7 @@ class StockPortfolioPageState extends State<StockPortfolioPage>
       ? stocks
       : stocks.where((s) => s.marketType == _filterMarket).toList();
 
-  List<StockModel> get _sortedStocks => StockCalculator.sortStocks(
+  List<StockModel> get _sortedStocks => StockDataManager.sortStocks(
     _filteredStocks,
     _sortColumn,
     _sortAscending,
@@ -458,8 +391,13 @@ class StockPortfolioPageState extends State<StockPortfolioPage>
       if (record != null) {
         _operationRecords.putIfAbsent(updatedStock.symbol, () => []);
         _operationRecords[updatedStock.symbol]!.insert(0, record);
-        // 加仓/减仓后重新计算持仓数据
-        _recalculateStockFromRecords(updatedStock.symbol);
+        final i = stocks.indexWhere((s) => s.symbol == updatedStock.symbol);
+        if (i != -1) {
+          stocks[i] = StockDataManager.recalculateStock(
+            stocks[i],
+            _operationRecords[updatedStock.symbol],
+          );
+        }
       }
     });
     _markDirty();
@@ -522,15 +460,24 @@ class StockPortfolioPageState extends State<StockPortfolioPage>
               }
               if (list == null || list.isEmpty) {
                 if (_keepStockAfterClose) {
-                  _recalculateStockFromRecords(symbol);
+                  final i = stocks.indexWhere((s) => s.symbol == symbol);
+                  if (i != -1)
+                    stocks[i] = StockDataManager.recalculateStock(
+                      stocks[i],
+                      null,
+                    );
                 } else {
-                  // 不保留持仓，直接删除股票
                   stocks.removeWhere((s) => s.symbol == symbol);
                   _operationRecords.remove(symbol);
                   _dividendRecords.remove(symbol);
                 }
               } else {
-                _recalculateStockFromRecords(symbol);
+                final i = stocks.indexWhere((s) => s.symbol == symbol);
+                if (i != -1)
+                  stocks[i] = StockDataManager.recalculateStock(
+                    stocks[i],
+                    _operationRecords[symbol],
+                  );
               }
             });
             _markDirty();
@@ -541,7 +488,12 @@ class StockPortfolioPageState extends State<StockPortfolioPage>
               if (list != null && index < list.length) {
                 list[index] = updated;
               }
-              _recalculateStockFromRecords(symbol);
+              final i = stocks.indexWhere((s) => s.symbol == symbol);
+              if (i != -1)
+                stocks[i] = StockDataManager.recalculateStock(
+                  stocks[i],
+                  _operationRecords[symbol],
+                );
             });
             _markDirty();
           },
@@ -640,8 +592,11 @@ class StockPortfolioPageState extends State<StockPortfolioPage>
           setState(() {
             stocks.add(newStock);
             _operationRecords[newStock.symbol] = [buyRecord];
-            // 根据操作记录重算持仓数据
-            _recalculateStockFromRecords(newStock.symbol);
+            final i = stocks.length - 1;
+            stocks[i] = StockDataManager.recalculateStock(
+              stocks[i],
+              _operationRecords[newStock.symbol],
+            );
           });
           _markDirty();
           CenterToast.success(context, StockConfig.resultAddStockSuccess);
@@ -684,7 +639,7 @@ class StockPortfolioPageState extends State<StockPortfolioPage>
   /// 同步开关被切换
   Future<void> _onSyncToggled() async {
     if (stocks.isNotEmpty) {
-      if (_dataDirty) await _flushToCloud();
+      if (_dataDirty) await _saveAll();
     } else {
       await _syncStockData();
     }
