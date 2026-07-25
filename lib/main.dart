@@ -85,6 +85,7 @@ class _AppShellState extends State<_AppShell> {
   int _currentIndex = 0;
   final GlobalKey<StockPortfolioPageState> _stockKey = GlobalKey();
   final GlobalKey<AssetsPageState> _assetKey = GlobalKey();
+  final PageController _pageController = PageController();
 
   void _onAddTap() {
     switch (_currentIndex) {
@@ -98,6 +99,21 @@ class _AppShellState extends State<_AppShell> {
     }
   }
 
+  void _onTabChanged(int index) {
+    setState(() => _currentIndex = index);
+    _pageController.animateToPage(
+      index,
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeInOut,
+    );
+  }
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -106,8 +122,9 @@ class _AppShellState extends State<_AppShell> {
       body: SafeArea(
         child: Stack(
           children: [
-            IndexedStack(
-              index: _currentIndex,
+            PageView(
+              controller: _pageController,
+              onPageChanged: (i) => setState(() => _currentIndex = i),
               children: [
                 StockPortfolioPage(key: _stockKey),
                 AssetsPage(
@@ -190,7 +207,7 @@ class _AppShellState extends State<_AppShell> {
   }) {
     final isSelected = _currentIndex == index;
     return GestureDetector(
-      onTap: () => setState(() => _currentIndex = index),
+      onTap: () => _onTabChanged(index),
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
         padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
