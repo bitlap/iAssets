@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../../models/stock_model.dart';
 import '../../config/app_config.dart';
 import '../../utils/currency_util.dart';
+import '../../utils/market_util.dart';
 import '../../utils/stock_calculator.dart';
 import '../../utils/logo_cacher.dart';
 
@@ -50,9 +51,7 @@ class StockCard extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 10,
                         fontWeight: FontWeight.bold,
-                        color: stock.marketType == StockConfig.searchMarketHK
-                            ? const Color(0xFF34C759)
-                            : const Color(0xFFFF3B30),
+                        color: MarketUtil.marketColor(stock.marketType),
                         height: 1.2,
                       ),
                     ),

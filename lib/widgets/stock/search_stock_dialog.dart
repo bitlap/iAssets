@@ -9,6 +9,7 @@ import '../../services/stock_quote_service.dart';
 import '../../utils/center_toast.dart';
 import '../../utils/currency_util.dart';
 import '../../utils/logo_cacher.dart';
+import '../../utils/market_util.dart';
 import '../../config/app_config.dart';
 import '../common/app_number_field.dart';
 import '../common/info_row_widget.dart';
@@ -345,20 +346,23 @@ class _SearchStockDialogState extends State<SearchStockDialog> {
             ),
           ),
           const SizedBox(height: 8),
-          Row(
+          Wrap(
+            spacing: 8,
+            crossAxisAlignment: WrapCrossAlignment.center,
             children: [
-              _buildTag(StockConfig.searchAll, _selectedMarket == null),
-              const SizedBox(width: 8),
+              _buildTag(MarketUtil.searchAll, _selectedMarket == null),
               _buildTag(
-                StockConfig.searchMarketUS,
-                _selectedMarket == StockConfig.searchMarketUS,
+                MarketUtil.searchMarketUS,
+                _selectedMarket == MarketUtil.searchMarketUS,
               ),
-              const SizedBox(width: 8),
               _buildTag(
-                StockConfig.searchMarketHK,
-                _selectedMarket == StockConfig.searchMarketHK,
+                MarketUtil.searchMarketHK,
+                _selectedMarket == MarketUtil.searchMarketHK,
               ),
-              const Spacer(),
+              _buildTag(
+                MarketUtil.searchMarketCN,
+                _selectedMarket == MarketUtil.searchMarketCN,
+              ),
               if (_isLoading)
                 const SizedBox(
                   width: 14,
@@ -379,7 +383,7 @@ class _SearchStockDialogState extends State<SearchStockDialog> {
     return GestureDetector(
       onTap: () {
         setState(() {
-          _selectedMarket = label == StockConfig.searchAll ? null : label;
+          _selectedMarket = label == MarketUtil.searchAll ? null : label;
           _results = _applyMarketFilter(_allResults);
         });
       },
@@ -411,7 +415,9 @@ class _SearchStockDialogState extends State<SearchStockDialog> {
   /// 根据选中的市场筛选结果
   List<StockSearchResult> _applyMarketFilter(List<StockSearchResult> results) {
     if (_selectedMarket == null) return results;
-    return results.where((s) => s.market == _selectedMarket).toList();
+    return results
+        .where((s) => MarketUtil.matchesFilter(_selectedMarket, s.market))
+        .toList();
   }
 
   /// 从 service 缓存中恢复已有行情，并对未缓存的股票批量获取行情
@@ -629,9 +635,7 @@ class _SearchStockDialogState extends State<SearchStockDialog> {
                         style: TextStyle(
                           fontSize: 10,
                           fontWeight: FontWeight.w600,
-                          color: stock.market == StockConfig.searchMarketUS
-                              ? Colors.white
-                              : Color(0xFFFF9F0A),
+                          color: MarketUtil.marketColor(stock.market),
                         ),
                       ),
                     ],

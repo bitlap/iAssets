@@ -90,16 +90,13 @@ class StockConfig {
   // 搜索对话框 文案
   static const String searchTitle = '添加股票';
   static const String searchHint = '输入股票名称或代码（如 AAPL、腾讯）';
-  static const String searchAll = '全部';
-  static const String searchMarketUS = '美股';
-  static const String searchMarketHK = '港股';
   static const String searchRateLimit = '请求过于频繁，请{secs}秒后再试';
   static const String searchRateLimitShort = '请求过于频繁，请稍后再试';
   static const String searchNotFound = '未找到相关股票';
   static const String searchNotFoundMarket = '未找到相关{market}股票';
   static const String searchFailed = '搜索失败，请重试';
-  static const String searchInitHint = '输入名称或代码搜索港股/美股';
-  static const String searchInitExample = '如：AAPL、腾讯、00700、TSLA';
+  static const String searchInitHint = '输入名称或代码搜索港股/美股/A股';
+  static const String searchInitExample = '如：AAPL、腾讯、00700、TSLA、600519';
   static const String searchAlreadyExists = '{code} 已在持仓中';
   static const String searchAddTitle = '添加 {code}';
   static const String searchStockName = '股票名称';
@@ -155,17 +152,4 @@ class StockConfig {
   static const String profitRange30d = '30天';
   static const String profitRange180d = '180天';
   static const String profitRange360d = '360天';
-
-  // 交易所中文关键词
-  static const String exchangeNasdaq = '纳斯达克';
-  static const String exchangeNewYork = '纽约';
-  static const String exchangeAmerica = '美国';
-  static const String exchangeHK = '港股';
-  static const String exchangeHongKong = '香港';
-
-  // 东方财富 secid 前缀
-  static const String secidUS = '105';
-  static const String secidUSAlt = '106';
-  static const String secidUS107 = '107';
-  static const String secidHK = '116';
 }

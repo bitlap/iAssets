@@ -9,6 +9,7 @@ import '../services/settings_service.dart';
 import '../services/stock_data_manager.dart';
 import '../services/stock_quote_service.dart';
 import '../services/exchange_rate_service.dart';
+import '../utils/market_util.dart';
 import '../utils/stock_calculator.dart';
 
 @pragma('vm:entry-point')
@@ -28,9 +29,7 @@ void callbackDispatcher() {
                 code: s.symbol,
                 name: s.companyName,
                 market: s.marketType,
-                secid:
-                    s.secid ??
-                    '${s.marketType == StockConfig.searchMarketUS ? StockConfig.secidUS : StockConfig.secidHK}.${s.symbol}',
+                secid: s.secid ?? _secidForMarket(s.marketType, s.symbol),
               ),
             )
             .toList();
@@ -39,8 +38,7 @@ void callbackDispatcher() {
         );
         for (final stock in stocks) {
           final secid =
-              stock.secid ??
-              '${stock.marketType == StockConfig.searchMarketUS ? StockConfig.secidUS : StockConfig.secidHK}.${stock.symbol}';
+              stock.secid ?? _secidForMarket(stock.marketType, stock.symbol);
           final quote = quotes[secid];
           if (quote != null) {
             final idx = stocks.indexWhere((s) => s.symbol == stock.symbol);
@@ -81,6 +79,9 @@ void callbackDispatcher() {
     return Future.value(true);
   });
 }
+
+String _secidForMarket(String marketType, String symbol) =>
+    MarketUtil.secidForMarket(marketType, symbol);
 
 Future<String> _readCurrency() async {
   try {

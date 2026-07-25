@@ -1,4 +1,5 @@
 import 'package:assets/config/app_config.dart';
+import 'package:assets/utils/market_util.dart';
 import '../services/exchange_rate_service.dart';
 
 /// 货币格式化与转换工具（数据源来自 ExchangeRateService）
@@ -45,7 +46,7 @@ class CurrencyUtil {
 
   /// 根据市场类型返回对应币种
   static String currencyForMarket(String marketType) =>
-      AppConfig.currencyForMarket(marketType);
+      MarketUtil.currencyForMarket(marketType);
 
   /// 将金额从源币种转换为目标币种（以 USD 为中间货币）
   static double convertCurrency(

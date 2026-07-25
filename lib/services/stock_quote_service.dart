@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 
 import '../config/app_config.dart';
 import '../models/stock_search_models.dart';
+import '../utils/market_util.dart';
 import 'circuit_breaker.dart';
 import 'tencent_quote_service.dart';
 import 'east_money_quote_service.dart';
@@ -95,9 +96,9 @@ class StockQuoteService {
   }
 
   static String? getLogoUrl(String code, String market) {
-    if (market == StockConfig.searchMarketUS) {
+    if (market == MarketUtil.searchMarketUS) {
       return 'https://logos.stocktwits-cdn.com/${code.toUpperCase()}.png?w=64';
-    } else if (market == StockConfig.searchMarketHK) {
+    } else if (market == MarketUtil.searchMarketHK) {
       return null;
     }
     return null;

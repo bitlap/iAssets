@@ -3,6 +3,7 @@ import 'package:http/http.dart';
 
 import '../config/app_config.dart';
 import '../models/stock_search_models.dart';
+import '../utils/market_util.dart';
 import 'circuit_breaker.dart';
 
 class TencentQuoteService {
@@ -22,8 +23,7 @@ class TencentQuoteService {
     }
 
     try {
-      final prefix = stock.market == StockConfig.searchMarketUS ? 'us' : 'hk';
-      final symbol = '$prefix${stock.code}';
+      final symbol = '${MarketUtil.tencentPrefix(stock.market)}${stock.code}';
 
       final client = Client();
       final uri = Uri.parse('$_baseUrl$symbol');
@@ -71,7 +71,7 @@ class TencentQuoteService {
         changePercent = double.tryParse(parts[32]) ?? 0.0;
       }
 
-      final logoUrl = stock.market == StockConfig.searchMarketUS
+      final logoUrl = stock.market == MarketUtil.searchMarketUS
           ? 'https://logos.stocktwits-cdn.com/${stock.code.toUpperCase()}.png?w=64'
           : null;
 

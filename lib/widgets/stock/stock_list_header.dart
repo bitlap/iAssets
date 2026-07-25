@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../config/app_config.dart';
+import '../../utils/market_util.dart';
 import '../common/sort_indicator.dart';
 
 class StockListHeader extends StatelessWidget {
@@ -33,11 +34,7 @@ class StockListHeader extends StatelessWidget {
                     ? Icons.filter_alt
                     : Icons.filter_alt_outlined,
                 size: 18,
-                color: filterMarket == StockConfig.searchMarketHK
-                    ? const Color(0xFF34C759)
-                    : filterMarket == StockConfig.searchMarketUS
-                    ? const Color(0xFFFF3B30)
-                    : const Color(0xFF636366),
+                color: MarketUtil.marketColor(filterMarket),
               ),
             ),
           ),

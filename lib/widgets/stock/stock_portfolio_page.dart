@@ -5,6 +5,7 @@ import '../../models/stock_model.dart';
 import '../../models/calculator_models.dart';
 import '../../config/app_config.dart';
 import '../../utils/center_toast.dart';
+import '../../utils/market_util.dart';
 import '../../services/stock_quote_service.dart';
 import '../../services/exchange_rate_service.dart';
 import '../../services/settings_service.dart';
@@ -239,7 +240,9 @@ class StockPortfolioPageState extends State<StockPortfolioPage>
       _exchangeRateService.effectiveRates[selectedCurrency] ?? 1.0;
   List<StockModel> get _filteredStocks => _filterMarket == null
       ? stocks
-      : stocks.where((s) => s.marketType == _filterMarket).toList();
+      : stocks
+            .where((s) => MarketUtil.matchesFilter(_filterMarket, s.marketType))
+            .toList();
 
   List<StockModel> get _sortedStocks => StockDataManager.sortStocks(
     _filteredStocks,
@@ -263,16 +266,16 @@ class StockPortfolioPageState extends State<StockPortfolioPage>
   void _showMarketFilter() {
     final markets = <String?>[
       null,
-      StockConfig.searchMarketUS,
-      StockConfig.searchMarketHK,
+      MarketUtil.searchMarketUS,
+      MarketUtil.searchMarketHK,
+      MarketUtil.searchMarketCN,
     ];
     final labels = [
       '全部',
-      StockConfig.searchMarketUS,
-      StockConfig.searchMarketHK,
+      MarketUtil.searchMarketUS,
+      MarketUtil.searchMarketHK,
+      MarketUtil.searchMarketCN,
     ];
-    final icons = [Icons.all_inclusive, Icons.language, Icons.location_city];
-    final colors = [null, const Color(0xFFFF3B30), const Color(0xFF34C759)];
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
@@ -311,11 +314,17 @@ class StockPortfolioPageState extends State<StockPortfolioPage>
                   child: Row(
                     children: [
                       Icon(
-                        icons[i],
+                        markets[i] != null
+                            ? MarketUtil.marketIcon(markets[i])
+                            : Icons.all_inclusive,
                         size: 20,
                         color: selected
-                            ? (colors[i] ?? Colors.white)
-                            : (colors[i] ?? Color(0xFF8E8E93)),
+                            ? (markets[i] != null
+                                  ? MarketUtil.marketColor(markets[i])
+                                  : Colors.white)
+                            : (markets[i] != null
+                                  ? MarketUtil.marketColor(markets[i])
+                                  : const Color(0xFF8E8E93)),
                       ),
                       const SizedBox(width: 12),
                       Text(

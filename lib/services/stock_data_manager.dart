@@ -5,6 +5,7 @@ import '../../models/calculator_models.dart';
 import '../../services/stock_quote_service.dart';
 import '../../services/exchange_rate_service.dart';
 import '../../services/icloud_storage.dart';
+import '../../utils/market_util.dart';
 import '../../utils/stock_calculator.dart';
 
 class StockDataManager {
@@ -35,7 +36,7 @@ class StockDataManager {
     for (final stock in result) {
       final secid =
           stock.secid ??
-          '${stock.marketType == StockConfig.searchMarketUS ? StockConfig.secidUS : StockConfig.secidHK}.${stock.symbol}';
+          MarketUtil.secidForMarket(stock.marketType, stock.symbol);
       final quote = quotes[secid];
       if (quote != null) {
         final index = result.indexWhere((s) => s.symbol == stock.symbol);
@@ -64,7 +65,7 @@ class StockDataManager {
             market: stock.marketType,
             secid:
                 stock.secid ??
-                '${stock.marketType == StockConfig.searchMarketUS ? StockConfig.secidUS : StockConfig.secidHK}.${stock.symbol}',
+                MarketUtil.secidForMarket(stock.marketType, stock.symbol),
           ),
         )
         .toList();

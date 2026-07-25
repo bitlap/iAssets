@@ -4,6 +4,7 @@ import 'package:http/http.dart';
 
 import '../config/app_config.dart';
 import '../models/stock_search_models.dart';
+import '../utils/market_util.dart';
 import 'circuit_breaker.dart';
 
 class EastMoneyQuoteService {
@@ -37,7 +38,7 @@ class EastMoneyQuoteService {
       final client = Client();
       final uri = Uri.parse(
         '$_batchBaseUrl?secids=$secids'
-        '&fields=f57,f58',
+        '&fields=f12,f2,f3',
       );
 
       final response = await client
@@ -51,16 +52,18 @@ class EastMoneyQuoteService {
         final rawData = body?['data'];
         final diffList = (rawData is Map ? rawData['diff'] : rawData) as List?;
         if (diffList != null) {
-          for (int i = 0; i < stocks.length && i < diffList.length; i++) {
-            final item = diffList[i];
+          final stockByCode = <String, StockSearchResult>{
+            for (final s in stocks) s.code: s,
+          };
+          for (final item in diffList) {
             if (item is! Map<String, dynamic>) continue;
-            final stock = stocks[i];
-            final code = stock.code;
-            final secid = stock.secid;
+            final code = item['f12']?.toString() ?? '';
+            final stock = stockByCode[code];
+            if (stock == null) continue;
 
             final quote = _parseItem(item, stock);
             if (quote == null) continue;
-            onQuote(secid, quote);
+            onQuote(stock.secid, quote);
             debugPrint(
               '[${DateTime.now().toString().substring(11, 19)}][东方财富] ===> $code: ${quote.currentPrice} (${quote.changePercent}%)',
             );
@@ -77,14 +80,18 @@ class EastMoneyQuoteService {
 
   StockQuote? _parseItem(Map<String, dynamic> item, StockSearchResult? stock) {
     if (stock == null) return null;
-    final rawPrice = _parseInt(item['f2']) / 1000;
+    var rawPrice = _parseInt(item['f2']) / 1000;
+    if (stock.market == MarketUtil.exchangeSH ||
+        stock.market == MarketUtil.exchangeSZ) {
+      rawPrice = rawPrice / 100;
+    }
     if (rawPrice == 0) return null;
 
     final changePercent = _parseDouble(item['f3']) / 100;
 
     final market = stock.market;
 
-    final logoUrl = market == StockConfig.searchMarketUS
+    final logoUrl = market == MarketUtil.searchMarketUS
         ? 'https://logos.stocktwits-cdn.com/${stock.code.toUpperCase()}.png?w=64'
         : null;
 

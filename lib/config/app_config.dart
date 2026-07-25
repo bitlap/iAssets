@@ -5,8 +5,6 @@ export 'settings_config.dart';
 export 'stock_config.dart';
 export 'asset_config.dart';
 
-import 'stock_config.dart';
-
 class AppConfig {
   AppConfig._();
 
@@ -58,14 +56,4 @@ class AppConfig {
   static const String suffixCount = '次';
   static const String suffixWan = '万';
   static const String suffixYi = '亿';
-
-  // 市场 → 币种 映射
-  static String currencyForMarket(String marketType) {
-    switch (marketType) {
-      case StockConfig.searchMarketHK:
-        return 'HKD';
-      default:
-        return 'USD';
-    }
-  }
 }

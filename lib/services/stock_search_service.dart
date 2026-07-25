@@ -97,50 +97,18 @@ class StockSearchService {
       final rawCode = item['Code']?.toString() ?? '';
       final code = rawCode.replaceAll('_', '.');
       final name = item['Name']?.toString() ?? '';
-      final marketId = item['MktNum']?.toString() ?? '';
       final exchange = item['ExchangeName']?.toString() ?? '';
+      final secid = item['QuoteID']?.toString() ?? '';
 
       if (seenCodes.contains(code)) continue;
 
-      String? market;
-      String? secid;
-      switch (marketId) {
-        case StockConfig.secidUS:
-        case StockConfig.secidUSAlt:
-          market = StockConfig.searchMarketUS;
-          secid = '$marketId.$rawCode';
-          break;
-        case StockConfig.secidUS107:
-          market = StockConfig.searchMarketUS;
-          secid = '${StockConfig.secidUS}.$rawCode';
-          break;
-        case StockConfig.secidHK:
-          market = StockConfig.searchMarketHK;
-          secid = '$marketId.$rawCode';
-          break;
-        default:
-          if (exchange.contains(StockConfig.exchangeNasdaq) ||
-              exchange.contains(StockConfig.exchangeNewYork) ||
-              exchange.contains(StockConfig.exchangeAmerica) ||
-              exchange.contains('NYSE') ||
-              exchange.contains('NASDAQ') ||
-              exchange.contains('ARCA')) {
-            market = StockConfig.searchMarketUS;
-            secid = '${StockConfig.secidUS}.$rawCode';
-          } else if (exchange.contains(StockConfig.exchangeHK) ||
-              exchange.contains(StockConfig.exchangeHongKong)) {
-            market = StockConfig.searchMarketHK;
-            secid = '${StockConfig.secidHK}.$rawCode';
-          }
-          break;
-      }
-
-      if (market != null && secid != null && code.isNotEmpty) {
+      final securityType = item['SecurityTypeName']?.toString() ?? '';
+      if (secid.isNotEmpty && code.isNotEmpty) {
         results.add(
           StockSearchResult(
             code: code,
             name: name,
-            market: market,
+            market: securityType,
             secid: secid,
             exchange: exchange,
           ),
