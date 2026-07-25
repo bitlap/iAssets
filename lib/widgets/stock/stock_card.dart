@@ -450,25 +450,45 @@ class StockCard extends StatelessWidget {
       alignment: alignRight ? Alignment.centerRight : Alignment.centerLeft,
       child: RichText(
         text: TextSpan(
-          children: [
-            TextSpan(
-              text: '${item.label}: ',
-              style: const TextStyle(
-                fontSize: 11,
-                color: Color(0xFF8E8E93),
-                height: 1.2,
-              ),
-            ),
-            TextSpan(
-              text: item.value,
-              style: const TextStyle(
-                fontSize: 12,
-                fontWeight: FontWeight.w600,
-                color: Colors.white,
-                height: 1.2,
-              ),
-            ),
-          ],
+          children: alignRight
+              ? [
+                  TextSpan(
+                    text: item.value,
+                    style: const TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.white,
+                      height: 1.2,
+                    ),
+                  ),
+                  TextSpan(
+                    text: ' :${item.label}',
+                    style: const TextStyle(
+                      fontSize: 11,
+                      color: Color(0xFF8E8E93),
+                      height: 1.2,
+                    ),
+                  ),
+                ]
+              : [
+                  TextSpan(
+                    text: '${item.label}: ',
+                    style: const TextStyle(
+                      fontSize: 11,
+                      color: Color(0xFF8E8E93),
+                      height: 1.2,
+                    ),
+                  ),
+                  TextSpan(
+                    text: item.value,
+                    style: const TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.white,
+                      height: 1.2,
+                    ),
+                  ),
+                ],
         ),
       ),
     );
