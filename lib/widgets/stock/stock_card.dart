@@ -392,7 +392,7 @@ class StockCard extends StatelessWidget {
     );
   }
 
-  /// 构建展开详情区域（每行3个）
+  /// 构建展开详情区域（每行2个，标题和值同一行）
   List<Widget> _buildExpandedDetails() {
     final stats = StockCalculator.calculateRecordStats(operationRecords);
     final totalCost = stats.totalBuyAmount - stats.totalSellAmount;
@@ -425,59 +425,43 @@ class StockCard extends StatelessWidget {
     ];
 
     final rows = <Widget>[];
-    for (int i = 0; i < items.length; i += 3) {
-      final rowItems = items.skip(i).take(3).toList();
+    for (int i = 0; i < items.length; i += 2) {
+      final rowItems = items.skip(i).take(2).toList();
       rows.add(
         Row(
           children: [
-            for (int j = 0; j < 3; j++)
-              Expanded(
-                child: j < rowItems.length
-                    ? _buildDetailCell(
-                        rowItems[j].label,
-                        rowItems[j].value,
-                        j == 0
-                            ? CrossAxisAlignment.start
-                            : j == 1
-                            ? CrossAxisAlignment.center
-                            : CrossAxisAlignment.end,
-                      )
-                    : const SizedBox.shrink(),
-              ),
+            Expanded(child: _buildDetailCell(rowItems[0], alignRight: false)),
+            const SizedBox(width: 16),
+            if (rowItems.length > 1)
+              Expanded(child: _buildDetailCell(rowItems[1], alignRight: true))
+            else
+              const Expanded(child: SizedBox.shrink()),
           ],
         ),
       );
-      if (i + 3 < items.length) {
-        rows.add(const SizedBox(height: 8));
-      }
+      if (i + 2 < items.length) rows.add(const SizedBox(height: 8));
     }
     return rows;
   }
 
-  Widget _buildDetailCell(
-    String label,
-    String value,
-    CrossAxisAlignment alignment,
-  ) {
-    return Column(
-      crossAxisAlignment: alignment,
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Text(
-          label,
-          style: TextStyle(fontSize: 11, color: Color(0xFF8E8E93), height: 1.2),
+  Widget _buildDetailCell(_DetailItem item, {required bool alignRight}) {
+    return FittedBox(
+      fit: BoxFit.scaleDown,
+      alignment: alignRight ? Alignment.centerRight : Alignment.centerLeft,
+      child: RichText(
+        text: TextSpan(
+          children: [
+            TextSpan(
+              text: '${item.label}: ',
+              style: const TextStyle(fontSize: 11, color: Color(0xFF8E8E93), height: 1.2),
+            ),
+            TextSpan(
+              text: item.value,
+              style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: Colors.white, height: 1.2),
+            ),
+          ],
         ),
-        const SizedBox(height: 2),
-        Text(
-          value,
-          style: const TextStyle(
-            fontSize: 12,
-            fontWeight: FontWeight.w600,
-            color: Colors.white,
-            height: 1.2,
-          ),
-        ),
-      ],
+      ),
     );
   }
 }
