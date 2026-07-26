@@ -71,7 +71,7 @@ class _DividendRecordItem extends StatelessWidget {
                 Row(
                   children: [
                     Text(
-                      DateFormat('yyyy-MM-dd').format(record.date),
+                      DateFormat(StockConfig.recordsDatePattern).format(record.date),
                       style: TextStyles.valueSmall,
                     ),
                     const Spacer(),
@@ -88,7 +88,7 @@ class _DividendRecordItem extends StatelessWidget {
                 ),
                 const SizedBox(height: 2),
                 Text(
-                  '${CurrencyUtil.formatRate(record.shares)}${StockConfig.stockSharesSuffix} × ${CurrencyUtil.formatRate(record.amount)}/${StockConfig.recordsDivAmountPerShare} × ${(1 - record.taxRate) * 100}%',
+                  '${CurrencyUtil.formatRate(record.shares)}${StockConfig.recordsTimesSign}${CurrencyUtil.formatRate(record.amount)}${StockConfig.recordsTimesSign}${1 - record.taxRate}',
                   style: TextStyles.caption,
                 ),
               ],

@@ -163,7 +163,7 @@ class DividendStockSection extends StatelessWidget {
         children: [
           Expanded(
             child: Text(
-              '${StockConfig.dividendLatestDate} ${item.latestDividendDate != null ? DateFormat('yyyy-MM-dd').format(item.latestDividendDate!) : '-'}',
+              '${StockConfig.dividendLatestDate} ${item.latestDividendDate != null ? DateFormat(StockConfig.recordsDatePattern).format(item.latestDividendDate!) : '-'}',
               style: TextStyles.caption,
             ),
           ),

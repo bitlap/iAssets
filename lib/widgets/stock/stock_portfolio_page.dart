@@ -16,7 +16,7 @@ import '../common/app_ui.dart';
 import '../common/section_title.dart';
 import 'stock_card.dart';
 import 'stock_list_header.dart';
-import 'records_dialog.dart';
+import '../records/records_dialog.dart';
 import 'edit_delete_dialogs.dart';
 import 'search_stock_dialog.dart';
 import 'stock_header_card.dart';

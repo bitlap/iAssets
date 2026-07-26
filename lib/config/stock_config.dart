@@ -144,6 +144,9 @@ class StockConfig {
   static const String recordsEditTitle = '编辑{desc}';
   static const String recordsEditPrice = '价格';
   static const String recordsEditShares = '股数';
+  static const String recordsDatePattern = 'yyyy-MM-dd';
+  static const String recordsDateTimePattern = 'yyyy-MM-dd HH:mm';
+  static const String recordsTimesSign = ' × ';
 
   // 操作结果 文案
   static const String resultCloseSuccess = '平仓成功';
