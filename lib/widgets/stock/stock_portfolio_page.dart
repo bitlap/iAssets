@@ -25,7 +25,14 @@ import '../settings_page.dart';
 
 /// 股票持仓主页 - 仅负责状态管理和页面组装
 class StockPortfolioPage extends StatefulWidget {
-  const StockPortfolioPage({super.key});
+  final String selectedCurrency;
+  final ValueChanged<String>? onCurrencyChanged;
+
+  const StockPortfolioPage({
+    super.key,
+    this.selectedCurrency = AppConfig.defaultCurrency,
+    this.onCurrencyChanged,
+  });
 
   @override
   StockPortfolioPageState createState() => StockPortfolioPageState();
@@ -77,6 +84,14 @@ class StockPortfolioPageState extends State<StockPortfolioPage>
     });
     _syncStockData();
     _startRefresh();
+  }
+
+  @override
+  void didUpdateWidget(StockPortfolioPage oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.selectedCurrency != selectedCurrency) {
+      selectedCurrency = widget.selectedCurrency;
+    }
   }
 
   /// 从本地存储加载默认货币
@@ -616,9 +631,12 @@ class StockPortfolioPageState extends State<StockPortfolioPage>
   // 设置页面本地货币变更回调
   void _onCurrencyChanged(String newCurrency) {
     _collapseExpandedStock();
-    setState(() => selectedCurrency = newCurrency);
-    SettingsService.setDefaultCurrency(newCurrency);
-    _markDirty();
+    if (selectedCurrency != newCurrency) {
+      setState(() => selectedCurrency = newCurrency);
+      SettingsService.setDefaultCurrency(newCurrency);
+      widget.onCurrencyChanged?.call(newCurrency);
+      _markDirty();
+    }
   }
 
   /// 设置页面排序变更回调

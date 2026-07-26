@@ -5,6 +5,7 @@ import 'package:workmanager/workmanager.dart';
 
 import 'config/app_config.dart';
 import 'config/app_colors.dart';
+import 'services/settings_service.dart';
 import 'utils/logo_cacher.dart';
 import 'widgets/stock/stock_portfolio_page.dart';
 import 'widgets/asset/assets_page.dart';
@@ -87,6 +88,20 @@ class _AppShellState extends State<_AppShell> {
   final GlobalKey<StockPortfolioPageState> _stockKey = GlobalKey();
   final GlobalKey<AssetsPageState> _assetKey = GlobalKey();
   final PageController _pageController = PageController();
+  String _selectedCurrency = AppConfig.defaultCurrency;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadDefaultCurrency();
+  }
+
+  Future<void> _loadDefaultCurrency() async {
+    final saved = await SettingsService.getDefaultCurrency();
+    if (saved != null && mounted) {
+      setState(() => _selectedCurrency = saved);
+    }
+  }
 
   void _onAddTap() {
     switch (_currentIndex) {
@@ -127,18 +142,24 @@ class _AppShellState extends State<_AppShell> {
               controller: _pageController,
               onPageChanged: (i) => setState(() => _currentIndex = i),
               children: [
-                StockPortfolioPage(key: _stockKey),
+                StockPortfolioPage(
+                  key: _stockKey,
+                  selectedCurrency: _selectedCurrency,
+                  onCurrencyChanged: (c) {
+                    setState(() => _selectedCurrency = c);
+                    SettingsService.setDefaultCurrency(c);
+                  },
+                ),
                 AssetsPage(
                   key: _assetKey,
                   stockTotalValue: _stockKey.currentState?.totalAssets ?? 0,
-                  currency:
-                      _stockKey.currentState?.selectedCurrency ??
-                      AppConfig.defaultCurrency,
+                  currency: _selectedCurrency,
                   onCurrencyChanged: (c) {
                     _stockKey.currentState?.setState(
                       () => _stockKey.currentState!.selectedCurrency = c,
                     );
-                    setState(() {});
+                    setState(() => _selectedCurrency = c);
+                    SettingsService.setDefaultCurrency(c);
                   },
                 ),
               ],
