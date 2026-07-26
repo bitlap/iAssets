@@ -189,10 +189,6 @@ class _AppShellState extends State<_AppShell> {
               decoration: BoxDecoration(
                 color: Colors.white.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(24),
-                border: Border.all(
-                  color: Colors.white.withValues(alpha: 0.4),
-                  width: 0.5,
-                ),
               ),
               padding: const EdgeInsets.all(4),
               child: Row(
