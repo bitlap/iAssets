@@ -12,7 +12,6 @@ import 'widgets/stock/stock_portfolio_page.dart';
 import 'widgets/asset/assets_page.dart';
 import 'widgets/asset/asset_dialogs.dart';
 import 'task/profit_task.dart';
-import 'widgets/common/app_ui.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -90,6 +89,7 @@ class _AppShellState extends State<_AppShell> {
   final GlobalKey<AssetsPageState> _assetKey = GlobalKey();
   final PageController _pageController = PageController();
   String _selectedCurrency = AppConfig.defaultCurrency;
+  double _stockTotalValue = 0;
 
   @override
   void initState() {
@@ -102,6 +102,11 @@ class _AppShellState extends State<_AppShell> {
     if (saved != null && mounted) {
       setState(() => _selectedCurrency = saved);
     }
+  }
+
+  void _syncStockTotalValue() {
+    final v = _stockKey.currentState?.totalAssets;
+    if (v != null) _stockTotalValue = v;
   }
 
   void _onAddTap() {
@@ -117,6 +122,7 @@ class _AppShellState extends State<_AppShell> {
   }
 
   void _onTabChanged(int index) {
+    _syncStockTotalValue();
     setState(() => _currentIndex = index);
     _pageController.animateToPage(
       index,
@@ -147,19 +153,29 @@ class _AppShellState extends State<_AppShell> {
                   key: _stockKey,
                   selectedCurrency: _selectedCurrency,
                   onCurrencyChanged: (c) {
-                    setState(() => _selectedCurrency = c);
+                    setState(() {
+                      _selectedCurrency = c;
+                      _stockTotalValue =
+                          _stockKey.currentState?.totalAssets ??
+                          _stockTotalValue;
+                    });
                     SettingsService.setDefaultCurrency(c);
                   },
                 ),
                 AssetsPage(
                   key: _assetKey,
-                  stockTotalValue: _stockKey.currentState?.totalAssets ?? 0,
+                  stockTotalValue: _stockTotalValue,
                   currency: _selectedCurrency,
                   onCurrencyChanged: (c) {
                     _stockKey.currentState?.setState(
                       () => _stockKey.currentState!.selectedCurrency = c,
                     );
-                    setState(() => _selectedCurrency = c);
+                    setState(() {
+                      _selectedCurrency = c;
+                      _stockTotalValue =
+                          _stockKey.currentState?.totalAssets ??
+                          _stockTotalValue;
+                    });
                     SettingsService.setDefaultCurrency(c);
                   },
                 ),
