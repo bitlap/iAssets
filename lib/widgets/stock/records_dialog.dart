@@ -307,11 +307,6 @@ class _OperationRecordsTabState extends State<_OperationRecordsTab> {
       itemBuilder: (context, index) {
         final record = allRecords[index];
         final isBuy = record.type == StockConfig.opBuy;
-        final iconColor = isBuy ? Colors.redAccent : Colors.greenAccent;
-        final iconBgColor = isBuy
-            ? Colors.red.withValues(alpha: 0.15)
-            : Colors.green.withValues(alpha: 0.15);
-        final icon = isBuy ? Icons.arrow_upward : Icons.arrow_downward;
         return Dismissible(
           key: ValueKey(
             'op_${index}_${record.operationTime.millisecondsSinceEpoch}',
@@ -354,10 +349,16 @@ class _OperationRecordsTabState extends State<_OperationRecordsTab> {
                     width: 36,
                     height: 36,
                     decoration: BoxDecoration(
-                      color: iconBgColor,
+                      color: isBuy
+                          ? Colors.red.withValues(alpha: 0.15)
+                          : Colors.green.withValues(alpha: 0.15),
                       borderRadius: BorderRadius.circular(10),
                     ),
-                    child: Icon(icon, color: iconColor, size: 16),
+                    child: Icon(
+                      isBuy ? Icons.arrow_upward : Icons.arrow_downward,
+                      color: isBuy ? Colors.redAccent : Colors.greenAccent,
+                      size: 16,
+                    ),
                   ),
                   const SizedBox(width: 10),
                   Expanded(
@@ -369,70 +370,53 @@ class _OperationRecordsTabState extends State<_OperationRecordsTab> {
                             Expanded(
                               child: Text(
                                 record.description,
-                                style: const TextStyle(
+                                style: TextStyles.body13.copyWith(
                                   fontWeight: FontWeight.w600,
-                                  color: Colors.white,
-                                  fontSize: 13,
                                 ),
                                 overflow: TextOverflow.ellipsis,
                               ),
                             ),
                             Text(
                               '${isBuy ? "+" : "-"}${CurrencyUtil.formatRate(record.shares)}${StockConfig.stockSharesSuffix}',
-                              style: const TextStyle(
+                              style: TextStyles.body13.copyWith(
                                 fontWeight: FontWeight.bold,
-                                fontSize: 13,
-                                color: Colors.white,
+                                color: isBuy
+                                    ? Colors.redAccent
+                                    : Colors.greenAccent,
                               ),
                             ),
                           ],
                         ),
-                        if (record.amount > 0) ...[
-                          const SizedBox(height: 4),
-                          Row(
-                            children: [
-                              Expanded(
-                                child: Text(
-                                  '${StockConfig.recordsFormulaLabel}: ${CurrencyUtil.formatRate(record.amount)} × ${CurrencyUtil.formatRate(record.shares)}',
-                                  style: TextStyle(
-                                    color: Colors.grey[500],
-                                    fontSize: 11,
-                                  ),
-                                  softWrap: true,
-                                  overflow: TextOverflow.ellipsis,
-                                  maxLines: 2,
-                                ),
-                              ),
+                        const SizedBox(height: 4),
+                        Row(
+                          children: [
+                            if (record.amount > 0)
                               Text(
-                                '${StockConfig.recordsOpLabel}: ${CurrencyUtil.getSymbol(widget.stock.currency)}${CurrencyUtil.formatRate(record.amount * record.shares)}',
-                                style: TextStyle(
-                                  color: isBuy
-                                      ? Colors.redAccent
-                                      : Colors.greenAccent,
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 12,
-                                ),
+                                '${CurrencyUtil.formatRate(record.amount)} × ${CurrencyUtil.formatRate(record.shares)}',
+                                style: TextStyles.caption,
+                              )
+                            else
+                              const Text('-', style: TextStyles.caption),
+                            const Spacer(),
+                            Text(
+                              '${CurrencyUtil.getSymbol(widget.stock.currency)}${CurrencyUtil.formatRate(record.amount * record.shares)}',
+                              style: TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.w500,
+                                color: isBuy
+                                    ? Colors.redAccent
+                                    : Colors.greenAccent,
+                                height: 1.2,
                               ),
-                            ],
-                          ),
-                        ],
-                        const SizedBox(height: 2),
-                        Text(
-                          '${StockConfig.recordsOperationTime}: ${DateFormat('yyyy-MM-dd HH:mm:ss').format(record.operationTime)}',
-                          style: TextStyle(
-                            color: Colors.grey[500],
-                            fontSize: 11,
-                          ),
-                          overflow: TextOverflow.ellipsis,
+                            ),
+                          ],
                         ),
                         const SizedBox(height: 2),
                         Text(
-                          '${StockConfig.recordsDateLabel}: ${DateFormat('yyyy-MM-dd HH:mm:ss').format(record.date)}',
-                          style: TextStyle(
-                            color: Colors.grey[500],
-                            fontSize: 11,
-                          ),
-                          overflow: TextOverflow.ellipsis,
+                          DateFormat(
+                            'yyyy-MM-dd HH:mm',
+                          ).format(record.operationTime),
+                          style: TextStyles.caption,
                         ),
                       ],
                     ),
@@ -702,22 +686,18 @@ class _DividendRecordsTabState extends State<_DividendRecordsTab> {
                           children: [
                             Expanded(
                               child: Text(
-                                StockConfig.recordsDivTab +
-                                    ' ${widget.stock.symbol}',
-                                style: const TextStyle(
+                                '${StockConfig.recordsDivTab} ${widget.stock.symbol}',
+                                style: TextStyles.body13.copyWith(
                                   fontWeight: FontWeight.w600,
-                                  color: Colors.white,
-                                  fontSize: 13,
                                 ),
                                 overflow: TextOverflow.ellipsis,
                               ),
                             ),
                             Text(
                               '${CurrencyUtil.getSymbol(widget.stock.currency)}${CurrencyUtil.formatRate(record.totalAmount)}',
-                              style: const TextStyle(
+                              style: TextStyles.body13.copyWith(
                                 fontWeight: FontWeight.bold,
-                                fontSize: 13,
-                                color: Colors.white,
+                                color: Colors.amber,
                               ),
                             ),
                           ],
@@ -725,45 +705,23 @@ class _DividendRecordsTabState extends State<_DividendRecordsTab> {
                         const SizedBox(height: 4),
                         Row(
                           children: [
-                            Expanded(
-                              child: Text(
-                                '${StockConfig.recordsFormulaLabel}: ${CurrencyUtil.formatRate(record.shares)} × ${CurrencyUtil.formatRate(record.amount)} × ${1 - record.taxRate}',
-                                style: TextStyle(
-                                  color: Colors.grey[500],
-                                  fontSize: 11,
-                                ),
-                                softWrap: true,
-                                overflow: TextOverflow.ellipsis,
-                                maxLines: 2,
-                              ),
-                            ),
                             Text(
-                              '${StockConfig.recordsDivLabel}: ${CurrencyUtil.getSymbol(widget.stock.currency)}${CurrencyUtil.formatRate(record.afterTaxAmount)}',
-                              style: const TextStyle(
-                                color: Colors.amber,
-                                fontWeight: FontWeight.w500,
-                                fontSize: 12,
-                              ),
+                              '${CurrencyUtil.formatRate(record.shares)} × ${CurrencyUtil.formatRate(record.amount)} × ${1 - record.taxRate}',
+                              style: TextStyles.caption,
+                            ),
+                            const Spacer(),
+                            Text(
+                              DateFormat('yyyy-MM-dd').format(record.date),
+                              style: TextStyles.caption,
                             ),
                           ],
                         ),
                         const SizedBox(height: 2),
                         Text(
-                          '${StockConfig.dividendDateLabel}: ${DateFormat('yyyy-MM-dd').format(record.date)}',
-                          style: TextStyle(
-                            color: Colors.grey[500],
-                            fontSize: 11,
-                          ),
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        const SizedBox(height: 2),
-                        Text(
-                          '${StockConfig.recordsOperationTime}: ${DateFormat('yyyy-MM-dd HH:mm:ss').format(record.operationTime)}',
-                          style: TextStyle(
-                            color: Colors.grey[500],
-                            fontSize: 11,
-                          ),
-                          overflow: TextOverflow.ellipsis,
+                          DateFormat(
+                            'yyyy-MM-dd HH:mm',
+                          ).format(record.operationTime),
+                          style: TextStyles.caption,
                         ),
                       ],
                     ),

@@ -132,8 +132,8 @@ class StockConfig {
   static const String recordsDeleteHint = '左滑可删除，删除后不可恢复，持仓数据将自动重算，请谨慎操作';
   static const String recordsDivDeleteHint = '左滑可删除，删除后不可恢复，资产数据将自动重算，请谨慎操作';
   static const String recordsFormulaLabel = '计算公式';
-  static const String recordsOpLabel = '总金额';
-  static const String recordsDivLabel = '总股息';
+  static const String recordsOpLabel = '市值';
+  static const String recordsDivLabel = '股息';
   static const String recordsEditTitle = '编辑{desc}';
   static const String recordsEditPrice = '价格';
   static const String recordsEditShares = '股数';
