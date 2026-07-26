@@ -1,5 +1,12 @@
+import 'package:flutter/material.dart';
+
 class StockConfig {
   StockConfig._();
+
+  // 底部 Tab 图标
+  static const IconData iconTabStock = Icons.show_chart;
+  static const IconData iconTabAsset = Icons.account_balance_wallet;
+  static const IconData iconAdd = Icons.add;
 
   // StockHeaderCard 文案
   static const String assetTotalAssets = '总资产';

@@ -179,18 +179,21 @@ class _AppShellState extends State<_AppShell> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   _buildTabItem(
-                    icon: Icons.show_chart,
+                    icon: StockConfig.iconTabStock,
                     label: StockConfig.tabStock,
                     index: 0,
                   ),
                   const SizedBox(width: 4),
                   _buildTabItem(
-                    icon: Icons.account_balance_wallet,
+                    icon: StockConfig.iconTabAsset,
                     label: StockConfig.tabAsset,
                     index: 1,
                   ),
                   const SizedBox(width: 4),
-                  _buildAddItem(),
+                  _buildAddItem(
+                    icon: StockConfig.iconAdd,
+                    label: AppConfig.btnAdd,
+                  ),
                 ],
               ),
             ),
@@ -241,7 +244,10 @@ class _AppShellState extends State<_AppShell> {
     );
   }
 
-  Widget _buildAddItem() {
+  Widget _buildAddItem({
+    required IconData icon,
+    required String label ,
+  }) {
     return GestureDetector(
       onTap: _onAddTap,
       child: Container(
@@ -253,11 +259,11 @@ class _AppShellState extends State<_AppShell> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Icon(Icons.add, color: Colors.white, size: 18),
+            Icon(icon, color: Colors.white, size: 18),
             const SizedBox(height: 2),
-            const Text(
-              '添加',
-              style: TextStyle(
+            Text(
+              label,
+              style: const TextStyle(
                 fontSize: 11,
                 fontWeight: FontWeight.w600,
                 color: Colors.white,
