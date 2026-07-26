@@ -68,6 +68,9 @@ class DividendFilterRow extends StatelessWidget {
                     label: marketLabels[i],
                     selected: selected,
                     onTap: () => onFilterChanged(markets[i]),
+                    color: markets[i] != null
+                        ? MarketUtil.marketColor(markets[i])
+                        : null,
                   ),
                 );
               }),

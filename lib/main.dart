@@ -247,9 +247,8 @@ class _AppShellState extends State<_AppShell> {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
         decoration: BoxDecoration(
-          color: AppColors.surfaceElevated,
+          color: Colors.transparent,
           borderRadius: BorderRadius.circular(20),
-          border: Border.all(color: AppColors.tertiaryBg, width: 0.5),
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,

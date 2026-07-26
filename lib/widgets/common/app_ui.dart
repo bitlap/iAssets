@@ -308,6 +308,7 @@ class FilterPill extends StatelessWidget {
   final bool selected;
   final VoidCallback onTap;
   final IconData? trailingIcon;
+  final Color? color;
 
   const FilterPill({
     super.key,
@@ -315,6 +316,7 @@ class FilterPill extends StatelessWidget {
     required this.selected,
     required this.onTap,
     this.trailingIcon,
+    this.color,
   });
 
   @override
@@ -335,9 +337,11 @@ class FilterPill extends StatelessWidget {
               label,
               style: TextStyle(
                 fontSize: 12,
-                color: selected
-                    ? AppColors.textPrimary
-                    : AppColors.textSecondary,
+                color:
+                    color ??
+                    (selected
+                        ? AppColors.textPrimary
+                        : AppColors.textSecondary),
                 fontWeight: FontWeight.w500,
               ),
             ),
