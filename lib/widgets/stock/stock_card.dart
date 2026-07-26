@@ -239,10 +239,9 @@ class StockCard extends StatelessWidget {
                 const SizedBox(width: 4),
                 Text(
                   '${stock.changePercent >= 0 ? '+' : '-'}${stock.changePercent.abs().toStringAsFixed(2)}%',
-                  style: TextStyle(
-                    fontSize: 10,
+                  style: TextStyles.label.copyWith(
                     color: changeColor,
-                    height: 1.2,
+                    fontWeight: FontWeight.w500,
                   ),
                 ),
                 const SizedBox(width: 14),

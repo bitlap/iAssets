@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:assets/utils/market_util.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart';
 
@@ -102,6 +103,12 @@ class StockSearchService {
       if (seenCodes.contains(code)) continue;
 
       final securityType = item['SecurityTypeName']?.toString() ?? '';
+      if (!MarketUtil.supportMarket(securityType)) {
+        debugPrint(
+          '[${DateTime.now().toString().substring(11, 19)}][搜索] ===> 不支持的股票市场: $securityType',
+        );
+        continue;
+      }
       if (secid.isNotEmpty && code.isNotEmpty) {
         results.add(
           StockSearchResult(

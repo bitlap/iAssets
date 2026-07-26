@@ -37,7 +37,10 @@ class AppNumberField extends StatelessWidget {
         borderSide: const BorderSide(color: AppColors.textTertiary),
       ),
       hintText: hintText,
-      hintStyle: TextStyle(color: AppColors.textTertiary),
+      hintStyle: TextStyles.hintText.copyWith(
+        fontSize: 13,
+        color: AppColors.textTertiary,
+      ),
     );
   }
 
@@ -50,11 +53,7 @@ class AppNumberField extends StatelessWidget {
         if (label != null) ...[
           Text(
             label!,
-            style: const TextStyle(
-              fontSize: 13,
-              color: AppColors.textSecondary,
-              height: 1.2,
-            ),
+            style: TextStyles.body13Bold.copyWith(fontWeight: FontWeight.w500),
           ),
           const SizedBox(height: 8),
         ],

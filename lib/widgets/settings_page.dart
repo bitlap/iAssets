@@ -438,8 +438,7 @@ class _SettingsPageState extends State<SettingsPage> {
         ),
         child: Text(
           label,
-          style: TextStyle(
-            fontSize: 13,
+          style: TextStyles.body13.copyWith(
             color: isSelected ? Colors.teal : Colors.grey[300],
             fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
           ),
@@ -623,7 +622,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     Expanded(
                       child: Text(
                         label,
-                        style: TextStyle(
+                        style: TextStyles.body13.copyWith(
                           fontSize: 14,
                           color: isSelected
                               ? AppColors.accent
@@ -698,8 +697,7 @@ class _SettingsPageState extends State<SettingsPage> {
                             const SizedBox(width: 4),
                             Text(
                               SettingsConfig.sortAscending,
-                              style: TextStyle(
-                                fontSize: 13,
+                              style: TextStyles.body13.copyWith(
                                 color: _isSortAscending
                                     ? AppColors.accent
                                     : Colors.grey[300],
@@ -746,8 +744,7 @@ class _SettingsPageState extends State<SettingsPage> {
                             const SizedBox(width: 4),
                             Text(
                               SettingsConfig.sortDescending,
-                              style: TextStyle(
-                                fontSize: 13,
+                              style: TextStyles.body13.copyWith(
                                 color: !_isSortAscending
                                     ? AppColors.accent
                                     : Colors.grey[300],
@@ -1138,8 +1135,7 @@ class _SettingsPageState extends State<SettingsPage> {
           ),
           Text(
             value,
-            style: TextStyle(
-              fontSize: 13,
+            style: TextStyles.body13.copyWith(
               color: onTap != null ? AppColors.accent : Colors.white,
             ),
           ),

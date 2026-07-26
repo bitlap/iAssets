@@ -76,14 +76,7 @@ Widget cancelButton({required VoidCallback onTap, String? text}) {
         border: Border.all(color: _borderColor),
       ),
       child: Center(
-        child: Text(
-          text ?? AppConfig.btnCancel,
-          style: const TextStyle(
-            fontSize: 15,
-            color: AppColors.textSecondary,
-            fontWeight: FontWeight.w500,
-          ),
-        ),
+        child: Text(text ?? AppConfig.btnCancel, style: TextStyles.bodyMedium),
       ),
     ),
   );

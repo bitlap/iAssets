@@ -310,12 +310,9 @@ class _SearchStockDialogState extends State<SearchStockDialog> {
                     focusNode: _focusNode,
                     onChanged: _onSearchChanged,
                     style: TextStyles.listTileTitle,
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
                       hintText: StockConfig.searchHint,
-                      hintStyle: TextStyle(
-                        color: AppColors.textSecondary,
-                        fontSize: 14,
-                      ),
+                      hintStyle: TextStyles.hintText,
                       border: InputBorder.none,
                       isDense: true,
                       contentPadding: EdgeInsets.symmetric(vertical: 12),

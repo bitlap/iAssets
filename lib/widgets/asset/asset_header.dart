@@ -81,12 +81,7 @@ class AssetHeader extends StatelessWidget {
           const SizedBox(height: 4),
           Text(
             '${CurrencyUtil.getSymbol(currency)}${CurrencyUtil.formatCompact(totalAssets)}',
-            style: const TextStyle(
-              fontSize: 34,
-              fontWeight: FontWeight.w700,
-              color: Colors.white,
-              height: 1.1,
-            ),
+            style: TextStyles.amountLarge,
           ),
           const SizedBox(height: 8),
           Row(

@@ -100,30 +100,9 @@ class SettingsSelectableItem extends StatelessWidget {
                     ),
             ),
             const SizedBox(width: 12),
-            Expanded(
-              child: Text(
-                label,
-                style: TextStyle(
-                  fontSize: 15,
-                  color: isSelected
-                      ? AppColors.textPrimary
-                      : AppColors.textSecondary,
-                  fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
-                  height: 1.2,
-                ),
-              ),
-            ),
+            Expanded(child: Text(label, style: TextStyles.bodyMedium)),
             if (trailingText != null)
-              Text(
-                trailingText!,
-                style: TextStyle(
-                  fontSize: 13,
-                  color: isSelected
-                      ? AppColors.textPrimary
-                      : AppColors.textSecondary,
-                  height: 1.2,
-                ),
-              ),
+              Text(trailingText!, style: TextStyles.body13Grey),
           ],
         ),
       ),

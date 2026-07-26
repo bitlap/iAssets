@@ -127,6 +127,9 @@ class StockConfig {
   static const String recordsEmptyDiv = '暂无派息记录';
   static const String recordsEmptyDivHint = '点击更多菜单中的"派息"添加记录';
   static const String profitNoData = '暂无数据';
+  static const String filterMarketTitle = '筛选市场';
+  static const String dragBetweenCategoriesHint = '请在分类标题之间拖拽';
+
   static const String recordsDivAmountPerShare = '每股';
   static const String recordsDivShares = '持仓股数';
   static const String recordsDivTotal = '总派息';

@@ -672,7 +672,10 @@ Widget _dialogTextField(TextEditingController ctrl, String hint) {
     style: TextStyles.sectionTitleRegular,
     decoration: InputDecoration(
       hintText: hint,
-      hintStyle: TextStyle(color: AppColors.textTertiary),
+      hintStyle: TextStyles.hintText.copyWith(
+        fontSize: 13,
+        color: AppColors.textTertiary,
+      ),
       filled: true,
       fillColor: AppColors.surface,
       contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),

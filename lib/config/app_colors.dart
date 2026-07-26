@@ -50,4 +50,5 @@ class AppColors {
   // 分割线/背景
   static const Color separator = Color(0xFF38383A);
   static const Color tertiaryBg = Color(0xFF3A3A3C);
+  static const Color toastBg = Color(0xFF1E272E);
 }

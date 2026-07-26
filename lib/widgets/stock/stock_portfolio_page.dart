@@ -282,7 +282,7 @@ class StockPortfolioPageState extends State<StockPortfolioPage>
       MarketUtil.searchMarketCN,
     ];
     final labels = [
-      '全部',
+      MarketUtil.searchAll,
       MarketUtil.searchMarketUS,
       MarketUtil.searchMarketHK,
       MarketUtil.searchMarketCN,
@@ -295,7 +295,10 @@ class StockPortfolioPageState extends State<StockPortfolioPage>
           borderRadius: BorderRadius.circular(16),
           side: const BorderSide(color: AppColors.border, width: 0.5),
         ),
-        title: const Text('筛选市场', style: TextStyles.sectionTitleRegular),
+        title: const Text(
+          StockConfig.filterMarketTitle,
+          style: TextStyles.sectionTitleRegular,
+        ),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: List.generate(markets.length, (i) {
@@ -337,7 +340,7 @@ class StockPortfolioPageState extends State<StockPortfolioPage>
                       const SizedBox(width: 12),
                       Text(
                         labels[i],
-                        style: TextStyle(
+                        style: TextStyles.body13.copyWith(
                           fontSize: 14,
                           color: selected
                               ? Colors.white

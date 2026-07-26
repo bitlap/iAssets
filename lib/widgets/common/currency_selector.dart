@@ -111,23 +111,12 @@ class CurrencySelector {
                                   Expanded(
                                     child: Text(
                                       currency,
-                                      style: TextStyle(
-                                        fontSize: 15,
-                                        color: AppColors.textPrimary,
-                                        fontWeight: isSelected
-                                            ? FontWeight.w600
-                                            : FontWeight.normal,
-                                      ),
+                                      style: TextStyles.listTileTitle,
                                     ),
                                   ),
                                   Text(
                                     '$symbol ${CurrencyUtil.formatRate(rate)}',
-                                    style: TextStyle(
-                                      fontSize: 13,
-                                      color: isSelected
-                                          ? AppColors.textPrimary
-                                          : AppColors.textSecondary,
-                                    ),
+                                    style: TextStyles.body13Grey,
                                   ),
                                 ],
                               ),

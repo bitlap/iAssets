@@ -190,11 +190,9 @@ class _ProfitChartWidgetState extends State<ProfitChartWidget> {
               ),
               child: Text(
                 option.label,
-                style: TextStyle(
-                  fontSize: 10,
+                style: TextStyles.label.copyWith(
                   fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
                   color: AppColors.textPrimary,
-                  height: 1.2,
                 ),
               ),
             ),
@@ -318,9 +316,9 @@ class _ProfitChartPainter extends CustomPainter {
       final tp = TextPainter(
         text: TextSpan(
           text: CurrencyUtil.formatCompact(val),
-          style: TextStyle(
-            color: AppColors.textPrimary.withValues(alpha: 0.4),
+          style: TextStyles.label.copyWith(
             fontSize: 9,
+            color: AppColors.textPrimary.withValues(alpha: 0.4),
           ),
         ),
         textDirection: ui.TextDirection.ltr,
@@ -433,9 +431,8 @@ class _ProfitChartPainter extends CustomPainter {
       final valueTp = TextPainter(
         text: TextSpan(
           text: valueText,
-          style: TextStyle(
+          style: TextStyles.whiteBold11.copyWith(
             color: color.withValues(alpha: 0.95),
-            fontSize: 11,
             fontWeight: FontWeight.w700,
           ),
         ),
@@ -465,9 +462,8 @@ class _ProfitChartPainter extends CustomPainter {
       final dateTp = TextPainter(
         text: TextSpan(
           text: dateText,
-          style: TextStyle(
+          style: TextStyles.label.copyWith(
             color: AppColors.textPrimary.withValues(alpha: 0.7),
-            fontSize: 10,
             fontWeight: FontWeight.w500,
           ),
         ),

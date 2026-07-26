@@ -100,12 +100,7 @@ class _StockHeaderCardState extends State<StockHeaderCard> {
           // 总金额（已经是目标币种，直接格式化）
           Text(
             '${CurrencyUtil.getSymbol(widget.selectedCurrency)}${CurrencyUtil.formatCompact(widget.totalAssets)}',
-            style: const TextStyle(
-              fontSize: 34,
-              fontWeight: FontWeight.w700,
-              color: Colors.white,
-              height: 1.1,
-            ),
+            style: TextStyles.amountLarge,
           ),
           const SizedBox(height: 8),
           // 总成本、总盈亏和总股息

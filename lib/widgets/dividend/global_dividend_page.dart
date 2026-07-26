@@ -141,13 +141,9 @@ class _GlobalDividendPageState extends State<GlobalDividendPage> {
         title: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Text(
+            Text(
               StockConfig.dividendOverviewTitle,
-              style: TextStyle(
-                fontSize: 17,
-                fontWeight: FontWeight.w600,
-                color: Colors.white,
-              ),
+              style: TextStyles.appBarTitle,
             ),
             Text(
               '${_overview.items.length} ${StockConfig.tabStock} · ${widget.selectedCurrency}',

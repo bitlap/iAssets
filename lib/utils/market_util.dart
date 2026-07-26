@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../config/app_colors.dart';
 
 class MarketUtil {
   MarketUtil._();
@@ -33,15 +34,15 @@ class MarketUtil {
 
   static Color marketColor(String? market) {
     if (isChineseMarket(market ?? '')) {
-      return const Color(0xFFFF9500);
+      return AppColors.marketA;
     }
     switch (market) {
       case searchMarketHK:
-        return const Color(0xFF34C759);
+        return AppColors.marketHK;
       case searchMarketUS:
-        return const Color(0xFFFF3B30);
+        return AppColors.marketUS;
       default:
-        return const Color(0xFF636366);
+        return AppColors.textTertiary;
     }
   }
 
@@ -87,6 +88,12 @@ class MarketUtil {
   // 市场 → 币种 映射
   static bool isChineseMarket(String marketType) {
     return searchMarketCN == marketType || cnMarkets.contains(marketType);
+  }
+
+  static bool supportMarket(String marketType) {
+    return isChineseMarket(marketType) ||
+        marketType == searchMarketUS ||
+        marketType == searchMarketHK;
   }
 
   static String currencyForMarket(String marketType) {

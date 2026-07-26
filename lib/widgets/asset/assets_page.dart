@@ -145,7 +145,11 @@ class AssetsPageState extends State<AssetsPage> {
         if (newIndex < _flatItems.length - 1) {
           final targetIdx = newIndex < oldIndex ? newIndex : newIndex + 1;
           if (_flatItems[targetIdx] is AssetCardItem) {
-            if (mounted) CenterToast.warning(context, '请在分类标题之间拖拽');
+            if (mounted)
+              CenterToast.warning(
+                context,
+                StockConfig.dragBetweenCategoriesHint,
+              );
             return;
           }
         }

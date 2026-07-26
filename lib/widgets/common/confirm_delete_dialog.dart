@@ -58,11 +58,7 @@ class ConfirmDeleteDialog extends StatelessWidget {
                 Text(
                   content,
                   textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: AppColors.textSecondary,
-                    height: 1.4,
-                  ),
+                  style: TextStyles.subtitle.copyWith(height: 1.4),
                 ),
                 const SizedBox(height: 20),
                 Row(
@@ -79,11 +75,7 @@ class ConfirmDeleteDialog extends StatelessWidget {
                           child: const Center(
                             child: Text(
                               AppConfig.btnCancel,
-                              style: TextStyle(
-                                fontSize: 15,
-                                color: AppColors.textSecondary,
-                                fontWeight: FontWeight.w500,
-                              ),
+                              style: TextStyles.bodyRegular,
                             ),
                           ),
                         ),
@@ -154,11 +146,7 @@ class ConfirmDeleteDialog extends StatelessWidget {
               Text(
                 content,
                 textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 14,
-                  color: AppColors.textSecondary,
-                  height: 1.4,
-                ),
+                style: TextStyles.subtitle.copyWith(height: 1.4),
               ),
               const SizedBox(height: 20),
               Row(
@@ -175,11 +163,7 @@ class ConfirmDeleteDialog extends StatelessWidget {
                         child: const Center(
                           child: Text(
                             AppConfig.btnCancel,
-                            style: TextStyle(
-                              fontSize: 15,
-                              color: AppColors.textSecondary,
-                              fontWeight: FontWeight.w500,
-                            ),
+                            style: TextStyles.bodyRegular,
                           ),
                         ),
                       ),

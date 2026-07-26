@@ -142,6 +142,34 @@ class TextStyles {
     color: Colors.white,
   );
 
+  /// 11px 白色加粗
+  static const whiteBold11 = TextStyle(
+    fontSize: 11,
+    fontWeight: FontWeight.w600,
+    color: Colors.white,
+  );
+
+  /// 34px 白色加粗（总资产金额）
+  static const amountLarge = TextStyle(
+    fontSize: 34,
+    fontWeight: FontWeight.w700,
+    color: Colors.white,
+    height: 1.1,
+  );
+
+  /// 17px 白色加粗（AppBar 标题）
+  static const appBarTitle = TextStyle(
+    fontSize: 17,
+    fontWeight: FontWeight.w600,
+    color: Colors.white,
+  );
+
+  /// 14px 灰色提示文字（hintStyle 备用）
+  static const hintText = TextStyle(
+    fontSize: 14,
+    color: AppColors.textSecondary,
+  );
+
   // ── 小型强调 ──
   static const smallBold = TextStyle(
     fontSize: 12,
@@ -186,12 +214,7 @@ class MarketBadge extends StatelessWidget {
       ),
       child: Text(
         market,
-        style: TextStyle(
-          fontSize: fontSize,
-          color: color,
-          fontWeight: FontWeight.w600,
-          height: 1.2,
-        ),
+        style: TextStyles.smallBold.copyWith(fontSize: fontSize, color: color),
       ),
     );
   }
@@ -250,11 +273,10 @@ class CurrencyBadge extends StatelessWidget {
       ),
       child: Text(
         currency,
-        style: TextStyle(
+        style: TextStyles.smallBold.copyWith(
           fontSize: fontSize,
           color: AppColors.textSecondary,
           fontWeight: FontWeight.w500,
-          height: 1.2,
         ),
       ),
     );
@@ -362,8 +384,7 @@ class FilterPill extends StatelessWidget {
           children: [
             Text(
               label,
-              style: TextStyle(
-                fontSize: 12,
+              style: TextStyles.bodySmall.copyWith(
                 color:
                     color ??
                     (selected
@@ -412,25 +433,9 @@ class StatMetricCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            label,
-            style: const TextStyle(
-              fontSize: 11,
-              color: AppColors.textSecondary,
-              height: 1.2,
-            ),
-          ),
+          Text(label, style: TextStyles.caption),
           const SizedBox(height: 6),
-          Text(
-            value,
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w700,
-              color: valueColor,
-              height: 1.1,
-              fontFamily: 'SFMono',
-            ),
-          ),
+          Text(value, style: TextStyles.valueLarge.copyWith(color: valueColor)),
         ],
       ),
     );

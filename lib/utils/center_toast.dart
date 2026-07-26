@@ -1,30 +1,23 @@
 import 'package:flutter/material.dart';
 
+import '../config/app_colors.dart';
+import '../widgets/common/app_ui.dart';
+
 /// 屏幕中间弹出的 Toast 提示
 class CenterToast {
   /// 显示成功提示（绿色）
   static void success(BuildContext context, String message) {
-    _show(
-      context,
-      message,
-      Icons.check_circle_outline,
-      const Color(0xFF2ECC71),
-    );
+    _show(context, message, Icons.check_circle_outline, AppColors.success);
   }
 
   /// 显示错误提示（红色）
   static void error(BuildContext context, String message) {
-    _show(context, message, Icons.error_outline, const Color(0xFFE74C3C));
+    _show(context, message, Icons.error_outline, AppColors.danger);
   }
 
   /// 显示警告提示（橙色）
   static void warning(BuildContext context, String message) {
-    _show(
-      context,
-      message,
-      Icons.warning_amber_rounded,
-      const Color(0xFFF39C12),
-    );
+    _show(context, message, Icons.warning_amber_rounded, AppColors.warning);
   }
 
   static void _show(
@@ -124,7 +117,7 @@ class _CenterToastWidgetState extends State<_CenterToastWidget>
                       vertical: 14,
                     ),
                     decoration: BoxDecoration(
-                      color: const Color(0xFF1E272E),
+                      color: AppColors.toastBg,
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Row(
@@ -135,11 +128,8 @@ class _CenterToastWidgetState extends State<_CenterToastWidget>
                         Flexible(
                           child: Text(
                             widget.message,
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 14,
+                            style: TextStyles.subtitle.copyWith(
                               fontWeight: FontWeight.w500,
-                              decoration: TextDecoration.none,
                             ),
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,

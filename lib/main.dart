@@ -10,6 +10,7 @@ import 'widgets/stock/stock_portfolio_page.dart';
 import 'widgets/asset/assets_page.dart';
 import 'widgets/asset/asset_dialogs.dart';
 import 'task/profit_task.dart';
+import 'widgets/common/app_ui.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -55,18 +56,18 @@ class MyApp extends StatelessWidget {
       supportedLocales: const [Locale('zh', 'CN'), Locale('en', 'US')],
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
-          seedColor: Color(0xFF636366),
+          seedColor: AppColors.textTertiary,
           brightness: Brightness.dark,
-          background: const Color(0xFF000000),
-          surface: Color(0xFF1C1C1E),
+          background: AppColors.surface,
+          surface: AppColors.surfaceElevated,
         ),
         useMaterial3: true,
-        scaffoldBackgroundColor: const Color(0xFF000000),
+        scaffoldBackgroundColor: AppColors.surface,
         textTheme: TextTheme(
-          bodyLarge: TextStyle(color: Colors.white),
-          bodyMedium: TextStyle(color: Colors.white),
-          displayLarge: TextStyle(color: Colors.white),
-          headlineMedium: TextStyle(color: Colors.white),
+          bodyLarge: TextStyle(color: AppColors.textPrimary),
+          bodyMedium: TextStyle(color: AppColors.textPrimary),
+          displayLarge: TextStyle(color: AppColors.textPrimary),
+          headlineMedium: TextStyle(color: AppColors.textPrimary),
         ),
       ),
       home: const _AppShell(),
@@ -118,7 +119,7 @@ class _AppShellState extends State<_AppShell> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      backgroundColor: const Color(0xFF000000),
+      backgroundColor: AppColors.surface,
       body: SafeArea(
         child: Stack(
           children: [
@@ -235,7 +236,9 @@ class _AppShellState extends State<_AppShell> {
               style: TextStyle(
                 fontSize: 11,
                 fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
-                color: isSelected ? Colors.white : AppColors.textSecondary,
+                color: isSelected
+                    ? AppColors.textPrimary
+                    : AppColors.textSecondary,
               ),
             ),
           ],
@@ -258,14 +261,7 @@ class _AppShellState extends State<_AppShell> {
           children: [
             Icon(icon, color: Colors.white, size: 18),
             const SizedBox(height: 2),
-            Text(
-              label,
-              style: const TextStyle(
-                fontSize: 11,
-                fontWeight: FontWeight.w600,
-                color: Colors.white,
-              ),
-            ),
+            Text(label, style: TextStyles.whiteBold11),
           ],
         ),
       ),
