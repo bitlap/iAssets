@@ -47,6 +47,10 @@ class _ProfitChartWidgetState extends State<ProfitChartWidget> {
   @override
   void didUpdateWidget(covariant ProfitChartWidget oldWidget) {
     super.didUpdateWidget(oldWidget);
+    if (widget.totalProfit != oldWidget.totalProfit ||
+        widget.targetCurrency != oldWidget.targetCurrency) {
+      _loadIntradayOnly();
+    }
     if (_isExpanded) _loadSnapshots();
   }
 
