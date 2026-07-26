@@ -125,6 +125,7 @@ class StockPortfolioPageState extends State<StockPortfolioPage>
             ),
           )
           .toList();
+      _lastRefreshTime = DateTime.now();
     });
   }
 
