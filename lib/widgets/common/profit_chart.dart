@@ -41,13 +41,21 @@ class _ProfitChartWidgetState extends State<ProfitChartWidget> {
   @override
   void initState() {
     super.initState();
-    _loadSnapshots();
+    _loadIntradayOnly();
   }
 
   @override
   void didUpdateWidget(covariant ProfitChartWidget oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (_isExpanded) _loadSnapshots();
+  }
+
+  Future<void> _loadIntradayOnly() async {
+    final intraday = await StockDataManager.loadIntradayProfitHistory(
+      targetCurrency: widget.targetCurrency,
+    );
+    if (!mounted) return;
+    setState(() => _intradaySnapshots = intraday);
   }
 
   Future<void> _loadSnapshots() async {
@@ -116,6 +124,8 @@ class _ProfitChartWidgetState extends State<ProfitChartWidget> {
             ],
           ),
         ),
+        const SizedBox(height: 6),
+        _buildMiniChart(),
         if (_isExpanded) ...[
           const SizedBox(height: 8),
           _buildRangeSelector(),
@@ -123,6 +133,31 @@ class _ProfitChartWidgetState extends State<ProfitChartWidget> {
           _buildChart(),
         ],
       ],
+    );
+  }
+
+  Widget _buildMiniChart() {
+    final data = _intradaySnapshots;
+    if (data.isEmpty) {
+      return Container(
+        height: 50,
+        alignment: Alignment.center,
+        child: const Text(StockConfig.profitNoData, style: TextStyles.caption),
+      );
+    }
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(10),
+      child: Container(
+        height: 50,
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+        child: CustomPaint(
+          size: const Size(double.infinity, 38),
+          painter: _MiniChartPainter(
+            data: data.map((s) => s.totalProfit).toList(),
+            isPositive: widget.totalProfit >= 0,
+          ),
+        ),
+      ),
     );
   }
 
@@ -465,5 +500,102 @@ class _ProfitChartPainter extends CustomPainter {
     return oldDelegate.snapshots != snapshots ||
         oldDelegate.isPositive != isPositive ||
         oldDelegate.selectedIndex != selectedIndex;
+  }
+}
+
+/// 缩小版今日盈亏曲线绘制器（用于折叠预览行）
+class _MiniChartPainter extends CustomPainter {
+  final List<double> data;
+  final bool isPositive;
+
+  _MiniChartPainter({required this.data, required this.isPositive});
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    if (data.length < 2) return;
+
+    final paintWidth = size.width;
+    final paintHeight = size.height;
+    final minVal = data.reduce((a, b) => a < b ? a : b);
+    final maxVal = data.reduce((a, b) => a > b ? a : b);
+    final color = isPositive ? AppColors.danger : AppColors.success;
+
+    double scaleY(double val) {
+      if (minVal == maxVal) return paintHeight / 2;
+      return paintHeight -
+          ((val - minVal) / (maxVal - minVal)) * (paintHeight - 4);
+    }
+
+    double scaleX(int index) {
+      if (data.length == 1) return paintWidth / 2;
+      return (index / (data.length - 1)) * paintWidth;
+    }
+
+    // dashed zero line
+    if (minVal < 0 && maxVal > 0) {
+      final zeroY = scaleY(0);
+      final dashPaint = Paint()
+        ..color = AppColors.textPrimary.withValues(alpha: 0.3)
+        ..strokeWidth = 1
+        ..style = PaintingStyle.stroke;
+      const dashLen = 4.0;
+      const gapLen = 2.0;
+      double dx = 0;
+      while (dx < paintWidth) {
+        canvas.drawLine(
+          Offset(dx, zeroY),
+          Offset((dx + dashLen).clamp(0, paintWidth), zeroY),
+          dashPaint,
+        );
+        dx += dashLen + gapLen;
+      }
+    }
+
+    // fill
+    final fillPaint = Paint()
+      ..shader = LinearGradient(
+        begin: Alignment.topCenter,
+        end: Alignment.bottomCenter,
+        colors: [color.withValues(alpha: 0.35), color.withValues(alpha: 0.02)],
+      ).createShader(Rect.fromLTWH(0, 0, paintWidth, paintHeight));
+
+    final path = Path();
+    for (int i = 0; i < data.length; i++) {
+      final x = scaleX(i);
+      final y = scaleY(data[i]);
+      if (i == 0) {
+        path.moveTo(x, paintHeight);
+        path.lineTo(x, y);
+      } else {
+        path.lineTo(x, y);
+      }
+    }
+    path.lineTo(scaleX(data.length - 1), paintHeight);
+    path.close();
+    canvas.drawPath(path, fillPaint);
+
+    // line
+    final linePaint = Paint()
+      ..color = color.withValues(alpha: 0.8)
+      ..strokeWidth = 1.5
+      ..style = PaintingStyle.stroke
+      ..strokeCap = StrokeCap.round;
+
+    final linePath = Path();
+    for (int i = 0; i < data.length; i++) {
+      final x = scaleX(i);
+      final y = scaleY(data[i]);
+      if (i == 0) {
+        linePath.moveTo(x, y);
+      } else {
+        linePath.lineTo(x, y);
+      }
+    }
+    canvas.drawPath(linePath, linePaint);
+  }
+
+  @override
+  bool shouldRepaint(covariant _MiniChartPainter oldDelegate) {
+    return oldDelegate.data != data || oldDelegate.isPositive != isPositive;
   }
 }
