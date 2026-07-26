@@ -52,7 +52,7 @@ class StockPortfolioPageState extends State<StockPortfolioPage>
   bool _keepStockAfterClose = false;
 
   // 排序状态
-  String _sortColumn = 'profit'; // 'name', 'holdings', 'profit'
+  String _sortColumn = 'holdings'; // 'name', 'holdings', 'profit'
   bool _sortAscending = false;
   // 市场筛选
   String? _filterMarket;

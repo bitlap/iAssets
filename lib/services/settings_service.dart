@@ -89,10 +89,10 @@ class SettingsService {
     await _save();
   }
 
-  /// 读取股票排序列，默认 'profit'
+  /// 读取股票排序列，默认 'holdings'
   static Future<String> getSortColumn() async {
     final settings = await _load();
-    return settings[keySortColumn] as String? ?? 'profit';
+    return settings[keySortColumn] as String? ?? 'holdings';
   }
 
   /// 保存股票排序列

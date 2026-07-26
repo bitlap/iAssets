@@ -44,7 +44,7 @@ class _SettingsPageState extends State<SettingsPage> {
   bool _isCurrencyExpanded = false;
   bool _isSortExpanded = false;
   bool _keepStockAfterClose = true;
-  String _selectedSortColumn = 'profit';
+  String _selectedSortColumn = 'holdings';
   bool _isSortAscending = false;
   bool _syncSettings = true;
   bool _isFeeExpanded = false;
