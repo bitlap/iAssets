@@ -1,3 +1,4 @@
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -180,21 +181,18 @@ class _AppShellState extends State<_AppShell> {
     return Padding(
       padding: const EdgeInsets.only(bottom: 4),
       child: Center(
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Container(
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(24),
+          child: BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: 30, sigmaY: 30),
+            child: Container(
               decoration: BoxDecoration(
-                color: AppColors.surface,
+                color: Colors.white.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(24),
-                border: Border.all(color: AppColors.border, width: 0.5),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.4),
-                    blurRadius: 12,
-                    offset: const Offset(0, -2),
-                  ),
-                ],
+                border: Border.all(
+                  color: Colors.white.withValues(alpha: 0.4),
+                  width: 0.5,
+                ),
               ),
               padding: const EdgeInsets.all(4),
               child: Row(
@@ -219,7 +217,7 @@ class _AppShellState extends State<_AppShell> {
                 ],
               ),
             ),
-          ],
+          ),
         ),
       ),
     );
@@ -249,7 +247,9 @@ class _AppShellState extends State<_AppShell> {
             Icon(
               icon,
               size: 18,
-              color: index == 0 ? AppColors.accent : AppColors.warning,
+              color: isSelected
+                  ? (index == 0 ? AppColors.accent : AppColors.warning)
+                  : AppColors.textSecondary,
             ),
             const SizedBox(height: 2),
             Text(
@@ -280,9 +280,16 @@ class _AppShellState extends State<_AppShell> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(icon, color: Colors.white, size: 18),
+            Icon(icon, color: AppColors.textSecondary, size: 18),
             const SizedBox(height: 2),
-            Text(label, style: TextStyles.whiteBold11),
+            Text(
+              label,
+              style: TextStyle(
+                fontSize: 11,
+                fontWeight: FontWeight.w600,
+                color: AppColors.textSecondary,
+              ),
+            ),
           ],
         ),
       ),
