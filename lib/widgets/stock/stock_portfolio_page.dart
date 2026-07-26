@@ -211,7 +211,14 @@ class StockPortfolioPageState extends State<StockPortfolioPage>
     );
     if (mounted) setState(() => stocks = updated);
     await StockDataManager.recordProfitIfNeeded(totalProfit, selectedCurrency);
-    if (mounted) setState(() => _lastRefreshTime = DateTime.now());
+    if (mounted) {
+      setState(() => _lastRefreshTime = DateTime.now());
+      _scrollController.animateTo(
+        0,
+        duration: const Duration(milliseconds: 200),
+        curve: Curves.easeOut,
+      );
+    }
   }
 
   Future<void> _recordProfitOnPaused() async {
