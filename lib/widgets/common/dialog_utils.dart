@@ -105,16 +105,7 @@ Widget confirmButton({
         color: bgColor,
         gradient: gradient,
       ),
-      child: Center(
-        child: Text(
-          text,
-          style: const TextStyle(
-            fontSize: 15,
-            color: Colors.white,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-      ),
+      child: Center(child: Text(text, style: TextStyles.bodyMedium)),
     ),
   );
 }
@@ -162,7 +153,7 @@ class DialogInfoTitle extends StatelessWidget {
       children: [
         Icon(icon, size: 20, color: iconColor ?? Colors.white),
         const SizedBox(width: 8),
-        Text(title, style: const TextStyle(color: Colors.white, fontSize: 16)),
+        Text(title, style: TextStyles.inputText),
       ],
     );
   }
@@ -244,8 +235,7 @@ class HintRow extends StatelessWidget {
                 ),
                 TextSpan(
                   text: desc,
-                  style: TextStyle(
-                    fontSize: 13,
+                  style: TextStyles.body13.copyWith(
                     color: AppColors.textSecondary,
                     height: 1.5,
                   ),

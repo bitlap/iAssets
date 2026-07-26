@@ -47,10 +47,8 @@ class AssetHeader extends StatelessWidget {
             children: [
               Text(
                 StockConfig.assetTotalAssets,
-                style: const TextStyle(
-                  fontSize: 13,
+                style: TextStyles.body13.copyWith(
                   color: AppColors.textSecondary,
-                  height: 1.2,
                 ),
               ),
               GestureDetector(
@@ -67,15 +65,7 @@ class AssetHeader extends StatelessWidget {
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Text(
-                        currency,
-                        style: const TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                          height: 1.2,
-                        ),
-                      ),
+                      Text(currency, style: TextStyles.subtitle),
                       const SizedBox(width: 2),
                       const Icon(
                         Icons.keyboard_arrow_down,
@@ -137,14 +127,7 @@ Widget _summaryChip(
           children: [
             Icon(icon, size: 10, color: iconColor),
             const SizedBox(width: 4),
-            Text(
-              label,
-              style: const TextStyle(
-                fontSize: 11,
-                color: AppColors.textSecondary,
-                height: 1.2,
-              ),
-            ),
+            Text(label, style: TextStyles.caption),
           ],
         ),
         const SizedBox(height: 4),

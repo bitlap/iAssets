@@ -31,17 +31,17 @@ class EmptyStateWidget extends StatelessWidget {
             const SizedBox(height: 12),
             Text(
               title,
-              style: TextStyle(
+              style: TextStyles.subtitle.copyWith(
                 color: AppColors.textSecondary,
-                fontSize: 14,
-                fontWeight: FontWeight.w500,
               ),
             ),
             if (subtitle != null) ...[
               const SizedBox(height: 6),
               Text(
                 subtitle!,
-                style: TextStyle(color: AppColors.textTertiary, fontSize: 12),
+                style: TextStyles.bodySmall.copyWith(
+                  color: AppColors.textTertiary,
+                ),
               ),
             ],
           ],

@@ -4,14 +4,12 @@ class StockSearchResult {
   final String name; // 股票名称
   final String market; // 市场标识：美股、港股
   final String secid; // 东方财富 secid，如 105.AAPL, 116.00700
-  final String? exchange; // 交易所名称
 
   StockSearchResult({
     required this.code,
     required this.name,
     required this.market,
     required this.secid,
-    this.exchange,
   });
 }
 

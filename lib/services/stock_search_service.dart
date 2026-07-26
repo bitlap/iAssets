@@ -97,7 +97,6 @@ class StockSearchService {
       final rawCode = item['Code']?.toString() ?? '';
       final code = rawCode.replaceAll('_', '.');
       final name = item['Name']?.toString() ?? '';
-      final exchange = item['ExchangeName']?.toString() ?? '';
       final secid = item['QuoteID']?.toString() ?? '';
 
       if (seenCodes.contains(code)) continue;
@@ -110,7 +109,6 @@ class StockSearchService {
             name: name,
             market: securityType,
             secid: secid,
-            exchange: exchange,
           ),
         );
       }

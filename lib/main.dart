@@ -244,10 +244,7 @@ class _AppShellState extends State<_AppShell> {
     );
   }
 
-  Widget _buildAddItem({
-    required IconData icon,
-    required String label ,
-  }) {
+  Widget _buildAddItem({required IconData icon, required String label}) {
     return GestureDetector(
       onTap: _onAddTap,
       child: Container(

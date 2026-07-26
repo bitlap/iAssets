@@ -115,6 +115,33 @@ class TextStyles {
 
   static const body13 = TextStyle(fontSize: 13, color: Colors.white);
 
+  /// 13px 灰色正文
+  static const body13Grey = TextStyle(
+    fontSize: 13,
+    color: AppColors.grey,
+    height: 1.2,
+  );
+
+  /// 15px 白色列表标题
+  static const listTileTitle = TextStyle(fontSize: 15, color: Colors.white);
+
+  /// 16px 白色输入框文字
+  static const inputText = TextStyle(fontSize: 16, color: Colors.white);
+
+  /// 12px 白色加粗
+  static const whiteBold12 = TextStyle(
+    fontSize: 12,
+    fontWeight: FontWeight.bold,
+    color: Colors.white,
+  );
+
+  /// 13px 白色加粗正文
+  static const body13Bold = TextStyle(
+    fontSize: 13,
+    fontWeight: FontWeight.bold,
+    color: Colors.white,
+  );
+
   // ── 小型强调 ──
   static const smallBold = TextStyle(
     fontSize: 12,

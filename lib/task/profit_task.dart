@@ -29,7 +29,7 @@ void callbackDispatcher() {
                 code: s.symbol,
                 name: s.companyName,
                 market: s.marketType,
-                secid: s.secid ?? _secidForMarket(s.marketType, s.symbol),
+                secid: s.secid,
               ),
             )
             .toList();
@@ -37,8 +37,7 @@ void callbackDispatcher() {
           searchResults,
         );
         for (final stock in stocks) {
-          final secid =
-              stock.secid ?? _secidForMarket(stock.marketType, stock.symbol);
+          final secid = stock.secid;
           final quote = quotes[secid];
           if (quote != null) {
             final idx = stocks.indexWhere((s) => s.symbol == stock.symbol);
@@ -79,9 +78,6 @@ void callbackDispatcher() {
     return Future.value(true);
   });
 }
-
-String _secidForMarket(String marketType, String symbol) =>
-    MarketUtil.secidForMarket(marketType, symbol);
 
 Future<String> _readCurrency() async {
   try {

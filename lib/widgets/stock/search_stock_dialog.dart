@@ -15,6 +15,7 @@ import '../../config/app_colors.dart';
 import '../common/app_number_field.dart';
 import '../common/info_row_widget.dart';
 import '../common/dialog_utils.dart';
+import '../common/app_ui.dart';
 
 /// 股票搜索弹窗 - 支持按名称/代码搜索港股、美股
 class SearchStockDialog extends StatefulWidget {
@@ -275,14 +276,7 @@ class _SearchStockDialogState extends State<SearchStockDialog> {
         children: [
           Row(
             children: [
-              const Text(
-                StockConfig.searchTitle,
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                ),
-              ),
+              Text(StockConfig.searchTitle, style: TextStyles.dialogTitle),
               const Spacer(),
               GestureDetector(
                 onTap: () => Navigator.of(context).pop(),
@@ -315,7 +309,7 @@ class _SearchStockDialogState extends State<SearchStockDialog> {
                     controller: _controller,
                     focusNode: _focusNode,
                     onChanged: _onSearchChanged,
-                    style: const TextStyle(color: Colors.white, fontSize: 15),
+                    style: TextStyles.listTileTitle,
                     decoration: const InputDecoration(
                       hintText: StockConfig.searchHint,
                       hintStyle: TextStyle(
@@ -407,11 +401,7 @@ class _SearchStockDialogState extends State<SearchStockDialog> {
         ),
         child: Text(
           label,
-          style: TextStyle(
-            fontSize: 12,
-            color: isSelected ? Colors.white : AppColors.textSecondary,
-            fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
-          ),
+          style: isSelected ? TextStyles.smallBold : TextStyles.bodySmall,
         ),
       ),
     );
@@ -495,9 +485,8 @@ class _SearchStockDialogState extends State<SearchStockDialog> {
               const SizedBox(height: 12),
               Text(
                 _errorMessage,
-                style: const TextStyle(
+                style: TextStyles.subtitleRegular.copyWith(
                   color: AppColors.textSecondary,
-                  fontSize: 14,
                 ),
               ),
             ],
@@ -507,26 +496,28 @@ class _SearchStockDialogState extends State<SearchStockDialog> {
     }
 
     if (!_hasSearched) {
-      return const Center(
+      return Center(
         child: Padding(
-          padding: EdgeInsets.all(40),
+          padding: const EdgeInsets.all(40),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(
+              const Icon(
                 Icons.tips_and_updates_outlined,
                 color: AppColors.textSecondary,
                 size: 48,
               ),
-              SizedBox(height: 12),
+              const SizedBox(height: 12),
               Text(
                 StockConfig.searchInitHint,
-                style: TextStyle(color: AppColors.textSecondary, fontSize: 14),
+                style: TextStyles.subtitleRegular.copyWith(
+                  color: AppColors.textSecondary,
+                ),
               ),
-              SizedBox(height: 6),
-              Text(
+              const SizedBox(height: 6),
+              const Text(
                 StockConfig.searchInitExample,
-                style: TextStyle(color: AppColors.textSecondary, fontSize: 12),
+                style: TextStyles.bodySmall,
               ),
             ],
           ),
@@ -631,19 +622,11 @@ class _SearchStockDialogState extends State<SearchStockDialog> {
                 children: [
                   Row(
                     children: [
-                      Text(
-                        stock.code,
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 15,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
+                      Text(stock.code, style: TextStyles.bodyMedium),
                       const SizedBox(width: 6),
                       Text(
                         stock.market,
-                        style: TextStyle(
-                          fontSize: 10,
+                        style: TextStyles.label.copyWith(
                           fontWeight: FontWeight.w600,
                           color: MarketUtil.marketColor(stock.market),
                         ),
@@ -653,9 +636,8 @@ class _SearchStockDialogState extends State<SearchStockDialog> {
                   const SizedBox(height: 3),
                   Text(
                     stock.name,
-                    style: const TextStyle(
+                    style: TextStyles.body13.copyWith(
                       color: AppColors.textSecondary,
-                      fontSize: 13,
                     ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
@@ -685,9 +667,8 @@ class _SearchStockDialogState extends State<SearchStockDialog> {
                     Flexible(
                       child: Text(
                         StockConfig.searchQuoteUnavailable,
-                        style: TextStyle(
+                        style: TextStyles.caption.copyWith(
                           color: AppColors.textTertiary,
-                          fontSize: 11,
                         ),
                         overflow: TextOverflow.ellipsis,
                       ),
@@ -702,9 +683,7 @@ class _SearchStockDialogState extends State<SearchStockDialog> {
                               quote.currentPrice,
                               formatBase: CurrencyUtil.formatRate,
                             ),
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 14,
+                            style: TextStyles.subtitle.copyWith(
                               fontWeight: FontWeight.w500,
                             ),
                             overflow: TextOverflow.ellipsis,
@@ -712,7 +691,9 @@ class _SearchStockDialogState extends State<SearchStockDialog> {
                           const SizedBox(height: 2),
                           Text(
                             '${isPositive ? '+' : '-'}${changePercent.abs().toStringAsFixed(2)}%',
-                            style: TextStyle(color: priceColor, fontSize: 12),
+                            style: TextStyles.smallBold.copyWith(
+                              color: priceColor,
+                            ),
                             overflow: TextOverflow.ellipsis,
                           ),
                         ],
@@ -739,12 +720,9 @@ class _SearchStockDialogState extends State<SearchStockDialog> {
                         color: AppColors.border,
                         borderRadius: BorderRadius.circular(6),
                       ),
-                      child: const Text(
+                      child: Text(
                         AppConfig.btnAdded,
-                        style: TextStyle(
-                          color: AppColors.textSecondary,
-                          fontSize: 12,
-                        ),
+                        style: TextStyles.bodySmall,
                       ),
                     )
                   else
@@ -762,10 +740,7 @@ class _SearchStockDialogState extends State<SearchStockDialog> {
                           ),
                         ),
                       ),
-                      child: const Text(
-                        AppConfig.btnAdd,
-                        style: TextStyle(color: Colors.white, fontSize: 12),
-                      ),
+                      child: Text(AppConfig.btnAdd, style: TextStyles.body13),
                     ),
                 ],
               ),
@@ -780,16 +755,7 @@ class _SearchStockDialogState extends State<SearchStockDialog> {
     final firstChar = stock.name.isNotEmpty ? stock.name[0] : stock.code[0];
     return Container(
       color: AppColors.surfaceElevated,
-      child: Center(
-        child: Text(
-          firstChar,
-          style: const TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-            fontSize: 14,
-          ),
-        ),
-      ),
+      child: Center(child: Text(firstChar, style: TextStyles.bodyRegular)),
     );
   }
 }
@@ -897,11 +863,7 @@ class _AddStockConfirmDialogState extends State<_AddStockConfirmDialog> {
                   '{code}',
                   widget.stockCode,
                 ),
-                style: const TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                ),
+                style: TextStyles.dialogTitle,
               ),
             ),
             const SizedBox(height: 16),

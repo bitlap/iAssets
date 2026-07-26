@@ -43,7 +43,7 @@ class ConfirmDeleteDialog extends StatelessWidget {
                   width: 48,
                   height: 48,
                   decoration: BoxDecoration(
-                    color: Colors.red.withValues(alpha: 0.15),
+                    color: AppColors.danger.withValues(alpha: 0.15),
                     shape: BoxShape.circle,
                   ),
                   child: const Icon(
@@ -97,7 +97,7 @@ class ConfirmDeleteDialog extends StatelessWidget {
                           padding: const EdgeInsets.symmetric(vertical: 12),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(12),
-                            color: Colors.red.withValues(alpha: 0.85),
+                            color: AppColors.danger.withValues(alpha: 0.85),
                           ),
                           child: const Center(
                             child: Text(
@@ -139,7 +139,7 @@ class ConfirmDeleteDialog extends StatelessWidget {
                 width: 48,
                 height: 48,
                 decoration: BoxDecoration(
-                  color: Colors.red.withValues(alpha: 0.15),
+                  color: AppColors.danger.withValues(alpha: 0.15),
                   shape: BoxShape.circle,
                 ),
                 child: const Icon(
@@ -196,7 +196,7 @@ class ConfirmDeleteDialog extends StatelessWidget {
                         padding: const EdgeInsets.symmetric(vertical: 12),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(12),
-                          color: Colors.red.withValues(alpha: 0.85),
+                          color: AppColors.danger.withValues(alpha: 0.85),
                         ),
                         child: const Center(
                           child: Text(

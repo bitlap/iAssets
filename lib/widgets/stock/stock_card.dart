@@ -55,10 +55,8 @@ class StockCard extends StatelessWidget {
                     const Spacer(),
                     Text(
                       StockConfig.stockTotalValue,
-                      style: TextStyle(
-                        fontSize: 13,
+                      style: TextStyles.body13.copyWith(
                         color: AppColors.textSecondary,
-                        height: 1.2,
                       ),
                     ),
                     const SizedBox(width: 2),
@@ -188,16 +186,7 @@ class StockCard extends StatelessWidget {
   }
 
   Widget _buildFallbackChar(String char) {
-    return Center(
-      child: Text(
-        char,
-        style: const TextStyle(
-          fontSize: 18,
-          fontWeight: FontWeight.bold,
-          color: Colors.white,
-        ),
-      ),
-    );
+    return Center(child: Text(char, style: TextStyles.dialogTitle));
   }
 
   Widget _buildCompanyInfo() {
@@ -281,12 +270,7 @@ class StockCard extends StatelessWidget {
           alignment: Alignment.centerRight,
           child: Text(
             '${isPositive}${CurrencyUtil.formatCompact(stock.profitLossAmount.abs())}',
-            style: TextStyle(
-              fontSize: 12,
-              color: profitColor,
-              fontWeight: FontWeight.bold,
-              height: 1.2,
-            ),
+            style: TextStyles.smallBold.copyWith(color: profitColor),
           ),
         ),
         FittedBox(
@@ -294,12 +278,7 @@ class StockCard extends StatelessWidget {
           alignment: Alignment.centerRight,
           child: Text(
             '${isPositive}${stock.profitLossPercent.abs().toStringAsFixed(2)}%',
-            style: TextStyle(
-              fontSize: 12,
-              fontWeight: FontWeight.bold,
-              color: profitColor,
-              height: 1.2,
-            ),
+            style: TextStyles.smallBold.copyWith(color: profitColor),
           ),
         ),
       ],
@@ -343,10 +322,8 @@ class StockCard extends StatelessWidget {
             const SizedBox(width: 4),
             Text(
               StockConfig.stockMore,
-              style: const TextStyle(
-                fontSize: 12,
+              style: TextStyles.whiteBold12.copyWith(
                 fontWeight: FontWeight.w500,
-                color: Colors.white,
               ),
             ),
           ],
@@ -416,24 +393,10 @@ class StockCard extends StatelessWidget {
           children: alignRight
               ? [
                   TextSpan(text: item.value, style: TextStyles.smallBold),
-                  TextSpan(
-                    text: ' :${item.label}',
-                    style: const TextStyle(
-                      fontSize: 11,
-                      color: AppColors.textSecondary,
-                      height: 1.2,
-                    ),
-                  ),
+                  TextSpan(text: ' :${item.label}', style: TextStyles.caption),
                 ]
               : [
-                  TextSpan(
-                    text: '${item.label}: ',
-                    style: const TextStyle(
-                      fontSize: 11,
-                      color: AppColors.textSecondary,
-                      height: 1.2,
-                    ),
-                  ),
+                  TextSpan(text: '${item.label}: ', style: TextStyles.caption),
                   TextSpan(text: item.value, style: TextStyles.smallBold),
                 ],
         ),

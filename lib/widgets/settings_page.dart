@@ -138,7 +138,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   ? SettingsConfig.keepStockOnDesc
                   : SettingsConfig.keepStockOffDesc,
               style: TextStyles.body13.copyWith(
-                color: Colors.grey[400],
+                color: AppColors.grey400,
                 height: 1.4,
               ),
             ),
@@ -149,7 +149,7 @@ class _SettingsPageState extends State<SettingsPage> {
             onPressed: () => Navigator.pop(ctx),
             child: Text(
               AppConfig.btnCancel,
-              style: TextStyles.body13.copyWith(color: Colors.grey),
+              style: TextStyles.body13.copyWith(color: AppColors.grey),
             ),
           ),
           TextButton(
@@ -159,9 +159,9 @@ class _SettingsPageState extends State<SettingsPage> {
               widget.onKeepStockChanged?.call(value);
               widget.onSettingsChanged?.call();
             },
-            child: const Text(
+            child: Text(
               AppConfig.btnClose,
-              style: TextStyle(color: AppColors.accent),
+              style: TextStyles.body13.copyWith(color: AppColors.accent),
             ),
           ),
         ],
@@ -259,11 +259,7 @@ class _SettingsPageState extends State<SettingsPage> {
             child: Center(
               child: Text(
                 _selectedCurrency.substring(0, 1),
-                style: const TextStyle(
-                  fontSize: 13,
-                  fontWeight: FontWeight.w700,
-                  color: AppColors.accent,
-                ),
+                style: TextStyles.body13Bold.copyWith(color: AppColors.accent),
               ),
             ),
           ),
@@ -281,7 +277,7 @@ class _SettingsPageState extends State<SettingsPage> {
       ),
       trailing: Icon(
         _isCurrencyExpanded ? Icons.expand_less : Icons.expand_more,
-        color: Colors.grey[500],
+        color: AppColors.grey500,
         size: 22,
       ),
       children: ExchangeRateService.supportedCurrencies.map((currency) {
@@ -376,7 +372,7 @@ class _SettingsPageState extends State<SettingsPage> {
         trailing: Icon(
           _isFeeExpanded ? Icons.expand_less : Icons.expand_more,
           size: 22,
-          color: Colors.grey[500],
+          color: AppColors.grey500,
         ),
         children: [
           Padding(
@@ -554,7 +550,7 @@ class _SettingsPageState extends State<SettingsPage> {
             onChanged: _onKeepStockChanged,
             activeTrackColor: AppColors.accent.withValues(alpha: 0.6),
             activeThumbColor: AppColors.accent,
-            inactiveThumbColor: Colors.grey[600],
+            inactiveThumbColor: AppColors.grey600,
             inactiveTrackColor: Colors.grey[800],
           ),
         ],
@@ -595,13 +591,13 @@ class _SettingsPageState extends State<SettingsPage> {
             const SizedBox(width: 8),
             Text(
               sortLabel,
-              style: TextStyles.body13.copyWith(color: Colors.grey[500]),
+              style: TextStyles.body13.copyWith(color: AppColors.grey500),
             ),
           ],
         ),
         trailing: Icon(
           _isSortExpanded ? Icons.expand_less : Icons.expand_more,
-          color: Colors.grey[500],
+          color: AppColors.grey500,
           size: 22,
         ),
         children: [
@@ -662,7 +658,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 Text(
                   SettingsConfig.sortDirectionLabel,
                   style: TextStyles.subtitleRegular.copyWith(
-                    color: Colors.grey,
+                    color: AppColors.grey,
                   ),
                 ),
                 const Spacer(),
@@ -697,7 +693,7 @@ class _SettingsPageState extends State<SettingsPage> {
                               size: 14,
                               color: _isSortAscending
                                   ? AppColors.accent
-                                  : Colors.grey[400],
+                                  : AppColors.grey400,
                             ),
                             const SizedBox(width: 4),
                             Text(
@@ -745,7 +741,7 @@ class _SettingsPageState extends State<SettingsPage> {
                               size: 14,
                               color: !_isSortAscending
                                   ? AppColors.accent
-                                  : Colors.grey[400],
+                                  : AppColors.grey400,
                             ),
                             const SizedBox(width: 4),
                             Text(
@@ -887,7 +883,7 @@ class _SettingsPageState extends State<SettingsPage> {
             onChanged: onChanged,
             activeTrackColor: AppColors.accent.withValues(alpha: 0.6),
             activeThumbColor: AppColors.accent,
-            inactiveThumbColor: Colors.grey[600],
+            inactiveThumbColor: AppColors.grey600,
             inactiveTrackColor: Colors.grey[800],
           ),
         ],
@@ -1009,7 +1005,7 @@ class _SettingsPageState extends State<SettingsPage> {
           children: [
             _buildGroupItem(
               icon: Icons.rate_review_outlined,
-              iconColor: Colors.amber,
+              iconColor: AppColors.amber,
               label: SettingsConfig.feedbackLabel,
               onTap: _showFeedbackDialog,
             ),
@@ -1030,7 +1026,7 @@ class _SettingsPageState extends State<SettingsPage> {
             _buildGroupDivider(),
             _buildGroupItem(
               icon: Icons.info_outline,
-              iconColor: Colors.grey,
+              iconColor: AppColors.grey,
               label: SettingsConfig.versionLabel,
               trailing: AppConfig.appVersion,
             ),
@@ -1067,7 +1063,7 @@ class _SettingsPageState extends State<SettingsPage> {
             if (trailing != null)
               Text(trailing, style: TextStyles.caption.copyWith(fontSize: 14))
             else if (onTap != null)
-              Icon(Icons.chevron_right, size: 18, color: Colors.grey[600]),
+              Icon(Icons.chevron_right, size: 18, color: AppColors.grey600),
           ],
         ),
       ),
@@ -1091,7 +1087,7 @@ class _SettingsPageState extends State<SettingsPage> {
             Text(
               SettingsConfig.feedbackHint,
               style: TextStyles.body13.copyWith(
-                color: Colors.grey[400],
+                color: AppColors.grey400,
                 height: 1.4,
               ),
             ),
@@ -1134,11 +1130,11 @@ class _SettingsPageState extends State<SettingsPage> {
       onTap: onTap,
       child: Row(
         children: [
-          Icon(icon, size: 18, color: Colors.grey[500]),
+          Icon(icon, size: 18, color: AppColors.grey500),
           const SizedBox(width: 8),
           Text(
             '$label：',
-            style: TextStyles.body13.copyWith(color: Colors.grey[400]),
+            style: TextStyles.body13.copyWith(color: AppColors.grey400),
           ),
           Text(
             value,
@@ -1242,7 +1238,7 @@ class _SettingsPageState extends State<SettingsPage> {
         Text(
           title,
           style: TextStyles.body13.copyWith(
-            color: Colors.grey[500],
+            color: AppColors.grey500,
             fontWeight: FontWeight.w500,
           ),
         ),
@@ -1279,8 +1275,7 @@ class _SettingsPageState extends State<SettingsPage> {
                           ),
                           child: Text(
                             lib.license,
-                            style: const TextStyle(
-                              fontSize: 10,
+                            style: TextStyles.label.copyWith(
                               color: AppColors.accent,
                             ),
                           ),
@@ -1291,7 +1286,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     Text(
                       '${lib.author} · ${lib.description}',
                       style: TextStyles.caption.copyWith(
-                        color: Colors.grey[600],
+                        color: AppColors.grey600,
                       ),
                     ),
                   ],

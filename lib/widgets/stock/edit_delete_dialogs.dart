@@ -155,12 +155,10 @@ class _EditStockDialogState extends State<EditStockDialog> {
             const SizedBox(height: 16),
             Row(
               children: [
-                const Text(
+                Text(
                   StockConfig.editPriceHint,
-                  style: TextStyle(
-                    fontSize: 13,
+                  style: TextStyles.body13.copyWith(
                     color: AppColors.textSecondary,
-                    height: 1.2,
                   ),
                 ),
                 const Spacer(),
@@ -376,14 +374,12 @@ class MoreOptionsDialog extends StatelessWidget {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Padding(
-                  padding: EdgeInsets.symmetric(vertical: 12),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 12),
                   child: Text(
                     StockConfig.opMoreActions,
-                    style: TextStyle(
-                      fontSize: 16,
+                    style: TextStyles.sectionTitle.copyWith(
                       fontWeight: FontWeight.bold,
-                      color: Colors.white,
                     ),
                   ),
                 ),
@@ -395,7 +391,7 @@ class MoreOptionsDialog extends StatelessWidget {
                   ),
                   title: const Text(
                     StockConfig.opAddPosition,
-                    style: TextStyle(color: Colors.white, fontSize: 15),
+                    style: TextStyles.listTileTitle,
                   ),
                   onTap: () {
                     Navigator.pop(context);
@@ -410,7 +406,7 @@ class MoreOptionsDialog extends StatelessWidget {
                   ),
                   title: const Text(
                     StockConfig.opReducePosition,
-                    style: TextStyle(color: Colors.white, fontSize: 15),
+                    style: TextStyles.listTileTitle,
                   ),
                   onTap: () {
                     Navigator.pop(context);
@@ -435,9 +431,11 @@ class MoreOptionsDialog extends StatelessWidget {
                 Divider(thickness: 0.5, color: AppColors.border),
                 ListTile(
                   leading: const Icon(Icons.delete, color: AppColors.danger),
-                  title: const Text(
+                  title: Text(
                     StockConfig.opDeleteStock,
-                    style: TextStyle(color: AppColors.danger, fontSize: 15),
+                    style: TextStyles.listTileTitle.copyWith(
+                      color: AppColors.danger,
+                    ),
                   ),
                   onTap: () {
                     Navigator.pop(context);
@@ -517,24 +515,16 @@ class _DividendDialogState extends State<DividendDialog> {
           const SizedBox(height: 16),
           _buildStockInfoSection(),
           const SizedBox(height: 16),
-          const Text(
+          Text(
             StockConfig.dividendDateLabel,
-            style: TextStyle(
-              fontSize: 13,
-              color: AppColors.textSecondary,
-              height: 1.2,
-            ),
+            style: TextStyles.body13.copyWith(color: AppColors.textSecondary),
           ),
           const SizedBox(height: 8),
           _buildDatePicker(),
           const SizedBox(height: 12),
           Text(
             StockConfig.dividendAmountLabel,
-            style: const TextStyle(
-              fontSize: 13,
-              color: AppColors.textSecondary,
-              height: 1.2,
-            ),
+            style: TextStyles.body13.copyWith(color: AppColors.textSecondary),
           ),
           const SizedBox(height: 8),
           Row(

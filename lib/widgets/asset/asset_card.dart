@@ -93,11 +93,7 @@ class AssetCardFrame extends StatelessWidget {
                         children: [
                           Text(
                             name,
-                            style: const TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w600,
-                              color: Colors.white,
-                            ),
+                            style: TextStyles.subtitle,
                             overflow: TextOverflow.ellipsis,
                           ),
                           _timestamps(createdAt, updatedAt),

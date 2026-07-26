@@ -475,19 +475,11 @@ class AssetsPageState extends State<AssetsPage> {
                 behavior: HitTestBehavior.opaque,
                 child: Row(
                   children: [
-                    Text(
-                      label,
-                      style: const TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.white,
-                      ),
-                    ),
+                    Text(label, style: TextStyles.subtitle),
                     const SizedBox(width: 4),
                     Text(
                       '($count)',
-                      style: TextStyle(
-                        fontSize: 13,
+                      style: TextStyles.body13.copyWith(
                         fontWeight: FontWeight.w500,
                         color: AppColors.textSecondary,
                       ),
@@ -495,11 +487,7 @@ class AssetsPageState extends State<AssetsPage> {
                     const Spacer(),
                     Text(
                       '$sym${CurrencyUtil.formatCompact(total)}',
-                      style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.white,
-                      ),
+                      style: TextStyles.bodyMedium,
                     ),
                     const SizedBox(width: 4),
                     Icon(
@@ -531,9 +519,9 @@ class AssetsPageState extends State<AssetsPage> {
         background: Container(
           margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
           decoration: BoxDecoration(
-            color: Colors.red.withValues(alpha: 0.2),
+            color: AppColors.danger.withValues(alpha: 0.2),
             borderRadius: BorderRadius.circular(14),
-            border: Border.all(color: Colors.red.withValues(alpha: 0.4)),
+            border: Border.all(color: AppColors.danger.withValues(alpha: 0.4)),
           ),
           alignment: Alignment.centerRight,
           padding: const EdgeInsets.only(right: 20),
@@ -597,11 +585,7 @@ class AssetsPageState extends State<AssetsPage> {
         alignment: Alignment.centerRight,
         child: Text(
           '$sym${CurrencyUtil.formatCompact(cash.balance)}',
-          style: const TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w600,
-            color: Colors.white,
-          ),
+          style: TextStyles.sectionTitle,
         ),
       ),
       onTap: () => _onEditCash(cash),
@@ -639,19 +623,14 @@ class AssetsPageState extends State<AssetsPage> {
           children: [
             Text(
               '${CurrencyUtil.getSymbol(td.currency)}${CurrencyUtil.formatCompact(td.totalValue)}',
-              style: const TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
-                color: Colors.white,
-              ),
+              style: TextStyles.sectionTitle,
             ),
             const SizedBox(height: 2),
             Text(
               daysLeft > 0
                   ? AssetConfig.daysRemaining.replaceAll('{days}', '$daysLeft')
                   : AssetConfig.expired,
-              style: TextStyle(
-                fontSize: 11,
+              style: TextStyles.caption.copyWith(
                 color: daysLeft > 0
                     ? AppColors.textSecondary
                     : AppColors.warning,
@@ -689,11 +668,7 @@ class AssetsPageState extends State<AssetsPage> {
         alignment: Alignment.centerRight,
         child: Text(
           '${CurrencyUtil.getSymbol(wp.currency)}${CurrencyUtil.formatCompact(wp.totalValue)}',
-          style: const TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w600,
-            color: Colors.white,
-          ),
+          style: TextStyles.sectionTitle,
         ),
       ),
       onTap: () => _onEditWP(wp),

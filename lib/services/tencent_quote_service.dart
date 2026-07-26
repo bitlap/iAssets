@@ -23,7 +23,8 @@ class TencentQuoteService {
     }
 
     try {
-      final symbol = '${MarketUtil.tencentPrefix(stock.market)}${stock.code}';
+      final symbol =
+          '${MarketUtil.tencentPrefix(stock.market, stock.secid)}${stock.code}';
 
       final client = Client();
       final uri = Uri.parse('$_baseUrl$symbol');

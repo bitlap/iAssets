@@ -69,7 +69,11 @@ class _OperationRecordsTabState extends State<OperationRecordsTab> {
             ),
             alignment: Alignment.centerRight,
             padding: const EdgeInsets.only(right: 16),
-            child: const Icon(Icons.delete, color: Colors.redAccent, size: 20),
+            child: const Icon(
+              Icons.delete,
+              color: AppColors.redAccent,
+              size: 20,
+            ),
           ),
           confirmDismiss: (_) => ConfirmDeleteDialog.show(
             context,
@@ -133,7 +137,7 @@ class _OperationRecordsTabState extends State<OperationRecordsTab> {
       ),
       child: Icon(
         isBuy ? Icons.arrow_upward : Icons.arrow_downward,
-        color: isBuy ? Colors.redAccent : Colors.greenAccent,
+        color: isBuy ? AppColors.redAccent : AppColors.greenAccent,
         size: 16,
       ),
     );
@@ -153,7 +157,7 @@ class _OperationRecordsTabState extends State<OperationRecordsTab> {
           '${isBuy ? "+" : "-"}${CurrencyUtil.formatRate(record.shares)}${StockConfig.stockSharesSuffix}',
           style: TextStyles.body13.copyWith(
             fontWeight: FontWeight.bold,
-            color: isBuy ? Colors.redAccent : Colors.greenAccent,
+            color: isBuy ? AppColors.redAccent : AppColors.greenAccent,
           ),
         ),
       ],
@@ -173,11 +177,8 @@ class _OperationRecordsTabState extends State<OperationRecordsTab> {
         const Spacer(),
         Text(
           '${CurrencyUtil.getSymbol(widget.stock.currency)}${CurrencyUtil.formatRate(record.amount * record.shares)}',
-          style: TextStyle(
-            fontSize: 12,
-            fontWeight: FontWeight.w500,
-            color: isBuy ? Colors.redAccent : Colors.greenAccent,
-            height: 1.2,
+          style: TextStyles.smallBold.copyWith(
+            color: isBuy ? AppColors.redAccent : AppColors.greenAccent,
           ),
         ),
       ],
@@ -210,24 +211,20 @@ class _OperationRecordsTabState extends State<OperationRecordsTab> {
                   '{desc}',
                   record.description,
                 ),
-                style: const TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                ),
+                style: TextStyles.dialogTitle,
               ),
             ),
             const SizedBox(height: 16),
             const Text(
               StockConfig.recordsEditPrice,
-              style: TextStyle(fontSize: 13, color: Colors.grey),
+              style: TextStyles.body13Grey,
             ),
             const SizedBox(height: 6),
             _buildTextField(priceCtrl),
             const SizedBox(height: 12),
             const Text(
               StockConfig.recordsEditShares,
-              style: TextStyle(fontSize: 13, color: Colors.grey),
+              style: TextStyles.body13Grey,
             ),
             const SizedBox(height: 6),
             _buildTextField(sharesCtrl),
@@ -265,7 +262,7 @@ class _OperationRecordsTabState extends State<OperationRecordsTab> {
     return TextField(
       controller: controller,
       keyboardType: const TextInputType.numberWithOptions(decimal: true),
-      style: const TextStyle(fontSize: 16, color: Colors.white),
+      style: TextStyles.inputText,
       decoration: InputDecoration(
         filled: true,
         fillColor: AppColors.surface,

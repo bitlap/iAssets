@@ -81,8 +81,7 @@ class EastMoneyQuoteService {
   StockQuote? _parseItem(Map<String, dynamic> item, StockSearchResult? stock) {
     if (stock == null) return null;
     var rawPrice = _parseInt(item['f2']) / 1000;
-    if (stock.market == MarketUtil.exchangeSH ||
-        stock.market == MarketUtil.exchangeSZ) {
+    if (MarketUtil.isChineseMarket(stock.market)) {
       rawPrice = rawPrice / 100;
     }
     if (rawPrice == 0) return null;

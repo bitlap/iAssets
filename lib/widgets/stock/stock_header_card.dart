@@ -5,6 +5,7 @@ import '../../utils/currency_util.dart';
 import '../common/profit_chart.dart';
 import '../common/dialog_utils.dart';
 import '../common/currency_selector.dart';
+import '../common/app_ui.dart';
 
 class StockHeaderCard extends StatefulWidget {
   final String selectedCurrency;
@@ -77,10 +78,8 @@ class _StockHeaderCardState extends State<StockHeaderCard> {
                 children: [
                   Text(
                     StockConfig.assetTotalAssets,
-                    style: const TextStyle(
-                      fontSize: 13,
+                    style: TextStyles.body13.copyWith(
                       color: AppColors.textSecondary,
-                      height: 1.2,
                     ),
                   ),
                   const SizedBox(width: 4),
@@ -144,15 +143,7 @@ class _StockHeaderCardState extends State<StockHeaderCard> {
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text(
-              widget.selectedCurrency,
-              style: const TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
-                height: 1.2,
-              ),
-            ),
+            Text(widget.selectedCurrency, style: TextStyles.subtitle),
             const SizedBox(width: 2),
             const Icon(
               Icons.keyboard_arrow_down,
@@ -173,14 +164,7 @@ class _StockHeaderCardState extends State<StockHeaderCard> {
           children: [
             Icon(Icons.account_balance, size: 10, color: AppColors.accent),
             const SizedBox(width: 4),
-            Text(
-              StockConfig.assetTotalCost,
-              style: const TextStyle(
-                fontSize: 11,
-                color: AppColors.textSecondary,
-                height: 1.2,
-              ),
-            ),
+            Text(StockConfig.assetTotalCost, style: TextStyles.caption),
             const SizedBox(width: 2),
             GestureDetector(
               onTap: _showTotalCostHelpDialog,
@@ -241,14 +225,7 @@ class _StockHeaderCardState extends State<StockHeaderCard> {
           children: [
             Icon(Icons.trending_up, size: 10, color: AppColors.danger),
             const SizedBox(width: 4),
-            Text(
-              StockConfig.assetTotalProfit,
-              style: const TextStyle(
-                fontSize: 11,
-                color: AppColors.textSecondary,
-                height: 1.2,
-              ),
-            ),
+            Text(StockConfig.assetTotalProfit, style: TextStyles.caption),
             const SizedBox(width: 2),
             GestureDetector(
               onTap: _showProfitHelpDialog,
@@ -288,12 +265,7 @@ class _StockHeaderCardState extends State<StockHeaderCard> {
   Widget _buildTotalMarketText() {
     return Text(
       '${CurrencyUtil.formatCompact(widget.totalMarketValue)}',
-      style: const TextStyle(
-        fontSize: 15,
-        fontWeight: FontWeight.w700,
-        color: Colors.white,
-        height: 1.1,
-      ),
+      style: TextStyles.valueMedium,
     );
   }
 
@@ -303,23 +275,15 @@ class _StockHeaderCardState extends State<StockHeaderCard> {
         : 0.0;
     return Text(
       '${percent.toStringAsFixed(2)}%',
-      style: const TextStyle(
-        fontSize: 11,
-        color: AppColors.textSecondary,
-        fontWeight: FontWeight.w500,
-        height: 1.2,
-      ),
+      style: TextStyles.caption.copyWith(fontWeight: FontWeight.w500),
     );
   }
 
   Widget _buildProfitText() {
     return Text(
       '${widget.totalProfit >= 0 ? '+' : ''}${CurrencyUtil.formatCompact(widget.totalProfit)}',
-      style: TextStyle(
-        fontSize: 15,
-        fontWeight: FontWeight.w700,
+      style: TextStyles.valueMedium.copyWith(
         color: widget.totalProfit >= 0 ? AppColors.danger : AppColors.success,
-        height: 1.1,
       ),
     );
   }
@@ -327,11 +291,9 @@ class _StockHeaderCardState extends State<StockHeaderCard> {
   Widget _buildProfitPercent() {
     return Text(
       '${widget.totalProfit >= 0 ? '+' : '-'}${widget.totalProfitPercent.abs().toStringAsFixed(2)}%',
-      style: TextStyle(
-        fontSize: 11,
-        color: widget.totalProfit >= 0 ? AppColors.danger : AppColors.success,
+      style: TextStyles.caption.copyWith(
         fontWeight: FontWeight.w600,
-        height: 1.2,
+        color: widget.totalProfit >= 0 ? AppColors.danger : AppColors.success,
       ),
     );
   }
@@ -350,11 +312,7 @@ class _StockHeaderCardState extends State<StockHeaderCard> {
             const SizedBox(width: 4),
             const Text(
               StockConfig.assetTotalDividends,
-              style: TextStyle(
-                fontSize: 11,
-                color: AppColors.textSecondary,
-                height: 1.2,
-              ),
+              style: TextStyles.caption,
             ),
             const SizedBox(width: 2),
           ],
@@ -373,14 +331,12 @@ class _StockHeaderCardState extends State<StockHeaderCard> {
       children: [
         Text(
           label,
-          style: const TextStyle(color: AppColors.textSecondary, fontSize: 13),
+          style: TextStyles.body13.copyWith(color: AppColors.textSecondary),
         ),
         Text(
           value,
-          style: TextStyle(
+          style: TextStyles.valueMedium.copyWith(
             color: valueColor ?? Colors.white,
-            fontSize: 14,
-            fontWeight: FontWeight.w700,
           ),
         ),
       ],
@@ -415,24 +371,14 @@ class _StockHeaderCardState extends State<StockHeaderCard> {
         : 0.0;
     return Text(
       '${percent.toStringAsFixed(2)}%',
-      style: const TextStyle(
-        fontSize: 11,
-        color: AppColors.textSecondary,
-        fontWeight: FontWeight.w500,
-        height: 1.2,
-      ),
+      style: TextStyles.caption.copyWith(fontWeight: FontWeight.w500),
     );
   }
 
   Widget _buildDividendText() {
     return Text(
       '${CurrencyUtil.formatCompact(widget.totalAfterTaxDividends)}',
-      style: const TextStyle(
-        fontSize: 15,
-        fontWeight: FontWeight.w700,
-        color: Colors.white,
-        height: 1.1,
-      ),
+      style: TextStyles.valueMedium,
     );
   }
 }

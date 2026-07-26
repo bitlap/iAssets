@@ -48,9 +48,7 @@ Widget buildPercentSelector(
                     const SizedBox(width: 8),
                     Text(
                       '${v.toInt()}%',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 14,
+                      style: TextStyles.body13.copyWith(
                         fontWeight: isSel ? FontWeight.w600 : FontWeight.normal,
                       ),
                     ),

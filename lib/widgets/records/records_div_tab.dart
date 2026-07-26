@@ -79,7 +79,11 @@ class _DividendRecordsTabState extends State<DividendRecordsTab> {
             ),
             alignment: Alignment.centerRight,
             padding: const EdgeInsets.only(right: 16),
-            child: const Icon(Icons.delete, color: Colors.redAccent, size: 20),
+            child: const Icon(
+              Icons.delete,
+              color: AppColors.redAccent,
+              size: 20,
+            ),
           ),
           confirmDismiss: (_) => ConfirmDeleteDialog.show(
             context,
@@ -139,7 +143,11 @@ class _DividendRecordsTabState extends State<DividendRecordsTab> {
         color: Colors.amber.withValues(alpha: 0.15),
         borderRadius: BorderRadius.circular(10),
       ),
-      child: const Icon(Icons.monetization_on, color: Colors.amber, size: 16),
+      child: const Icon(
+        Icons.monetization_on,
+        color: AppColors.amber,
+        size: 16,
+      ),
     );
   }
 
@@ -157,7 +165,7 @@ class _DividendRecordsTabState extends State<DividendRecordsTab> {
           '${CurrencyUtil.getSymbol(widget.stock.currency)}${CurrencyUtil.formatRate(record.totalAmount)}',
           style: TextStyles.body13.copyWith(
             fontWeight: FontWeight.bold,
-            color: Colors.amber,
+            color: AppColors.amber,
           ),
         ),
       ],
@@ -206,21 +214,13 @@ class _DividendRecordsTabState extends State<DividendRecordsTab> {
               Center(
                 child: Text(
                   StockConfig.dividendEditTitle,
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
+                  style: TextStyles.dialogTitle,
                 ),
               ),
               const SizedBox(height: 16),
               Text(
                 StockConfig.dividendEditDateLabel,
-                style: const TextStyle(
-                  fontSize: 13,
-                  color: Colors.grey,
-                  height: 1.2,
-                ),
+                style: TextStyles.body13Grey,
               ),
               const SizedBox(height: 8),
               GestureDetector(
@@ -249,16 +249,13 @@ class _DividendRecordsTabState extends State<DividendRecordsTab> {
                         DateFormat(
                           StockConfig.recordsDatePattern,
                         ).format(selectedDate),
-                        style: const TextStyle(
-                          fontSize: 16,
-                          color: Colors.white,
-                        ),
+                        style: TextStyles.inputText,
                       ),
                       const Spacer(),
                       Icon(
                         Icons.calendar_today,
                         size: 18,
-                        color: Colors.grey[600],
+                        color: AppColors.grey600,
                       ),
                     ],
                   ),
@@ -267,11 +264,7 @@ class _DividendRecordsTabState extends State<DividendRecordsTab> {
               const SizedBox(height: 12),
               Text(
                 StockConfig.dividendEditAmountLabel,
-                style: const TextStyle(
-                  fontSize: 13,
-                  color: Colors.grey,
-                  height: 1.2,
-                ),
+                style: TextStyles.body13Grey,
               ),
               const SizedBox(height: 8),
               Row(

@@ -210,10 +210,7 @@ class _ProfitChartWidgetState extends State<ProfitChartWidget> {
       return Container(
         height: 200,
         alignment: Alignment.center,
-        child: Text(
-          StockConfig.profitNoData,
-          style: TextStyle(fontSize: 12, color: AppColors.textSecondary),
-        ),
+        child: Text(StockConfig.profitNoData, style: TextStyles.bodySmall),
       );
     }
 

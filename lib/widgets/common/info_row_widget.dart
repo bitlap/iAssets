@@ -22,22 +22,12 @@ class InfoRowWidget extends StatelessWidget {
       children: [
         SizedBox(
           width: labelWidth,
-          child: Text(
-            label,
-            style: const TextStyle(
-              color: AppColors.textSecondary,
-              fontSize: 13,
-            ),
-          ),
+          child: Text(label, style: TextStyles.bodySmall),
         ),
         Expanded(
           child: Text(
             value,
-            style: const TextStyle(
-              color: AppColors.textPrimary,
-              fontSize: 13,
-              fontWeight: FontWeight.w500,
-            ),
+            style: TextStyles.bodySmall.copyWith(color: AppColors.textPrimary),
           ),
         ),
       ],

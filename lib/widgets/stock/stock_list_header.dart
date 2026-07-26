@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../../config/app_colors.dart';
 import '../../config/app_config.dart';
 import '../../utils/market_util.dart';
+import '../common/app_ui.dart';
 import '../common/sort_indicator.dart';
 
 class StockListHeader extends StatelessWidget {
@@ -52,20 +53,16 @@ class StockListHeader extends StatelessWidget {
                 children: [
                   Text(
                     StockConfig.homeStockHeader,
-                    style: const TextStyle(
-                      fontSize: 13,
+                    style: TextStyles.body13.copyWith(
                       fontWeight: FontWeight.w600,
                       color: AppColors.textSecondary,
-                      height: 1.2,
                     ),
                   ),
                   if (stockCount > 0)
                     Text(
                       '($stockCount)',
-                      style: const TextStyle(
-                        fontSize: 13,
+                      style: TextStyles.body13.copyWith(
                         color: AppColors.textSecondary,
-                        height: 1.2,
                       ),
                     ),
                   SortIndicator(
@@ -88,11 +85,9 @@ class StockListHeader extends StatelessWidget {
                   children: [
                     Text(
                       StockConfig.homeHoldingHeader,
-                      style: TextStyle(
-                        fontSize: 14,
+                      style: TextStyles.subtitleRegular.copyWith(
                         fontWeight: FontWeight.bold,
                         color: AppColors.textSecondary,
-                        height: 1.2,
                       ),
                     ),
                     SortIndicator(
@@ -120,11 +115,9 @@ class StockListHeader extends StatelessWidget {
                     ),
                     Text(
                       StockConfig.homeProfitHeader,
-                      style: const TextStyle(
-                        fontSize: 13,
+                      style: TextStyles.body13.copyWith(
                         fontWeight: FontWeight.w600,
                         color: AppColors.textSecondary,
-                        height: 1.2,
                       ),
                     ),
                   ],

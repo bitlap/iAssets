@@ -41,6 +41,11 @@ class AppColors {
   static const Color greenAccent = Color(0xFF4CAF50);
   static const Color redAccent = Color(0xFFFF5252);
   static const Color lightBlue = Color(0xFF64B5F6);
+  static const Color amber = Color(0xFFFFC107);
+  static const Color grey = Color(0xFF9E9E9E);
+  static const Color grey600 = Color(0xFF757575);
+  static const Color grey500 = Color(0xFF9E9E9E);
+  static const Color grey400 = Color(0xFFBDBDBD);
 
   // 分割线/背景
   static const Color separator = Color(0xFF38383A);

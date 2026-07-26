@@ -41,7 +41,7 @@ List<StockModel> stocksFromJson(List<Map<String, dynamic>> json) {
           marketType: j['marketType'] as String,
           changePercent: (j['changePercent'] as num).toDouble(),
           currency: j['currency'] as String?,
-          secid: j['secid'] as String?,
+          secid: j['secid'] as String,
         ),
       )
       .toList();

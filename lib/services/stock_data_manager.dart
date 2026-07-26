@@ -34,9 +34,7 @@ class StockDataManager {
   ) {
     final result = List<StockModel>.from(stocks);
     for (final stock in result) {
-      final secid =
-          stock.secid ??
-          MarketUtil.secidForMarket(stock.marketType, stock.symbol);
+      final secid = stock.secid;
       final quote = quotes[secid];
       if (quote != null) {
         final index = result.indexWhere((s) => s.symbol == stock.symbol);
@@ -63,9 +61,7 @@ class StockDataManager {
             code: stock.symbol,
             name: stock.companyName,
             market: stock.marketType,
-            secid:
-                stock.secid ??
-                MarketUtil.secidForMarket(stock.marketType, stock.symbol),
+            secid: stock.secid,
           ),
         )
         .toList();

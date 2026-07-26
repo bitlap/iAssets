@@ -58,11 +58,7 @@ class CurrencySelector {
                         children: [
                           Text(
                             StockConfig.assetSelectCurrency,
-                            style: const TextStyle(
-                              fontSize: 15,
-                              fontWeight: FontWeight.w600,
-                              color: AppColors.textPrimary,
-                            ),
+                            style: TextStyles.bodyMedium,
                           ),
                           const Spacer(),
                           GestureDetector(

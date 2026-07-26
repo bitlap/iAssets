@@ -1,6 +1,5 @@
 import 'package:assets/utils/currency_util.dart';
 
-import '../config/app_config.dart';
 import '../utils/market_util.dart';
 
 /// 股票数据模型
@@ -19,7 +18,7 @@ class StockModel {
   final String? _currency; // 股票币种
   String get currency =>
       _currency ?? CurrencyUtil.currencyForMarket(marketType);
-  final String? secid; // 东方财富 secid（用于获取行情）
+  final String secid; // 东方财富 secid（用于获取行情）
 
   StockModel({
     required this.symbol,
@@ -34,7 +33,7 @@ class StockModel {
     this.marketType = MarketUtil.searchMarketUS,
     this.changePercent = 0.0,
     String? currency,
-    this.secid,
+    required this.secid,
   }) : _currency = currency;
 
   /// 复制并修改

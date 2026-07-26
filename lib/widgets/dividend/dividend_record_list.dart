@@ -71,17 +71,16 @@ class _DividendRecordItem extends StatelessWidget {
                 Row(
                   children: [
                     Text(
-                      DateFormat(StockConfig.recordsDatePattern).format(record.date),
+                      DateFormat(
+                        StockConfig.recordsDatePattern,
+                      ).format(record.date),
                       style: TextStyles.valueSmall,
                     ),
                     const Spacer(),
                     Text(
                       '${StockConfig.recordsDivLabel}: $sym${CurrencyUtil.formatCompact(record.afterTaxAmount)}',
-                      style: const TextStyle(
-                        fontSize: 12,
+                      style: TextStyles.whiteBold12.copyWith(
                         color: AppColors.warning,
-                        fontWeight: FontWeight.w600,
-                        height: 1.2,
                       ),
                     ),
                   ],

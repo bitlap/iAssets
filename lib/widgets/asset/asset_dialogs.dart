@@ -218,16 +218,16 @@ class _BalanceDialogState extends State<_BalanceDialog> {
             ),
           ),
           const SizedBox(height: 16),
-          const Text(
+          Text(
             AssetConfig.fieldName,
-            style: TextStyle(fontSize: 13, color: AppColors.textSecondary),
+            style: TextStyles.body13.copyWith(color: AppColors.textSecondary),
           ),
           const SizedBox(height: 6),
           _dialogTextField(nameCtrl, widget.hintName),
           const SizedBox(height: 12),
-          const Text(
+          Text(
             AssetConfig.fieldBalance,
-            style: TextStyle(fontSize: 13, color: AppColors.textSecondary),
+            style: TextStyles.body13.copyWith(color: AppColors.textSecondary),
           ),
           const SizedBox(height: 6),
           Row(
@@ -397,9 +397,9 @@ class _TimeDepositDialogState extends State<_TimeDepositDialog> {
           const SizedBox(height: 6),
           _dialogTextField(nameCtrl, AssetConfig.hintTDName),
           const SizedBox(height: 12),
-          const Text(
+          Text(
             AssetConfig.fieldPrincipal,
-            style: TextStyle(fontSize: 13, color: AppColors.textSecondary),
+            style: TextStyles.body13.copyWith(color: AppColors.textSecondary),
           ),
           const SizedBox(height: 6),
           Row(
@@ -419,9 +419,9 @@ class _TimeDepositDialogState extends State<_TimeDepositDialog> {
             ],
           ),
           const SizedBox(height: 12),
-          const Text(
+          Text(
             AssetConfig.fieldAnnualRate,
-            style: TextStyle(fontSize: 13, color: AppColors.textSecondary),
+            style: TextStyles.body13.copyWith(color: AppColors.textSecondary),
           ),
           const SizedBox(height: 6),
           AppNumberField(controller: rateCtrl, hintText: '2.5'),
@@ -568,11 +568,7 @@ class _WealthProductDialogState extends State<_WealthProductDialog> {
           Center(
             child: Text(
               isEdit ? AssetConfig.titleEditWP : AssetConfig.titleAddWP,
-              style: const TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
-              ),
+              style: TextStyles.dialogTitle,
             ),
           ),
           const SizedBox(height: 16),
@@ -580,16 +576,16 @@ class _WealthProductDialogState extends State<_WealthProductDialog> {
           const SizedBox(height: 6),
           _dialogTextField(nameCtrl, AssetConfig.hintWPName),
           const SizedBox(height: 12),
-          const Text(
+          Text(
             AssetConfig.fieldShares,
-            style: TextStyle(fontSize: 13, color: AppColors.textSecondary),
+            style: TextStyles.body13.copyWith(color: AppColors.textSecondary),
           ),
           const SizedBox(height: 6),
           AppNumberField(controller: sharesCtrl, hintText: '0.00'),
           const SizedBox(height: 12),
-          const Text(
+          Text(
             AssetConfig.fieldNav,
-            style: TextStyle(fontSize: 13, color: AppColors.textSecondary),
+            style: TextStyles.body13.copyWith(color: AppColors.textSecondary),
           ),
           const SizedBox(height: 6),
           Row(
@@ -665,7 +661,7 @@ Future<WealthProduct?> showWealthProductDialog(
 Widget _label(String text) {
   return Text(
     text,
-    style: const TextStyle(fontSize: 13, color: AppColors.textSecondary),
+    style: TextStyles.body13.copyWith(color: AppColors.textSecondary),
   );
 }
 
@@ -742,9 +738,7 @@ Widget _currencySelector(
                     const SizedBox(width: 8),
                     Text(
                       c,
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 14,
+                      style: TextStyles.subtitle.copyWith(
                         fontWeight: isSel ? FontWeight.w600 : FontWeight.normal,
                       ),
                     ),
@@ -845,9 +839,7 @@ Widget _durationSelector(int selected, ValueChanged<int> onChanged) {
                     const SizedBox(width: 8),
                     Text(
                       AssetConfig.durationMonths.replaceAll('{m}', '$m'),
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 14,
+                      style: TextStyles.subtitle.copyWith(
                         fontWeight: isSel ? FontWeight.w600 : FontWeight.normal,
                       ),
                     ),

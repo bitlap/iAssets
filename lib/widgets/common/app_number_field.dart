@@ -64,7 +64,7 @@ class AppNumberField extends StatelessWidget {
           inputFormatters: [
             FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d*$')),
           ],
-          style: const TextStyle(fontSize: 16, color: AppColors.textPrimary),
+          style: TextStyles.inputText,
           decoration: _decoration(hintText),
         ),
       ],

@@ -79,7 +79,7 @@ class _RecordsDialogState extends State<RecordsDialog>
               width: 36,
               height: 4,
               decoration: BoxDecoration(
-                color: Colors.grey[600],
+                color: AppColors.grey600,
                 borderRadius: BorderRadius.circular(2),
               ),
             ),
@@ -90,14 +90,7 @@ class _RecordsDialogState extends State<RecordsDialog>
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  widget.stock.symbol,
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
-                ),
+                Text(widget.stock.symbol, style: TextStyles.dialogTitle),
                 const SizedBox(width: 8),
                 Container(
                   padding: const EdgeInsets.symmetric(
@@ -108,12 +101,11 @@ class _RecordsDialogState extends State<RecordsDialog>
                     color: Colors.blue.withValues(alpha: 0.15),
                     borderRadius: BorderRadius.circular(10),
                   ),
-                  child: const Text(
+                  child: Text(
                     StockConfig.stockRecord,
-                    style: TextStyle(
+                    style: TextStyles.body13.copyWith(
                       fontSize: 12,
                       color: AppColors.accent,
-                      fontWeight: FontWeight.w500,
                     ),
                   ),
                 ),
@@ -130,7 +122,7 @@ class _RecordsDialogState extends State<RecordsDialog>
                     ),
                     child: const Icon(
                       Icons.close,
-                      color: Colors.grey,
+                      color: AppColors.grey,
                       size: 14,
                     ),
                   ),
@@ -153,7 +145,7 @@ class _RecordsDialogState extends State<RecordsDialog>
                 ),
                 indicatorSize: TabBarIndicatorSize.tab,
                 labelColor: Colors.white,
-                unselectedLabelColor: Colors.grey,
+                unselectedLabelColor: AppColors.grey,
                 labelStyle: TextStyles.body13.copyWith(
                   fontWeight: FontWeight.w600,
                 ),
@@ -240,7 +232,10 @@ class _RecordsDialogState extends State<RecordsDialog>
       iconColor: AppColors.accent,
       content: Text(
         StockConfig.recordsDeleteHint,
-        style: TextStyle(color: Colors.grey[400], fontSize: 13, height: 1.4),
+        style: TextStyles.body13.copyWith(
+          color: AppColors.grey400,
+          height: 1.4,
+        ),
       ),
     );
   }
@@ -250,10 +245,13 @@ class _RecordsDialogState extends State<RecordsDialog>
       context,
       title: StockConfig.recordsDivTab,
       icon: Icons.info_outline,
-      iconColor: Colors.amber,
+      iconColor: AppColors.amber,
       content: Text(
         StockConfig.recordsDivDeleteHint,
-        style: TextStyle(color: Colors.grey[400], fontSize: 13, height: 1.4),
+        style: TextStyles.body13.copyWith(
+          color: AppColors.grey400,
+          height: 1.4,
+        ),
       ),
     );
   }
