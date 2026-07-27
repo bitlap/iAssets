@@ -130,6 +130,7 @@ class _CenterToastWidgetState extends State<_CenterToastWidget>
                             widget.message,
                             style: TextStyles.subtitle.copyWith(
                               fontWeight: FontWeight.w500,
+                              decoration: TextDecoration.none,
                             ),
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
