@@ -38,7 +38,7 @@ class EastMoneyQuoteService {
       final client = Client();
       final uri = Uri.parse(
         '$_batchBaseUrl?secids=$secids'
-        '&fields=f12,f2,f3',
+        '&fields=f12,f1,f2,f3',
       );
 
       final response = await client
@@ -78,13 +78,20 @@ class EastMoneyQuoteService {
     }
   }
 
+  double _pow10(int n) {
+    double result = 1.0;
+    for (int i = 0; i < n; i++) {
+      result *= 10;
+    }
+    return result;
+  }
+
   StockQuote? _parseItem(Map<String, dynamic> item, StockSearchResult? stock) {
     if (stock == null) return null;
-    var rawPrice = _parseInt(item['f2']) / 1000;
-    if (MarketUtil.isChineseMarket(stock.market)) {
-      rawPrice = rawPrice / 100;
-    }
-    if (rawPrice == 0) return null;
+    var decimals = _parseInt(item['f1']).toInt();
+    var rawPrice = _parseInt(item['f2']);
+    final price = decimals > 0 ? rawPrice / _pow10(decimals) : rawPrice;
+    if (price == 0) return null;
 
     final changePercent = _parseDouble(item['f3']) / 100;
 
@@ -97,7 +104,7 @@ class EastMoneyQuoteService {
     return StockQuote(
       code: stock.code,
       name: stock.name,
-      currentPrice: rawPrice,
+      currentPrice: price,
       changePercent: changePercent,
       market: market,
       logoUrl: logoUrl,

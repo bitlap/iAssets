@@ -39,7 +39,7 @@ class StockPortfolioPage extends StatefulWidget {
 }
 
 class StockPortfolioPageState extends State<StockPortfolioPage>
-    with WidgetsBindingObserver {
+    with WidgetsBindingObserver, AutomaticKeepAliveClientMixin {
   // 状态
   List<StockModel> stocks = [];
   String selectedCurrency = AppConfig.defaultCurrency;
@@ -72,6 +72,9 @@ class StockPortfolioPageState extends State<StockPortfolioPage>
 
   final ScrollController _scrollController = ScrollController();
   DateTime? _lastRefreshTime;
+
+  @override
+  bool get wantKeepAlive => true;
 
   @override
   void initState() {
@@ -727,6 +730,7 @@ class StockPortfolioPageState extends State<StockPortfolioPage>
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return LayoutBuilder(
       builder: (context, constraints) {
         return _buildStockTab();

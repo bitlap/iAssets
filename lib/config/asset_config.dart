@@ -7,7 +7,7 @@ class AssetConfig {
   // 分类显示名称
   static const String cash = '现金';
   static const String timeDeposit = '定期存款';
-  static const String wealthProduct = '理财/基金';
+  static const String wealthProduct = '理财';
   static const String current = '活期存款';
   static const String providentFund = '公积金';
 
@@ -17,8 +17,8 @@ class AssetConfig {
   static const String titleAddCash = '添加现金';
   static const String titleEditTD = '编辑定期存款';
   static const String titleAddTD = '添加定期存款';
-  static const String titleEditWP = '编辑理财/基金';
-  static const String titleAddWP = '添加理财/基金';
+  static const String titleEditWP = '编辑理财';
+  static const String titleAddWP = '添加理财';
   static const String titleEditCurrent = '编辑活期';
   static const String titleAddCurrent = '添加活期';
   static const String titleEditProvidentFund = '编辑公积金';
