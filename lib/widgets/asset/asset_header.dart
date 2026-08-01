@@ -45,36 +45,42 @@ class AssetHeader extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                StockConfig.assetTotalAssets,
-                style: TextStyles.body13.copyWith(
-                  color: AppColors.textSecondary,
-                ),
-              ),
-              GestureDetector(
-                onTap: onCurrencyTap,
-                child: Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 10,
-                    vertical: 4,
+              Row(
+                children: [
+                  Text(
+                    StockConfig.assetTotalAssets,
+                    style: TextStyles.body13,
                   ),
-                  decoration: BoxDecoration(
-                    color: AppColors.tertiaryBg,
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(currency, style: TextStyles.subtitle),
-                      const SizedBox(width: 2),
-                      const Icon(
-                        Icons.keyboard_arrow_down,
-                        size: 16,
-                        color: Colors.white,
+                  const SizedBox(width: 8),
+                  GestureDetector(
+                    onTap: onCurrencyTap,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 8),
+                      decoration: BoxDecoration(
+                        color: AppColors.tertiaryBg,
+                        borderRadius: BorderRadius.circular(10),
                       ),
-                    ],
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            currency,
+                            style: TextStyles.body13.copyWith(
+                              fontWeight: FontWeight.w600,
+                              height: 1.0,
+                            ),
+                          ),
+                          const SizedBox(width: 2),
+                          const Icon(
+                            Icons.arrow_drop_down,
+                            size: 18,
+                            color: Colors.white,
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
-                ),
+                ],
               ),
             ],
           ),
