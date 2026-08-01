@@ -84,16 +84,14 @@ class _StockHeaderCardState extends State<StockHeaderCard> {
                 children: [
                   Text(
                     StockConfig.assetTotalAssets,
-                    style: TextStyles.body13.copyWith(
-                      color: AppColors.textSecondary,
-                    ),
+                    style: TextStyles.body13,
                   ),
                   const SizedBox(width: 4),
                   GestureDetector(
                     onTap: _showTotalAssetsHelpDialog,
                     child: const Icon(
                       Icons.help_outline,
-                      size: 14,
+                      size: 13,
                       color: AppColors.warning,
                     ),
                   ),
@@ -147,12 +145,15 @@ class _StockHeaderCardState extends State<StockHeaderCard> {
           children: [
             Text(
               widget.selectedCurrency,
-              style: TextStyles.body13.copyWith(fontWeight: FontWeight.w600),
+              style: TextStyles.body13.copyWith(
+                fontWeight: FontWeight.w600,
+                height: 1.0,
+              ),
             ),
             const SizedBox(width: 2),
             const Icon(
-              Icons.keyboard_arrow_down,
-              size: 13,
+              Icons.arrow_drop_down,
+              size: 18,
               color: Colors.white,
             ),
           ],
@@ -172,7 +173,7 @@ class _StockHeaderCardState extends State<StockHeaderCard> {
           children: [
             Text(
               StockConfig.assetTodayProfit,
-              style: TextStyles.caption.copyWith(
+              style: TextStyles.body13.copyWith(
                 color: AppColors.textSecondary,
                 height: 1.0,
               ),
@@ -182,7 +183,7 @@ class _StockHeaderCardState extends State<StockHeaderCard> {
               onTap: _showTodayProfitHelpDialog,
               child: const Icon(
                 Icons.help_outline,
-                size: 11,
+                size: 13,
                 color: AppColors.warning,
               ),
             ),
