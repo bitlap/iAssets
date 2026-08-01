@@ -104,7 +104,6 @@ class _StockHeaderCardState extends State<StockHeaderCard> {
               _buildTodayProfitColumn(),
             ],
           ),
-          const SizedBox(height: 4),
           // 总金额（已经是目标币种，直接格式化）
           Text(
             '${CurrencyUtil.getSymbol(widget.selectedCurrency)}${CurrencyUtil.formatCompact(widget.totalAssets)}',
@@ -138,7 +137,7 @@ class _StockHeaderCardState extends State<StockHeaderCard> {
     return GestureDetector(
       onTap: _toggleDropdown,
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+        padding: const EdgeInsets.symmetric(horizontal: 8),
         decoration: BoxDecoration(
           color: AppColors.tertiaryBg,
           borderRadius: BorderRadius.circular(10),
@@ -146,11 +145,14 @@ class _StockHeaderCardState extends State<StockHeaderCard> {
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text(widget.selectedCurrency, style: TextStyles.subtitle),
+            Text(
+              widget.selectedCurrency,
+              style: TextStyles.body13.copyWith(fontWeight: FontWeight.w600),
+            ),
             const SizedBox(width: 2),
             const Icon(
               Icons.keyboard_arrow_down,
-              size: 16,
+              size: 13,
               color: Colors.white,
             ),
           ],
@@ -172,6 +174,7 @@ class _StockHeaderCardState extends State<StockHeaderCard> {
               StockConfig.assetTodayProfit,
               style: TextStyles.caption.copyWith(
                 color: AppColors.textSecondary,
+                height: 1.0,
               ),
             ),
             const SizedBox(width: 2),

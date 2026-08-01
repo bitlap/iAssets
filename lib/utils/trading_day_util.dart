@@ -5,10 +5,16 @@ class TradingDayUtil {
   /// 判断 UTC 时刻是否处于美东夏令时（EDT, UTC-4）
   /// 规则：每年 3 月第二个周日 02:00 → 11 月第一个周日 02:00（美东当地时间）
   static bool isEasternDST(DateTime utc) {
-    final dstStart = _nthSunday(utc.year, 3, 2)
-        .add(const Duration(hours: 7)); // 02:00 EST = 07:00 UTC
-    final dstEnd = _nthSunday(utc.year, 11, 1)
-        .add(const Duration(hours: 6)); // 02:00 EDT = 06:00 UTC
+    final dstStart = _nthSunday(
+      utc.year,
+      3,
+      2,
+    ).add(const Duration(hours: 7)); // 02:00 EST = 07:00 UTC
+    final dstEnd = _nthSunday(
+      utc.year,
+      11,
+      1,
+    ).add(const Duration(hours: 6)); // 02:00 EDT = 06:00 UTC
     return !utc.isBefore(dstStart) && utc.isBefore(dstEnd);
   }
 
