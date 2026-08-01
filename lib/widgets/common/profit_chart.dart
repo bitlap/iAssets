@@ -6,6 +6,7 @@ import '../../config/app_config.dart';
 import '../../services/stock_data_manager.dart';
 import '../../models/stock_model.dart';
 import '../../utils/currency_util.dart';
+import '../../utils/trading_day_util.dart';
 import 'app_ui.dart';
 
 class ProfitChartWidget extends StatefulWidget {
@@ -99,12 +100,14 @@ class _ProfitChartWidgetState extends State<ProfitChartWidget> {
   }
 
   void _applyRange() {
-    final today = DateTime.now();
-    final todayDate = DateTime(today.year, today.month, today.day);
+    final now = DateTime.now();
+    final todayDate = DateTime(now.year, now.month, now.day);
 
     if (_selectedRange == 0) {
+      // 今日：以美东 9:00 日界筛选（覆盖美股开盘）
+      final dayKey = TradingDayUtil.tradingDayKey(now);
       _snapshots = _intradaySnapshots
-          .where((s) => !s.time.isBefore(todayDate))
+          .where((s) => TradingDayUtil.tradingDayKey(s.time) == dayKey)
           .toList();
     } else {
       final cutoff = todayDate.subtract(

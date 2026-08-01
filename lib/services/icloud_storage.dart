@@ -7,6 +7,7 @@ import '../config/app_config.dart';
 import '../models/stock_model.dart';
 import '../models/asset_account.dart';
 import '../utils/currency_util.dart';
+import '../utils/trading_day_util.dart';
 import 'serde/serde.dart';
 import 'settings_service.dart';
 
@@ -268,16 +269,6 @@ class IcloudStorage {
     await _syncToCloud(intradayProfitFile);
   }
 
-  /// 交易日日键：以北京时间每天 9:00 为日界线
-  /// （"昨天晚上9点至今天早上9点为当天"，覆盖美股交易日）
-  static String _tradingDayKey(DateTime t) {
-    final shifted = t.subtract(const Duration(hours: 9));
-    final y = shifted.year;
-    final m = shifted.month.toString().padLeft(2, '0');
-    final d = shifted.day.toString().padLeft(2, '0');
-    return '$y-$m-$d';
-  }
-
   /// 读取今日盈亏基线（总盈亏，存于 defaultCurrency）
   static Future<(String, double)?> loadTodayBaseline() async {
     await ensureInit();
@@ -315,7 +306,7 @@ class IcloudStorage {
     String sourceCurrency,
   ) async {
     final now = DateTime.now();
-    final today = DateTime(now.year, now.month, now.day);
+    final dayKey = TradingDayUtil.tradingDayKey(now);
 
     // 转换为 defaultCurrency 存储
     final profitInDefaultCurrency = CurrencyUtil.convertCurrency(
@@ -330,13 +321,12 @@ class IcloudStorage {
     var intraday = await loadIntradayProfitHistory(
       targetCurrency: AppConfig.defaultCurrency,
     );
-    // 检查是否跨天：将昨天最后一条转存为天级
+    // 检查是否跨交易日（美东 9:00 日界）：将上一条转存为天级
     if (intraday.isNotEmpty) {
       final last = intraday.last;
-      final lastDay = DateTime(last.time.year, last.time.month, last.time.day);
-      if (lastDay.isBefore(today)) {
+      if (TradingDayUtil.tradingDayKey(last.time) != dayKey) {
         debugPrint(
-          '[${now.toString().substring(11, 19)}][快照] ===> 跨天: 最后一条 ${last.time.toString().substring(0, 19)} → 转存为天级',
+          '[${now.toString().substring(11, 19)}][快照] ===> 跨交易日: 最后一条 ${last.time.toString().substring(0, 19)} → 转存为天级',
         );
         daily.add(
           ProfitSnapshot(time: last.time, totalProfit: last.totalProfit),
@@ -348,8 +338,7 @@ class IcloudStorage {
       }
     }
 
-    // 今日盈亏基线：以北京时间9:00为日界，跨日时更新基线
-    final dayKey = _tradingDayKey(now);
+    // 今日盈亏基线：以美东时间9:00为日界，跨日时更新基线
     final baseline = await loadTodayBaseline();
     if (baseline == null || baseline.$1 != dayKey) {
       debugPrint(
