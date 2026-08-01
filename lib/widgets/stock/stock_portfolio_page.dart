@@ -7,6 +7,7 @@ import '../../config/app_config.dart';
 import '../../config/app_colors.dart';
 import '../../utils/center_toast.dart';
 import '../../utils/market_util.dart';
+import '../../utils/currency_util.dart';
 import '../../services/stock_quote_service.dart';
 import '../../services/exchange_rate_service.dart';
 import '../../services/settings_service.dart';
@@ -54,6 +55,9 @@ class StockPortfolioPageState extends State<StockPortfolioPage>
   final ExchangeRateService _exchangeRateService = ExchangeRateService();
   Timer? _priceRefreshTimer;
   bool _isForeground = true;
+
+  /// 今日盈亏基线（存于 defaultCurrency 的总盈亏）
+  double _todayBaseline = 0;
 
   /// 平仓后是否保留持仓股票（若选择删除，则清空数据，效果等同直接删除股票）
   bool _keepStockAfterClose = false;
@@ -145,6 +149,14 @@ class StockPortfolioPageState extends State<StockPortfolioPage>
           .toList();
       _lastRefreshTime = DateTime.now();
     });
+    await _loadTodayBaseline();
+  }
+
+  /// 加载今日盈亏基线
+  Future<void> _loadTodayBaseline() async {
+    final baseline = await StockDataManager.loadTodayBaseline();
+    if (!mounted) return;
+    setState(() => _todayBaseline = baseline?.$2 ?? 0);
   }
 
   /// 标记数据已变更，并启动防抖定时器异步同步到 iCloud
@@ -230,6 +242,7 @@ class StockPortfolioPageState extends State<StockPortfolioPage>
     );
     if (mounted) setState(() => stocks = updated);
     await StockDataManager.recordProfitIfNeeded(totalProfit, selectedCurrency);
+    await _loadTodayBaseline();
     if (mounted) {
       setState(() => _lastRefreshTime = DateTime.now());
       _scrollController.animateTo(
@@ -249,6 +262,7 @@ class StockPortfolioPageState extends State<StockPortfolioPage>
       _dividendRecords,
     );
     await StockDataManager.recordProfitIfNeeded(totalProfit, selectedCurrency);
+    await _loadTodayBaseline();
   }
 
   // 计算属性
@@ -266,6 +280,24 @@ class StockPortfolioPageState extends State<StockPortfolioPage>
   double get totalSellAmount => _assetSummary.totalSellAmount;
   double get totalRealizedPL => _assetSummary.totalRealizedPL;
   double get totalProfitPercent => _assetSummary.totalProfitPercent;
+
+  /// 今日盈亏 = 当前总盈亏 − 基线（已换算到当前币种）
+  double get todayProfit {
+    final baseline = CurrencyUtil.convertCurrency(
+      _todayBaseline,
+      AppConfig.defaultCurrency,
+      selectedCurrency,
+    );
+    return totalProfit - baseline;
+  }
+
+  /// 今日盈亏率 = 今日盈亏 / 昨收总资产
+  double get todayProfitPercent {
+    final baseAssets = totalAssets - todayProfit;
+    if (baseAssets <= 0) return 0;
+    return todayProfit / baseAssets * 100;
+  }
+
   double get exchangeRate =>
       _exchangeRateService.effectiveRates[selectedCurrency] ?? 1.0;
   List<StockModel> get _filteredStocks => _filterMarket == null
@@ -773,6 +805,8 @@ class StockPortfolioPageState extends State<StockPortfolioPage>
                       totalProfit: totalProfit,
                       totalRealizedPL: totalRealizedPL,
                       totalProfitPercent: totalProfitPercent,
+                      todayProfit: todayProfit,
+                      todayProfitPercent: todayProfitPercent,
                       totalAfterTaxDividends: totalAfterTaxDividends,
                       totalSellAmount: totalSellAmount,
                       onCurrencyChanged: _onCurrencyChanged,

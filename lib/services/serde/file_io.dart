@@ -11,6 +11,7 @@ const String intradayProfitFile = 'profit_history_intraday.json';
 const String settingsFile = 'settings.json';
 const String assetsFile = 'assets.json';
 const String exchangeRatesFile = 'exchange_rates.json';
+const String todayBaselineFile = 'today_baseline.json';
 
 String localFilePath(String localPath, String name) => '$localPath/$name';
 

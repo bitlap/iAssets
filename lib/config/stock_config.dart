@@ -10,6 +10,9 @@ class StockConfig {
 
   // StockHeaderCard 文案
   static const String assetTotalAssets = '总资产';
+  static const String assetTodayProfit = '今日盈亏';
+  static const String assetTodayProfitHelp =
+      '当前总盈亏 − 基线总盈亏。基线为北京时间每天早上9点（日界线，即昨收）的总盈亏';
   static const String assetTotalCost = '持仓市值';
   static const String assetTotalProfit = '总盈亏';
   static const String assetTotalDividends = '总股息';

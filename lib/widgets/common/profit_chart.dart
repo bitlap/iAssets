@@ -55,20 +55,38 @@ class _ProfitChartWidgetState extends State<ProfitChartWidget> {
   }
 
   Future<void> _loadIntradayOnly() async {
+    final intraday = await _loadTodaySnapshots();
+    if (!mounted) return;
+    setState(() => _intradaySnapshots = intraday);
+  }
+
+  /// 今日盈亏曲线：日内快照 − 今日基线（昨收），返回相对基线的盈亏
+  Future<List<ProfitSnapshot>> _loadTodaySnapshots() async {
+    final baseline = await StockDataManager.loadTodayBaseline();
     final intraday = await StockDataManager.loadIntradayProfitHistory(
       targetCurrency: widget.targetCurrency,
     );
-    if (!mounted) return;
-    setState(() => _intradaySnapshots = intraday);
+    if (baseline == null) return intraday;
+    final baselineInTarget = CurrencyUtil.convertCurrency(
+      baseline.$2,
+      AppConfig.defaultCurrency,
+      widget.targetCurrency,
+    );
+    return intraday
+        .map(
+          (s) => ProfitSnapshot(
+            time: s.time,
+            totalProfit: s.totalProfit - baselineInTarget,
+          ),
+        )
+        .toList();
   }
 
   Future<void> _loadSnapshots() async {
     final daily = await StockDataManager.loadDailyProfitHistory(
       targetCurrency: widget.targetCurrency,
     );
-    final intraday = await StockDataManager.loadIntradayProfitHistory(
-      targetCurrency: widget.targetCurrency,
-    );
+    final intraday = await _loadTodaySnapshots();
     if (!mounted) return;
     setState(() {
       _dailySnapshots = daily;
@@ -114,11 +132,6 @@ class _ProfitChartWidgetState extends State<ProfitChartWidget> {
           child: Row(
             children: [
               const Icon(Icons.timeline, size: 12, color: AppColors.warning),
-              const SizedBox(width: 4),
-              const Text(
-                StockConfig.profitChartTitle,
-                style: TextStyles.caption,
-              ),
               const Spacer(),
               Icon(
                 _isExpanded ? Icons.expand_less : Icons.expand_more,
@@ -128,8 +141,7 @@ class _ProfitChartWidgetState extends State<ProfitChartWidget> {
             ],
           ),
         ),
-        const SizedBox(height: 6),
-        _buildMiniChart(),
+        if (!_isExpanded) ...[const SizedBox(height: 6), _buildMiniChart()],
         if (_isExpanded) ...[
           const SizedBox(height: 8),
           _buildRangeSelector(),

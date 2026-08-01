@@ -899,6 +899,10 @@ class _SettingsPageState extends State<SettingsPage> {
       StockConfig.assetTotalProfitHelp,
     ),
     _FormulaItem(
+      StockConfig.assetTodayProfit,
+      StockConfig.assetTodayProfitHelp,
+    ),
+    _FormulaItem(
       StockConfig.assetDividendRateLabel,
       StockConfig.assetTotalDividendsHelp,
     ),

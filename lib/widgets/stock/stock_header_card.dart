@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../../config/app_config.dart';
 import '../../config/app_colors.dart';
 import '../../utils/currency_util.dart';
+import '../../utils/profit_util.dart';
 import '../common/profit_chart.dart';
 import '../common/dialog_utils.dart';
 import '../common/currency_selector.dart';
@@ -15,6 +16,8 @@ class StockHeaderCard extends StatefulWidget {
   final double totalProfit;
   final double totalRealizedPL;
   final double totalProfitPercent;
+  final double todayProfit;
+  final double todayProfitPercent;
   final double totalAfterTaxDividends;
   final double totalSellAmount;
   final ValueChanged<String> onCurrencyChanged;
@@ -29,6 +32,8 @@ class StockHeaderCard extends StatefulWidget {
     required this.totalProfit,
     required this.totalRealizedPL,
     required this.totalProfitPercent,
+    required this.todayProfit,
+    required this.todayProfitPercent,
     required this.totalAfterTaxDividends,
     required this.totalSellAmount,
     required this.onCurrencyChanged,
@@ -70,9 +75,10 @@ class _StockHeaderCardState extends State<StockHeaderCard> {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
-          // 总资产和货币选择
+          // 总资产 + 货币选择（左），今日盈亏（右）
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
                 children: [
@@ -91,9 +97,11 @@ class _StockHeaderCardState extends State<StockHeaderCard> {
                       color: AppColors.warning,
                     ),
                   ),
+                  const SizedBox(width: 8),
+                  _buildCurrencyButton(),
                 ],
               ),
-              _buildCurrencyButton(),
+              _buildTodayProfitColumn(),
             ],
           ),
           const SizedBox(height: 4),
@@ -151,6 +159,50 @@ class _StockHeaderCardState extends State<StockHeaderCard> {
     );
   }
 
+  /// 今日盈亏：上方文字，中间数字，下方盈亏比例，右对齐
+  Widget _buildTodayProfitColumn() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.end,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              StockConfig.assetTodayProfit,
+              style: TextStyles.caption.copyWith(
+                color: AppColors.textSecondary,
+              ),
+            ),
+            const SizedBox(width: 2),
+            GestureDetector(
+              onTap: _showTodayProfitHelpDialog,
+              child: const Icon(
+                Icons.help_outline,
+                size: 11,
+                color: AppColors.warning,
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 2),
+        Text(
+          ProfitUtil.amount(widget.todayProfit),
+          style: TextStyles.body13.copyWith(
+            color: ProfitUtil.colorOf(widget.todayProfit),
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+        Text(
+          ProfitUtil.percent(widget.todayProfitPercent),
+          style: TextStyles.caption.copyWith(
+            color: ProfitUtil.colorOf(widget.todayProfit),
+          ),
+        ),
+      ],
+    );
+  }
+
   Widget _buildTotalCostSummaryCard() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -179,6 +231,20 @@ class _StockHeaderCardState extends State<StockHeaderCard> {
     );
   }
 
+  void _showTodayProfitHelpDialog() {
+    _helpDialogFrame(
+      title: StockConfig.assetTodayProfit,
+      icon: Icons.today,
+      iconColor: AppColors.warning,
+      children: [
+        Text(
+          StockConfig.assetTodayProfitHelp,
+          style: TextStyles.body13.copyWith(color: AppColors.textSecondary),
+        ),
+      ],
+    );
+  }
+
   void _showTotalAssetsHelpDialog() {
     final sellText = '${CurrencyUtil.formatCompact(widget.totalSellAmount)}';
     _helpDialogFrame(
@@ -194,8 +260,7 @@ class _StockHeaderCardState extends State<StockHeaderCard> {
   void _showTotalCostHelpDialog() {
     final costText = '${CurrencyUtil.formatCompact(widget.totalCost)}';
     final floatPL = widget.totalMarketValue - widget.totalCost;
-    final floatText =
-        '${floatPL >= 0 ? '+' : ''}${CurrencyUtil.formatCompact(floatPL)}';
+    final floatText = ProfitUtil.amount(floatPL);
     _helpDialogFrame(
       title: StockConfig.assetTotalCost,
       icon: Icons.account_balance,
@@ -206,7 +271,7 @@ class _StockHeaderCardState extends State<StockHeaderCard> {
         _helpLine(
           StockConfig.assetFloatProfitLabel,
           floatText,
-          floatPL >= 0 ? AppColors.danger : AppColors.success,
+          ProfitUtil.colorOf(floatPL),
         ),
       ],
     );
@@ -241,8 +306,7 @@ class _StockHeaderCardState extends State<StockHeaderCard> {
   }
 
   void _showProfitHelpDialog() {
-    final realizedText =
-        '${widget.totalRealizedPL >= 0 ? '+' : ''}${CurrencyUtil.formatCompact(widget.totalRealizedPL)}';
+    final realizedText = ProfitUtil.amount(widget.totalRealizedPL);
     _helpDialogFrame(
       title: StockConfig.assetTotalProfit,
       icon: Icons.trending_up,
@@ -251,7 +315,7 @@ class _StockHeaderCardState extends State<StockHeaderCard> {
         _helpLine(
           StockConfig.assetTotalRealizedPL,
           realizedText,
-          widget.totalRealizedPL >= 0 ? AppColors.danger : AppColors.success,
+          ProfitUtil.colorOf(widget.totalRealizedPL),
         ),
       ],
     );
@@ -276,19 +340,19 @@ class _StockHeaderCardState extends State<StockHeaderCard> {
 
   Widget _buildProfitText() {
     return Text(
-      '${widget.totalProfit >= 0 ? '+' : ''}${CurrencyUtil.formatCompact(widget.totalProfit)}',
+      ProfitUtil.amount(widget.totalProfit),
       style: TextStyles.valueMedium.copyWith(
-        color: widget.totalProfit >= 0 ? AppColors.danger : AppColors.success,
+        color: ProfitUtil.colorOf(widget.totalProfit),
       ),
     );
   }
 
   Widget _buildProfitPercent() {
     return Text(
-      '${widget.totalProfit >= 0 ? '+' : '-'}${widget.totalProfitPercent.abs().toStringAsFixed(2)}%',
+      ProfitUtil.percent(widget.totalProfitPercent),
       style: TextStyles.caption.copyWith(
         fontWeight: FontWeight.w600,
-        color: widget.totalProfit >= 0 ? AppColors.danger : AppColors.success,
+        color: ProfitUtil.colorOf(widget.totalProfit),
       ),
     );
   }

@@ -5,6 +5,7 @@ import '../../config/app_colors.dart';
 import '../../utils/currency_util.dart';
 import '../../utils/market_util.dart';
 import '../../utils/stock_calculator.dart';
+import '../../utils/profit_util.dart';
 import '../../utils/logo_cacher.dart';
 import '../common/app_ui.dart';
 
@@ -205,9 +206,7 @@ class StockCard extends StatelessWidget {
   }
 
   Widget _buildSharesAndPrice() {
-    final changeColor = stock.changePercent >= 0
-        ? AppColors.danger
-        : AppColors.success;
+    final changeColor = ProfitUtil.colorOf(stock.changePercent);
     return Align(
       alignment: Alignment.centerLeft,
       child: Column(
@@ -238,7 +237,7 @@ class StockCard extends StatelessWidget {
                 ),
                 const SizedBox(width: 4),
                 Text(
-                  '${stock.changePercent >= 0 ? '+' : '-'}${stock.changePercent.abs().toStringAsFixed(2)}%',
+                  ProfitUtil.percent(stock.changePercent),
                   style: TextStyles.label.copyWith(
                     color: changeColor,
                     fontWeight: FontWeight.w500,
@@ -254,11 +253,8 @@ class StockCard extends StatelessWidget {
   }
 
   Widget _buildProfitLoss() {
-    final isZero = stock.profitLossAmount.abs() < 0.0001;
-    final profitColor = isZero
-        ? AppColors.textTertiary
-        : (stock.isPositive ? AppColors.danger : AppColors.success);
-    final isPositive = isZero ? '' : (stock.isPositive ? '+' : '-');
+    final profitColor = ProfitUtil.colorOf(stock.profitLossAmount);
+    final sign = ProfitUtil.signOf(stock.profitLossAmount);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.end,
       mainAxisSize: MainAxisSize.min,
@@ -268,7 +264,7 @@ class StockCard extends StatelessWidget {
           fit: BoxFit.scaleDown,
           alignment: Alignment.centerRight,
           child: Text(
-            '${isPositive}${CurrencyUtil.formatCompact(stock.profitLossAmount.abs())}',
+            '$sign${CurrencyUtil.formatCompact(stock.profitLossAmount.abs())}',
             style: TextStyles.smallBold.copyWith(color: profitColor),
           ),
         ),
@@ -276,7 +272,7 @@ class StockCard extends StatelessWidget {
           fit: BoxFit.scaleDown,
           alignment: Alignment.centerRight,
           child: Text(
-            '${isPositive}${stock.profitLossPercent.abs().toStringAsFixed(2)}%',
+            '$sign${stock.profitLossPercent.abs().toStringAsFixed(2)}%',
             style: TextStyles.smallBold.copyWith(color: profitColor),
           ),
         ),

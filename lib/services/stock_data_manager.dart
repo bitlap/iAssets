@@ -140,6 +140,10 @@ class StockDataManager {
     String targetCurrency = AppConfig.defaultCurrency,
   }) => IcloudStorage.loadIntradayProfitHistory(targetCurrency: targetCurrency);
 
+  /// 读取今日盈亏基线（总盈亏，存于 defaultCurrency）
+  static Future<(String, double)?> loadTodayBaseline() =>
+      IcloudStorage.loadTodayBaseline();
+
   /// 计算资产汇总
   static AssetSummary calculateAssetSummary(
     List<StockModel> stocks,

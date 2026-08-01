@@ -268,6 +268,48 @@ class IcloudStorage {
     await _syncToCloud(intradayProfitFile);
   }
 
+  /// 交易日日键：以北京时间每天 9:00 为日界线
+  /// （"昨天晚上9点至今天早上9点为当天"，覆盖美股交易日）
+  static String _tradingDayKey(DateTime t) {
+    final shifted = t.subtract(const Duration(hours: 9));
+    final y = shifted.year;
+    final m = shifted.month.toString().padLeft(2, '0');
+    final d = shifted.day.toString().padLeft(2, '0');
+    return '$y-$m-$d';
+  }
+
+  /// 读取今日盈亏基线（总盈亏，存于 defaultCurrency）
+  static Future<(String, double)?> loadTodayBaseline() async {
+    await ensureInit();
+    await _syncFromCloud(todayBaselineFile);
+    final file = File(localFilePath(_localPath!, todayBaselineFile));
+    if (!await file.exists()) return null;
+    try {
+      final json =
+          jsonDecode(await file.readAsString()) as Map<String, dynamic>;
+      return (json['day'] as String, (json['baseline'] as num).toDouble());
+    } catch (e) {
+      debugPrint(
+        '[${DateTime.now().toString().substring(11, 19)}][基线] ===> 读取失败: $e',
+      );
+      return null;
+    }
+  }
+
+  /// 保存今日盈亏基线
+  static Future<void> saveTodayBaseline(String day, double baseline) async {
+    await ensureInit();
+    final file = File(localFilePath(_localPath!, todayBaselineFile));
+    try {
+      await file.writeAsString(jsonEncode({'day': day, 'baseline': baseline}));
+      await _syncToCloud(todayBaselineFile);
+    } catch (e) {
+      debugPrint(
+        '[${DateTime.now().toString().substring(11, 19)}][基线] ===> 保存失败: $e',
+      );
+    }
+  }
+
   static Future<void> recordProfitIfNeeded(
     double totalProfit,
     String sourceCurrency,
@@ -304,6 +346,16 @@ class IcloudStorage {
         await saveDailyProfitHistory(daily);
         intraday.clear();
       }
+    }
+
+    // 今日盈亏基线：以北京时间9:00为日界，跨日时更新基线
+    final dayKey = _tradingDayKey(now);
+    final baseline = await loadTodayBaseline();
+    if (baseline == null || baseline.$1 != dayKey) {
+      debugPrint(
+        '[${now.toString().substring(11, 19)}][基线] ===> 跨日更新: $dayKey, 基线 = $profitInDefaultCurrency',
+      );
+      await saveTodayBaseline(dayKey, profitInDefaultCurrency);
     }
 
     // 去重：相同值且10分钟内不重复记录
