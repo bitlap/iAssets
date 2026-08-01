@@ -41,7 +41,7 @@ const _assetOptions = [
     AssetType.timeDeposit,
   ),
   _AssetOption(
-    Icons.trending_up,
+    Icons.monetization_on,
     AppColors.accent,
     AssetConfig.wealthProduct,
     AssetType.wealthProduct,

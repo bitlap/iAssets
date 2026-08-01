@@ -28,7 +28,7 @@ class StockConfig {
   static const String assetFloatProfitLabel = '持仓总浮盈';
   static const String assetAfterTaxDividendsLabel = '税后总股息';
   static const String assetDividendRateLabel = '总股息率';
-  static const String assetPositionRatioLabel = '持仓比例';
+  static const String assetPositionRatioLabel = '资产分布';
   static const String assetPositionRatioHelp = '持仓市值 / 总资产';
 
   // 首页 文案

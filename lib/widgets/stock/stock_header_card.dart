@@ -82,10 +82,7 @@ class _StockHeaderCardState extends State<StockHeaderCard> {
             children: [
               Row(
                 children: [
-                  Text(
-                    StockConfig.assetTotalAssets,
-                    style: TextStyles.body13,
-                  ),
+                  Text(StockConfig.assetTotalAssets, style: TextStyles.body13),
                   const SizedBox(width: 4),
                   GestureDetector(
                     onTap: _showTotalAssetsHelpDialog,
@@ -151,11 +148,7 @@ class _StockHeaderCardState extends State<StockHeaderCard> {
               ),
             ),
             const SizedBox(width: 2),
-            const Icon(
-              Icons.arrow_drop_down,
-              size: 18,
-              color: Colors.white,
-            ),
+            const Icon(Icons.arrow_drop_down, size: 18, color: Colors.white),
           ],
         ),
       ),
@@ -184,7 +177,7 @@ class _StockHeaderCardState extends State<StockHeaderCard> {
               child: const Icon(
                 Icons.help_outline,
                 size: 13,
-                color: AppColors.warning,
+                color: AppColors.textSecondary,
               ),
             ),
           ],

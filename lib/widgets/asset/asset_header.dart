@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import '../../models/asset_account.dart';
 import '../../utils/currency_util.dart';
 import '../../config/app_config.dart';
 import '../../config/app_colors.dart';
-import '../../config/asset_config.dart';
 import '../common/app_ui.dart';
+import '../common/dialog_utils.dart';
 
 // Header (Summary Card)
 
@@ -12,6 +13,7 @@ class AssetHeader extends StatelessWidget {
   final double stockTotalValue;
   final String currency;
   final VoidCallback onCurrencyTap;
+  final Map<AssetType, double> totalsByType;
 
   const AssetHeader({
     super.key,
@@ -19,6 +21,7 @@ class AssetHeader extends StatelessWidget {
     required this.stockTotalValue,
     required this.currency,
     required this.onCurrencyTap,
+    required this.totalsByType,
   });
 
   @override
@@ -44,13 +47,11 @@ class AssetHeader extends StatelessWidget {
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
                 children: [
-                  Text(
-                    StockConfig.assetTotalAssets,
-                    style: TextStyles.body13,
-                  ),
+                  Text(StockConfig.assetTotalAssets, style: TextStyles.body13),
                   const SizedBox(width: 8),
                   GestureDetector(
                     onTap: onCurrencyTap,
@@ -82,6 +83,7 @@ class AssetHeader extends StatelessWidget {
                   ),
                 ],
               ),
+              _buildStockRatioColumn(context),
             ],
           ),
           const SizedBox(height: 4),
@@ -110,6 +112,150 @@ class AssetHeader extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  Widget _buildStockRatioColumn(BuildContext context) {
+    final ratio = totalAssets > 0 ? stockTotalValue / totalAssets : 0.0;
+    final percent = '${(ratio * 100).toStringAsFixed(1)}%';
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.end,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              StockConfig.assetPositionRatioLabel,
+              style: TextStyles.body13.copyWith(
+                color: AppColors.textSecondary,
+                height: 1.0,
+              ),
+            ),
+            const SizedBox(width: 2),
+            GestureDetector(
+              onTap: () => _showRatioHelpDialog(context),
+              child: const Icon(
+                Icons.help_outline,
+                size: 13,
+                color: AppColors.textSecondary,
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 2),
+        Text(
+          percent,
+          style: TextStyles.body13.copyWith(
+            color: Colors.white,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+      ],
+    );
+  }
+
+  void _showRatioHelpDialog(BuildContext context) {
+    final entries = <(IconData, Color, String, double)>[
+      (
+        Icons.show_chart,
+        AppColors.accent,
+        StockConfig.tabStock,
+        stockTotalValue,
+      ),
+      for (final type in AssetType.values)
+        if ((totalsByType[type] ?? 0) > 0)
+          switch (type) {
+            AssetType.cash => (
+              Icons.payments,
+              AppColors.success,
+              AssetConfig.cash,
+              totalsByType[type]!,
+            ),
+            AssetType.timeDeposit => (
+              Icons.savings,
+              AppColors.warning,
+              AssetConfig.timeDeposit,
+              totalsByType[type]!,
+            ),
+            AssetType.wealthProduct => (
+              Icons.monetization_on,
+              AppColors.accent,
+              AssetConfig.wealthProduct,
+              totalsByType[type]!,
+            ),
+            AssetType.current => (
+              Icons.account_balance,
+              AppColors.cyan,
+              AssetConfig.current,
+              totalsByType[type]!,
+            ),
+            AssetType.providentFund => (
+              Icons.home_work,
+              AppColors.purple,
+              AssetConfig.providentFund,
+              totalsByType[type]!,
+            ),
+          },
+    ];
+    entries.sort((a, b) => b.$4.compareTo(a.$4));
+
+    showDialog(
+      context: context,
+      builder: (ctx) => dialogFrame(
+        context: ctx,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Icon(Icons.pie_chart, color: AppColors.accent, size: 20),
+                const SizedBox(width: 8),
+                Text(
+                  StockConfig.assetPositionRatioLabel,
+                  style: TextStyles.subtitle,
+                ),
+              ],
+            ),
+            const SizedBox(height: 12),
+            const Divider(color: AppColors.border, thickness: 0.5),
+            const SizedBox(height: 8),
+            for (final (icon, color, label, value) in entries)
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 6),
+                child: Row(
+                  children: [
+                    Icon(icon, size: 18, color: color),
+                    const SizedBox(width: 8),
+                    Expanded(child: Text(label, style: TextStyles.body13)),
+                    Text(
+                      _formatRatio(value),
+                      style: TextStyles.body13.copyWith(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            const SizedBox(height: 12),
+            confirmButton(
+              onTap: () => Navigator.of(ctx).pop(),
+              text: AppConfig.btnClose,
+              gradient: const LinearGradient(
+                colors: [AppColors.blueDark, AppColors.blueAccent],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  String _formatRatio(double value) {
+    if (totalAssets <= 0) return '0.0%';
+    return '${(value / totalAssets * 100).toStringAsFixed(1)}%';
   }
 }
 
