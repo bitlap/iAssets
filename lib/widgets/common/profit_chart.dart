@@ -62,18 +62,23 @@ class _ProfitChartWidgetState extends State<ProfitChartWidget> {
   }
 
   /// 今日盈亏曲线：日内快照 − 今日基线（昨收），返回相对基线的盈亏
+  /// 以美东 9:00 日界筛选（覆盖美股开盘）
   Future<List<ProfitSnapshot>> _loadTodaySnapshots() async {
     final baseline = await StockDataManager.loadTodayBaseline();
     final intraday = await StockDataManager.loadIntradayProfitHistory(
       targetCurrency: widget.targetCurrency,
     );
-    if (baseline == null) return intraday;
+    final dayKey = TradingDayUtil.tradingDayKey(DateTime.now());
+    final today = intraday
+        .where((s) => TradingDayUtil.tradingDayKey(s.time) == dayKey)
+        .toList();
+    if (baseline == null) return today;
     final baselineInTarget = CurrencyUtil.convertCurrency(
       baseline.$2,
       AppConfig.defaultCurrency,
       widget.targetCurrency,
     );
-    return intraday
+    return today
         .map(
           (s) => ProfitSnapshot(
             time: s.time,
@@ -104,11 +109,8 @@ class _ProfitChartWidgetState extends State<ProfitChartWidget> {
     final todayDate = DateTime(now.year, now.month, now.day);
 
     if (_selectedRange == 0) {
-      // 今日：以美东 9:00 日界筛选（覆盖美股开盘）
-      final dayKey = TradingDayUtil.tradingDayKey(now);
-      _snapshots = _intradaySnapshots
-          .where((s) => TradingDayUtil.tradingDayKey(s.time) == dayKey)
-          .toList();
+      // 今日：日内快照已在 _loadTodaySnapshots 中按美东 9:00 日界过滤
+      _snapshots = _intradaySnapshots;
     } else {
       final cutoff = todayDate.subtract(
         Duration(days: [0, 7, 30, 180, 360][_selectedRange]),
