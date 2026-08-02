@@ -59,15 +59,20 @@ Future<AssetType?> showAddAssetSheet(BuildContext context) {
     context: context,
     builder: (ctx) => dialogFrame(
       context: ctx,
-      padding: const EdgeInsets.fromLTRB(20, 20, 20, 16),
+      padding: const EdgeInsets.fromLTRB(20, 12, 20, 8),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Text(AssetConfig.titleAddAsset, style: TextStyles.dialogTitle),
-          const SizedBox(height: 12),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8),
+            child: Text(
+              AssetConfig.titleAddAsset,
+              style: TextStyles.dialogTitle,
+              textAlign: TextAlign.center,
+            ),
+          ),
           for (final option in _assetOptions) ...[
-            if (option != _assetOptions.first)
-              Divider(thickness: 0.5, height: 20, color: AppColors.border),
+            const Divider(thickness: 0.5, height: 1, color: AppColors.border),
             _addOption(
               option.icon,
               option.color,
@@ -89,24 +94,19 @@ Widget _addOption(
   String label, {
   required VoidCallback onTap,
 }) {
-  return SizedBox(
-    height: 48,
-    child: ListTile(
-      leading: Container(
-        width: 36,
-        height: 36,
-        decoration: BoxDecoration(
-          color: color.withValues(alpha: 0.15),
-          borderRadius: BorderRadius.circular(10),
-        ),
-        child: Icon(icon, size: 18, color: color),
+  return ListTile(
+    leading: Container(
+      width: 36,
+      height: 36,
+      decoration: BoxDecoration(
+        color: color.withValues(alpha: 0.15),
+        borderRadius: BorderRadius.circular(10),
       ),
-      title: Text(label, style: TextStyles.bodyRegular),
-      trailing: const Icon(Icons.chevron_right, color: AppColors.textSecondary),
-      onTap: onTap,
-      contentPadding: const EdgeInsets.symmetric(horizontal: 4),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      child: Icon(icon, size: 18, color: color),
     ),
+    title: Text(label, style: TextStyles.bodyRegular),
+    trailing: const Icon(Icons.chevron_right, color: AppColors.textSecondary),
+    onTap: onTap,
   );
 }
 

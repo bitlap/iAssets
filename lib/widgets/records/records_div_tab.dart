@@ -105,7 +105,7 @@ class _DividendRecordsTabState extends State<DividendRecordsTab> {
                 border: Border.all(color: AppColors.border, width: 0.5),
               ),
               child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   _icon(),
                   const SizedBox(width: 10),

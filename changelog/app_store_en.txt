@@ -1,0 +1,36 @@
+Asset Management — Your Personal Investment Manager
+
+Core Features
+• Unified asset management: Cash, demand deposits, time deposits, wealth management, and provident fund organized by category, with expand/collapse and drag-to-reorder support
+• Stock portfolio management: Add Hong Kong, US, and A-share stocks (including on-exchange and off-exchange funds) in one tap, with full buy, add, sell, and position-close workflows
+• Real-time quotes: Automatically fetch the latest stock prices and exchange rates, with profit/loss updating in real time — no manual refresh needed
+• Today's P&L: Automatically tracks today's profit/loss amount and rate based on US trading days, so you can see gains at a glance
+• Profit curve: View return trends across multiple time ranges (Today / 7D / 30D / 180D / 360D)
+• Multi-currency support: Automatic conversion for CNY, USD, HKD, EUR, GBP, and JPY
+• Smart calculations: Automatically computes average cost, total P&L, dividend yield, position ratio, and other key metrics
+
+Stock Management
+• Stock search: Quickly find stocks by code or name, covering HK, US, and A-share markets
+• Market filtering: Filter by US / HK / A-share to quickly locate the stocks you follow
+• Transaction records: Full history of every buy/sell operation (time, price, quantity, fees) at a glance
+• Dividend management: Records per-share dividends and tax rates, automatically calculating after-tax income and cumulative dividends
+• Flexible sorting: Sort by P&L amount, position size, or stock name, in ascending or descending order
+• Keep closed positions: Option to retain closed positions for easy review of past trades
+
+Asset Overview
+• Total assets, total cost, total P&L, and total dividends — four core metrics on one screen
+• Real-time position ratio and dividend yield calculations to help you evaluate your investment structure
+
+Multi-Language Support
+• Switch between 简体中文 / 繁體中文 / English with one tap, or follow the system language automatically
+
+Data Security
+• iCloud sync: Data is automatically backed up to iCloud for seamless continuity across devices
+• Local-first: Works offline, with automatic sync once the network is restored
+
+Design Philosophy
+• Dark theme: A professional dark interface that keeps the focus on your data
+• Simple and efficient: No ads, no community, no in-app purchases — back to the essence of investment management
+• Light and fast: Quick launch, smooth operations, no bloat
+
+Perfect for every individual investor who takes their asset management seriously. For suggestions or feedback, feel free to contact the developer.

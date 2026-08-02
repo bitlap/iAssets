@@ -7,7 +7,6 @@ import '../../utils/currency_util.dart';
 import '../common/app_ui.dart';
 import '../common/empty_state_widget.dart';
 import '../common/confirm_delete_dialog.dart';
-import '../common/app_number_field.dart';
 import '../common/dialog_utils.dart';
 
 /// 操作记录Tab
@@ -95,7 +94,7 @@ class _OperationRecordsTabState extends State<OperationRecordsTab> {
                 border: Border.all(color: AppColors.border, width: 0.5),
               ),
               child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   _icon(isBuy),
                   const SizedBox(width: 10),

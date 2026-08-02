@@ -146,57 +146,62 @@ class _AppShellState extends State<_AppShell> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      backgroundColor: AppColors.surface,
-      body: SafeArea(
-        child: Stack(
-          children: [
-            PageView(
-              controller: _pageController,
-              onPageChanged: (i) => setState(() => _currentIndex = i),
+    return ValueListenableBuilder<String>(
+      valueListenable: L10n.notifier,
+      builder: (context, lang, _) {
+        return Scaffold(
+          resizeToAvoidBottomInset: false,
+          backgroundColor: AppColors.surface,
+          body: SafeArea(
+            child: Stack(
               children: [
-                StockPortfolioPage(
-                  key: _stockKey,
-                  selectedCurrency: _selectedCurrency,
-                  onCurrencyChanged: (c) {
-                    setState(() {
-                      _selectedCurrency = c;
-                      _stockTotalValue =
-                          _stockKey.currentState?.totalAssets ??
-                          _stockTotalValue;
-                    });
-                    SettingsService.setDefaultCurrency(c);
-                  },
+                PageView(
+                  controller: _pageController,
+                  onPageChanged: (i) => setState(() => _currentIndex = i),
+                  children: [
+                    StockPortfolioPage(
+                      key: _stockKey,
+                      selectedCurrency: _selectedCurrency,
+                      onCurrencyChanged: (c) {
+                        setState(() {
+                          _selectedCurrency = c;
+                          _stockTotalValue =
+                              _stockKey.currentState?.totalAssets ??
+                              _stockTotalValue;
+                        });
+                        SettingsService.setDefaultCurrency(c);
+                      },
+                    ),
+                    AssetsPage(
+                      key: _assetKey,
+                      stockTotalValue: _stockTotalValue,
+                      currency: _selectedCurrency,
+                      onCurrencyChanged: (c) {
+                        _stockKey.currentState?.setState(
+                          () => _stockKey.currentState!.selectedCurrency = c,
+                        );
+                        setState(() {
+                          _selectedCurrency = c;
+                          _stockTotalValue =
+                              _stockKey.currentState?.totalAssets ??
+                              _stockTotalValue;
+                        });
+                        SettingsService.setDefaultCurrency(c);
+                      },
+                    ),
+                  ],
                 ),
-                AssetsPage(
-                  key: _assetKey,
-                  stockTotalValue: _stockTotalValue,
-                  currency: _selectedCurrency,
-                  onCurrencyChanged: (c) {
-                    _stockKey.currentState?.setState(
-                      () => _stockKey.currentState!.selectedCurrency = c,
-                    );
-                    setState(() {
-                      _selectedCurrency = c;
-                      _stockTotalValue =
-                          _stockKey.currentState?.totalAssets ??
-                          _stockTotalValue;
-                    });
-                    SettingsService.setDefaultCurrency(c);
-                  },
+                Positioned(
+                  left: 0,
+                  right: 0,
+                  bottom: 0,
+                  child: _buildBottomTabBar(),
                 ),
               ],
             ),
-            Positioned(
-              left: 0,
-              right: 0,
-              bottom: 0,
-              child: _buildBottomTabBar(),
-            ),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 
