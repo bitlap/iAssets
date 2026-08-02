@@ -333,10 +333,10 @@ class StockPortfolioPageState extends State<StockPortfolioPage>
       MarketUtil.searchMarketCN,
     ];
     final labels = [
-      MarketUtil.searchAll,
-      MarketUtil.searchMarketUS,
-      MarketUtil.searchMarketHK,
-      MarketUtil.searchMarketCN,
+      MarketUtil.marketLabel(MarketUtil.searchAll),
+      MarketUtil.marketLabel(MarketUtil.searchMarketUS),
+      MarketUtil.marketLabel(MarketUtil.searchMarketHK),
+      MarketUtil.marketLabel(MarketUtil.searchMarketCN),
     ];
     showDialog(
       context: context,
@@ -346,7 +346,7 @@ class StockPortfolioPageState extends State<StockPortfolioPage>
           borderRadius: BorderRadius.circular(16),
           side: const BorderSide(color: AppColors.border, width: 0.5),
         ),
-        title: const Text(
+        title: Text(
           StockConfig.filterMarketTitle,
           style: TextStyles.sectionTitleRegular,
         ),
@@ -467,7 +467,7 @@ class StockPortfolioPageState extends State<StockPortfolioPage>
       } else if (_operationRecords[updatedStock.symbol]?.length == 1) {
         action = StockConfig.opOpenPosition;
       } else {
-        action = record.type == StockConfig.opBuy
+        action = record.type == StockConfig.opBuyType
             ? StockConfig.opAddPosition
             : StockConfig.opReducePosition;
       }
@@ -823,7 +823,7 @@ class StockPortfolioPageState extends State<StockPortfolioPage>
                     ),
                     const SizedBox(height: 2),
                     if (_sortedStocks.isEmpty) ...[
-                      const EmptyStateWidget(
+                      EmptyStateWidget(
                         icon: Icons.show_chart,
                         title: StockConfig.homeEmptyTitle,
                         subtitle: StockConfig.homeEmptySubtitle,

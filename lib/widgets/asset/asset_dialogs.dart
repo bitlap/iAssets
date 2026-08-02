@@ -21,7 +21,7 @@ class _AssetOption {
   const _AssetOption(this.icon, this.color, this.label, this.type);
 }
 
-const _assetOptions = [
+List<_AssetOption> get _assetOptions => [
   _AssetOption(
     Icons.payments,
     AppColors.success,
@@ -63,10 +63,8 @@ Future<AssetType?> showAddAssetSheet(BuildContext context) {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const Text(AssetConfig.titleAddAsset, style: TextStyles.dialogTitle),
-          const SizedBox(height: 16),
-          Divider(thickness: 0.5, height: 20, color: AppColors.border),
-          const SizedBox(height: 4),
+          Text(AssetConfig.titleAddAsset, style: TextStyles.dialogTitle),
+          const SizedBox(height: 12),
           for (final option in _assetOptions) ...[
             if (option != _assetOptions.first)
               Divider(thickness: 0.5, height: 20, color: AppColors.border),

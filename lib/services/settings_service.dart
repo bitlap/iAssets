@@ -15,9 +15,16 @@ class SettingsService {
   static const String keyAssetSortColumn = 'asset_sort_column';
   static const String keyAssetSortAscending = 'asset_sort_ascending';
   static const String keyAssetSectionOrder = 'asset_section_order';
+  static const String keyPreferredLanguage = 'preferred_language';
 
   static const String feeTypePercentage = 'percentage';
   static const String feeTypeFixed = 'fixed';
+
+  /// 语言偏好可选值
+  static const String languageSystem = 'system';
+  static const String languageZh = 'zh';
+  static const String languageZhHant = 'zh_Hant';
+  static const String languageEn = 'en';
 
   static Map<String, dynamic>? _cache;
   static String? _path;
@@ -198,6 +205,19 @@ class SettingsService {
   static Future<void> setSyncSettings(bool value) async {
     final settings = await _load();
     settings[keySyncSettings] = value;
+    await _save();
+  }
+
+  /// 读取首选语言，默认 'system'（跟随系统）
+  static Future<String> getPreferredLanguage() async {
+    final settings = await _load();
+    return settings[keyPreferredLanguage] as String? ?? languageSystem;
+  }
+
+  /// 保存首选语言
+  static Future<void> setPreferredLanguage(String language) async {
+    final settings = await _load();
+    settings[keyPreferredLanguage] = language;
     await _save();
   }
 

@@ -213,7 +213,7 @@ class MarketBadge extends StatelessWidget {
         borderRadius: BorderRadius.circular(8),
       ),
       child: Text(
-        market,
+        MarketUtil.marketLabel(market),
         style: TextStyles.smallBold.copyWith(fontSize: fontSize, color: color),
       ),
     );

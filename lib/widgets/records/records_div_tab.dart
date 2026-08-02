@@ -53,7 +53,7 @@ class _DividendRecordsTabState extends State<DividendRecordsTab> {
   @override
   Widget build(BuildContext context) {
     if (allRecords.isEmpty) {
-      return const EmptyStateWidget(
+      return EmptyStateWidget(
         icon: Icons.attach_money,
         title: StockConfig.recordsEmptyDiv,
         subtitle: StockConfig.recordsEmptyDivHint,

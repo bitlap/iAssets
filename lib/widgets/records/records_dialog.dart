@@ -160,7 +160,7 @@ class _RecordsDialogState extends State<RecordsDialog>
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        const Text(StockConfig.recordsOpTab),
+                        Text(StockConfig.recordsOpTab),
                         const SizedBox(width: 3),
                         GestureDetector(
                           onTap: _showOpDeleteHint,
@@ -180,7 +180,7 @@ class _RecordsDialogState extends State<RecordsDialog>
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        const Text(StockConfig.recordsDivTab),
+                        Text(StockConfig.recordsDivTab),
                         const SizedBox(width: 3),
                         GestureDetector(
                           onTap: _showDivDeleteHint,

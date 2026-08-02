@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../l10n/l10n.dart';
 
 class StockConfig {
   StockConfig._();
@@ -9,187 +10,224 @@ class StockConfig {
   static const IconData iconAdd = Icons.add;
 
   // StockHeaderCard 文案
-  static const String assetTotalAssets = '总资产';
-  static const String assetTodayProfit = '今日盈亏';
-  static const String assetTodayProfitHelp =
-      '当前总盈亏 − 基线总盈亏。基线为美股市场（美东时间）每天早上9点（日界线，即昨收）的总盈亏；自动适配夏令时与本地时区，覆盖美股开盘时段';
-  static const String assetTotalCost = '持仓市值';
-  static const String assetTotalProfit = '总盈亏';
-  static const String assetTotalDividends = '总股息';
-  static const String assetExchangeRate = '汇率';
-  static const String assetSelectCurrency = '选择货币';
-  static const String assetTotalCostHelp = '每股现价 × 持仓股数';
-  static const String assetTotalRealizedPL = '已实现盈亏';
-  static const String assetTotalProfitHelp = '持仓总浮盈 + 已实现盈亏';
-  static const String assetTotalAssetsHelp = '持仓市值 + 已平仓总额';
-  static const String assetTotalDividendsHelp = '税后总股息 / 总资产';
-  static const String assetTotalSellAmount = '已平仓总额';
-  static const String assetCostDetailLabel = '持仓总成本';
-  static const String assetFloatProfitLabel = '持仓总浮盈';
-  static const String assetAfterTaxDividendsLabel = '税后总股息';
-  static const String assetDividendRateLabel = '总股息率';
-  static const String assetPositionRatioLabel = '资产分布';
-  static const String assetPositionRatioHelp = '持仓市值 / 总资产';
+  static String get assetTotalAssets => L10n.t('assetTotalAssets');
+  static String get assetTodayProfit => L10n.t('assetTodayProfit');
+  static String get assetTodayProfitHelp => L10n.t('assetTodayProfitHelp');
+  static String get assetTotalCost => L10n.t('assetTotalCost');
+  static String get assetTotalProfit => L10n.t('assetTotalProfit');
+  static String get assetTotalDividends => L10n.t('assetTotalDividends');
+  static String get assetExchangeRate => L10n.t('assetExchangeRate');
+  static String get assetSelectCurrency => L10n.t('assetSelectCurrency');
+  static String get assetTotalCostHelp => L10n.t('assetTotalCostHelp');
+  static String get assetTotalRealizedPL => L10n.t('assetTotalRealizedPL');
+  static String get assetTotalProfitHelp => L10n.t('assetTotalProfitHelp');
+  static String get assetTotalAssetsHelp => L10n.t('assetTotalAssetsHelp');
+  static String get assetTotalDividendsHelp =>
+      L10n.t('assetTotalDividendsHelp');
+  static String get assetTotalSellAmount => L10n.t('assetTotalSellAmount');
+  static String get assetCostDetailLabel => L10n.t('assetCostDetailLabel');
+  static String get assetFloatProfitLabel => L10n.t('assetFloatProfitLabel');
+  static String get assetAfterTaxDividendsLabel =>
+      L10n.t('assetAfterTaxDividendsLabel');
+  static String get assetDividendRateLabel => L10n.t('assetDividendRateLabel');
+  static String get assetPositionRatioLabel =>
+      L10n.t('assetPositionRatioLabel');
+  static String get assetPositionRatioHelp => L10n.t('assetPositionRatioHelp');
 
   // 首页 文案
-  static const String homeTitle = '股票';
-  static const String homeSubtitle = '共 {count} 只 · 实时更新';
-  static const String homeSubtitleRefresh = '最近更新：{time}';
-  static const String homeEmptyTitle = '暂无股票持仓';
-  static const String homeEmptySubtitle = '点击右上角 + 添加股票开始投资';
-  static const String homeStockHeader = '股票';
-  static const String homeHoldingHeader = '持仓';
-  static const String homeProfitHeader = '盈亏';
+  static String get homeTitle => L10n.t('homeTitle');
+  static String get homeSubtitle => L10n.t('homeSubtitle');
+  static String get homeSubtitleRefresh => L10n.t('homeSubtitleRefresh');
+  static String get homeEmptyTitle => L10n.t('homeEmptyTitle');
+  static String get homeEmptySubtitle => L10n.t('homeEmptySubtitle');
+  static String get homeStockHeader => L10n.t('homeStockHeader');
+  static String get homeHoldingHeader => L10n.t('homeHoldingHeader');
+  static String get homeProfitHeader => L10n.t('homeProfitHeader');
 
   // 底部 Tab 文案
-  static const String tabStock = '股票';
-  static const String tabAsset = '资产';
-  static const String assetComingSoon = '资产页面正在开发中';
-  static const String assetComingSoonDesc = '敬请期待';
+  static String get tabStock => L10n.t('tabStock');
+  static String get tabAsset => L10n.t('tabAsset');
+  static String get assetComingSoon => L10n.t('assetComingSoon');
+  static String get assetComingSoonDesc => L10n.t('assetComingSoonDesc');
 
   // StockCard 文案
-  static const String stockTotalValue = '总市值';
-  static const String stockRecord = '记录';
-  static const String stockMore = '更多';
-  static const String stockSharesSuffix = '股';
-  static const String stockDetailTotalCost = '总成本';
-  static const String stockDetailAvgPrice = '持仓均价';
-  static const String stockDetailMaxPrice = '最高购买价';
-  static const String stockDetailMinPrice = '最低购买价';
-  static const String stockDetailBuyCount = '加仓次数';
-  static const String stockDetailSellCount = '减仓次数';
+  static String get stockTotalValue => L10n.t('stockTotalValue');
+  static String get stockRecord => L10n.t('stockRecord');
+  static String get stockMore => L10n.t('stockMore');
+  static String get stockSharesSuffix => L10n.t('stockSharesSuffix');
+  static String get stockDetailTotalCost => L10n.t('stockDetailTotalCost');
+  static String get stockDetailAvgPrice => L10n.t('stockDetailAvgPrice');
+  static String get stockDetailMaxPrice => L10n.t('stockDetailMaxPrice');
+  static String get stockDetailMinPrice => L10n.t('stockDetailMinPrice');
+  static String get stockDetailBuyCount => L10n.t('stockDetailBuyCount');
+  static String get stockDetailSellCount => L10n.t('stockDetailSellCount');
 
-  // 操作/记录 文案
-  static const String opBuy = '买入';
-  static const String opSell = '卖出';
-  static const String opAddPosition = '加仓';
-  static const String opReducePosition = '减仓';
-  static const String opClosePosition = '平仓';
-  static const String opOpenPosition = '开仓';
-  static const String opDeleteStock = '删除股票';
-  static const String opDividend = '派息';
-  static const String opMoreActions = '更多操作';
-  static const String opConfirmDelete = '确认删除';
+  // 操作类型（内部稳定标识，用于持久化与逻辑判断，保持历史数据兼容）
+  static const String opBuyType = '买入';
+  static const String opSellType = '卖出';
+
+  // 操作/记录 文案（展示用，随语言变化）
+  static String get opBuy => L10n.t('opBuy');
+  static String get opSell => L10n.t('opSell');
+  static String get opAddPosition => L10n.t('opAddPosition');
+  static String get opReducePosition => L10n.t('opReducePosition');
+  static String get opClosePosition => L10n.t('opClosePosition');
+  static String get opOpenPosition => L10n.t('opOpenPosition');
+  static String get opDeleteStock => L10n.t('opDeleteStock');
+  static String get opDividend => L10n.t('opDividend');
+  static String get opMoreActions => L10n.t('opMoreActions');
+  static String get opConfirmDelete => L10n.t('opConfirmDelete');
 
   // 编辑对话框 文案
-  static const String editPriceHint = '成交价';
-  static const String editPricePlaceholder = '请输入价格';
-  static const String editFeeLabel = '手续费（可选）';
-  static const String editFeePlaceholder = '请输入手续费';
-  static const String editAddSharesLabel = '加仓股数';
-  static const String editReduceSharesLabel = '减仓股数';
-  static const String editAddSharesHint = '请输入加仓股数';
-  static const String editReduceSharesHint = '请输入减仓股数';
-  static const String editInvalidInput = '请输入有效的股数和价格';
-  static const String editOverflow = '减仓股数不能超过持股数';
-  static const String deleteConfirmContent = '确定要删除 {symbol} ({name}) 吗?';
+  static String get editPriceHint => L10n.t('editPriceHint');
+  static String get editPricePlaceholder => L10n.t('editPricePlaceholder');
+  static String get editFeeLabel => L10n.t('editFeeLabel');
+  static String get editFeePlaceholder => L10n.t('editFeePlaceholder');
+  static String get editAddSharesLabel => L10n.t('editAddSharesLabel');
+  static String get editReduceSharesLabel => L10n.t('editReduceSharesLabel');
+  static String get editAddSharesHint => L10n.t('editAddSharesHint');
+  static String get editReduceSharesHint => L10n.t('editReduceSharesHint');
+  static String get editInvalidInput => L10n.t('editInvalidInput');
+  static String get editOverflow => L10n.t('editOverflow');
+  static String get deleteConfirmContent => L10n.t('deleteConfirmContent');
 
   // 派息对话框 文案
-  static const String dividendTitle = '派息';
-  static const String dividendDateLabel = '派息日期';
-  static const String dividendAmountLabel = '每股派息金额';
-  static const String dividendAmountHint = '请输入每股派息金额';
-  static const String dividendTaxRateLabel = '税率';
-  static const String dividendConfirm = '确认派息';
-  static const String dividendInvalidAmount = '请输入有效的派息金额';
-  static const String dividendSuccess = '派息成功';
-  static const String dividendEditTitle = '编辑派息记录';
-  static const String dividendEditAmountLabel = '每股派息金额';
-  static const String dividendEditSharesLabel = '持仓股数';
-  static const String dividendEditDateLabel = '派息日期';
+  static String get dividendTitle => L10n.t('dividendTitle');
+  static String get dividendDateLabel => L10n.t('dividendDateLabel');
+  static String get dividendAmountLabel => L10n.t('dividendAmountLabel');
+  static String get dividendAmountHint => L10n.t('dividendAmountHint');
+  static String get dividendTaxRateLabel => L10n.t('dividendTaxRateLabel');
+  static String get dividendConfirm => L10n.t('dividendConfirm');
+  static String get dividendInvalidAmount => L10n.t('dividendInvalidAmount');
+  static String get dividendSuccess => L10n.t('dividendSuccess');
+  static String get dividendEditTitle => L10n.t('dividendEditTitle');
+  static String get dividendEditAmountLabel =>
+      L10n.t('dividendEditAmountLabel');
+  static String get dividendEditSharesLabel =>
+      L10n.t('dividendEditSharesLabel');
+  static String get dividendEditDateLabel => L10n.t('dividendEditDateLabel');
 
   // 搜索对话框 文案
-  static const String searchTitle = '添加股票';
-  static const String searchHint = '输入股票名称或代码（如 AAPL、腾讯）';
-  static const String searchRateLimit = '请求过于频繁，请{secs}秒后再试';
-  static const String searchRateLimitShort = '请求过于频繁，请稍后再试';
-  static const String searchNotFound = '未找到相关股票';
-  static const String searchNotFoundMarket = '未找到相关{market}股票';
-  static const String searchFailed = '搜索失败，请重试';
-  static const String searchInitHint = '输入名称或代码搜索港股/美股/A股';
-  static const String searchInitExample = '如：AAPL、腾讯、00700、TSLA、600519';
-  static const String searchAlreadyExists = '{code} 已在持仓中';
-  static const String searchAddTitle = '添加 {code}';
-  static const String searchStockName = '股票名称';
-  static const String searchStockCode = '股票代码';
-  static const String searchMarket = '市场';
-  static const String searchRealtimePrice = '实时价格';
-  static const String searchBuyPrice = '买入价格';
-  static const String searchBuyPriceHint = '请输入买入价格';
-  static const String searchShares = '持股数量';
-  static const String searchSharesHint = '请输入持股数量';
-  static const String searchInvalidPrice = '请输入有效的买入价格';
-  static const String searchInvalidShares = '请输入有效的持股数量';
-  static const String searchQuoteUnavailable = '暂无法获取';
+  static String get searchTitle => L10n.t('searchTitle');
+  static String get searchHint => L10n.t('searchHint');
+  static String get searchRateLimit => L10n.t('searchRateLimit');
+  static String get searchRateLimitShort => L10n.t('searchRateLimitShort');
+  static String get searchNotFound => L10n.t('searchNotFound');
+  static String get searchNotFoundMarket => L10n.t('searchNotFoundMarket');
+  static String get searchFailed => L10n.t('searchFailed');
+  static String get searchInitHint => L10n.t('searchInitHint');
+  static String get searchInitExample => L10n.t('searchInitExample');
+  static String get searchAlreadyExists => L10n.t('searchAlreadyExists');
+  static String get searchAddTitle => L10n.t('searchAddTitle');
+  static String get searchStockName => L10n.t('searchStockName');
+  static String get searchStockCode => L10n.t('searchStockCode');
+  static String get searchMarket => L10n.t('searchMarket');
+  static String get searchRealtimePrice => L10n.t('searchRealtimePrice');
+  static String get searchBuyPrice => L10n.t('searchBuyPrice');
+  static String get searchBuyPriceHint => L10n.t('searchBuyPriceHint');
+  static String get searchShares => L10n.t('searchShares');
+  static String get searchSharesHint => L10n.t('searchSharesHint');
+  static String get searchInvalidPrice => L10n.t('searchInvalidPrice');
+  static String get searchInvalidShares => L10n.t('searchInvalidShares');
+  static String get searchQuoteUnavailable => L10n.t('searchQuoteUnavailable');
 
   // 记录对话框 文案
-  static const String recordsOpTab = '操作';
-  static const String recordsDivTab = '派息';
-  static const String recordsEmptyOp = '暂无操作记录';
-  static const String recordsEmptyOpHint = '点击"记录"按钮添加第一次操作';
-  static const String recordsEmptyDiv = '暂无派息记录';
-  static const String recordsEmptyDivHint = '点击更多菜单中的"派息"添加记录';
-  static const String profitNoData = '暂无数据';
-  static const String filterMarketTitle = '筛选市场';
-  static const String dragBetweenCategoriesHint = '请在分类标题之间拖拽';
+  static String get recordsOpTab => L10n.t('recordsOpTab');
+  static String get recordsDivTab => L10n.t('recordsDivTab');
+  static String get recordsEmptyOp => L10n.t('recordsEmptyOp');
+  static String get recordsEmptyOpHint => L10n.t('recordsEmptyOpHint');
+  static String get recordsEmptyDiv => L10n.t('recordsEmptyDiv');
+  static String get recordsEmptyDivHint => L10n.t('recordsEmptyDivHint');
+  static String get profitNoData => L10n.t('profitNoData');
+  static String get filterMarketTitle => L10n.t('filterMarketTitle');
+  static String get dragBetweenCategoriesHint =>
+      L10n.t('dragBetweenCategoriesHint');
 
-  static const String recordsDivAmountPerShare = '每股';
-  static const String recordsDivShares = '持仓股数';
-  static const String recordsDivTotal = '总派息';
-  static const String recordsOperationTime = '更新时间';
-  static const String recordsDateLabel = '创建时间';
-  static const String recordsOpTotalValue = '总市值';
-  static const String recordsOpTotalCost = '总成本';
-  static const String recordsDeleteOpConfirm = '确定删除此条操作记录？';
-  static const String recordsDeleteDivConfirm = '确定删除此条派息记录？';
-  static const String recordsDeleteHint = '左滑可删除，删除后不可恢复，持仓数据将自动重算，请谨慎操作';
-  static const String recordsDivDeleteHint = '左滑可删除，删除后不可恢复，资产数据将自动重算，请谨慎操作';
-  static const String recordsFormulaLabel = '计算公式';
-  static const String recordsOpLabel = '市值';
-  static const String recordsDivLabel = '股息';
-  static const String recordsEditTitle = '编辑{desc}';
-  static const String recordsEditPrice = '价格';
-  static const String recordsEditShares = '股数';
+  static String get recordsDivAmountPerShare =>
+      L10n.t('recordsDivAmountPerShare');
+  static String get recordsDivShares => L10n.t('recordsDivShares');
+  static String get recordsDivTotal => L10n.t('recordsDivTotal');
+  static String get recordsOperationTime => L10n.t('recordsOperationTime');
+  static String get recordsDateLabel => L10n.t('recordsDateLabel');
+  static String get recordsOpTotalValue => L10n.t('recordsOpTotalValue');
+  static String get recordsOpTotalCost => L10n.t('recordsOpTotalCost');
+  static String get recordsDeleteOpConfirm => L10n.t('recordsDeleteOpConfirm');
+  static String get recordsDeleteDivConfirm =>
+      L10n.t('recordsDeleteDivConfirm');
+  static String get recordsDeleteHint => L10n.t('recordsDeleteHint');
+  static String get recordsDivDeleteHint => L10n.t('recordsDivDeleteHint');
+  static String get recordsFormulaLabel => L10n.t('recordsFormulaLabel');
+  static String get recordsOpLabel => L10n.t('recordsOpLabel');
+  static String get recordsDivLabel => L10n.t('recordsDivLabel');
+  static String get recordsEditTitle => L10n.t('recordsEditTitle');
+  static String get recordsEditPrice => L10n.t('recordsEditPrice');
+  static String get recordsEditShares => L10n.t('recordsEditShares');
   static const String recordsDatePattern = 'yyyy-MM-dd';
   static const String recordsDateTimePattern = 'yyyy-MM-dd HH:mm';
   static const String recordsTimesSign = ' × ';
 
   // 操作结果 文案
-  static const String resultCloseSuccess = '平仓成功';
-  static const String resultOpenSuccess = '开仓成功';
-  static const String resultAddSuccess = '加仓成功';
-  static const String resultReduceSuccess = '减仓成功';
-  static const String resultDeleteSuccess = '删除成功';
-  static const String resultAddStockSuccess = '添加成功';
+  static String get resultCloseSuccess => L10n.t('resultCloseSuccess');
+  static String get resultOpenSuccess => L10n.t('resultOpenSuccess');
+  static String get resultAddSuccess => L10n.t('resultAddSuccess');
+  static String get resultReduceSuccess => L10n.t('resultReduceSuccess');
+  static String get resultDeleteSuccess => L10n.t('resultDeleteSuccess');
+  static String get resultAddStockSuccess => L10n.t('resultAddStockSuccess');
 
   // 收益曲线 文案
-  static const String profitChartTitle = '盈亏曲线';
-  static const String profitRangeToday = '今天';
-  static const String profitRange7d = '7天';
-  static const String profitRange30d = '30天';
-  static const String profitRange180d = '180天';
-  static const String profitRange360d = '360天';
+  static String get profitChartTitle => L10n.t('profitChartTitle');
+  static String get profitRangeToday => L10n.t('profitRangeToday');
+  static String get profitRange7d => L10n.t('profitRange7d');
+  static String get profitRange30d => L10n.t('profitRange30d');
+  static String get profitRange180d => L10n.t('profitRange180d');
+  static String get profitRange360d => L10n.t('profitRange360d');
 
   // 全局股息页 文案
-  static const String dividendOverviewTitle = '股息记录';
-  static const String dividendOverviewEmpty = '暂无派息记录';
-  static const String dividendOverviewEmptyHint = '在股票卡片更多菜单中添加派息';
-  static const String dividendTabByStock = '按股票';
-  static const String dividendTabByRecord = '按记录';
-  static const String dividendCostYield = '成本股息率';
-  static const String dividendMarketYield = '现价股息率';
-  static const String dividendTotalAfterTax = '税后总股息';
-  static const String dividendTrailing12m = '近12月股息';
-  static const String dividendCurrentCost = '当前成本';
-  static const String dividendCurrentValue = '当前市值';
-  static const String dividendRecordCount = '条派息记录';
-  static const String dividendExpandAll = '展开全部记录';
-  static const String dividendLatestDate = '最新派息';
-  static const String dividendSortYield = '按现价股息率';
-  static const String dividendSortCostYield = '按成本股息率';
-  static const String dividendSortAmount = '按税后总股息';
-  static const String dividendSortDate = '按最近派息';
-  static const String dividendSortName = '按名称';
-  static const String dividendRecords = '派息记录';
-  static const String dividendAllMarkets = '全部市场';
+  static String get dividendOverviewTitle => L10n.t('dividendOverviewTitle');
+  static String get dividendOverviewEmpty => L10n.t('dividendOverviewEmpty');
+  static String get dividendOverviewEmptyHint =>
+      L10n.t('dividendOverviewEmptyHint');
+  static String get dividendTabByStock => L10n.t('dividendTabByStock');
+  static String get dividendTabByRecord => L10n.t('dividendTabByRecord');
+  static String get dividendCostYield => L10n.t('dividendCostYield');
+  static String get dividendMarketYield => L10n.t('dividendMarketYield');
+  static String get dividendTotalAfterTax => L10n.t('dividendTotalAfterTax');
+  static String get dividendTrailing12m => L10n.t('dividendTrailing12m');
+  static String get dividendCurrentCost => L10n.t('dividendCurrentCost');
+  static String get dividendCurrentValue => L10n.t('dividendCurrentValue');
+  static String get dividendRecordCount => L10n.t('dividendRecordCount');
+  static String get dividendExpandAll => L10n.t('dividendExpandAll');
+  static String get dividendLatestDate => L10n.t('dividendLatestDate');
+  static String get dividendSortYield => L10n.t('dividendSortYield');
+  static String get dividendSortCostYield => L10n.t('dividendSortCostYield');
+  static String get dividendSortAmount => L10n.t('dividendSortAmount');
+  static String get dividendSortDate => L10n.t('dividendSortDate');
+  static String get dividendSortName => L10n.t('dividendSortName');
+  static String get dividendRecords => L10n.t('dividendRecords');
+  static String get dividendAllMarkets => L10n.t('dividendAllMarkets');
+
+  /// 将记录 description 中的操作词（可能为创建时语言的任意一种）替换为当前语言
+  static String localizeRecordDescription(String description) {
+    const map = {
+      '开仓': 'opOpenPosition',
+      '加仓': 'opAddPosition',
+      '减仓': 'opReducePosition',
+      '平仓': 'opClosePosition',
+      '開倉': 'opOpenPosition',
+      '加倉': 'opAddPosition',
+      '減倉': 'opReducePosition',
+      '平倉': 'opClosePosition',
+      'Open': 'opOpenPosition',
+      'Add': 'opAddPosition',
+      'Reduce': 'opReducePosition',
+      'Close': 'opClosePosition',
+    };
+    for (final entry in map.entries) {
+      if (description.startsWith(entry.key)) {
+        final rest = description.substring(entry.key.length);
+        return '${L10n.t(entry.value)}$rest';
+      }
+    }
+    return description;
+  }
 }

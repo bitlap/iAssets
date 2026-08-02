@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../config/app_colors.dart';
+import '../l10n/l10n.dart';
 
 class MarketUtil {
   MarketUtil._();
@@ -8,6 +9,23 @@ class MarketUtil {
   static const String searchMarketUS = '美股';
   static const String searchMarketHK = '港股';
   static const String searchMarketCN = 'A股';
+
+  /// 市场展示名称（内部标识保持中文，展示层本地化；A股细分统一归一为 CN）
+  static String marketLabel(String market) {
+    if (isChineseMarket(market)) {
+      return L10n.t('marketCN');
+    }
+    switch (market) {
+      case searchAll:
+        return L10n.t('marketAll');
+      case searchMarketUS:
+        return L10n.t('marketUS');
+      case searchMarketHK:
+        return L10n.t('marketHK');
+      default:
+        return market;
+    }
+  }
 
   static const String exchangeSH = '沪A';
   static const String exchangeSZ = '深A';

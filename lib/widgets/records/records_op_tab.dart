@@ -42,7 +42,7 @@ class _OperationRecordsTabState extends State<OperationRecordsTab> {
   @override
   Widget build(BuildContext context) {
     if (allRecords.isEmpty) {
-      return const EmptyStateWidget(
+      return EmptyStateWidget(
         icon: Icons.list_alt,
         title: StockConfig.recordsEmptyOp,
         subtitle: StockConfig.recordsEmptyOpHint,
@@ -54,7 +54,7 @@ class _OperationRecordsTabState extends State<OperationRecordsTab> {
       itemCount: allRecords.length,
       itemBuilder: (context, index) {
         final record = allRecords[index];
-        final isBuy = record.type == StockConfig.opBuy;
+        final isBuy = record.type == StockConfig.opBuyType;
         return Dismissible(
           key: ValueKey(
             'op_${index}_${record.operationTime.millisecondsSinceEpoch}',
@@ -148,7 +148,7 @@ class _OperationRecordsTabState extends State<OperationRecordsTab> {
       children: [
         Expanded(
           child: Text(
-            record.description,
+            StockConfig.localizeRecordDescription(record.description),
             style: TextStyles.body13.copyWith(fontWeight: FontWeight.w600),
             overflow: TextOverflow.ellipsis,
           ),
@@ -209,23 +209,17 @@ class _OperationRecordsTabState extends State<OperationRecordsTab> {
               child: Text(
                 StockConfig.recordsEditTitle.replaceAll(
                   '{desc}',
-                  record.description,
+                  StockConfig.localizeRecordDescription(record.description),
                 ),
                 style: TextStyles.dialogTitle,
               ),
             ),
             const SizedBox(height: 16),
-            const Text(
-              StockConfig.recordsEditPrice,
-              style: TextStyles.body13Grey,
-            ),
+            Text(StockConfig.recordsEditPrice, style: TextStyles.body13Grey),
             const SizedBox(height: 6),
             _buildTextField(priceCtrl),
             const SizedBox(height: 12),
-            const Text(
-              StockConfig.recordsEditShares,
-              style: TextStyles.body13Grey,
-            ),
+            Text(StockConfig.recordsEditShares, style: TextStyles.body13Grey),
             const SizedBox(height: 6),
             _buildTextField(sharesCtrl),
             const SizedBox(height: 16),

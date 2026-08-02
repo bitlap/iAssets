@@ -366,10 +366,7 @@ class _StockHeaderCardState extends State<StockHeaderCard> {
               color: AppColors.warning,
             ),
             const SizedBox(width: 4),
-            const Text(
-              StockConfig.assetTotalDividends,
-              style: TextStyles.caption,
-            ),
+            Text(StockConfig.assetTotalDividends, style: TextStyles.caption),
             const SizedBox(width: 2),
           ],
         ),

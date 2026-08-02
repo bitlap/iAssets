@@ -178,7 +178,7 @@ class _GlobalDividendPageState extends State<GlobalDividendPage> {
               ),
               const SizedBox(height: 8),
               if (items.isEmpty)
-                const SizedBox(
+                SizedBox(
                   height: 200,
                   child: EmptyStateWidget(
                     icon: Icons.attach_money,

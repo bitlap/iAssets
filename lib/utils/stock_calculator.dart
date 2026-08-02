@@ -18,13 +18,13 @@ class StockCalculator {
     int sellCount = 0;
 
     for (final record in records) {
-      if (record.type == StockConfig.opBuy) {
+      if (record.type == StockConfig.opBuyType) {
         currentShares += record.shares;
         totalBuyAmount += record.amount * record.shares + record.fee;
         buyCount++;
         if (record.amount > maxBuyPrice) maxBuyPrice = record.amount;
         if (record.amount < minBuyPrice) minBuyPrice = record.amount;
-      } else if (record.type == StockConfig.opSell) {
+      } else if (record.type == StockConfig.opSellType) {
         currentShares -= record.shares;
         totalSellAmount += record.amount * record.shares - record.fee;
         sellCount++;
@@ -58,10 +58,10 @@ class StockCalculator {
     double totalSellAmount = 0.0;
     double currentShares = 0.0;
     for (final r in records) {
-      if (r.type == StockConfig.opBuy) {
+      if (r.type == StockConfig.opBuyType) {
         totalBuyAmount += r.amount * r.shares + r.fee;
         currentShares += r.shares;
-      } else if (r.type == StockConfig.opSell) {
+      } else if (r.type == StockConfig.opSellType) {
         totalSellAmount += r.amount * r.shares - r.fee;
         currentShares -= r.shares;
       }

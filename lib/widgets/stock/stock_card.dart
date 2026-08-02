@@ -289,11 +289,11 @@ class StockCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(10),
           color: AppColors.surfaceElevated,
         ),
-        child: const Row(
+        child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.list_alt, size: 14, color: AppColors.accent),
-            SizedBox(width: 4),
+            const Icon(Icons.list_alt, size: 14, color: AppColors.accent),
+            const SizedBox(width: 4),
             Text(StockConfig.stockRecord, style: TextStyles.smallBold),
           ],
         ),

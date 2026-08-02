@@ -228,7 +228,7 @@ class _SearchStockDialogState extends State<SearchStockDialog> {
     // 创建建仓操作记录
     final buyRecord = OperationRecord(
       date: DateTime.now(),
-      type: StockConfig.opBuy,
+      type: StockConfig.opBuyType,
       description: StockConfig.opOpenPosition + ' ${stock.code}',
       amount: price,
       shares: shares,
@@ -375,11 +375,11 @@ class _SearchStockDialogState extends State<SearchStockDialog> {
     );
   }
 
-  Widget _buildTag(String label, bool isSelected) {
+  Widget _buildTag(String market, bool isSelected) {
     return GestureDetector(
       onTap: () {
         setState(() {
-          _selectedMarket = label == MarketUtil.searchAll ? null : label;
+          _selectedMarket = market == MarketUtil.searchAll ? null : market;
           _results = _applyMarketFilter(_allResults);
         });
       },
@@ -397,7 +397,7 @@ class _SearchStockDialogState extends State<SearchStockDialog> {
           ),
         ),
         child: Text(
-          label,
+          MarketUtil.marketLabel(market),
           style: isSelected ? TextStyles.smallBold : TextStyles.bodySmall,
         ),
       ),
@@ -512,10 +512,7 @@ class _SearchStockDialogState extends State<SearchStockDialog> {
                 ),
               ),
               const SizedBox(height: 6),
-              const Text(
-                StockConfig.searchInitExample,
-                style: TextStyles.bodySmall,
-              ),
+              Text(StockConfig.searchInitExample, style: TextStyles.bodySmall),
             ],
           ),
         ),
@@ -622,7 +619,7 @@ class _SearchStockDialogState extends State<SearchStockDialog> {
                       Text(stock.code, style: TextStyles.bodyMedium),
                       const SizedBox(width: 6),
                       Text(
-                        stock.market,
+                        MarketUtil.marketLabel(stock.market),
                         style: TextStyles.label.copyWith(
                           fontWeight: FontWeight.w600,
                           color: MarketUtil.marketColor(stock.market),
@@ -914,7 +911,10 @@ class _AddStockConfirmDialogState extends State<_AddStockConfirmDialog> {
             value: widget.stockName,
           ),
           const SizedBox(height: 8),
-          InfoRowWidget(label: StockConfig.searchMarket, value: widget.market),
+          InfoRowWidget(
+            label: StockConfig.searchMarket,
+            value: MarketUtil.marketLabel(widget.market),
+          ),
           if (widget.defaultPrice > 0) ...[
             const SizedBox(height: 8),
             InfoRowWidget(

@@ -6,6 +6,7 @@ import 'package:workmanager/workmanager.dart';
 
 import 'config/app_config.dart';
 import 'config/app_colors.dart';
+import 'l10n/l10n.dart';
 import 'services/settings_service.dart';
 import 'utils/logo_cacher.dart';
 import 'widgets/stock/stock_portfolio_page.dart';
@@ -18,6 +19,10 @@ void main() async {
   await LogoCacher.ensureInit();
   final info = await PackageInfo.fromPlatform();
   AppConfig.appVersion = info.version;
+
+  L10n.deviceLocale = WidgetsBinding.instance.platformDispatcher.locale;
+  final preferredLanguage = await SettingsService.getPreferredLanguage();
+  L10n.applyLanguage(preferredLanguage);
 
   await Workmanager().initialize(callbackDispatcher);
   await Workmanager().registerPeriodicTask(
@@ -42,36 +47,38 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: AppConfig.appName,
-      debugShowCheckedModeBanner: false,
-      locale: const Locale(
-        AppConfig.defaultLocaleLanguage,
-        AppConfig.defaultLocaleCountry,
-      ),
-      localizationsDelegates: const [
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-      ],
-      supportedLocales: const [Locale('zh', 'CN'), Locale('en', 'US')],
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: AppColors.textTertiary,
-          brightness: Brightness.dark,
-          background: AppColors.surface,
-          surface: AppColors.surfaceElevated,
-        ),
-        useMaterial3: true,
-        scaffoldBackgroundColor: AppColors.surface,
-        textTheme: TextTheme(
-          bodyLarge: TextStyle(color: AppColors.textPrimary),
-          bodyMedium: TextStyle(color: AppColors.textPrimary),
-          displayLarge: TextStyle(color: AppColors.textPrimary),
-          headlineMedium: TextStyle(color: AppColors.textPrimary),
-        ),
-      ),
-      home: const _AppShell(),
+    return ValueListenableBuilder<String>(
+      valueListenable: L10n.notifier,
+      builder: (context, lang, _) {
+        return MaterialApp(
+          title: AppConfig.appName,
+          debugShowCheckedModeBanner: false,
+          locale: L10n.currentLocale,
+          localizationsDelegates: const [
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ],
+          supportedLocales: L10n.supportedLocales,
+          theme: ThemeData(
+            colorScheme: ColorScheme.fromSeed(
+              seedColor: AppColors.textTertiary,
+              brightness: Brightness.dark,
+              background: AppColors.surface,
+              surface: AppColors.surfaceElevated,
+            ),
+            useMaterial3: true,
+            scaffoldBackgroundColor: AppColors.surface,
+            textTheme: TextTheme(
+              bodyLarge: TextStyle(color: AppColors.textPrimary),
+              bodyMedium: TextStyle(color: AppColors.textPrimary),
+              displayLarge: TextStyle(color: AppColors.textPrimary),
+              headlineMedium: TextStyle(color: AppColors.textPrimary),
+            ),
+          ),
+          home: const _AppShell(),
+        );
+      },
     );
   }
 }

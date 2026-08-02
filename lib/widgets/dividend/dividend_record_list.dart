@@ -20,8 +20,8 @@ class DividendRecordList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (records.isEmpty) {
-      return const Padding(
-        padding: EdgeInsets.fromLTRB(12, 0, 12, 12),
+      return Padding(
+        padding: const EdgeInsets.fromLTRB(12, 0, 12, 12),
         child: Text(StockConfig.profitNoData, style: TextStyles.bodySmall),
       );
     }

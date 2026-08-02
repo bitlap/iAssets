@@ -1,4 +1,5 @@
 import 'package:assets/config/app_config.dart';
+import 'package:assets/l10n/l10n.dart';
 import 'package:assets/utils/market_util.dart';
 import '../services/exchange_rate_service.dart';
 
@@ -29,19 +30,44 @@ class CurrencyUtil {
     return rate.toStringAsFixed(4);
   }
 
-  /// 紧凑格式化（超过100万显示“万”单位）
+  /// 紧凑格式化（简体中文超 100 万显示“万/亿”，其他语言用 K/M/B 缩写）
   static String formatCompact(
     double value, {
     String Function(double)? formatBase,
   }) {
     final fmt = formatBase ?? (v) => v.toStringAsFixed(2);
-    if (value.abs() >= 100000000) {
-      return '${fmt(value / 100000000)}${AppConfig.suffixYi}';
+    final fmtAbbr = formatBase ?? _fmtAbbr;
+    if (L10n.currentLang == L10n.langZh) {
+      if (value.abs() >= 100000000) {
+        return '${fmtAbbr(value / 100000000)}${AppConfig.suffixYi}';
+      }
+      if (value.abs() >= 1000000) {
+        return '${fmtAbbr(value / 10000)}${AppConfig.suffixWan}';
+      }
+      return fmt(value);
+    }
+    if (value.abs() >= 1000000000) {
+      return '${fmtAbbr(value / 1000000000)}B';
     }
     if (value.abs() >= 1000000) {
-      return '${fmt(value / 10000)}${AppConfig.suffixWan}';
+      return '${fmtAbbr(value / 1000000)}M';
+    }
+    if (value.abs() >= 100000) {
+      return '${fmtAbbr(value / 1000)}K';
     }
     return fmt(value);
+  }
+
+  /// 美式缩写数值格式：最多 2 位小数并去除尾随零（300.00K → 300K，1.50M → 1.5M）
+  static String _fmtAbbr(double v) {
+    final s = v.toStringAsFixed(2);
+    if (s.endsWith('.00')) {
+      return s.substring(0, s.length - 3);
+    }
+    if (s.endsWith('0')) {
+      return s.substring(0, s.length - 1);
+    }
+    return s;
   }
 
   /// 根据市场类型返回对应币种

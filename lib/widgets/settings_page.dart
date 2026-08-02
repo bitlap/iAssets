@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:url_launcher/url_launcher.dart';
+import '../l10n/l10n.dart';
 import '../utils/currency_util.dart';
 import '../services/exchange_rate_service.dart';
 import '../utils/center_toast.dart';
@@ -50,6 +51,8 @@ class _SettingsPageState extends State<SettingsPage> {
   bool _isFeeExpanded = false;
   String _selectedFeeType = SettingsService.feeTypePercentage;
   late TextEditingController _feeValueController;
+  String _selectedLanguage = SettingsService.languageSystem;
+  bool _isLanguageExpanded = false;
 
   @override
   void initState() {
@@ -88,6 +91,7 @@ class _SettingsPageState extends State<SettingsPage> {
     final syncSettings = await SettingsService.getSyncSettings();
     final feeType = await SettingsService.getDefaultFeeType();
     final feeValue = await SettingsService.getDefaultFeeValue();
+    final language = await SettingsService.getPreferredLanguage();
     if (mounted) {
       setState(() {
         _keepStockAfterClose = keepStock;
@@ -98,6 +102,7 @@ class _SettingsPageState extends State<SettingsPage> {
         _feeValueController.text = feeValue > 0
             ? CurrencyUtil.formatRate(feeValue)
             : '';
+        _selectedLanguage = language;
       });
     }
   }
@@ -175,6 +180,14 @@ class _SettingsPageState extends State<SettingsPage> {
     widget.onSettingsChanged?.call();
   }
 
+  void _onLanguageSelected(String language) {
+    if (language == _selectedLanguage) return;
+    setState(() => _selectedLanguage = language);
+    SettingsService.setPreferredLanguage(language);
+    L10n.applyLanguage(language);
+    widget.onSettingsChanged?.call();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -197,6 +210,10 @@ class _SettingsPageState extends State<SettingsPage> {
       body: ListView(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
         children: [
+          _buildSectionHeader(Icons.language, SettingsConfig.sectionLanguage),
+          const SizedBox(height: 8),
+          _buildLanguageSection(),
+          const SizedBox(height: 24),
           _buildSectionHeader(
             Icons.currency_exchange,
             SettingsConfig.sectionCurrency,
@@ -237,6 +254,72 @@ class _SettingsPageState extends State<SettingsPage> {
           ),
         ],
       ),
+    );
+  }
+
+  Widget _buildLanguageSection() {
+    final options = [
+      (
+        value: SettingsService.languageSystem,
+        label: SettingsConfig.languageAuto,
+      ),
+      (value: SettingsService.languageZh, label: SettingsConfig.languageZh),
+      (
+        value: SettingsService.languageZhHant,
+        label: SettingsConfig.languageZhHant,
+      ),
+      (value: SettingsService.languageEn, label: SettingsConfig.languageEn),
+    ];
+    return SettingsExpansionCard(
+      initiallyExpanded: _isLanguageExpanded,
+      onExpansionChanged: (expanded) =>
+          setState(() => _isLanguageExpanded = expanded),
+      title: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Container(
+            width: 32,
+            height: 32,
+            decoration: BoxDecoration(
+              color: AppColors.accent.withValues(alpha: 0.15),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: const Icon(
+              Icons.translate,
+              size: 18,
+              color: AppColors.accent,
+            ),
+          ),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Text(
+              options
+                  .firstWhere(
+                    (o) => o.value == _selectedLanguage,
+                    orElse: () => options.first,
+                  )
+                  .label,
+              style: TextStyles.bodyMedium.copyWith(height: 1.2),
+            ),
+          ),
+        ],
+      ),
+      trailing: Icon(
+        _isLanguageExpanded ? Icons.expand_less : Icons.expand_more,
+        color: AppColors.grey500,
+        size: 22,
+      ),
+      children: options.asMap().entries.map((entry) {
+        final index = entry.key;
+        final option = entry.value;
+        final isSelected = option.value == _selectedLanguage;
+        return SettingsSelectableItem(
+          label: option.label,
+          isSelected: isSelected,
+          isLast: index == options.length - 1,
+          onTap: () => _onLanguageSelected(option.value),
+        );
+      }).toList(),
     );
   }
 
@@ -348,10 +431,7 @@ class _SettingsPageState extends State<SettingsPage> {
             Expanded(
               child: Row(
                 children: [
-                  const Text(
-                    SettingsConfig.sectionFee,
-                    style: TextStyles.bodyMedium,
-                  ),
+                  Text(SettingsConfig.sectionFee, style: TextStyles.bodyMedium),
                   const SizedBox(width: 4),
                   GestureDetector(
                     onTap: _showFeeHelp,
@@ -457,13 +537,13 @@ class _SettingsPageState extends State<SettingsPage> {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const HintRow(
+          HintRow(
             color: Colors.greenAccent,
             label: SettingsConfig.feeTypePercentage,
             desc: SettingsConfig.feeHelpRate,
           ),
           const SizedBox(height: 12),
-          const HintRow(
+          HintRow(
             color: Colors.orangeAccent,
             label: SettingsConfig.feeTypeFixed,
             desc: SettingsConfig.feeHelpFixed,
@@ -483,13 +563,13 @@ class _SettingsPageState extends State<SettingsPage> {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const HintRow(
+          HintRow(
             color: Colors.greenAccent,
             label: SettingsConfig.keepStockOnLabel,
             desc: SettingsConfig.keepStockOnDesc,
           ),
           const SizedBox(height: 12),
-          const HintRow(
+          HintRow(
             color: Colors.redAccent,
             label: SettingsConfig.keepStockOffLabel,
             desc: SettingsConfig.keepStockOffDesc,
@@ -586,7 +666,7 @@ class _SettingsPageState extends State<SettingsPage> {
               ),
             ),
             const SizedBox(width: 10),
-            const Text(SettingsConfig.sortLabel, style: TextStyles.bodyMedium),
+            Text(SettingsConfig.sortLabel, style: TextStyles.bodyMedium),
             const SizedBox(width: 8),
             Text(
               sortLabel,
@@ -805,19 +885,19 @@ class _SettingsPageState extends State<SettingsPage> {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const HintRow(
+          HintRow(
             color: Colors.blueAccent,
             label: SettingsConfig.syncItemSettings,
             desc: SettingsConfig.syncHelpSettingsDesc,
           ),
           const SizedBox(height: 12),
-          const HintRow(
+          HintRow(
             color: AppColors.greenAccent,
             label: SettingsConfig.syncItemStocks,
             desc: SettingsConfig.syncHelpStocksDesc,
           ),
           const SizedBox(height: 12),
-          const HintRow(
+          HintRow(
             color: Colors.orangeAccent,
             label: SettingsConfig.syncItemRecords,
             desc: SettingsConfig.syncHelpRecordsDesc,
@@ -888,7 +968,7 @@ class _SettingsPageState extends State<SettingsPage> {
     );
   }
 
-  static const List<_FormulaItem> _formulas = [
+  static List<_FormulaItem> get _formulas => [
     _FormulaItem(
       StockConfig.assetTotalAssets,
       StockConfig.assetTotalAssetsHelp,
@@ -974,10 +1054,7 @@ class _SettingsPageState extends State<SettingsPage> {
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
-                  child: const Text(
-                    AppConfig.btnClose,
-                    style: TextStyles.body13,
-                  ),
+                  child: Text(AppConfig.btnClose, style: TextStyles.body13),
                 ),
               ),
             ],
@@ -1110,7 +1187,7 @@ class _SettingsPageState extends State<SettingsPage> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx),
-            child: const Text(AppConfig.btnClose, style: TextStyles.body13),
+            child: Text(AppConfig.btnClose, style: TextStyles.body13),
           ),
         ],
       ),
@@ -1214,10 +1291,7 @@ class _SettingsPageState extends State<SettingsPage> {
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
-                  child: const Text(
-                    AppConfig.btnClose,
-                    style: TextStyles.body13,
-                  ),
+                  child: Text(AppConfig.btnClose, style: TextStyles.body13),
                 ),
               ),
             ],

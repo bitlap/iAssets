@@ -57,9 +57,7 @@ class _EditStockDialogState extends State<EditStockDialog> {
   @override
   void initState() {
     super.initState();
-    _sharesController = TextEditingController(
-      text: widget.isAdd ? '' : CurrencyUtil.formatRate(widget.stock.shares),
-    );
+    _sharesController = TextEditingController();
     _priceController = TextEditingController(
       text: widget.stock.currentPrice > 0
           ? CurrencyUtil.formatRate(widget.stock.currentPrice)
@@ -232,7 +230,8 @@ class _EditStockDialogState extends State<EditStockDialog> {
     final newShares = widget.isAdd
         ? oldShares + diffShares
         : oldShares - diffShares;
-    final bool isClosePosition = !widget.isAdd && diffShares == oldShares;
+    final bool isClosePosition =
+        !widget.isAdd && (diffShares - oldShares).abs() < 1e-9;
     final double avgBuyPrice = _avgBuyPrice;
     final double profitLoss = avgBuyPrice > 0
         ? (newPrice - avgBuyPrice) * newShares
@@ -246,13 +245,15 @@ class _EditStockDialogState extends State<EditStockDialog> {
 
     String recordType, description;
     if (isClosePosition) {
-      recordType = StockConfig.opSell;
+      recordType = StockConfig.opSellType;
       description = '${StockConfig.opClosePosition} ${widget.stock.symbol}';
     } else if (widget.operationRecords.isEmpty) {
-      recordType = StockConfig.opBuy;
+      recordType = StockConfig.opBuyType;
       description = '${StockConfig.opOpenPosition} ${widget.stock.symbol}';
     } else {
-      recordType = widget.isAdd ? StockConfig.opBuy : StockConfig.opSell;
+      recordType = widget.isAdd
+          ? StockConfig.opBuyType
+          : StockConfig.opSellType;
       description =
           '${widget.isAdd ? StockConfig.opAddPosition : StockConfig.opReducePosition} ${widget.stock.symbol}';
     }
@@ -389,7 +390,7 @@ class MoreOptionsDialog extends StatelessWidget {
                     Icons.add_circle,
                     color: AppColors.danger,
                   ),
-                  title: const Text(
+                  title: Text(
                     StockConfig.opAddPosition,
                     style: TextStyles.listTileTitle,
                   ),
@@ -404,7 +405,7 @@ class MoreOptionsDialog extends StatelessWidget {
                     Icons.remove_circle,
                     color: AppColors.success,
                   ),
-                  title: const Text(
+                  title: Text(
                     StockConfig.opReducePosition,
                     style: TextStyles.listTileTitle,
                   ),

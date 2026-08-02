@@ -72,7 +72,7 @@ class ConfirmDeleteDialog extends StatelessWidget {
                             borderRadius: BorderRadius.circular(12),
                             border: Border.all(color: AppColors.separator),
                           ),
-                          child: const Center(
+                          child: Center(
                             child: Text(
                               AppConfig.btnCancel,
                               style: TextStyles.bodyRegular,
@@ -91,7 +91,7 @@ class ConfirmDeleteDialog extends StatelessWidget {
                             borderRadius: BorderRadius.circular(12),
                             color: AppColors.danger.withValues(alpha: 0.85),
                           ),
-                          child: const Center(
+                          child: Center(
                             child: Text(
                               AppConfig.btnDelete,
                               style: TextStyles.bodyMedium,
@@ -160,7 +160,7 @@ class ConfirmDeleteDialog extends StatelessWidget {
                           borderRadius: BorderRadius.circular(12),
                           border: Border.all(color: AppColors.separator),
                         ),
-                        child: const Center(
+                        child: Center(
                           child: Text(
                             AppConfig.btnCancel,
                             style: TextStyles.bodyRegular,
@@ -182,7 +182,7 @@ class ConfirmDeleteDialog extends StatelessWidget {
                           borderRadius: BorderRadius.circular(12),
                           color: AppColors.danger.withValues(alpha: 0.85),
                         ),
-                        child: const Center(
+                        child: Center(
                           child: Text(
                             AppConfig.btnDelete,
                             style: TextStyles.bodyMedium,

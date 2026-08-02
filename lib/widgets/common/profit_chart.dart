@@ -31,7 +31,7 @@ class _ProfitChartWidgetState extends State<ProfitChartWidget> {
   List<ProfitSnapshot> _dailySnapshots = [];
   List<ProfitSnapshot> _intradaySnapshots = [];
 
-  static const List<_RangeOption> _rangeOptions = [
+  static List<_RangeOption> get _rangeOptions => [
     _RangeOption(StockConfig.profitRangeToday, 0),
     _RangeOption(StockConfig.profitRange7d, 1),
     _RangeOption(StockConfig.profitRange30d, 2),
@@ -163,7 +163,7 @@ class _ProfitChartWidgetState extends State<ProfitChartWidget> {
       return Container(
         height: 50,
         alignment: Alignment.center,
-        child: const Text(StockConfig.profitNoData, style: TextStyles.caption),
+        child: Text(StockConfig.profitNoData, style: TextStyles.caption),
       );
     }
     return ClipRRect(

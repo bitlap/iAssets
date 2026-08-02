@@ -372,7 +372,7 @@ class AssetsPageState extends State<AssetsPage> {
                 ),
               ),
               if (_flatItems.isEmpty)
-                const SliverFillRemaining(
+                SliverFillRemaining(
                   hasScrollBody: false,
                   child: EmptyStateWidget(
                     icon: Icons.account_balance_wallet_outlined,

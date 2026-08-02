@@ -5,17 +5,17 @@ export 'settings_config.dart';
 export 'stock_config.dart';
 export 'asset_config.dart';
 
+import '../l10n/l10n.dart';
+
 class AppConfig {
   AppConfig._();
 
   // 应用信息
-  static const String appName = '股票';
+  static String get appName => L10n.t('appName');
   static String appVersion = '1.0.0';
 
-  // 默认币种和语言
+  // 默认币种
   static const String defaultCurrency = 'USD';
-  static const String defaultLocaleLanguage = 'zh';
-  static const String defaultLocaleCountry = 'CN';
 
   // UI 布局
   static const double appBarHeight = 44.0;
@@ -27,15 +27,15 @@ class AppConfig {
   static const String developerWechat = 'naive_dddd';
 
   // 通用按钮
-  static const String btnClose = '确定';
-  static const String btnCancel = '取消';
-  static const String btnDelete = '删除';
-  static const String btnConfirm = '确认删除';
-  static const String btnAdd = '添加';
-  static const String btnAdded = '已添加';
-  static const String btnConfirmAdd = '确认添加';
-  static const String btnConfirmBuy = '确认加仓';
-  static const String btnConfirmSell = '确认减仓';
+  static String get btnClose => L10n.t('btnClose');
+  static String get btnCancel => L10n.t('btnCancel');
+  static String get btnDelete => L10n.t('btnDelete');
+  static String get btnConfirm => L10n.t('btnConfirm');
+  static String get btnAdd => L10n.t('btnAdd');
+  static String get btnAdded => L10n.t('btnAdded');
+  static String get btnConfirmAdd => L10n.t('btnConfirmAdd');
+  static String get btnConfirmBuy => L10n.t('btnConfirmBuy');
+  static String get btnConfirmSell => L10n.t('btnConfirmSell');
 
   // 定时器 / 缓存 / 超时
   static const int refreshInitialDelaySec = 3;
@@ -49,12 +49,12 @@ class AppConfig {
   static const int searchDebounceMs = 1000;
 
   // Toast 文案
-  static const String toastEmailCopied = '邮箱地址';
-  static const String toastWechatCopied = '微信号';
-  static const String toastClipboardSuffix = '已复制到剪贴板';
+  static String get toastEmailCopied => L10n.t('toastEmailCopied');
+  static String get toastWechatCopied => L10n.t('toastWechatCopied');
+  static String get toastClipboardSuffix => L10n.t('toastClipboardSuffix');
 
   // 通用后缀
-  static const String suffixCount = '次';
-  static const String suffixWan = '万';
-  static const String suffixYi = '亿';
+  static String get suffixCount => L10n.t('suffixCount');
+  static String get suffixWan => L10n.t('suffixWan');
+  static String get suffixYi => L10n.t('suffixYi');
 }

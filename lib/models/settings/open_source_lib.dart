@@ -8,7 +8,7 @@ class OpenSourceLib {
   const OpenSourceLib(this.name, this.author, this.license, this.description);
 }
 
-const List<OpenSourceLib> openSourceLibs = [
+List<OpenSourceLib> get openSourceLibs => [
   OpenSourceLib(
     'Flutter',
     'Google',
@@ -65,7 +65,7 @@ const List<OpenSourceLib> openSourceLibs = [
   ),
 ];
 
-const List<OpenSourceLib> dataSources = [
+List<OpenSourceLib> get dataSources => [
   OpenSourceLib(
     SettingsConfig.dataSourceNameEastMoney,
     SettingsConfig.dataSourceAuthorEastMoney,
