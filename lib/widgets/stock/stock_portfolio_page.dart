@@ -68,11 +68,14 @@ class StockPortfolioPageState extends State<StockPortfolioPage>
   // 市场筛选
   String? _filterMarket;
 
-  /// 数据是否有变更（脏标记），用于延迟写入 iCloud
+  /// 数据是否有变更（脏标记），用于异步写入本地与 iCloud
   bool _dataDirty = false;
 
-  /// 防抖定时器：修改后延迟自动异步同步到 iCloud
-  Timer? _syncTimer;
+  /// 是否正在保存，防止并发写入交错
+  bool _saving = false;
+
+  /// 当前进行中的保存任务（供并发调用等待）
+  Future<void> _saveInFlight = Future.value();
 
   final ScrollController _scrollController = ScrollController();
   DateTime? _lastRefreshTime;
@@ -159,30 +162,44 @@ class StockPortfolioPageState extends State<StockPortfolioPage>
     setState(() => _todayBaseline = baseline?.$2 ?? 0);
   }
 
-  /// 标记数据已变更，并启动防抖定时器异步同步到 iCloud
+  /// 标记数据已变更，并立即异步保存到本地（同步 iCloud 由内部处理）
   void _markDirty() {
     _dataDirty = true;
-    // 取消上一次的定时器，重新计时（防抖）
-    _syncTimer?.cancel();
-    _syncTimer = Timer(const Duration(seconds: 3), () {
-      if (_dataDirty && mounted) {
-        _saveAll();
-      }
-    });
+    unawaited(_saveAll());
   }
 
   /// 真正写入本地（同步到 iCloud 由内部按配置处理）
+  /// 若已有保存进行中，则等待其完成后再处理新产生的脏数据，避免并发交错
   Future<void> _saveAll() async {
-    _syncTimer?.cancel();
+    while (_saving) {
+      await _saveInFlight;
+    }
     if (!_dataDirty) return;
-    await StockDataManager.saveAll(stocks, _operationRecords, _dividendRecords);
-    _dataDirty = false;
+    _saving = true;
+    final completer = Completer<void>();
+    _saveInFlight = completer.future;
+    try {
+      // 循环处理：保存期间的任何新编辑会重新置脏，确保不丢失
+      while (_dataDirty) {
+        _dataDirty = false;
+        await StockDataManager.saveAll(
+          stocks,
+          _operationRecords,
+          _dividendRecords,
+        );
+      }
+      completer.complete();
+    } catch (e) {
+      completer.completeError(e);
+      rethrow;
+    } finally {
+      _saving = false;
+    }
   }
 
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
-    _syncTimer?.cancel();
     _priceRefreshTimer?.cancel();
     super.dispose();
   }
@@ -224,6 +241,31 @@ class StockPortfolioPageState extends State<StockPortfolioPage>
 
     final data = await StockDataManager.loadStocks();
     if (!mounted) return;
+    // 加载期间若发生新的编辑（脏标记被重新置位），保留内存中的最新数据，
+    // 避免用 iCloud/磁盘旧数据覆盖用户刚做的修改
+    if (_dataDirty) {
+      final updated = await StockDataManager.fetchQuotesAndSave(
+        _quoteService,
+        stocks,
+        _operationRecords,
+        _dividendRecords,
+      );
+      if (mounted) setState(() => stocks = updated);
+      await StockDataManager.recordProfitIfNeeded(
+        totalProfit,
+        selectedCurrency,
+      );
+      await _loadTodayBaseline();
+      if (mounted) {
+        setState(() => _lastRefreshTime = DateTime.now());
+        _scrollController.animateTo(
+          0,
+          duration: const Duration(milliseconds: 200),
+          curve: Curves.easeOut,
+        );
+      }
+      return;
+    }
     setState(() {
       stocks = data.$1;
       _operationRecords
