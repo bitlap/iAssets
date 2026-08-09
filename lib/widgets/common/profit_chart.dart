@@ -159,7 +159,7 @@ class _ProfitChartWidgetState extends State<ProfitChartWidget> {
 
   Widget _buildMiniChart() {
     final data = _intradaySnapshots;
-    if (data.isEmpty) {
+    if (data.length < 2) {
       return Container(
         height: 50,
         alignment: Alignment.center,
@@ -175,7 +175,7 @@ class _ProfitChartWidgetState extends State<ProfitChartWidget> {
           size: const Size(double.infinity, 38),
           painter: _MiniChartPainter(
             data: data.map((s) => s.totalProfit).toList(),
-            isPositive: widget.totalProfit >= 0,
+            isPositive: data.last.totalProfit >= 0,
           ),
         ),
       ),
