@@ -154,7 +154,21 @@ class IcloudStorage {
     }
   }
 
-  /// 从 iCloud 拉取更新到本地（若 iCloud 文件更新）
+  /// 判断云内容是否为可用 JSON（非空且可解析，且非空集合/对象）
+  /// 防止 iCloud 占位文件 / 残损文件 / 空文件覆盖本地有效数据
+  static bool _isUsableCloudJson(String content) {
+    if (content.trim().isEmpty) return false;
+    try {
+      final decoded = jsonDecode(content);
+      if (decoded is List) return decoded.isNotEmpty;
+      if (decoded is Map) return decoded.isNotEmpty;
+      return false;
+    } catch (_) {
+      return false;
+    }
+  }
+
+  /// 从 iCloud 拉取更新到本地（若 iCloud 文件更新且内容有效）
   static Future<void> _syncFromCloud(String name) async {
     if (_cloudPath == null) return;
     final enabled = await SettingsService.getSyncSettings();
@@ -168,7 +182,14 @@ class IcloudStorage {
           ? await local.lastModified()
           : DateTime(0);
       if (cloudTime.isAfter(localTime)) {
-        await local.writeAsString(await cloud.readAsString());
+        final cloudContent = await cloud.readAsString();
+        if (!_isUsableCloudJson(cloudContent)) {
+          debugPrint(
+            '[${DateTime.now().toString().substring(11, 19)}][iCloud] ===> 云端内容为空或损坏，跳过覆盖（保护本地数据）: $name',
+          );
+          return;
+        }
+        await local.writeAsString(cloudContent);
         debugPrint(
           '[${DateTime.now().toString().substring(11, 19)}][iCloud] ===> 从 iCloud 同步到本地: $name',
         );
