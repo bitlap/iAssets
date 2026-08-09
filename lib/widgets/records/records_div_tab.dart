@@ -38,7 +38,7 @@ class _DividendRecordsTabState extends State<DividendRecordsTab> {
   void initState() {
     super.initState();
     allRecords = List.from(widget.dividendRecords)
-      ..sort((a, b) => b.operationTime.compareTo(a.operationTime));
+      ..sort((a, b) => b.date.compareTo(a.date));
   }
 
   @override
@@ -46,7 +46,7 @@ class _DividendRecordsTabState extends State<DividendRecordsTab> {
     super.didUpdateWidget(oldWidget);
     if (widget.dividendRecords != oldWidget.dividendRecords) {
       allRecords = List.from(widget.dividendRecords)
-        ..sort((a, b) => b.operationTime.compareTo(a.operationTime));
+        ..sort((a, b) => b.date.compareTo(a.date));
     }
   }
 
@@ -91,8 +91,12 @@ class _DividendRecordsTabState extends State<DividendRecordsTab> {
             content: StockConfig.recordsDeleteDivConfirm,
           ),
           onDismissed: (_) {
+            final originalIndex = widget.dividendRecords.indexOf(record);
             setState(() => allRecords.removeAt(index));
-            widget.onDeleteRecord?.call(widget.stock.symbol, index);
+            widget.onDeleteRecord?.call(
+              widget.stock.symbol,
+              originalIndex < 0 ? index : originalIndex,
+            );
           },
           child: InkWell(
             onTap: () => _showEditDividendDialog(context, index, record),
@@ -307,9 +311,10 @@ class _DividendRecordsTabState extends State<DividendRecordsTab> {
                     taxRate: editTaxRate / 100,
                   );
                   setState(() => allRecords[index] = updated);
+                  final originalIndex = widget.dividendRecords.indexOf(record);
                   widget.onEditRecord?.call(
                     widget.stock.symbol,
-                    index,
+                    originalIndex < 0 ? index : originalIndex,
                     updated,
                   );
                   Navigator.pop(ctx);
