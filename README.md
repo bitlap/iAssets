@@ -170,7 +170,7 @@ dart format .
 | 后台快照间隔    | 10 分钟                                           | WorkManager 定时记录收益快照       |
 | 支持币种      | CNY、CNH、USD、HKD、EUR、JPY、GBP、AUD、CAD、CHF、KRW、SGD | 当前代码实际支持                   |
 | 数据源       | 东方财富搜索、腾讯行情、东方财富行情补充、ExchangeRate-API           | 当前代码实际使用                   |
-| iOS 最低版本  | 14.0                                            | 当前 Xcode 工程配置              |
+| iOS 最低版本  | 15.0                                            | 当前 Xcode 工程配置              |
 | Bundle ID | `org.bitlap.assets`                             | 当前工程默认值，克隆后可按需修改           |
 | Team ID   | `ios/Config.xcconfig`                           | 通过 `DEVELOPMENT_TEAM` 配置签名 |
 | iCloud 容器 | `iCloud.org.bitlap.assets`                      | 若修改包名需同步调整                 |
