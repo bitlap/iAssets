@@ -184,8 +184,12 @@ class InfoDialog extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
         side: const BorderSide(color: AppColors.border, width: 0.5),
       ),
+      insetPadding: const EdgeInsets.symmetric(horizontal: 40, vertical: 24),
       title: title,
-      content: content,
+      content: SizedBox(
+        width: MediaQuery.of(context).size.width * AppConfig.dialogWidthRatio,
+        child: content,
+      ),
       actions: [
         TextButton(
           onPressed: () => Navigator.pop(context),

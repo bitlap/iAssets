@@ -8,6 +8,7 @@ class SectionTitle extends StatelessWidget {
   final VoidCallback? onAdd;
   final VoidCallback? onSettings;
   final VoidCallback? onDividendOverview;
+  final VoidCallback? onBackup;
 
   const SectionTitle({
     super.key,
@@ -16,6 +17,7 @@ class SectionTitle extends StatelessWidget {
     this.onAdd,
     this.onSettings,
     this.onDividendOverview,
+    this.onBackup,
   });
 
   @override
@@ -43,6 +45,25 @@ class SectionTitle extends StatelessWidget {
           Row(
             mainAxisSize: MainAxisSize.min,
             children: [
+              if (onBackup != null)
+                GestureDetector(
+                  onTap: onBackup,
+                  child: Container(
+                    width: 32,
+                    height: 32,
+                    decoration: BoxDecoration(
+                      color: AppColors.surfaceElevated,
+                      shape: BoxShape.circle,
+                    ),
+                    child: const Icon(
+                      Icons.backup_outlined,
+                      color: AppColors.textPrimary,
+                      size: 18,
+                    ),
+                  ),
+                ),
+              if (onBackup != null && onDividendOverview != null)
+                const SizedBox(width: 8),
               if (onDividendOverview != null)
                 GestureDetector(
                   onTap: onDividendOverview,

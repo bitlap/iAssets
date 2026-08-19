@@ -206,6 +206,39 @@ class StockConfig {
   static String get dividendRecords => L10n.t('dividendRecords');
   static String get dividendAllMarkets => L10n.t('dividendAllMarkets');
 
+  // 备份 文案
+  static String get backupTitle => L10n.t('backupTitle');
+  static String get backupExport => L10n.t('backupExport');
+  static String get backupImport => L10n.t('backupImport');
+  static String get backupExportDesc => L10n.t('backupExportDesc');
+  static String get backupImportDesc => L10n.t('backupImportDesc');
+  static String get backupExportSuccess => L10n.t('backupExportSuccess');
+  static String get backupImportSuccess => L10n.t('backupImportSuccess');
+  static String get backupImportConfirm => L10n.t('backupImportConfirm');
+  static String get backupExportFail => L10n.t('backupExportFail');
+  static String get backupImportFail => L10n.t('backupImportFail');
+  static String get backupNoData => L10n.t('backupNoData');
+  static String get backupImporting => L10n.t('backupImporting');
+  static String get backupExporting => L10n.t('backupExporting');
+  static String get backupRollback => L10n.t('backupRollback');
+  static String get backupRollbackDesc => L10n.t('backupRollbackDesc');
+  static String get backupRollbackConfirm => L10n.t('backupRollbackConfirm');
+  static String get backupRollbackSuccess => L10n.t('backupRollbackSuccess');
+  static String get backupRollbackFail => L10n.t('backupRollbackFail');
+  static String get btnConfirmRollback => L10n.t('btnConfirmRollback');
+  static String get backupNoBackup => L10n.t('backupNoBackup');
+
+  // 文件浏览器
+  static String get fileBrowserTitle => L10n.t('fileBrowserTitle');
+  static String get fileBrowserExportTitle => L10n.t('fileBrowserExportTitle');
+  static String get fileBrowserGoUp => L10n.t('fileBrowserGoUp');
+  static String get fileBrowserEmpty => L10n.t('fileBrowserEmpty');
+  static String get fileBrowserFileName => L10n.t('fileBrowserFileName');
+  static String get fileBrowserSave => L10n.t('fileBrowserSave');
+  static String get fileBrowserSaveFail => L10n.t('fileBrowserSaveFail');
+  static String get fileBrowserImportConfirm =>
+      L10n.t('fileBrowserImportConfirm');
+
   /// 将记录 description 中的操作词（可能为创建时语言的任意一种）替换为当前语言
   static String localizeRecordDescription(String description) {
     const map = {

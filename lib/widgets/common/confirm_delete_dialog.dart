@@ -16,11 +16,18 @@ class ConfirmDeleteDialog extends StatelessWidget {
     required this.onConfirm,
   });
 
-  /// 显示删除确认弹窗（便捷方法）
+  /// 显示确认弹窗（便捷方法）
+  ///
+  /// 默认是删除风格（红色删除图标 + "删除"按钮），
+  /// 通过 [icon] / [iconColor] / [confirmText] / [confirmColor] 可定制为其他确认场景。
   static Future<bool> show(
     BuildContext context, {
     required String title,
     required String content,
+    IconData icon = Icons.delete_outline,
+    Color iconColor = AppColors.danger,
+    String? confirmText,
+    Color confirmColor = AppColors.danger,
   }) {
     return showDialog<bool>(
       context: context,
@@ -43,14 +50,10 @@ class ConfirmDeleteDialog extends StatelessWidget {
                   width: 48,
                   height: 48,
                   decoration: BoxDecoration(
-                    color: AppColors.danger.withValues(alpha: 0.15),
+                    color: iconColor.withValues(alpha: 0.15),
                     shape: BoxShape.circle,
                   ),
-                  child: const Icon(
-                    Icons.delete_outline,
-                    color: AppColors.danger,
-                    size: 24,
-                  ),
+                  child: Icon(icon, color: iconColor, size: 24),
                 ),
                 const SizedBox(height: 12),
                 Text(title, style: TextStyles.dialogTitle),
@@ -89,11 +92,11 @@ class ConfirmDeleteDialog extends StatelessWidget {
                           padding: const EdgeInsets.symmetric(vertical: 12),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(12),
-                            color: AppColors.danger.withValues(alpha: 0.85),
+                            color: confirmColor.withValues(alpha: 0.85),
                           ),
                           child: Center(
                             child: Text(
-                              AppConfig.btnDelete,
+                              confirmText ?? AppConfig.btnDelete,
                               style: TextStyles.bodyMedium,
                             ),
                           ),

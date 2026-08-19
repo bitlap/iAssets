@@ -22,6 +22,7 @@ import 'edit_delete_dialogs.dart';
 import 'search_stock_dialog.dart';
 import 'stock_header_card.dart';
 import '../dividend/global_dividend_page.dart';
+import '../common/backup_dialog.dart';
 import '../settings_page.dart';
 
 /// 股票持仓主页 - 仅负责状态管理和页面组装
@@ -515,7 +516,7 @@ class StockPortfolioPageState extends State<StockPortfolioPage>
       }
       CenterToast.success(
         context,
-        '${action}${StockConfig.resultAddSuccess.replaceAll(StockConfig.opAddPosition, '')}',
+        '$action${StockConfig.resultAddSuccess.replaceAll(StockConfig.opAddPosition, '')}',
       );
     }
   }
@@ -561,11 +562,12 @@ class StockPortfolioPageState extends State<StockPortfolioPage>
               if (list == null || list.isEmpty) {
                 if (_keepStockAfterClose) {
                   final i = stocks.indexWhere((s) => s.symbol == symbol);
-                  if (i != -1)
+                  if (i != -1) {
                     stocks[i] = StockDataManager.recalculateStock(
                       stocks[i],
                       null,
                     );
+                  }
                 } else {
                   stocks.removeWhere((s) => s.symbol == symbol);
                   _operationRecords.remove(symbol);
@@ -573,11 +575,12 @@ class StockPortfolioPageState extends State<StockPortfolioPage>
                 }
               } else {
                 final i = stocks.indexWhere((s) => s.symbol == symbol);
-                if (i != -1)
+                if (i != -1) {
                   stocks[i] = StockDataManager.recalculateStock(
                     stocks[i],
                     _operationRecords[symbol],
                   );
+                }
               }
             });
             _markDirty();
@@ -589,11 +592,12 @@ class StockPortfolioPageState extends State<StockPortfolioPage>
                 list[index] = updated;
               }
               final i = stocks.indexWhere((s) => s.symbol == symbol);
-              if (i != -1)
+              if (i != -1) {
                 stocks[i] = StockDataManager.recalculateStock(
                   stocks[i],
                   _operationRecords[symbol],
                 );
+              }
             });
             _markDirty();
           },
@@ -765,6 +769,22 @@ class StockPortfolioPageState extends State<StockPortfolioPage>
     );
   }
 
+  /// 打开数据备份弹窗
+  void _showBackupDialog() {
+    _collapseExpandedStock();
+    showDialog(
+      context: context,
+      builder: (dialogContext) => BackupDialog(
+        onDataChanged: () {
+          _syncStockData();
+        },
+        // 传入页面 context（而非 dialog 自身的 context），
+        // 保证关闭备份弹窗后仍可用它打开文件浏览器等后续弹窗
+        rootContext: context,
+      ),
+    );
+  }
+
   /// 打开全屏设置页面
   void _showSettingsPage() {
     _collapseExpandedStock();
@@ -836,6 +856,7 @@ class StockPortfolioPageState extends State<StockPortfolioPage>
                       title: StockConfig.homeTitle,
                       subtitle: _buildSubtitle(),
                       onDividendOverview: () => _showDividendOverview(),
+                      onBackup: () => _showBackupDialog(),
                       onSettings: _showSettingsPage,
                     ),
                     const SizedBox(height: 8),

@@ -11,6 +11,7 @@ const Map<String, String> stringsEn = {
   'btnConfirmAdd': 'Confirm Add',
   'btnConfirmBuy': 'Confirm Buy',
   'btnConfirmSell': 'Confirm Sell',
+  'btnConfirmRollback': 'Confirm Rollback',
   'toastEmailCopied': 'Email address',
   'toastWechatCopied': 'WeChat ID',
   'toastClipboardSuffix': 'copied to clipboard',
@@ -345,4 +346,37 @@ const Map<String, String> stringsEn = {
   'depositWealthLabel': 'Deposits & Wealth',
   'createdLabel': 'Created: {date}',
   'updatedLabel': 'Updated: {date}',
+
+  // Backup
+  'backupTitle': 'Data Backup',
+  'backupExport': 'Export Data',
+  'backupImport': 'Import Data',
+  'backupExportDesc':
+      'Export all positions, records and settings as a JSON file',
+  'backupImportDesc': 'Restore data from a JSON file (overwrites current data)',
+  'backupExportSuccess': 'Export successful',
+  'backupImportSuccess': 'Import successful',
+  'backupImportConfirm': 'Import will overwrite all current data. Continue?',
+  'backupExportFail': 'Export failed',
+  'backupImportFail': 'Import failed, invalid data format',
+  'backupNoData': 'No data to export',
+  'backupImporting': 'Importing...',
+  'backupExporting': 'Exporting...',
+  'backupRollback': 'Rollback Data',
+  'backupRollbackDesc': 'Restore data from backup to before last import',
+  'backupRollbackConfirm':
+      'Rollback will overwrite all current data. Continue?',
+  'backupRollbackSuccess': 'Rollback successful',
+  'backupRollbackFail': 'Rollback failed, no backup available',
+  'backupNoBackup': 'No backup available to rollback',
+
+  // File browser
+  'fileBrowserTitle': 'Import File',
+  'fileBrowserExportTitle': 'Export File',
+  'fileBrowserGoUp': 'Go Up',
+  'fileBrowserEmpty': 'Empty directory',
+  'fileBrowserFileName': 'File name',
+  'fileBrowserSave': 'Save',
+  'fileBrowserSaveFail': 'Save failed',
+  'fileBrowserImportConfirm': 'Import',
 };
