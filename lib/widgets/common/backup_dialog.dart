@@ -210,6 +210,7 @@ class _BackupDialogState extends State<BackupDialog> {
       title: StockConfig.backupRollback,
       content: StockConfig.backupRollbackConfirm,
       confirmText: StockConfig.btnConfirmRollback,
+      icon: Icons.restore,
     );
     if (!confirmed || !mounted) return;
 
