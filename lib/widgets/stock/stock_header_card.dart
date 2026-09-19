@@ -62,13 +62,7 @@ class _StockHeaderCardState extends State<StockHeaderCard> {
       decoration: BoxDecoration(
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(24),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.6),
-            blurRadius: 20,
-            offset: const Offset(0, 8),
-          ),
-        ],
+        boxShadow: AppColors.summaryCardShadow,
         border: Border.all(color: AppColors.border, width: 0.5),
       ),
       child: Column(
@@ -86,7 +80,7 @@ class _StockHeaderCardState extends State<StockHeaderCard> {
                   const SizedBox(width: 4),
                   GestureDetector(
                     onTap: _showTotalAssetsHelpDialog,
-                    child: const Icon(
+                    child: Icon(
                       Icons.help_outline,
                       size: 13,
                       color: AppColors.warning,
@@ -148,7 +142,7 @@ class _StockHeaderCardState extends State<StockHeaderCard> {
               ),
             ),
             const SizedBox(width: 2),
-            const Icon(Icons.arrow_drop_down, size: 18, color: Colors.white),
+            Icon(Icons.arrow_drop_down, size: 18, color: AppColors.textPrimary),
           ],
         ),
       ),
@@ -174,7 +168,7 @@ class _StockHeaderCardState extends State<StockHeaderCard> {
             const SizedBox(width: 2),
             GestureDetector(
               onTap: _showTodayProfitHelpDialog,
-              child: const Icon(
+              child: Icon(
                 Icons.help_outline,
                 size: 13,
                 color: AppColors.textSecondary,
@@ -212,7 +206,7 @@ class _StockHeaderCardState extends State<StockHeaderCard> {
             const SizedBox(width: 2),
             GestureDetector(
               onTap: _showTotalCostHelpDialog,
-              child: const Icon(
+              child: Icon(
                 Icons.help_outline,
                 size: 10,
                 color: AppColors.accent,
@@ -249,7 +243,11 @@ class _StockHeaderCardState extends State<StockHeaderCard> {
       icon: Icons.account_balance_wallet,
       iconColor: AppColors.warning,
       children: [
-        _helpLine(StockConfig.assetTotalSellAmount, sellText, Colors.white),
+        _helpLine(
+          StockConfig.assetTotalSellAmount,
+          sellText,
+          AppColors.textPrimary,
+        ),
       ],
     );
   }
@@ -263,7 +261,11 @@ class _StockHeaderCardState extends State<StockHeaderCard> {
       icon: Icons.account_balance,
       iconColor: AppColors.accent,
       children: [
-        _helpLine(StockConfig.assetCostDetailLabel, costText, Colors.white),
+        _helpLine(
+          StockConfig.assetCostDetailLabel,
+          costText,
+          AppColors.textPrimary,
+        ),
         const SizedBox(height: 6),
         _helpLine(
           StockConfig.assetFloatProfitLabel,
@@ -280,16 +282,20 @@ class _StockHeaderCardState extends State<StockHeaderCard> {
       children: [
         Row(
           children: [
-            Icon(Icons.trending_up, size: 10, color: AppColors.danger),
+            Icon(
+              Icons.trending_up,
+              size: 10,
+              color: ProfitUtil.colorOf(widget.totalProfit),
+            ),
             const SizedBox(width: 4),
             Text(StockConfig.assetTotalProfit, style: TextStyles.caption),
             const SizedBox(width: 2),
             GestureDetector(
               onTap: _showProfitHelpDialog,
-              child: const Icon(
+              child: Icon(
                 Icons.help_outline,
                 size: 10,
-                color: AppColors.danger,
+                color: ProfitUtil.colorOf(widget.totalProfit),
               ),
             ),
           ],
@@ -307,7 +313,7 @@ class _StockHeaderCardState extends State<StockHeaderCard> {
     _helpDialogFrame(
       title: StockConfig.assetTotalProfit,
       icon: Icons.trending_up,
-      iconColor: AppColors.danger,
+      iconColor: ProfitUtil.colorOf(widget.totalProfit),
       children: [
         _helpLine(
           StockConfig.assetTotalRealizedPL,
@@ -360,11 +366,7 @@ class _StockHeaderCardState extends State<StockHeaderCard> {
       children: [
         Row(
           children: [
-            const Icon(
-              Icons.monetization_on,
-              size: 10,
-              color: AppColors.warning,
-            ),
+            Icon(Icons.monetization_on, size: 10, color: AppColors.warning),
             const SizedBox(width: 4),
             Text(StockConfig.assetTotalDividends, style: TextStyles.caption),
             const SizedBox(width: 2),
@@ -389,7 +391,7 @@ class _StockHeaderCardState extends State<StockHeaderCard> {
         Text(
           value,
           style: TextStyles.valueMedium.copyWith(
-            color: valueColor ?? Colors.white,
+            color: valueColor ?? AppColors.textPrimary,
           ),
         ),
       ],
@@ -410,7 +412,7 @@ class _StockHeaderCardState extends State<StockHeaderCard> {
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const Divider(color: AppColors.border, thickness: 0.5),
+          Divider(color: AppColors.border, thickness: 0.5),
           const SizedBox(height: 12),
           ...children,
         ],

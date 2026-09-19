@@ -61,7 +61,7 @@ class _RecordsDialogState extends State<RecordsDialog>
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
         color: AppColors.surface,
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
         border: Border(
@@ -120,11 +120,7 @@ class _RecordsDialogState extends State<RecordsDialog>
                       shape: BoxShape.circle,
                       border: Border.all(color: AppColors.border, width: 0.5),
                     ),
-                    child: const Icon(
-                      Icons.close,
-                      color: AppColors.grey,
-                      size: 14,
-                    ),
+                    child: Icon(Icons.close, color: AppColors.grey, size: 14),
                   ),
                 ),
               ],

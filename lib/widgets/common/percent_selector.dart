@@ -25,7 +25,7 @@ Widget buildPercentSelector(
             color: AppColors.surface,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10),
-              side: const BorderSide(color: AppColors.border),
+              side: BorderSide(color: AppColors.border),
             ),
             constraints: const BoxConstraints(maxHeight: 300),
             items: values.map((v) {
@@ -38,9 +38,9 @@ Widget buildPercentSelector(
                     SizedBox(
                       width: 16,
                       child: isSel
-                          ? const Icon(
+                          ? Icon(
                               Icons.check,
-                              color: Colors.white,
+                              color: AppColors.textPrimary,
                               size: 16,
                             )
                           : null,
@@ -71,7 +71,7 @@ Widget buildPercentSelector(
             children: [
               Text('${selected.toInt()}%', style: TextStyles.bodyMedium),
               const SizedBox(width: 4),
-              const Icon(
+              Icon(
                 Icons.keyboard_arrow_down,
                 size: 18,
                 color: AppColors.textTertiary,

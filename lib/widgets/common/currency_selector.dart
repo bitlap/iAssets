@@ -63,7 +63,7 @@ class CurrencySelector {
                           const Spacer(),
                           GestureDetector(
                             onTap: _close,
-                            child: const Icon(
+                            child: Icon(
                               Icons.close,
                               size: 18,
                               color: AppColors.textSecondary,
@@ -100,7 +100,7 @@ class CurrencySelector {
                                   SizedBox(
                                     width: 16,
                                     child: isSelected
-                                        ? const Icon(
+                                        ? Icon(
                                             Icons.check,
                                             size: 16,
                                             color: AppColors.textPrimary,

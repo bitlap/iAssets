@@ -16,6 +16,8 @@ class SettingsService {
   static const String keyAssetSortAscending = 'asset_sort_ascending';
   static const String keyAssetSectionOrder = 'asset_section_order';
   static const String keyPreferredLanguage = 'preferred_language';
+  static const String keyThemeMode = 'theme_mode';
+  static const String keyRedUpGreenDown = 'red_up_green_down';
 
   static const String feeTypePercentage = 'percentage';
   static const String feeTypeFixed = 'fixed';
@@ -25,6 +27,11 @@ class SettingsService {
   static const String languageZh = 'zh';
   static const String languageZhHant = 'zh_Hant';
   static const String languageEn = 'en';
+
+  /// 主题偏好可选值
+  static const String themeSystem = 'system';
+  static const String themeLight = 'light';
+  static const String themeDark = 'dark';
 
   static Map<String, dynamic>? _cache;
   static String? _path;
@@ -218,6 +225,37 @@ class SettingsService {
   static Future<void> setPreferredLanguage(String language) async {
     final settings = await _load();
     settings[keyPreferredLanguage] = language;
+    await _save();
+  }
+
+  /// 读取主题偏好，默认跟随系统。
+  static Future<String> getThemeMode() async {
+    final settings = await _load();
+    final value = settings[keyThemeMode] as String?;
+    return switch (value) {
+      themeLight => themeLight,
+      themeDark => themeDark,
+      _ => themeSystem,
+    };
+  }
+
+  /// 保存主题偏好。
+  static Future<void> setThemeMode(String themeMode) async {
+    final settings = await _load();
+    settings[keyThemeMode] = themeMode;
+    await _save();
+  }
+
+  /// 读取涨跌配色偏好，默认红涨绿跌。
+  static Future<bool> getRedUpGreenDown() async {
+    final settings = await _load();
+    return settings[keyRedUpGreenDown] as bool? ?? true;
+  }
+
+  /// 保存涨跌配色偏好。
+  static Future<void> setRedUpGreenDown(bool value) async {
+    final settings = await _load();
+    settings[keyRedUpGreenDown] = value;
     await _save();
   }
 

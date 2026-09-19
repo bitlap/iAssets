@@ -51,7 +51,7 @@ class _DraggableFabState extends State<DraggableFab> {
               ),
             ],
           ),
-          child: const Icon(Icons.add, color: Colors.white, size: 28),
+          child: Icon(Icons.add, color: Colors.white, size: 28),
         ),
       ),
     );

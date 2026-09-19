@@ -88,11 +88,7 @@ class SettingsSelectableItem extends StatelessWidget {
               width: 20,
               height: 20,
               child: isSelected
-                  ? const Icon(
-                      Icons.check_circle,
-                      size: 20,
-                      color: Colors.white,
-                    )
+                  ? Icon(Icons.check_circle, size: 20, color: AppColors.accent)
                   : Icon(
                       Icons.circle_outlined,
                       size: 20,

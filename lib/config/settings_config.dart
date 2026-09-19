@@ -5,7 +5,13 @@ class SettingsConfig {
 
   // 设置页 分区标题
   static String get settingsTitle => L10n.t('settingsTitle');
-  static String get sectionLanguage => L10n.t('sectionLanguage');
+  static String get sectionGeneral => L10n.t('sectionGeneral');
+  static String get themeLabel => L10n.t('themeLabel');
+  static String get themeSystem => L10n.t('themeSystem');
+  static String get themeLight => L10n.t('themeLight');
+  static String get themeDark => L10n.t('themeDark');
+  static String get languageLabel => L10n.t('languageLabel');
+  static String get redUpGreenDown => L10n.t('redUpGreenDown');
   static String get languageAuto => L10n.t('languageAuto');
   static String get languageZh => L10n.t('languageZh');
   static String get languageZhHant => L10n.t('languageZhHant');

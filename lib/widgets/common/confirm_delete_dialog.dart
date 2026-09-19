@@ -137,7 +137,7 @@ class ConfirmDeleteDialog extends StatelessWidget {
                   color: AppColors.danger.withValues(alpha: 0.15),
                   shape: BoxShape.circle,
                 ),
-                child: const Icon(
+                child: Icon(
                   Icons.delete_outline,
                   color: AppColors.danger,
                   size: 24,

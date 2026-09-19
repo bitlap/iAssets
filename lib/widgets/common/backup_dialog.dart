@@ -65,10 +65,7 @@ class _BackupDialogState extends State<BackupDialog> {
                 ),
                 Divider(thickness: 0.5, color: AppColors.border),
                 ListTile(
-                  leading: const Icon(
-                    Icons.upload_file,
-                    color: AppColors.accent,
-                  ),
+                  leading: Icon(Icons.upload_file, color: AppColors.accent),
                   title: Text(
                     StockConfig.backupExport,
                     style: TextStyles.listTileTitle,
@@ -81,7 +78,7 @@ class _BackupDialogState extends State<BackupDialog> {
                 ),
                 Divider(thickness: 0.5, color: AppColors.border),
                 ListTile(
-                  leading: const Icon(Icons.download, color: AppColors.warning),
+                  leading: Icon(Icons.download, color: AppColors.warning),
                   title: Text(
                     StockConfig.backupImport,
                     style: TextStyles.listTileTitle,
@@ -95,7 +92,7 @@ class _BackupDialogState extends State<BackupDialog> {
                 if (_hasBackup) ...[
                   Divider(thickness: 0.5, color: AppColors.border),
                   ListTile(
-                    leading: const Icon(Icons.restore, color: AppColors.danger),
+                    leading: Icon(Icons.restore, color: AppColors.danger),
                     title: Text(
                       StockConfig.backupRollback,
                       style: TextStyles.listTileTitle.copyWith(

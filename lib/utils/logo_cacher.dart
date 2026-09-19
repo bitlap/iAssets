@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:typed_data';
 import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
@@ -74,6 +75,26 @@ class LogoCacher {
       );
     }
     return local ?? NetworkImage(logoUrl);
+  }
+
+  /// 将用户选择的本地图片复制到持久化 Logo 缓存目录。
+  static Future<void> cacheLocalImage(String code, String sourcePath) async {
+    await ensureInit();
+    final source = File(sourcePath);
+    if (!await source.exists()) {
+      throw FileSystemException('Selected image does not exist', sourcePath);
+    }
+    final target = File(_filePath(code));
+    await target.parent.create(recursive: true);
+    await source.copy(target.path);
+  }
+
+  /// 将图片字节保存为持久化 Logo，适用于相册和文件选择器。
+  static Future<void> cacheLocalImageBytes(String code, Uint8List bytes) async {
+    await ensureInit();
+    final target = File(_filePath(code));
+    await target.parent.create(recursive: true);
+    await target.writeAsBytes(bytes, flush: true);
   }
 
   /// 下载图片到本地（等待完成）

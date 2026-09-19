@@ -8,6 +8,7 @@ import '../utils/center_toast.dart';
 import '../services/settings_service.dart';
 import '../config/app_config.dart';
 import '../config/app_colors.dart';
+import '../config/app_theme.dart';
 import '../config/sort_options.dart';
 import '../widgets/common/app_ui.dart';
 import '../models/settings/open_source_lib.dart';
@@ -52,6 +53,9 @@ class _SettingsPageState extends State<SettingsPage> {
   String _selectedFeeType = SettingsService.feeTypePercentage;
   late TextEditingController _feeValueController;
   String _selectedLanguage = SettingsService.languageSystem;
+  String _selectedTheme = SettingsService.themeSystem;
+  bool _redUpGreenDown = true;
+  bool _isThemeExpanded = false;
   bool _isLanguageExpanded = false;
 
   @override
@@ -92,6 +96,8 @@ class _SettingsPageState extends State<SettingsPage> {
     final feeType = await SettingsService.getDefaultFeeType();
     final feeValue = await SettingsService.getDefaultFeeValue();
     final language = await SettingsService.getPreferredLanguage();
+    final theme = await SettingsService.getThemeMode();
+    final redUpGreenDown = await SettingsService.getRedUpGreenDown();
     if (mounted) {
       setState(() {
         _keepStockAfterClose = keepStock;
@@ -103,6 +109,8 @@ class _SettingsPageState extends State<SettingsPage> {
             ? CurrencyUtil.formatRate(feeValue)
             : '';
         _selectedLanguage = language;
+        _selectedTheme = theme;
+        _redUpGreenDown = redUpGreenDown;
       });
     }
   }
@@ -188,6 +196,21 @@ class _SettingsPageState extends State<SettingsPage> {
     widget.onSettingsChanged?.call();
   }
 
+  Future<void> _onThemeSelected(String theme) async {
+    if (theme == _selectedTheme) return;
+    setState(() => _selectedTheme = theme);
+    AppTheme.apply(theme);
+    await SettingsService.setThemeMode(theme);
+    widget.onSettingsChanged?.call();
+  }
+
+  Future<void> _onMarketColorChanged(bool value) async {
+    setState(() => _redUpGreenDown = value);
+    AppColors.applyMarketColorPreference(value);
+    await SettingsService.setRedUpGreenDown(value);
+    widget.onSettingsChanged?.call();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -198,7 +221,11 @@ class _SettingsPageState extends State<SettingsPage> {
         toolbarHeight: 44,
         scrolledUnderElevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios, color: Colors.white, size: 18),
+          icon: Icon(
+            Icons.arrow_back_ios,
+            color: AppColors.textPrimary,
+            size: 18,
+          ),
           onPressed: () => Navigator.pop(context),
         ),
         title: Text(
@@ -210,9 +237,9 @@ class _SettingsPageState extends State<SettingsPage> {
       body: ListView(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
         children: [
-          _buildSectionHeader(Icons.language, SettingsConfig.sectionLanguage),
+          _buildSectionHeader(Icons.tune, SettingsConfig.sectionGeneral),
           const SizedBox(height: 8),
-          _buildLanguageSection(),
+          _buildGeneralSettingsGroup(),
           const SizedBox(height: 24),
           _buildSectionHeader(
             Icons.currency_exchange,
@@ -234,6 +261,150 @@ class _SettingsPageState extends State<SettingsPage> {
           _buildOtherGroup(),
           const SizedBox(height: 32),
         ],
+      ),
+    );
+  }
+
+  Widget _buildGeneralSettingsGroup() {
+    return Container(
+      decoration: BoxDecoration(
+        color: AppColors.surface,
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(color: AppColors.border, width: 0.5),
+      ),
+      child: Material(
+        color: Colors.transparent,
+        borderRadius: BorderRadius.circular(14),
+        clipBehavior: Clip.antiAlias,
+        child: Column(
+          children: [
+            _buildThemeSection(),
+            _buildGroupDivider(),
+            _buildLanguageSection(),
+            _buildGroupDivider(),
+            _buildMarketColorTile(),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildMarketColorTile() {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(14, 10, 8, 10),
+      child: Row(
+        children: [
+          Container(
+            width: 32,
+            height: 32,
+            decoration: BoxDecoration(
+              color: AppColors.rise.withValues(alpha: 0.15),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Icon(Icons.swap_vert, size: 18, color: AppColors.rise),
+          ),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Text(
+              SettingsConfig.redUpGreenDown,
+              style: TextStyles.bodyMedium,
+            ),
+          ),
+          Switch(
+            value: _redUpGreenDown,
+            onChanged: _onMarketColorChanged,
+            activeTrackColor: AppColors.danger.withValues(alpha: 0.45),
+            activeThumbColor: AppColors.danger,
+            inactiveTrackColor: AppColors.success.withValues(alpha: 0.32),
+            inactiveThumbColor: AppColors.success,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildThemeSection() {
+    final options = [
+      (value: SettingsService.themeSystem, label: SettingsConfig.themeSystem),
+      (value: SettingsService.themeLight, label: SettingsConfig.themeLight),
+      (value: SettingsService.themeDark, label: SettingsConfig.themeDark),
+    ];
+    return _buildExpansionSetting(
+      icon: _selectedTheme == SettingsService.themeDark
+          ? Icons.dark_mode_outlined
+          : _selectedTheme == SettingsService.themeLight
+          ? Icons.light_mode_outlined
+          : Icons.brightness_auto_outlined,
+      label: SettingsConfig.themeLabel,
+      value: _selectedTheme,
+      options: options,
+      isExpanded: _isThemeExpanded,
+      onExpansionChanged: (expanded) =>
+          setState(() => _isThemeExpanded = expanded),
+      onChanged: _onThemeSelected,
+    );
+  }
+
+  Widget _buildExpansionSetting({
+    required IconData icon,
+    required String label,
+    required String value,
+    required List<({String value, String label})> options,
+    required bool isExpanded,
+    required ValueChanged<bool> onExpansionChanged,
+    required ValueChanged<String> onChanged,
+  }) {
+    final selectedLabel = options
+        .firstWhere(
+          (option) => option.value == value,
+          orElse: () => options.first,
+        )
+        .label;
+
+    return Theme(
+      data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+      child: ExpansionTile(
+        initiallyExpanded: isExpanded,
+        onExpansionChanged: onExpansionChanged,
+        tilePadding: const EdgeInsets.fromLTRB(14, 0, 12, 0),
+        childrenPadding: EdgeInsets.zero,
+        title: Row(
+          children: [
+            Container(
+              width: 32,
+              height: 32,
+              decoration: BoxDecoration(
+                color: AppColors.accent.withValues(alpha: 0.15),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Icon(icon, size: 18, color: AppColors.accent),
+            ),
+            const SizedBox(width: 10),
+            Text(label, style: TextStyles.bodyMedium.copyWith(height: 1.2)),
+            const SizedBox(width: 8),
+            Expanded(
+              child: Text(
+                selectedLabel,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyles.bodySmall,
+              ),
+            ),
+          ],
+        ),
+        trailing: Icon(
+          isExpanded ? Icons.expand_less : Icons.expand_more,
+          color: AppColors.grey500,
+          size: 22,
+        ),
+        children: options.asMap().entries.map((entry) {
+          final option = entry.value;
+          return SettingsSelectableItem(
+            label: option.label,
+            isSelected: option.value == value,
+            isLast: entry.key == options.length - 1,
+            onTap: () => onChanged(option.value),
+          );
+        }).toList(),
       ),
     );
   }
@@ -270,56 +441,15 @@ class _SettingsPageState extends State<SettingsPage> {
       ),
       (value: SettingsService.languageEn, label: SettingsConfig.languageEn),
     ];
-    return SettingsExpansionCard(
-      initiallyExpanded: _isLanguageExpanded,
+    return _buildExpansionSetting(
+      icon: Icons.translate,
+      label: SettingsConfig.languageLabel,
+      value: _selectedLanguage,
+      options: options,
+      isExpanded: _isLanguageExpanded,
       onExpansionChanged: (expanded) =>
           setState(() => _isLanguageExpanded = expanded),
-      title: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Container(
-            width: 32,
-            height: 32,
-            decoration: BoxDecoration(
-              color: AppColors.accent.withValues(alpha: 0.15),
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: const Icon(
-              Icons.translate,
-              size: 18,
-              color: AppColors.accent,
-            ),
-          ),
-          const SizedBox(width: 10),
-          Expanded(
-            child: Text(
-              options
-                  .firstWhere(
-                    (o) => o.value == _selectedLanguage,
-                    orElse: () => options.first,
-                  )
-                  .label,
-              style: TextStyles.bodyMedium.copyWith(height: 1.2),
-            ),
-          ),
-        ],
-      ),
-      trailing: Icon(
-        _isLanguageExpanded ? Icons.expand_less : Icons.expand_more,
-        color: AppColors.grey500,
-        size: 22,
-      ),
-      children: options.asMap().entries.map((entry) {
-        final index = entry.key;
-        final option = entry.value;
-        final isSelected = option.value == _selectedLanguage;
-        return SettingsSelectableItem(
-          label: option.label,
-          isSelected: isSelected,
-          isLast: index == options.length - 1,
-          onTap: () => _onLanguageSelected(option.value),
-        );
-      }).toList(),
+      onChanged: _onLanguageSelected,
     );
   }
 
@@ -421,11 +551,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 color: Colors.teal.withValues(alpha: 0.15),
                 borderRadius: BorderRadius.circular(8),
               ),
-              child: const Icon(
-                Icons.receipt_long,
-                size: 18,
-                color: Colors.teal,
-              ),
+              child: Icon(Icons.receipt_long, size: 18, color: Colors.teal),
             ),
             const SizedBox(width: 10),
             Expanded(
@@ -580,8 +706,8 @@ class _SettingsPageState extends State<SettingsPage> {
   }
 
   Widget _buildGroupDivider() {
-    return const Padding(
-      padding: EdgeInsets.only(left: 48),
+    return Padding(
+      padding: const EdgeInsets.only(left: 48),
       child: Divider(height: 1, color: AppColors.border, thickness: 0.5),
     );
   }
@@ -598,7 +724,7 @@ class _SettingsPageState extends State<SettingsPage> {
               color: Colors.orange.withValues(alpha: 0.15),
               borderRadius: BorderRadius.circular(8),
             ),
-            child: const Icon(Icons.swap_horiz, size: 18, color: Colors.orange),
+            child: Icon(Icons.swap_horiz, size: 18, color: Colors.orange),
           ),
           const SizedBox(width: 10),
           Expanded(
@@ -659,11 +785,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 color: Colors.purple.withValues(alpha: 0.15),
                 borderRadius: BorderRadius.circular(8),
               ),
-              child: const Icon(
-                Icons.sort,
-                size: 18,
-                color: Colors.purpleAccent,
-              ),
+              child: Icon(Icons.sort, size: 18, color: Colors.purpleAccent),
             ),
             const SizedBox(width: 10),
             Text(SettingsConfig.sortLabel, style: TextStyles.bodyMedium),
@@ -714,19 +836,15 @@ class _SettingsPageState extends State<SettingsPage> {
                       ),
                     ),
                     if (isSelected)
-                      const Icon(
-                        Icons.check,
-                        size: 18,
-                        color: AppColors.accent,
-                      ),
+                      Icon(Icons.check, size: 18, color: AppColors.accent),
                   ],
                 ),
               ),
             );
           }),
           // 排序方向切换
-          const Padding(
-            padding: EdgeInsets.only(left: 56),
+          Padding(
+            padding: const EdgeInsets.only(left: 56),
             child: Divider(height: 1, color: AppColors.border, thickness: 0.5),
           ),
           Padding(
@@ -1213,7 +1331,7 @@ class _SettingsPageState extends State<SettingsPage> {
           Text(
             value,
             style: TextStyles.body13.copyWith(
-              color: onTap != null ? AppColors.accent : Colors.white,
+              color: onTap != null ? AppColors.accent : AppColors.textPrimary,
             ),
           ),
         ],

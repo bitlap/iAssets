@@ -25,7 +25,7 @@ class SortIndicator extends StatelessWidget {
           ? Icon(
               isAscending ? Icons.arrow_upward : Icons.arrow_downward,
               size: size,
-              color: activeColor ?? Colors.white,
+              color: activeColor ?? AppColors.textPrimary,
             )
           : null,
     );
