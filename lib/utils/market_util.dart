@@ -62,6 +62,8 @@ class MarketUtil {
         return AppColors.marketHK;
       case searchMarketUS:
         return AppColors.marketUS;
+      case customMarket:
+        return AppColors.purple;
       default:
         return AppColors.textTertiary;
     }
@@ -116,7 +118,8 @@ class MarketUtil {
   static bool supportMarket(String marketType) {
     return isChineseMarket(marketType) ||
         marketType == searchMarketUS ||
-        marketType == searchMarketHK;
+        marketType == searchMarketHK ||
+        marketType == customMarket;
   }
 
   static String currencyForMarket(String marketType) {

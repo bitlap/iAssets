@@ -27,12 +27,14 @@ class DividendFilterRow extends StatelessWidget {
       MarketUtil.searchMarketUS,
       MarketUtil.searchMarketHK,
       MarketUtil.searchMarketCN,
+      MarketUtil.customMarket,
     ];
     final marketLabels = [
       StockConfig.dividendAllMarkets,
       MarketUtil.marketLabel(MarketUtil.searchMarketUS),
       MarketUtil.marketLabel(MarketUtil.searchMarketHK),
       MarketUtil.marketLabel(MarketUtil.searchMarketCN),
+      MarketUtil.marketLabel(MarketUtil.customMarket),
     ];
     final sortOptions = [
       StockConfig.dividendSortYield,

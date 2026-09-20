@@ -119,6 +119,11 @@ class _CenterToastWidgetState extends State<_CenterToastWidget>
                     decoration: BoxDecoration(
                       color: AppColors.toastBg,
                       borderRadius: BorderRadius.circular(12),
+                      border: Border.all(
+                        color: AppColors.toastBorder,
+                        width: 0.5,
+                      ),
+                      boxShadow: AppColors.toastShadow,
                     ),
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
@@ -129,6 +134,7 @@ class _CenterToastWidgetState extends State<_CenterToastWidget>
                           child: Text(
                             widget.message,
                             style: TextStyles.subtitle.copyWith(
+                              color: AppColors.textPrimary,
                               fontWeight: FontWeight.w500,
                               decoration: TextDecoration.none,
                             ),

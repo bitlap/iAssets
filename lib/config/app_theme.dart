@@ -58,6 +58,10 @@ class AppTheme {
         backgroundColor: surfaceElevated,
         surfaceTintColor: Colors.transparent,
       ),
+      switchTheme: const SwitchThemeData(
+        trackOutlineColor: WidgetStatePropertyAll(Colors.transparent),
+        trackOutlineWidth: WidgetStatePropertyAll(0),
+      ),
       textTheme: TextTheme(
         bodyLarge: TextStyle(color: textPrimary),
         bodyMedium: TextStyle(color: textPrimary),

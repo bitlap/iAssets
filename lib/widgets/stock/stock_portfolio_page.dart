@@ -384,12 +384,14 @@ class StockPortfolioPageState extends State<StockPortfolioPage>
       MarketUtil.searchMarketUS,
       MarketUtil.searchMarketHK,
       MarketUtil.searchMarketCN,
+      MarketUtil.customMarket,
     ];
     final labels = [
       MarketUtil.marketLabel(MarketUtil.searchAll),
       MarketUtil.marketLabel(MarketUtil.searchMarketUS),
       MarketUtil.marketLabel(MarketUtil.searchMarketHK),
       MarketUtil.marketLabel(MarketUtil.searchMarketCN),
+      MarketUtil.marketLabel(MarketUtil.customMarket),
     ];
     showDialog(
       context: context,

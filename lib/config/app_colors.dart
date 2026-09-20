@@ -47,6 +47,10 @@ class AppColors {
   // 图标
   static Color get iconMuted =>
       isDark ? const Color(0xFF48484A) : const Color(0xFFAEAEB2);
+  static Color get switchInactiveTrack =>
+      isDark ? const Color(0xFF3A3A3C) : const Color(0xFFE5E5EA);
+  static Color get switchInactiveThumb =>
+      isDark ? const Color(0xFF8E8E93) : const Color(0xFFFFFFFF);
 
   // 功能色
   static Color get accent =>
@@ -89,7 +93,16 @@ class AppColors {
   static Color get tertiaryBg =>
       isDark ? const Color(0xFF3A3A3C) : const Color(0xFFE5E5EA);
   static Color get toastBg =>
-      isDark ? const Color(0xFF1E272E) : const Color(0xFF3A3A3C);
+      isDark ? const Color(0xFF1C1C1E) : const Color(0xFFFFFFFF);
+  static Color get toastBorder =>
+      isDark ? const Color(0xFF38383A) : const Color(0xFFD1D1D6);
+  static List<BoxShadow> get toastShadow => [
+    BoxShadow(
+      color: Colors.black.withValues(alpha: isDark ? 0.35 : 0.12),
+      blurRadius: 18,
+      offset: const Offset(0, 6),
+    ),
+  ];
 
   /// 顶部资产卡片阴影。浅色模式使用轻量阴影，避免白色卡片出现大面积灰边。
   static List<BoxShadow> get summaryCardShadow => [
