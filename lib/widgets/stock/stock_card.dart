@@ -193,19 +193,16 @@ class StockCard extends StatelessWidget {
   }
 
   Widget _buildCompanyInfo() {
-    if (stock.isCustom) {
-      return Text(
-        stock.companyName,
-        maxLines: 2,
-        overflow: TextOverflow.ellipsis,
-        style: TextStyles.smallBold.copyWith(fontWeight: FontWeight.bold),
-      );
-    }
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
-        Text(stock.companyName, style: TextStyles.caption),
+        Text(
+          stock.companyName,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          style: TextStyles.caption,
+        ),
         const SizedBox(height: 2),
         Text(
           stock.symbol,

@@ -143,7 +143,7 @@ class _OperationRecordsTabState extends State<OperationRecordsTab> {
       children: [
         Expanded(
           child: Text(
-            StockConfig.localizeRecordDescription(record.description),
+            StockConfig.recordTitle(record.description, widget.stock.symbol),
             style: TextStyles.body13.copyWith(fontWeight: FontWeight.w600),
             overflow: TextOverflow.ellipsis,
           ),

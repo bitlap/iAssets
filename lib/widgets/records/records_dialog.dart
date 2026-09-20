@@ -88,9 +88,25 @@ class _RecordsDialogState extends State<RecordsDialog>
           Padding(
             padding: const EdgeInsets.fromLTRB(16, 16, 16, 12),
             child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Text(widget.stock.symbol, style: TextStyles.dialogTitle),
+                Flexible(
+                  child: Text(
+                    widget.stock.companyName,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyles.dialogTitle,
+                  ),
+                ),
+                const SizedBox(width: 6),
+                Text(
+                  widget.stock.symbol,
+                  maxLines: 1,
+                  style: TextStyles.dialogTitle.copyWith(
+                    color: AppColors.textSecondary,
+                    fontSize: 15,
+                  ),
+                ),
                 const SizedBox(width: 8),
                 Container(
                   padding: const EdgeInsets.symmetric(
@@ -109,7 +125,7 @@ class _RecordsDialogState extends State<RecordsDialog>
                     ),
                   ),
                 ),
-                const Spacer(),
+                const SizedBox(width: 8),
                 GestureDetector(
                   onTap: () => Navigator.pop(context),
                   child: Container(

@@ -292,4 +292,11 @@ class StockConfig {
     }
     return description;
   }
+
+  /// 记录列表始终使用当前股票代码，兼容旧记录中保存名称或旧代码的情况。
+  static String recordTitle(String description, String symbol) {
+    final localized = localizeRecordDescription(description);
+    final operation = localized.split(RegExp(r'\s+')).first;
+    return '$operation $symbol';
+  }
 }

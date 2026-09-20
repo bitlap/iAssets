@@ -763,7 +763,7 @@ class StockPortfolioPageState extends State<StockPortfolioPage>
     final record = OperationRecord(
       date: DateTime.now(),
       type: StockConfig.opBuyType,
-      description: '${StockConfig.opOpenPosition} ${draft.companyName}',
+      description: '${StockConfig.opOpenPosition} $id',
       amount: draft.currentPrice,
       shares: draft.shares,
     );
