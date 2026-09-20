@@ -137,6 +137,8 @@ class StockConfig {
   static String get addCustomStockDesc => L10n.t('addCustomStockDesc');
   static String get customStockName => L10n.t('customStockName');
   static String get customStockNameHint => L10n.t('customStockNameHint');
+  static String get customStockCode => L10n.t('customStockCode');
+  static String get customStockCodeHint => L10n.t('customStockCodeHint');
   static String get customStockShares => L10n.t('customStockShares');
   static String get customStockSharesHint => L10n.t('customStockSharesHint');
   static String get customStockPrice => L10n.t('customStockPrice');
@@ -148,6 +150,10 @@ class StockConfig {
   static String get customStockChangeImage => L10n.t('customStockChangeImage');
   static String get customStockNameRequired =>
       L10n.t('customStockNameRequired');
+  static String get customStockCodeRequired =>
+      L10n.t('customStockCodeRequired');
+  static String get customStockCodeConflict =>
+      L10n.t('customStockCodeConflict');
   static String get customStockInvalidShares =>
       L10n.t('customStockInvalidShares');
   static String get customStockInvalidPrice =>
