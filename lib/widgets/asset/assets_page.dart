@@ -357,15 +357,12 @@ class AssetsPageState extends State<AssetsPage> {
           child: CustomScrollView(
             slivers: [
               SliverToBoxAdapter(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8),
-                  child: AssetHeader(
-                    totalAssets: _totalAssets,
-                    stockTotalValue: widget.stockTotalValue,
-                    currency: widget.currency,
-                    totalsByType: _totalByType(widget.currency),
-                    onCurrencyTap: _showCurrencyMenu,
-                  ),
+                child: AssetHeader(
+                  totalAssets: _totalAssets,
+                  stockTotalValue: widget.stockTotalValue,
+                  currency: widget.currency,
+                  totalsByType: _totalByType(widget.currency),
+                  onCurrencyTap: _showCurrencyMenu,
                 ),
               ),
               if (_flatItems.isEmpty)
