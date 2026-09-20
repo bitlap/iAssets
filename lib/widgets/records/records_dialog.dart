@@ -90,39 +90,45 @@ class _RecordsDialogState extends State<RecordsDialog>
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Flexible(
-                  child: Text(
-                    widget.stock.companyName,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyles.dialogTitle,
-                  ),
-                ),
-                const SizedBox(width: 6),
-                Text(
-                  widget.stock.symbol,
-                  maxLines: 1,
-                  style: TextStyles.dialogTitle.copyWith(
-                    color: AppColors.textSecondary,
-                    fontSize: 15,
-                  ),
-                ),
-                const SizedBox(width: 8),
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 8,
-                    vertical: 2,
-                  ),
-                  decoration: BoxDecoration(
-                    color: Colors.blue.withValues(alpha: 0.15),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Text(
-                    StockConfig.stockRecord,
-                    style: TextStyles.body13.copyWith(
-                      fontSize: 12,
-                      color: AppColors.accent,
-                    ),
+                Expanded(
+                  child: Row(
+                    children: [
+                      Flexible(
+                        child: Text(
+                          widget.stock.companyName,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyles.dialogTitle,
+                        ),
+                      ),
+                      const SizedBox(width: 6),
+                      Text(
+                        widget.stock.symbol,
+                        maxLines: 1,
+                        style: TextStyles.dialogTitle.copyWith(
+                          color: AppColors.textSecondary,
+                          fontSize: 15,
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 8,
+                          vertical: 2,
+                        ),
+                        decoration: BoxDecoration(
+                          color: Colors.blue.withValues(alpha: 0.15),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Text(
+                          StockConfig.stockRecord,
+                          style: TextStyles.body13.copyWith(
+                            fontSize: 12,
+                            color: AppColors.accent,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
                 const SizedBox(width: 8),
