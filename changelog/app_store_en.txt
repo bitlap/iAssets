@@ -10,6 +10,7 @@ Core Features
 • Smart calculations: Automatically computes average cost, total P&L, dividend yield, position ratio, and other key metrics
 
 Stock Management
+• Custom stock: Manually enter name, shares, current price and currency, with optional custom image — ideal for tracking non-listed assets
 • Stock search: Quickly find stocks by code or name, covering HK, US, and A-share markets
 • Market filtering: Filter by US / HK / A-share to quickly locate the stocks you follow
 • Transaction records: Full history of every buy/sell operation (time, price, quantity, fees) at a glance
@@ -29,7 +30,7 @@ Data Security
 • Local-first: Works offline, with automatic sync once the network is restored
 
 Design Philosophy
-• Dark theme: A professional dark interface that keeps the focus on your data
+• Theme switching: Light, dark, and system-follow modes — switch at will
 • Simple and efficient: No ads, no community, no in-app purchases — back to the essence of investment management
 • Light and fast: Quick launch, smooth operations, no bloat
 
