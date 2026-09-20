@@ -51,6 +51,10 @@ class AppColors {
       isDark ? const Color(0xFF3A3A3C) : const Color(0xFFE5E5EA);
   static Color get switchInactiveThumb =>
       isDark ? const Color(0xFF8E8E93) : const Color(0xFFFFFFFF);
+  static Color get imagePickerBorder =>
+      isDark ? const Color(0xFF48484A) : const Color(0xFFDCE7F7);
+  static Color get imagePickerBackground =>
+      isDark ? const Color(0xFF111216) : const Color(0xFFF8FAFE);
 
   // 功能色
   static Color get accent =>

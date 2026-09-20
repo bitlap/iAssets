@@ -717,13 +717,24 @@ class StockPortfolioPageState extends State<StockPortfolioPage>
     final draft = await showCustomStockSheet(
       context,
       initialCurrency: selectedCurrency,
+      existingSymbols: stocks.map((stock) => stock.symbol).toSet(),
     );
     if (!mounted || draft == null) return;
     await _addCustomStock(draft);
   }
 
   Future<void> _addCustomStock(CustomStockDraft draft) async {
-    final id = 'CUSTOM_${DateTime.now().microsecondsSinceEpoch}';
+    final id = draft.stockCode.trim().toUpperCase();
+    final hasConflict = stocks.any(
+      (stock) => stock.symbol.trim().toUpperCase() == id,
+    );
+    if (hasConflict) {
+      CenterToast.warning(
+        context,
+        StockConfig.customStockCodeConflict.replaceAll('{code}', id),
+      );
+      return;
+    }
     if (draft.imageBytes != null) {
       try {
         await LogoCacher.cacheLocalImageBytes(id, draft.imageBytes!);
@@ -746,7 +757,7 @@ class StockPortfolioPageState extends State<StockPortfolioPage>
       isPositive: true,
       marketType: MarketUtil.customMarket,
       currency: draft.currency,
-      secid: id,
+      secid: 'CUSTOM.$id',
       isCustom: true,
     );
     final record = OperationRecord(

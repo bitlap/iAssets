@@ -1,7 +1,6 @@
-import 'dart:typed_data';
-
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../config/app_colors.dart';
@@ -15,6 +14,7 @@ enum AddStockMethod { search, custom }
 
 class CustomStockDraft {
   final String companyName;
+  final String stockCode;
   final double shares;
   final double currentPrice;
   final String currency;
@@ -22,6 +22,7 @@ class CustomStockDraft {
 
   const CustomStockDraft({
     required this.companyName,
+    required this.stockCode,
     required this.shares,
     required this.currentPrice,
     required this.currency,
@@ -61,13 +62,17 @@ Future<AddStockMethod?> showAddStockMethodSheet(BuildContext context) {
 Future<CustomStockDraft?> showCustomStockSheet(
   BuildContext context, {
   required String initialCurrency,
+  required Set<String> existingSymbols,
 }) {
   return showModalBottomSheet<CustomStockDraft>(
     context: context,
     isScrollControlled: true,
     useSafeArea: true,
     backgroundColor: Colors.transparent,
-    builder: (_) => _CustomStockSheet(initialCurrency: initialCurrency),
+    builder: (_) => _CustomStockSheet(
+      initialCurrency: initialCurrency,
+      existingSymbols: existingSymbols,
+    ),
   );
 }
 
@@ -154,8 +159,12 @@ class _MethodTile extends StatelessWidget {
 
 class _CustomStockSheet extends StatefulWidget {
   final String initialCurrency;
+  final Set<String> existingSymbols;
 
-  const _CustomStockSheet({required this.initialCurrency});
+  const _CustomStockSheet({
+    required this.initialCurrency,
+    required this.existingSymbols,
+  });
 
   @override
   State<_CustomStockSheet> createState() => _CustomStockSheetState();
@@ -163,6 +172,7 @@ class _CustomStockSheet extends StatefulWidget {
 
 class _CustomStockSheetState extends State<_CustomStockSheet> {
   final _nameController = TextEditingController();
+  final _codeController = TextEditingController();
   final _sharesController = TextEditingController();
   final _priceController = TextEditingController();
   final _imagePicker = ImagePicker();
@@ -179,6 +189,7 @@ class _CustomStockSheetState extends State<_CustomStockSheet> {
   @override
   void dispose() {
     _nameController.dispose();
+    _codeController.dispose();
     _sharesController.dispose();
     _priceController.dispose();
     super.dispose();
@@ -220,10 +231,25 @@ class _CustomStockSheetState extends State<_CustomStockSheet> {
 
   void _submit() {
     final name = _nameController.text.trim();
+    final code = _codeController.text.trim().toUpperCase();
     final shares = double.tryParse(_sharesController.text);
     final price = double.tryParse(_priceController.text);
     if (name.isEmpty) {
       CenterToast.warning(context, StockConfig.customStockNameRequired);
+      return;
+    }
+    if (code.isEmpty) {
+      CenterToast.warning(context, StockConfig.customStockCodeRequired);
+      return;
+    }
+    final hasConflict = widget.existingSymbols.any(
+      (symbol) => symbol.trim().toUpperCase() == code,
+    );
+    if (hasConflict) {
+      CenterToast.warning(
+        context,
+        StockConfig.customStockCodeConflict.replaceAll('{code}', code),
+      );
       return;
     }
     if (shares == null || shares <= 0) {
@@ -238,6 +264,7 @@ class _CustomStockSheetState extends State<_CustomStockSheet> {
       context,
       CustomStockDraft(
         companyName: name,
+        stockCode: code,
         shares: shares,
         currentPrice: price,
         currency: _currency,
@@ -310,7 +337,7 @@ class _CustomStockSheetState extends State<_CustomStockSheet> {
                       children: [
                         _buildImagePicker(),
                         const SizedBox(height: 20),
-                        _buildNameField(),
+                        _buildIdentityFields(),
                         const SizedBox(height: 16),
                         AppNumberField(
                           controller: _sharesController,
@@ -365,13 +392,23 @@ class _CustomStockSheetState extends State<_CustomStockSheet> {
                 children: [
                   OutlinedButton.icon(
                     onPressed: _pickingImage ? null : _pickFromPhotos,
-                    icon: const Icon(Icons.photo_library_outlined, size: 18),
+                    style: _imagePickerButtonStyle(),
+                    icon: Icon(
+                      Icons.photo_library_outlined,
+                      size: 18,
+                      color: AppColors.accent,
+                    ),
                     label: Text(StockConfig.customStockChooseAlbum),
                   ),
                   const SizedBox(height: 6),
                   OutlinedButton.icon(
                     onPressed: _pickingImage ? null : _pickFromFiles,
-                    icon: const Icon(Icons.folder_open_outlined, size: 18),
+                    style: _imagePickerButtonStyle(),
+                    icon: Icon(
+                      Icons.folder_open_outlined,
+                      size: 18,
+                      color: AppColors.accent,
+                    ),
                     label: Text(StockConfig.customStockChooseFile),
                   ),
                 ],
@@ -383,17 +420,62 @@ class _CustomStockSheetState extends State<_CustomStockSheet> {
     );
   }
 
-  Widget _buildNameField() {
+  ButtonStyle _imagePickerButtonStyle() {
+    return OutlinedButton.styleFrom(
+      foregroundColor: AppColors.accent,
+      backgroundColor: AppColors.imagePickerBackground,
+      side: BorderSide(color: AppColors.imagePickerBorder, width: 0.7),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+    );
+  }
+
+  Widget _buildIdentityFields() {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Expanded(
+          child: _buildTextField(
+            label: StockConfig.customStockName,
+            hint: StockConfig.customStockNameHint,
+            controller: _nameController,
+          ),
+        ),
+        const SizedBox(width: 12),
+        Expanded(
+          child: _buildTextField(
+            label: StockConfig.customStockCode,
+            hint: StockConfig.customStockCodeHint,
+            controller: _codeController,
+            capitalization: TextCapitalization.characters,
+            inputFormatters: [
+              FilteringTextInputFormatter.allow(RegExp(r'[A-Za-z0-9._-]')),
+              _UpperCaseTextFormatter(),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildTextField({
+    required String label,
+    required String hint,
+    required TextEditingController controller,
+    TextCapitalization capitalization = TextCapitalization.none,
+    List<TextInputFormatter>? inputFormatters,
+  }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(StockConfig.customStockName, style: TextStyles.body13Bold),
+        Text(label, style: TextStyles.body13Bold),
         const SizedBox(height: 8),
         TextField(
-          controller: _nameController,
+          controller: controller,
           textInputAction: TextInputAction.next,
+          textCapitalization: capitalization,
+          inputFormatters: inputFormatters,
           style: TextStyles.inputText,
-          decoration: _inputDecoration(StockConfig.customStockNameHint),
+          decoration: _inputDecoration(hint),
         ),
       ],
     );
@@ -454,5 +536,15 @@ class _CustomStockSheetState extends State<_CustomStockSheet> {
         borderSide: BorderSide(color: AppColors.accent),
       ),
     );
+  }
+}
+
+class _UpperCaseTextFormatter extends TextInputFormatter {
+  @override
+  TextEditingValue formatEditUpdate(
+    TextEditingValue oldValue,
+    TextEditingValue newValue,
+  ) {
+    return newValue.copyWith(text: newValue.text.toUpperCase());
   }
 }
