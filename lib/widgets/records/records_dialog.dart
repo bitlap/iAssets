@@ -61,7 +61,7 @@ class _RecordsDialogState extends State<RecordsDialog>
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
         color: AppColors.surface,
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
         border: Border(
@@ -88,28 +88,50 @@ class _RecordsDialogState extends State<RecordsDialog>
           Padding(
             padding: const EdgeInsets.fromLTRB(16, 16, 16, 12),
             child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Text(widget.stock.symbol, style: TextStyles.dialogTitle),
-                const SizedBox(width: 8),
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 8,
-                    vertical: 2,
-                  ),
-                  decoration: BoxDecoration(
-                    color: Colors.blue.withValues(alpha: 0.15),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Text(
-                    StockConfig.stockRecord,
-                    style: TextStyles.body13.copyWith(
-                      fontSize: 12,
-                      color: AppColors.accent,
-                    ),
+                Expanded(
+                  child: Row(
+                    children: [
+                      Flexible(
+                        child: Text(
+                          widget.stock.companyName,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyles.dialogTitle,
+                        ),
+                      ),
+                      const SizedBox(width: 6),
+                      Text(
+                        widget.stock.symbol,
+                        maxLines: 1,
+                        style: TextStyles.dialogTitle.copyWith(
+                          color: AppColors.textSecondary,
+                          fontSize: 15,
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 8,
+                          vertical: 2,
+                        ),
+                        decoration: BoxDecoration(
+                          color: Colors.blue.withValues(alpha: 0.15),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Text(
+                          StockConfig.stockRecord,
+                          style: TextStyles.body13.copyWith(
+                            fontSize: 12,
+                            color: AppColors.accent,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-                const Spacer(),
+                const SizedBox(width: 8),
                 GestureDetector(
                   onTap: () => Navigator.pop(context),
                   child: Container(
@@ -120,11 +142,7 @@ class _RecordsDialogState extends State<RecordsDialog>
                       shape: BoxShape.circle,
                       border: Border.all(color: AppColors.border, width: 0.5),
                     ),
-                    child: const Icon(
-                      Icons.close,
-                      color: AppColors.grey,
-                      size: 14,
-                    ),
+                    child: Icon(Icons.close, color: AppColors.grey, size: 14),
                   ),
                 ),
               ],

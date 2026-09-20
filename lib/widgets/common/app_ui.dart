@@ -10,42 +10,33 @@ import '../../utils/market_util.dart';
 class TextStyles {
   TextStyles._();
 
-  static const caption = TextStyle(
-    fontSize: 11,
-    color: AppColors.textSecondary,
-    height: 1.2,
-  );
+  static TextStyle get caption =>
+      TextStyle(fontSize: 11, color: AppColors.textSecondary, height: 1.2);
 
-  static const captionMono = TextStyle(
+  static TextStyle get captionMono => TextStyle(
     fontSize: 11,
     color: AppColors.textSecondary,
     height: 1.2,
     fontFamily: 'SFMono',
   );
 
-  static const label = TextStyle(
-    fontSize: 10,
-    color: AppColors.textSecondary,
-    height: 1.2,
-  );
+  static TextStyle get label =>
+      TextStyle(fontSize: 10, color: AppColors.textSecondary, height: 1.2);
 
-  static const bodySmall = TextStyle(
-    fontSize: 12,
-    color: AppColors.textSecondary,
-    height: 1.2,
-  );
+  static TextStyle get bodySmall =>
+      TextStyle(fontSize: 12, color: AppColors.textSecondary, height: 1.2);
 
-  static const valueSmall = TextStyle(
+  static TextStyle get valueSmall => TextStyle(
     fontSize: 12,
     fontWeight: FontWeight.w600,
-    color: Colors.white,
+    color: AppColors.textPrimary,
     height: 1.2,
   );
 
-  static const valueSmallMono = TextStyle(
+  static TextStyle get valueSmallMono => TextStyle(
     fontSize: 12,
     fontWeight: FontWeight.w600,
-    color: Colors.white,
+    color: AppColors.textPrimary,
     height: 1.2,
     fontFamily: 'SFMono',
   );
@@ -64,14 +55,14 @@ class TextStyles {
     fontFamily: 'SFMono',
   );
 
-  static const headline = TextStyle(
+  static TextStyle get headline => TextStyle(
     fontSize: 22,
     fontWeight: FontWeight.w600,
-    color: Colors.white,
+    color: AppColors.textPrimary,
     height: 1.2,
   );
 
-  static const accentLink = TextStyle(
+  static TextStyle get accentLink => TextStyle(
     fontSize: 11,
     color: AppColors.accent,
     fontWeight: FontWeight.w500,
@@ -79,102 +70,100 @@ class TextStyles {
   );
 
   // ── 标题类 ──
-  static const dialogTitle = TextStyle(
+  static TextStyle get dialogTitle => TextStyle(
     fontSize: 18,
     fontWeight: FontWeight.bold,
-    color: Colors.white,
+    color: AppColors.textPrimary,
   );
 
-  static const sectionTitle = TextStyle(
+  static TextStyle get sectionTitle => TextStyle(
     fontSize: 16,
     fontWeight: FontWeight.w600,
-    color: Colors.white,
+    color: AppColors.textPrimary,
   );
 
-  static const sectionTitleRegular = TextStyle(
-    fontSize: 16,
-    color: Colors.white,
-  );
+  static TextStyle get sectionTitleRegular =>
+      TextStyle(fontSize: 16, color: AppColors.textPrimary);
 
   // ── 正文类 ──
-  static const subtitle = TextStyle(
+  static TextStyle get subtitle => TextStyle(
     fontSize: 14,
     fontWeight: FontWeight.w600,
-    color: Colors.white,
+    color: AppColors.textPrimary,
   );
 
-  static const subtitleRegular = TextStyle(fontSize: 14, color: Colors.white);
+  static TextStyle get subtitleRegular =>
+      TextStyle(fontSize: 14, color: AppColors.textPrimary);
 
-  static const bodyMedium = TextStyle(
+  static TextStyle get bodyMedium => TextStyle(
     fontSize: 15,
     fontWeight: FontWeight.w600,
-    color: Colors.white,
+    color: AppColors.textPrimary,
   );
 
-  static const bodyRegular = TextStyle(fontSize: 15, color: Colors.white);
+  static TextStyle get bodyRegular =>
+      TextStyle(fontSize: 15, color: AppColors.textPrimary);
 
-  static const body13 = TextStyle(fontSize: 13, color: Colors.white);
+  static TextStyle get body13 =>
+      TextStyle(fontSize: 13, color: AppColors.textPrimary);
 
   /// 13px 灰色正文
-  static const body13Grey = TextStyle(
-    fontSize: 13,
-    color: AppColors.grey,
-    height: 1.2,
-  );
+  static TextStyle get body13Grey =>
+      TextStyle(fontSize: 13, color: AppColors.grey, height: 1.2);
 
   /// 15px 白色列表标题
-  static const listTileTitle = TextStyle(fontSize: 15, color: Colors.white);
+  static TextStyle get listTileTitle =>
+      TextStyle(fontSize: 15, color: AppColors.textPrimary);
 
   /// 16px 白色输入框文字
-  static const inputText = TextStyle(fontSize: 16, color: Colors.white);
+  static TextStyle get inputText =>
+      TextStyle(fontSize: 16, color: AppColors.textPrimary);
 
   /// 12px 白色加粗
-  static const whiteBold12 = TextStyle(
+  static TextStyle get whiteBold12 => TextStyle(
     fontSize: 12,
     fontWeight: FontWeight.bold,
-    color: Colors.white,
+    color: AppColors.textPrimary,
   );
 
   /// 13px 白色加粗正文
-  static const body13Bold = TextStyle(
+  static TextStyle get body13Bold => TextStyle(
     fontSize: 13,
     fontWeight: FontWeight.bold,
-    color: Colors.white,
+    color: AppColors.textPrimary,
   );
 
   /// 11px 白色加粗
-  static const whiteBold11 = TextStyle(
+  static TextStyle get whiteBold11 => TextStyle(
     fontSize: 11,
     fontWeight: FontWeight.w600,
-    color: Colors.white,
+    color: AppColors.textPrimary,
   );
 
   /// 34px 白色加粗（总资产金额）
-  static const amountLarge = TextStyle(
+  static TextStyle get amountLarge => TextStyle(
     fontSize: 34,
     fontWeight: FontWeight.w700,
-    color: Colors.white,
+    color: AppColors.textPrimary,
     height: 1.1,
   );
 
   /// 17px 白色加粗（AppBar 标题）
-  static const appBarTitle = TextStyle(
+  static TextStyle get appBarTitle => TextStyle(
     fontSize: 17,
     fontWeight: FontWeight.w600,
-    color: Colors.white,
+    color: AppColors.textPrimary,
   );
 
   /// 14px 灰色提示文字（hintStyle 备用）
-  static const hintText = TextStyle(
-    fontSize: 14,
-    color: AppColors.textSecondary,
-  );
+  static TextStyle get hintText =>
+      TextStyle(fontSize: 14, color: AppColors.textSecondary);
 
   // ── 小型强调 ──
-  static const smallBold = TextStyle(
+  static TextStyle get smallBold => TextStyle(
     fontSize: 12,
     fontWeight: FontWeight.w600,
-    color: Colors.white,
+    color: AppColors.textPrimary,
     height: 1.2,
   );
 }

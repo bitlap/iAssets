@@ -199,9 +199,7 @@ class _EditStockDialogState extends State<EditStockDialog> {
               confirmText: widget.isAdd
                   ? AppConfig.btnConfirmBuy
                   : AppConfig.btnConfirmSell,
-              confirmBgColor: widget.isAdd
-                  ? AppColors.danger
-                  : AppColors.success,
+              confirmBgColor: widget.isAdd ? AppColors.rise : AppColors.fall,
             ),
           ],
         ),
@@ -386,10 +384,7 @@ class MoreOptionsDialog extends StatelessWidget {
                 ),
                 Divider(thickness: 0.5, color: AppColors.border),
                 ListTile(
-                  leading: const Icon(
-                    Icons.add_circle,
-                    color: AppColors.danger,
-                  ),
+                  leading: Icon(Icons.add_circle, color: AppColors.rise),
                   title: Text(
                     StockConfig.opAddPosition,
                     style: TextStyles.listTileTitle,
@@ -401,10 +396,7 @@ class MoreOptionsDialog extends StatelessWidget {
                 ),
                 Divider(thickness: 0.5, color: AppColors.border),
                 ListTile(
-                  leading: const Icon(
-                    Icons.remove_circle,
-                    color: AppColors.success,
-                  ),
+                  leading: Icon(Icons.remove_circle, color: AppColors.fall),
                   title: Text(
                     StockConfig.opReducePosition,
                     style: TextStyles.listTileTitle,
@@ -416,7 +408,7 @@ class MoreOptionsDialog extends StatelessWidget {
                 ),
                 Divider(thickness: 0.5, color: AppColors.border),
                 ListTile(
-                  leading: const Icon(
+                  leading: Icon(
                     Icons.monetization_on,
                     color: AppColors.warning,
                   ),
@@ -431,7 +423,7 @@ class MoreOptionsDialog extends StatelessWidget {
                 ),
                 Divider(thickness: 0.5, color: AppColors.border),
                 ListTile(
-                  leading: const Icon(Icons.delete, color: AppColors.danger),
+                  leading: Icon(Icons.delete, color: AppColors.danger),
                   title: Text(
                     StockConfig.opDeleteStock,
                     style: TextStyles.listTileTitle.copyWith(

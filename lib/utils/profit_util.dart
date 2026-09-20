@@ -2,17 +2,17 @@ import 'package:flutter/material.dart';
 import '../config/app_colors.dart';
 import 'currency_util.dart';
 
-/// 涨跌显示工具：红涨绿跌，零值灰显
+/// 涨跌显示工具：按用户偏好显示涨跌色，零值灰显。
 class ProfitUtil {
   static const double _zeroThreshold = 0.0001;
 
   /// 是否约等于零
   static bool isZero(double value) => value.abs() < _zeroThreshold;
 
-  /// 涨跌颜色：正红 / 负绿 / 零灰
+  /// 涨跌颜色：正值使用涨色 / 负值使用跌色 / 零值灰显。
   static Color colorOf(double value) {
     if (isZero(value)) return AppColors.textTertiary;
-    return value > 0 ? AppColors.danger : AppColors.success;
+    return value > 0 ? AppColors.rise : AppColors.fall;
   }
 
   /// 涨跌符号：正 "+" / 负 "-" / 零 ""

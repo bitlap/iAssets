@@ -11,7 +11,6 @@ import '../../services/asset_data_manager.dart';
 import '../common/empty_state_widget.dart';
 import '../common/currency_selector.dart';
 import '../common/confirm_delete_dialog.dart';
-import '../common/section_title.dart';
 import '../common/app_ui.dart';
 import 'asset_card.dart';
 import 'asset_header.dart';
@@ -21,12 +20,14 @@ class AssetsPage extends StatefulWidget {
   final double stockTotalValue;
   final String currency;
   final ValueChanged<String>? onCurrencyChanged;
+  final VoidCallback? onHeaderChanged;
 
   const AssetsPage({
     super.key,
     required this.stockTotalValue,
     required this.currency,
     this.onCurrencyChanged,
+    this.onHeaderChanged,
   });
 
   @override
@@ -52,6 +53,7 @@ class AssetsPageState extends State<AssetsPage> {
     widget.stockTotalValue,
     widget.currency,
   );
+  String get headerSubtitle => _buildSubtitle();
 
   Map<AssetType, double> _totalByType(String currency) =>
       AssetCalculator.getTotalByType(_assets, currency);
@@ -81,6 +83,7 @@ class AssetsPageState extends State<AssetsPage> {
       _isLoading = false;
       _lastRefreshTime = DateTime.now();
     });
+    widget.onHeaderChanged?.call();
     _rebuildFlatItems();
   }
 
@@ -349,26 +352,17 @@ class AssetsPageState extends State<AssetsPage> {
       children: [
         RefreshIndicator(
           onRefresh: _load,
-          color: Colors.white,
+          color: AppColors.accent,
           backgroundColor: AppColors.surface,
           child: CustomScrollView(
             slivers: [
               SliverToBoxAdapter(
-                child: SectionTitle(
-                  title: StockConfig.tabAsset,
-                  subtitle: _buildSubtitle(),
-                ),
-              ),
-              SliverToBoxAdapter(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8),
-                  child: AssetHeader(
-                    totalAssets: _totalAssets,
-                    stockTotalValue: widget.stockTotalValue,
-                    currency: widget.currency,
-                    totalsByType: _totalByType(widget.currency),
-                    onCurrencyTap: _showCurrencyMenu,
-                  ),
+                child: AssetHeader(
+                  totalAssets: _totalAssets,
+                  stockTotalValue: widget.stockTotalValue,
+                  currency: widget.currency,
+                  totalsByType: _totalByType(widget.currency),
+                  onCurrencyTap: _showCurrencyMenu,
                 ),
               ),
               if (_flatItems.isEmpty)
@@ -406,9 +400,7 @@ class AssetsPageState extends State<AssetsPage> {
           Container(
             color: Colors.black26,
             alignment: Alignment.center,
-            child: const CircularProgressIndicator(
-              color: AppColors.textSecondary,
-            ),
+            child: CircularProgressIndicator(color: AppColors.textSecondary),
           ),
       ],
     );
@@ -530,7 +522,7 @@ class AssetsPageState extends State<AssetsPage> {
           ),
           alignment: Alignment.centerRight,
           padding: const EdgeInsets.only(right: 20),
-          child: const Icon(Icons.delete, color: AppColors.danger, size: 22),
+          child: Icon(Icons.delete, color: AppColors.danger, size: 22),
         ),
         confirmDismiss: (_) => _confirmDelete(asset),
         onDismissed: (_) => _deleteAsset(asset.id),

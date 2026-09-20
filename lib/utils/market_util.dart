@@ -9,6 +9,7 @@ class MarketUtil {
   static const String searchMarketUS = '美股';
   static const String searchMarketHK = '港股';
   static const String searchMarketCN = 'A股';
+  static const String customMarket = '自定义';
 
   /// 市场展示名称（内部标识保持中文，展示层本地化；A股细分统一归一为 CN）
   static String marketLabel(String market) {
@@ -22,6 +23,8 @@ class MarketUtil {
         return L10n.t('marketUS');
       case searchMarketHK:
         return L10n.t('marketHK');
+      case customMarket:
+        return L10n.t('marketCustom');
       default:
         return market;
     }
@@ -59,6 +62,8 @@ class MarketUtil {
         return AppColors.marketHK;
       case searchMarketUS:
         return AppColors.marketUS;
+      case customMarket:
+        return AppColors.purple;
       default:
         return AppColors.textTertiary;
     }
@@ -73,6 +78,8 @@ class MarketUtil {
         return Icons.language;
       case searchMarketHK:
         return Icons.location_city;
+      case customMarket:
+        return Icons.edit_outlined;
       default:
         return Icons.all_inclusive;
     }
@@ -111,7 +118,8 @@ class MarketUtil {
   static bool supportMarket(String marketType) {
     return isChineseMarket(marketType) ||
         marketType == searchMarketUS ||
-        marketType == searchMarketHK;
+        marketType == searchMarketHK ||
+        marketType == customMarket;
   }
 
   static String currencyForMarket(String marketType) {

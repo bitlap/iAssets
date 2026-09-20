@@ -68,11 +68,7 @@ class _OperationRecordsTabState extends State<OperationRecordsTab> {
             ),
             alignment: Alignment.centerRight,
             padding: const EdgeInsets.only(right: 16),
-            child: const Icon(
-              Icons.delete,
-              color: AppColors.redAccent,
-              size: 20,
-            ),
+            child: Icon(Icons.delete, color: AppColors.redAccent, size: 20),
           ),
           confirmDismiss: (_) => ConfirmDeleteDialog.show(
             context,
@@ -129,14 +125,14 @@ class _OperationRecordsTabState extends State<OperationRecordsTab> {
       width: 36,
       height: 36,
       decoration: BoxDecoration(
-        color: isBuy
-            ? Colors.red.withValues(alpha: 0.15)
-            : Colors.green.withValues(alpha: 0.15),
+        color: (isBuy ? AppColors.rise : AppColors.fall).withValues(
+          alpha: 0.15,
+        ),
         borderRadius: BorderRadius.circular(10),
       ),
       child: Icon(
         isBuy ? Icons.arrow_upward : Icons.arrow_downward,
-        color: isBuy ? AppColors.redAccent : AppColors.greenAccent,
+        color: isBuy ? AppColors.rise : AppColors.fall,
         size: 16,
       ),
     );
@@ -147,7 +143,7 @@ class _OperationRecordsTabState extends State<OperationRecordsTab> {
       children: [
         Expanded(
           child: Text(
-            StockConfig.localizeRecordDescription(record.description),
+            StockConfig.recordTitle(record.description, widget.stock.symbol),
             style: TextStyles.body13.copyWith(fontWeight: FontWeight.w600),
             overflow: TextOverflow.ellipsis,
           ),
@@ -156,7 +152,7 @@ class _OperationRecordsTabState extends State<OperationRecordsTab> {
           '${isBuy ? "+" : "-"}${CurrencyUtil.formatRate(record.shares)}${StockConfig.stockSharesSuffix}',
           style: TextStyles.body13.copyWith(
             fontWeight: FontWeight.bold,
-            color: isBuy ? AppColors.redAccent : AppColors.greenAccent,
+            color: isBuy ? AppColors.rise : AppColors.fall,
           ),
         ),
       ],
@@ -172,12 +168,12 @@ class _OperationRecordsTabState extends State<OperationRecordsTab> {
             style: TextStyles.caption,
           )
         else
-          const Text('-', style: TextStyles.caption),
+          Text('-', style: TextStyles.caption),
         const Spacer(),
         Text(
           '${CurrencyUtil.getSymbol(widget.stock.currency)}${CurrencyUtil.formatRate(record.amount * record.shares)}',
           style: TextStyles.smallBold.copyWith(
-            color: isBuy ? AppColors.redAccent : AppColors.greenAccent,
+            color: isBuy ? AppColors.rise : AppColors.fall,
           ),
         ),
       ],
@@ -265,15 +261,15 @@ class _OperationRecordsTabState extends State<OperationRecordsTab> {
         ),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: AppColors.border, width: 0.5),
+          borderSide: BorderSide(color: AppColors.border, width: 0.5),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: AppColors.border, width: 0.5),
+          borderSide: BorderSide(color: AppColors.border, width: 0.5),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: Colors.blue),
+          borderSide: BorderSide(color: Colors.blue),
         ),
       ),
     );

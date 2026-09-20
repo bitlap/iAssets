@@ -98,7 +98,12 @@ Widget confirmButton({
         color: bgColor,
         gradient: gradient,
       ),
-      child: Center(child: Text(text, style: TextStyles.bodyMedium)),
+      child: Center(
+        child: Text(
+          text,
+          style: TextStyles.bodyMedium.copyWith(color: AppColors.onAccent),
+        ),
+      ),
     ),
   );
 }
@@ -144,7 +149,7 @@ class DialogInfoTitle extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Icon(icon, size: 20, color: iconColor ?? Colors.white),
+        Icon(icon, size: 20, color: iconColor ?? AppColors.textPrimary),
         const SizedBox(width: 8),
         Text(title, style: TextStyles.inputText),
       ],
@@ -182,7 +187,7 @@ class InfoDialog extends StatelessWidget {
       backgroundColor: AppColors.surface,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
-        side: const BorderSide(color: AppColors.border, width: 0.5),
+        side: BorderSide(color: AppColors.border, width: 0.5),
       ),
       insetPadding: const EdgeInsets.symmetric(horizontal: 40, vertical: 24),
       title: title,
@@ -261,11 +266,11 @@ Future<DateTime?> showDatePickerDialog(
     builder: (context, child) {
       return Theme(
         data: Theme.of(context).copyWith(
-          colorScheme: const ColorScheme.dark(
-            primary: Colors.white,
-            onPrimary: Colors.white,
+          colorScheme: Theme.of(context).colorScheme.copyWith(
+            primary: AppColors.accent,
+            onPrimary: AppColors.onAccent,
             surface: AppColors.surface,
-            onSurface: Colors.white,
+            onSurface: AppColors.textPrimary,
           ),
         ),
         child: child!,
@@ -288,7 +293,7 @@ Future<void> showHelpDialog(
       mainAxisSize: MainAxisSize.min,
       children: [
         if (icon != null) ...[
-          Icon(icon, color: iconColor ?? Colors.white, size: 28),
+          Icon(icon, color: iconColor ?? AppColors.textPrimary, size: 28),
           const SizedBox(height: 8),
         ],
         Text(title, textAlign: TextAlign.center, style: TextStyles.subtitle),

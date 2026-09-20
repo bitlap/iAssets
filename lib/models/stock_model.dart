@@ -19,6 +19,7 @@ class StockModel {
   String get currency =>
       _currency ?? CurrencyUtil.currencyForMarket(marketType);
   final String secid; // 东方财富 secid（用于获取行情）
+  final bool isCustom; // 自定义股票不参与在线行情刷新
 
   StockModel({
     required this.symbol,
@@ -34,6 +35,7 @@ class StockModel {
     this.changePercent = 0.0,
     String? currency,
     required this.secid,
+    this.isCustom = false,
   }) : _currency = currency;
 
   /// 复制并修改
@@ -51,6 +53,7 @@ class StockModel {
     double? changePercent,
     String? currency,
     String? secid,
+    bool? isCustom,
   }) {
     return StockModel(
       symbol: symbol ?? this.symbol,
@@ -66,6 +69,7 @@ class StockModel {
       changePercent: changePercent ?? this.changePercent,
       currency: currency ?? this.currency,
       secid: secid ?? this.secid,
+      isCustom: isCustom ?? this.isCustom,
     );
   }
 }

@@ -130,6 +130,35 @@ class StockConfig {
   static String get searchInvalidPrice => L10n.t('searchInvalidPrice');
   static String get searchInvalidShares => L10n.t('searchInvalidShares');
   static String get searchQuoteUnavailable => L10n.t('searchQuoteUnavailable');
+  static String get addStockMethodTitle => L10n.t('addStockMethodTitle');
+  static String get addStockBySearch => L10n.t('addStockBySearch');
+  static String get addStockBySearchDesc => L10n.t('addStockBySearchDesc');
+  static String get addCustomStock => L10n.t('addCustomStock');
+  static String get addCustomStockDesc => L10n.t('addCustomStockDesc');
+  static String get customStockName => L10n.t('customStockName');
+  static String get customStockNameHint => L10n.t('customStockNameHint');
+  static String get customStockCode => L10n.t('customStockCode');
+  static String get customStockCodeHint => L10n.t('customStockCodeHint');
+  static String get customStockShares => L10n.t('customStockShares');
+  static String get customStockSharesHint => L10n.t('customStockSharesHint');
+  static String get customStockPrice => L10n.t('customStockPrice');
+  static String get customStockPriceHint => L10n.t('customStockPriceHint');
+  static String get customStockCurrency => L10n.t('customStockCurrency');
+  static String get customStockImage => L10n.t('customStockImage');
+  static String get customStockChooseAlbum => L10n.t('customStockChooseAlbum');
+  static String get customStockChooseFile => L10n.t('customStockChooseFile');
+  static String get customStockChangeImage => L10n.t('customStockChangeImage');
+  static String get customStockNameRequired =>
+      L10n.t('customStockNameRequired');
+  static String get customStockCodeRequired =>
+      L10n.t('customStockCodeRequired');
+  static String get customStockCodeConflict =>
+      L10n.t('customStockCodeConflict');
+  static String get customStockInvalidShares =>
+      L10n.t('customStockInvalidShares');
+  static String get customStockInvalidPrice =>
+      L10n.t('customStockInvalidPrice');
+  static String get customStockImageFailed => L10n.t('customStockImageFailed');
 
   // 记录对话框 文案
   static String get recordsOpTab => L10n.t('recordsOpTab');
@@ -262,5 +291,12 @@ class StockConfig {
       }
     }
     return description;
+  }
+
+  /// 记录列表始终使用当前股票代码，兼容旧记录中保存名称或旧代码的情况。
+  static String recordTitle(String description, String symbol) {
+    final localized = localizeRecordDescription(description);
+    final operation = localized.split(RegExp(r'\s+')).first;
+    return '$operation $symbol';
   }
 }

@@ -29,7 +29,7 @@ class DividendRecordList extends StatelessWidget {
       ..sort((a, b) => b.date.compareTo(a.date));
     return Column(
       children: [
-        const Divider(color: AppColors.border, thickness: 0.5, height: 0.5),
+        Divider(color: AppColors.border, thickness: 0.5, height: 0.5),
         const SizedBox(height: 4),
         ...sorted.map(
           (r) => _DividendRecordItem(record: r, currency: currency),

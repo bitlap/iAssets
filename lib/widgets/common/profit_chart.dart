@@ -136,7 +136,7 @@ class _ProfitChartWidgetState extends State<ProfitChartWidget> {
           }),
           child: Row(
             children: [
-              const Icon(Icons.timeline, size: 12, color: AppColors.warning),
+              Icon(Icons.timeline, size: 12, color: AppColors.warning),
               const Spacer(),
               Icon(
                 _isExpanded ? Icons.expand_less : Icons.expand_more,
@@ -176,6 +176,7 @@ class _ProfitChartWidgetState extends State<ProfitChartWidget> {
           painter: _MiniChartPainter(
             data: data.map((s) => s.totalProfit).toList(),
             isPositive: data.last.totalProfit >= 0,
+            color: data.last.totalProfit >= 0 ? AppColors.rise : AppColors.fall,
           ),
         ),
       ),
@@ -257,6 +258,9 @@ class _ProfitChartWidgetState extends State<ProfitChartWidget> {
                     painter: _ProfitChartPainter(
                       snapshots: data,
                       isPositive: widget.totalProfit >= 0,
+                      color: widget.totalProfit >= 0
+                          ? AppColors.rise
+                          : AppColors.fall,
                       selectedIndex: _selectedIndex,
                       selectedRange: _selectedRange,
                     ),
@@ -294,12 +298,14 @@ class _RangeOption {
 class _ProfitChartPainter extends CustomPainter {
   final List<ProfitSnapshot> snapshots;
   final bool isPositive;
+  final Color color;
   final int? selectedIndex;
   final int selectedRange;
 
   _ProfitChartPainter({
     required this.snapshots,
     required this.isPositive,
+    required this.color,
     this.selectedIndex,
     this.selectedRange = 1,
   });
@@ -313,8 +319,6 @@ class _ProfitChartPainter extends CustomPainter {
     final paintHeight = size.height;
     final minVal = data.reduce((a, b) => a < b ? a : b);
     final maxVal = data.reduce((a, b) => a > b ? a : b);
-    final color = AppColors.warning;
-
     double scaleY(double val) {
       if (minVal == maxVal) return paintHeight / 2;
       return paintHeight -
@@ -513,6 +517,7 @@ class _ProfitChartPainter extends CustomPainter {
   bool shouldRepaint(covariant _ProfitChartPainter oldDelegate) {
     return oldDelegate.snapshots != snapshots ||
         oldDelegate.isPositive != isPositive ||
+        oldDelegate.color != color ||
         oldDelegate.selectedIndex != selectedIndex;
   }
 }
@@ -521,8 +526,13 @@ class _ProfitChartPainter extends CustomPainter {
 class _MiniChartPainter extends CustomPainter {
   final List<double> data;
   final bool isPositive;
+  final Color color;
 
-  _MiniChartPainter({required this.data, required this.isPositive});
+  _MiniChartPainter({
+    required this.data,
+    required this.isPositive,
+    required this.color,
+  });
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -532,8 +542,6 @@ class _MiniChartPainter extends CustomPainter {
     final paintHeight = size.height;
     final minVal = data.reduce((a, b) => a < b ? a : b);
     final maxVal = data.reduce((a, b) => a > b ? a : b);
-    final color = isPositive ? AppColors.danger : AppColors.success;
-
     double scaleY(double val) {
       if (minVal == maxVal) return paintHeight / 2;
       return paintHeight -
@@ -610,6 +618,8 @@ class _MiniChartPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(covariant _MiniChartPainter oldDelegate) {
-    return oldDelegate.data != data || oldDelegate.isPositive != isPositive;
+    return oldDelegate.data != data ||
+        oldDelegate.isPositive != isPositive ||
+        oldDelegate.color != color;
   }
 }

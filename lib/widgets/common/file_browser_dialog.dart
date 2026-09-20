@@ -208,7 +208,7 @@ class _FileBrowserDialogState extends State<FileBrowserDialog> {
         // Go up button
         if (dir.parent.path != dir.path)
           ListTile(
-            leading: const Icon(Icons.chevron_left, size: 20),
+            leading: Icon(Icons.chevron_left, size: 20),
             title: Text(
               StockConfig.fileBrowserGoUp,
               style: TextStyles.listTileTitle,
@@ -243,10 +243,7 @@ class _FileBrowserDialogState extends State<FileBrowserDialog> {
                     final name = _nameOf(entity);
                     if (entity is Directory) {
                       return ListTile(
-                        leading: const Icon(
-                          Icons.folder,
-                          color: AppColors.warning,
-                        ),
+                        leading: Icon(Icons.folder, color: AppColors.warning),
                         title: Text(name, style: TextStyles.listTileTitle),
                         contentPadding: const EdgeInsets.symmetric(
                           horizontal: 12,
@@ -356,14 +353,11 @@ class _FileBrowserDialogState extends State<FileBrowserDialog> {
               ),
               enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8),
-                borderSide: const BorderSide(
-                  color: AppColors.border,
-                  width: 0.5,
-                ),
+                borderSide: BorderSide(color: AppColors.border, width: 0.5),
               ),
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8),
-                borderSide: const BorderSide(color: AppColors.accent, width: 1),
+                borderSide: BorderSide(color: AppColors.accent, width: 1),
               ),
               contentPadding: const EdgeInsets.symmetric(
                 horizontal: 12,

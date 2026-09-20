@@ -4,7 +4,7 @@
   <img src="ios/Runner/Assets.xcassets/AppIcon.appiconset/icon_1024.png" width="128" height="128" alt="iAssets Logo">
 </p>
 
-一款使用 Flutter 开发的个人资产管理 iOS APP，采用 Material 3 暗色主题，支持多币种换算、iCloud 同步、后台收益快照等能力。
+一款使用 Flutter 开发的个人资产管理 iOS APP，采用 Material 3 设计，支持跟随系统、浅色和深色主题，以及多币种换算、iCloud 同步、后台收益快照等能力。
 
 已在 [App Store](https://apps.apple.com/cn/app/iassets/id6790114856) 上线。无内购无广告，使用公开 API，不保证严格实时。
 
@@ -27,6 +27,8 @@
 - 支持美股、港股、A 股按代码或名称搜索
 - 市场筛选（全部/美股/港股/A 股）
 - 添加时自动创建首笔买入记录，自动带入默认手续费
+- 支持自定义股票，手动录入公司名称、股票数量、当前价格和本地币种
+- 自定义股票图片可从系统相册或本地文件选择，并持久化展示
 
 **收益曲线**
 - 标题行始终可见，下方固定展示今日盈亏迷你曲线
@@ -56,6 +58,9 @@
 
 ### 设置
 
+- **主题**：跟随系统 / 浅色 / 深色切换，默认跟随系统
+- **语言**：跟随系统 / 简体中文 / 繁體中文 / English
+- **涨跌配色**：默认红涨绿跌，可切换为绿涨红跌
 - **本地货币**：CNY / CNH / USD / HKD / EUR / JPY / GBP / AUD / CAD / CHF / KRW / SGD 切换
 - **iCloud 同步**：自动同步设置、股票、记录、资产和收益快照
 - **排序偏好**：默认排序字段、排序方向
@@ -83,7 +88,7 @@
 | 类别   | 技术                                    |
 |------|---------------------------------------|
 | 框架   | Flutter 3.44.4（CI） / Dart SDK ^3.12.2 |
-| UI   | Material 3 暗色主题                      |
+| UI   | Material 3 浅色 / 深色主题                |
 | 设计系统 | 统一 AppColors / TextStyles 常量体系       |
 | 本地化  | flutter_localizations、intl            |
 | 网络   | http                                  |

@@ -32,13 +32,7 @@ class AssetHeader extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(24),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.6),
-            blurRadius: 20,
-            offset: const Offset(0, 8),
-          ),
-        ],
+        boxShadow: AppColors.summaryCardShadow,
         border: Border.all(color: AppColors.border, width: 0.5),
       ),
       child: Column(
@@ -72,10 +66,10 @@ class AssetHeader extends StatelessWidget {
                             ),
                           ),
                           const SizedBox(width: 2),
-                          const Icon(
+                          Icon(
                             Icons.arrow_drop_down,
                             size: 18,
-                            color: Colors.white,
+                            color: AppColors.textPrimary,
                           ),
                         ],
                       ),
@@ -134,7 +128,7 @@ class AssetHeader extends StatelessWidget {
             const SizedBox(width: 2),
             GestureDetector(
               onTap: () => _showRatioHelpDialog(context),
-              child: const Icon(
+              child: Icon(
                 Icons.help_outline,
                 size: 13,
                 color: AppColors.textSecondary,
@@ -146,7 +140,7 @@ class AssetHeader extends StatelessWidget {
         Text(
           percent,
           style: TextStyles.body13.copyWith(
-            color: Colors.white,
+            color: AppColors.textPrimary,
             fontWeight: FontWeight.w600,
           ),
         ),
@@ -210,7 +204,7 @@ class AssetHeader extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Icon(Icons.pie_chart, color: AppColors.accent, size: 20),
+                Icon(Icons.pie_chart, color: AppColors.accent, size: 20),
                 const SizedBox(width: 8),
                 Text(
                   StockConfig.assetPositionRatioLabel,
@@ -219,7 +213,7 @@ class AssetHeader extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 12),
-            const Divider(color: AppColors.border, thickness: 0.5),
+            Divider(color: AppColors.border, thickness: 0.5),
             const SizedBox(height: 8),
             for (final (icon, color, label, value) in entries)
               Padding(
@@ -232,7 +226,7 @@ class AssetHeader extends StatelessWidget {
                     Text(
                       _formatRatio(value),
                       style: TextStyles.body13.copyWith(
-                        color: Colors.white,
+                        color: AppColors.textPrimary,
                         fontWeight: FontWeight.w600,
                       ),
                     ),
@@ -263,8 +257,9 @@ Widget _summaryChip(
   IconData icon,
   String label,
   String value, {
-  Color iconColor = AppColors.textSecondary,
+  Color? iconColor,
 }) {
+  iconColor ??= AppColors.textSecondary;
   return Expanded(
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,

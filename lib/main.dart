@@ -6,12 +6,14 @@ import 'package:workmanager/workmanager.dart';
 
 import 'config/app_config.dart';
 import 'config/app_colors.dart';
+import 'config/app_theme.dart';
 import 'l10n/l10n.dart';
 import 'services/settings_service.dart';
 import 'utils/logo_cacher.dart';
 import 'widgets/stock/stock_portfolio_page.dart';
 import 'widgets/asset/assets_page.dart';
 import 'widgets/asset/asset_dialogs.dart';
+import 'widgets/common/section_title.dart';
 import 'task/profit_task.dart';
 
 void main() async {
@@ -23,6 +25,10 @@ void main() async {
   L10n.deviceLocale = WidgetsBinding.instance.platformDispatcher.locale;
   final preferredLanguage = await SettingsService.getPreferredLanguage();
   L10n.applyLanguage(preferredLanguage);
+  AppTheme.apply(await SettingsService.getThemeMode());
+  AppColors.applyMarketColorPreference(
+    await SettingsService.getRedUpGreenDown(),
+  );
 
   await Workmanager().initialize(callbackDispatcher);
   await Workmanager().registerPeriodicTask(
@@ -42,41 +48,65 @@ void main() async {
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
   @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangePlatformBrightness() {
+    setState(() {});
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return ValueListenableBuilder<String>(
-      valueListenable: L10n.notifier,
-      builder: (context, lang, _) {
-        return MaterialApp(
-          title: AppConfig.appName,
-          debugShowCheckedModeBanner: false,
-          locale: L10n.currentLocale,
-          localizationsDelegates: const [
-            GlobalMaterialLocalizations.delegate,
-            GlobalWidgetsLocalizations.delegate,
-            GlobalCupertinoLocalizations.delegate,
-          ],
-          supportedLocales: L10n.supportedLocales,
-          theme: ThemeData(
-            colorScheme: ColorScheme.fromSeed(
-              seedColor: AppColors.textTertiary,
-              brightness: Brightness.dark,
-              background: AppColors.surface,
-              surface: AppColors.surfaceElevated,
-            ),
-            useMaterial3: true,
-            scaffoldBackgroundColor: AppColors.surface,
-            textTheme: TextTheme(
-              bodyLarge: TextStyle(color: AppColors.textPrimary),
-              bodyMedium: TextStyle(color: AppColors.textPrimary),
-              displayLarge: TextStyle(color: AppColors.textPrimary),
-              headlineMedium: TextStyle(color: AppColors.textPrimary),
-            ),
-          ),
-          home: const _AppShell(),
+    return ValueListenableBuilder<bool>(
+      valueListenable: AppColors.marketColorNotifier,
+      builder: (context, redUpGreenDown, _) {
+        return ValueListenableBuilder<String>(
+          valueListenable: AppTheme.notifier,
+          builder: (context, themeMode, _) {
+            final effectiveBrightness = switch (AppTheme.mode) {
+              ThemeMode.light => Brightness.light,
+              ThemeMode.dark => Brightness.dark,
+              ThemeMode.system =>
+                WidgetsBinding.instance.platformDispatcher.platformBrightness,
+            };
+            AppColors.applyBrightness(effectiveBrightness);
+            return ValueListenableBuilder<String>(
+              valueListenable: L10n.notifier,
+              builder: (context, lang, _) => MaterialApp(
+                title: AppConfig.appName,
+                debugShowCheckedModeBanner: false,
+                locale: L10n.currentLocale,
+                localizationsDelegates: const [
+                  GlobalMaterialLocalizations.delegate,
+                  GlobalWidgetsLocalizations.delegate,
+                  GlobalCupertinoLocalizations.delegate,
+                ],
+                supportedLocales: L10n.supportedLocales,
+                theme: AppTheme.data(Brightness.light),
+                darkTheme: AppTheme.data(Brightness.dark),
+                themeMode: AppTheme.mode,
+                home: const _AppShell(),
+              ),
+            );
+          },
         );
       },
     );
@@ -116,10 +146,22 @@ class _AppShellState extends State<_AppShell> {
     if (v != null) _stockTotalValue = v;
   }
 
+  void _refreshHeader() {
+    if (mounted) setState(() {});
+  }
+
+  String get _stockSubtitle =>
+      _stockKey.currentState?.headerSubtitle ??
+      StockConfig.homeSubtitleRefresh.replaceAll('{time}', '-');
+
+  String get _assetSubtitle =>
+      _assetKey.currentState?.headerSubtitle ??
+      AssetConfig.assetSubtitleRefresh.replaceAll('{time}', '-');
+
   void _onAddTap() {
     switch (_currentIndex) {
       case 0:
-        _stockKey.currentState?.showSearchStockDialog();
+        _stockKey.currentState?.showAddStockMenu();
       case 1:
         showAddAssetSheet(context).then((type) {
           if (type == null || !mounted) return;
@@ -147,57 +189,92 @@ class _AppShellState extends State<_AppShell> {
   @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder<String>(
-      valueListenable: L10n.notifier,
-      builder: (context, lang, _) {
-        return Scaffold(
-          resizeToAvoidBottomInset: false,
-          backgroundColor: AppColors.surface,
-          body: SafeArea(
-            child: Stack(
-              children: [
-                PageView(
-                  controller: _pageController,
-                  onPageChanged: (i) => setState(() => _currentIndex = i),
-                  children: [
-                    StockPortfolioPage(
-                      key: _stockKey,
-                      selectedCurrency: _selectedCurrency,
-                      onCurrencyChanged: (c) {
-                        setState(() {
-                          _selectedCurrency = c;
-                          _stockTotalValue =
-                              _stockKey.currentState?.totalAssets ??
-                              _stockTotalValue;
-                        });
-                        SettingsService.setDefaultCurrency(c);
-                      },
+      valueListenable: AppTheme.notifier,
+      builder: (context, themeMode, _) {
+        return ValueListenableBuilder<String>(
+          valueListenable: L10n.notifier,
+          builder: (context, lang, _) => Scaffold(
+            resizeToAvoidBottomInset: false,
+            backgroundColor: AppColors.surface,
+            body: SafeArea(
+              child: Column(
+                children: [
+                  AnimatedBuilder(
+                    animation: _pageController,
+                    builder: (context, _) => AnimatedHomeHeader(
+                      page: _pageController.hasClients
+                          ? (_pageController.page ?? _currentIndex.toDouble())
+                          : _currentIndex.toDouble(),
+                      stockTitle: StockConfig.homeTitle,
+                      stockSubtitle: _stockSubtitle,
+                      assetTitle: StockConfig.tabAsset,
+                      assetSubtitle: _assetSubtitle,
+                      onDividendOverview: () =>
+                          _stockKey.currentState?.showDividendOverview(),
+                      onBackup: () =>
+                          _stockKey.currentState?.showBackupDialog(),
+                      onSettings: () =>
+                          _stockKey.currentState?.showSettingsPage(),
                     ),
-                    AssetsPage(
-                      key: _assetKey,
-                      stockTotalValue: _stockTotalValue,
-                      currency: _selectedCurrency,
-                      onCurrencyChanged: (c) {
-                        _stockKey.currentState?.setState(
-                          () => _stockKey.currentState!.selectedCurrency = c,
-                        );
-                        setState(() {
-                          _selectedCurrency = c;
-                          _stockTotalValue =
-                              _stockKey.currentState?.totalAssets ??
-                              _stockTotalValue;
-                        });
-                        SettingsService.setDefaultCurrency(c);
-                      },
+                  ),
+                  const SizedBox(height: 8),
+                  Expanded(
+                    child: Stack(
+                      children: [
+                        PageView(
+                          controller: _pageController,
+                          onPageChanged: (i) {
+                            _syncStockTotalValue();
+                            setState(() => _currentIndex = i);
+                          },
+                          children: [
+                            StockPortfolioPage(
+                              key: _stockKey,
+                              selectedCurrency: _selectedCurrency,
+                              onHeaderChanged: _refreshHeader,
+                              onCurrencyChanged: (c) {
+                                setState(() {
+                                  _selectedCurrency = c;
+                                  _stockTotalValue =
+                                      _stockKey.currentState?.totalAssets ??
+                                      _stockTotalValue;
+                                });
+                                SettingsService.setDefaultCurrency(c);
+                              },
+                            ),
+                            AssetsPage(
+                              key: _assetKey,
+                              stockTotalValue: _stockTotalValue,
+                              currency: _selectedCurrency,
+                              onHeaderChanged: _refreshHeader,
+                              onCurrencyChanged: (c) {
+                                _stockKey.currentState?.setState(
+                                  () =>
+                                      _stockKey.currentState!.selectedCurrency =
+                                          c,
+                                );
+                                setState(() {
+                                  _selectedCurrency = c;
+                                  _stockTotalValue =
+                                      _stockKey.currentState?.totalAssets ??
+                                      _stockTotalValue;
+                                });
+                                SettingsService.setDefaultCurrency(c);
+                              },
+                            ),
+                          ],
+                        ),
+                        Positioned(
+                          left: 0,
+                          right: 0,
+                          bottom: 0,
+                          child: _buildBottomTabBar(),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-                Positioned(
-                  left: 0,
-                  right: 0,
-                  bottom: 0,
-                  child: _buildBottomTabBar(),
-                ),
-              ],
+                  ),
+                ],
+              ),
             ),
           ),
         );
@@ -215,7 +292,7 @@ class _AppShellState extends State<_AppShell> {
             filter: ImageFilter.blur(sigmaX: 30, sigmaY: 30),
             child: Container(
               decoration: BoxDecoration(
-                color: Colors.white.withValues(alpha: 0.1),
+                color: AppColors.surfaceElevated.withValues(alpha: 0.88),
                 borderRadius: BorderRadius.circular(24),
               ),
               padding: const EdgeInsets.all(4),
@@ -253,16 +330,22 @@ class _AppShellState extends State<_AppShell> {
     required int index,
   }) {
     final isSelected = _currentIndex == index;
+    final selectedColor = index == 0 ? AppColors.accent : AppColors.warning;
     return GestureDetector(
       onTap: () => _onTabChanged(index),
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
         padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
         decoration: BoxDecoration(
-          color: isSelected ? AppColors.surfaceElevated : Colors.transparent,
+          color: isSelected
+              ? selectedColor.withValues(alpha: AppColors.isDark ? 0.2 : 0.12)
+              : Colors.transparent,
           borderRadius: BorderRadius.circular(20),
           border: isSelected
-              ? Border.all(color: AppColors.tertiaryBg, width: 0.5)
+              ? Border.all(
+                  color: selectedColor.withValues(alpha: 0.3),
+                  width: 0.5,
+                )
               : null,
         ),
         child: Column(
@@ -271,9 +354,7 @@ class _AppShellState extends State<_AppShell> {
             Icon(
               icon,
               size: 18,
-              color: isSelected
-                  ? (index == 0 ? AppColors.accent : AppColors.warning)
-                  : AppColors.textSecondary,
+              color: isSelected ? selectedColor : AppColors.textSecondary,
             ),
             const SizedBox(height: 2),
             Text(

@@ -242,26 +242,36 @@ class _SearchStockDialogState extends State<SearchStockDialog> {
 
   @override
   Widget build(BuildContext context) {
-    return Dialog(
-      backgroundColor: AppColors.surface,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
-        side: BorderSide(color: AppColors.border),
-      ),
-      insetPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 60),
-      child: ConstrainedBox(
-        constraints: BoxConstraints(
-          maxWidth:
-              MediaQuery.of(context).size.width * AppConfig.dialogWidthRatio,
-          maxHeight: 600,
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            _buildSearchBar(),
-            Divider(thickness: 0.5, color: AppColors.border),
-            FlexibleChild(child: _buildResultsList()),
-          ],
+    final bottomInset = MediaQuery.viewInsetsOf(context).bottom;
+    return AnimatedPadding(
+      duration: const Duration(milliseconds: 180),
+      padding: EdgeInsets.only(bottom: bottomInset),
+      child: FractionallySizedBox(
+        heightFactor: 0.92,
+        child: Container(
+          decoration: BoxDecoration(
+            color: AppColors.surface,
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
+            border: Border(
+              top: BorderSide(color: AppColors.border, width: 0.5),
+            ),
+          ),
+          child: Column(
+            children: [
+              const SizedBox(height: 10),
+              Container(
+                width: 36,
+                height: 4,
+                decoration: BoxDecoration(
+                  color: AppColors.separator,
+                  borderRadius: BorderRadius.circular(2),
+                ),
+              ),
+              _buildSearchBar(),
+              Divider(thickness: 0.5, color: AppColors.border),
+              Expanded(child: _buildResultsList()),
+            ],
+          ),
         ),
       ),
     );
@@ -280,7 +290,7 @@ class _SearchStockDialogState extends State<SearchStockDialog> {
               const Spacer(),
               GestureDetector(
                 onTap: () => Navigator.of(context).pop(),
-                child: const Icon(
+                child: Icon(
                   Icons.close,
                   color: AppColors.textSecondary,
                   size: 22,
@@ -298,11 +308,7 @@ class _SearchStockDialogState extends State<SearchStockDialog> {
             child: Row(
               children: [
                 const SizedBox(width: 12),
-                const Icon(
-                  Icons.search,
-                  color: AppColors.textSecondary,
-                  size: 20,
-                ),
+                Icon(Icons.search, color: AppColors.textSecondary, size: 20),
                 const SizedBox(width: 8),
                 Expanded(
                   child: TextField(
@@ -329,8 +335,8 @@ class _SearchStockDialogState extends State<SearchStockDialog> {
                         _errorMessage = '';
                       });
                     },
-                    child: const Padding(
-                      padding: EdgeInsets.only(right: 12),
+                    child: Padding(
+                      padding: const EdgeInsets.only(right: 12),
                       child: Icon(
                         Icons.clear,
                         color: AppColors.textSecondary,
@@ -459,9 +465,9 @@ class _SearchStockDialogState extends State<SearchStockDialog> {
   /// 搜索结果列表
   Widget _buildResultsList() {
     if (_isLoading && _results.isEmpty) {
-      return const Center(
+      return Center(
         child: Padding(
-          padding: EdgeInsets.all(40),
+          padding: const EdgeInsets.all(40),
           child: CircularProgressIndicator(color: AppColors.textSecondary),
         ),
       );
@@ -474,11 +480,7 @@ class _SearchStockDialogState extends State<SearchStockDialog> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Icon(
-                Icons.search_off,
-                color: AppColors.textSecondary,
-                size: 48,
-              ),
+              Icon(Icons.search_off, color: AppColors.textSecondary, size: 48),
               const SizedBox(height: 12),
               Text(
                 _errorMessage,
@@ -499,7 +501,7 @@ class _SearchStockDialogState extends State<SearchStockDialog> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Icon(
+              Icon(
                 Icons.tips_and_updates_outlined,
                 color: AppColors.textSecondary,
                 size: 48,
@@ -551,7 +553,7 @@ class _SearchStockDialogState extends State<SearchStockDialog> {
   ) {
     final changePercent = quote?.changePercent ?? 0.0;
     final isPositive = changePercent >= 0;
-    final priceColor = isPositive ? AppColors.redAccent : AppColors.greenAccent;
+    final priceColor = isPositive ? AppColors.rise : AppColors.fall;
 
     return InkWell(
       onTap: isExisting ? null : () => _addStock(stock),
@@ -649,7 +651,7 @@ class _SearchStockDialogState extends State<SearchStockDialog> {
                 children: [
                   // 行情数据
                   if (isLoadingQuote)
-                    const SizedBox(
+                    SizedBox(
                       width: 16,
                       height: 16,
                       child: CircularProgressIndicator(
@@ -694,7 +696,7 @@ class _SearchStockDialogState extends State<SearchStockDialog> {
                       ),
                     )
                   else
-                    const SizedBox(
+                    SizedBox(
                       width: 16,
                       height: 16,
                       child: CircularProgressIndicator(

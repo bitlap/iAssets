@@ -113,7 +113,9 @@ class StockCard extends StatelessWidget {
                     child: Icon(
                       Icons.keyboard_arrow_down,
                       size: 18,
-                      color: isExpanded ? Colors.white : AppColors.textTertiary,
+                      color: isExpanded
+                          ? AppColors.textPrimary
+                          : AppColors.textTertiary,
                     ),
                   ),
                 ),
@@ -139,11 +141,11 @@ class StockCard extends StatelessWidget {
         gradient: LinearGradient(
           colors: [
             stock.isPositive
-                ? AppColors.danger.withValues(alpha: 0.7)
-                : AppColors.success.withValues(alpha: 0.7),
+                ? AppColors.rise.withValues(alpha: 0.7)
+                : AppColors.fall.withValues(alpha: 0.7),
             stock.isPositive
-                ? AppColors.danger.withValues(alpha: 0.4)
-                : AppColors.success.withValues(alpha: 0.4),
+                ? AppColors.rise.withValues(alpha: 0.4)
+                : AppColors.fall.withValues(alpha: 0.4),
           ],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
@@ -157,8 +159,6 @@ class StockCard extends StatelessWidget {
   }
 
   Widget _buildLogoContent(String fallbackChar) {
-    if (stock.logoUrl == null) return _buildFallbackChar(fallbackChar);
-
     final cached = LogoCacher.syncCached(stock.symbol);
     if (cached != null) {
       return Image(
@@ -167,6 +167,8 @@ class StockCard extends StatelessWidget {
         errorBuilder: (_, __, ___) => _buildFallbackChar(fallbackChar),
       );
     }
+    if (stock.isCustom) return _buildFallbackChar(fallbackChar);
+    if (stock.logoUrl == null) return _buildFallbackChar(fallbackChar);
     final logoFuture = LogoCacher.getLogo(stock.symbol, stock.logoUrl!);
     return FutureBuilder<ImageProvider>(
       future: logoFuture,
@@ -195,7 +197,12 @@ class StockCard extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
-        Text(stock.companyName, style: TextStyles.caption),
+        Text(
+          stock.companyName,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          style: TextStyles.caption,
+        ),
         const SizedBox(height: 2),
         Text(
           stock.symbol,
@@ -292,7 +299,7 @@ class StockCard extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Icon(Icons.list_alt, size: 14, color: AppColors.accent),
+            Icon(Icons.list_alt, size: 14, color: AppColors.accent),
             const SizedBox(width: 4),
             Text(StockConfig.stockRecord, style: TextStyles.smallBold),
           ],

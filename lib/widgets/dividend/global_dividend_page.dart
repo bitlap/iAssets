@@ -135,7 +135,11 @@ class _GlobalDividendPageState extends State<GlobalDividendPage> {
         toolbarHeight: AppConfig.appBarHeight,
         scrolledUnderElevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios, color: Colors.white, size: 18),
+          icon: Icon(
+            Icons.arrow_back_ios,
+            color: AppColors.textPrimary,
+            size: 18,
+          ),
           onPressed: () => Navigator.pop(context),
         ),
         title: Column(

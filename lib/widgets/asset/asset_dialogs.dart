@@ -55,34 +55,70 @@ List<_AssetOption> get _assetOptions => [
 ];
 
 Future<AssetType?> showAddAssetSheet(BuildContext context) {
-  return showDialog<AssetType>(
+  return showModalBottomSheet<AssetType>(
     context: context,
-    builder: (ctx) => dialogFrame(
-      context: ctx,
-      padding: const EdgeInsets.fromLTRB(20, 12, 20, 8),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8),
-            child: Text(
-              AssetConfig.titleAddAsset,
-              style: TextStyles.dialogTitle,
-              textAlign: TextAlign.center,
-            ),
+    useSafeArea: true,
+    backgroundColor: Colors.transparent,
+    builder: (ctx) => Container(
+      decoration: BoxDecoration(
+        color: AppColors.surface,
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
+        border: Border(top: BorderSide(color: AppColors.border, width: 0.5)),
+      ),
+      child: SafeArea(
+        top: false,
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(16, 10, 16, 16),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                width: 36,
+                height: 4,
+                decoration: BoxDecoration(
+                  color: AppColors.separator,
+                  borderRadius: BorderRadius.circular(2),
+                ),
+              ),
+              const SizedBox(height: 14),
+              Text(AssetConfig.titleAddAsset, style: TextStyles.sectionTitle),
+              const SizedBox(height: 12),
+              Container(
+                decoration: BoxDecoration(
+                  border: Border.all(color: AppColors.border, width: 0.5),
+                  borderRadius: BorderRadius.circular(14),
+                ),
+                clipBehavior: Clip.antiAlias,
+                child: Material(
+                  color: Colors.transparent,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      for (var i = 0; i < _assetOptions.length; i++) ...[
+                        if (i > 0)
+                          Padding(
+                            padding: const EdgeInsets.only(left: 62),
+                            child: Divider(
+                              thickness: 0.5,
+                              height: 1,
+                              color: AppColors.border,
+                            ),
+                          ),
+                        _addOption(
+                          _assetOptions[i].icon,
+                          _assetOptions[i].color,
+                          _assetOptions[i].label,
+                          onTap: () =>
+                              Navigator.pop(ctx, _assetOptions[i].type),
+                        ),
+                      ],
+                    ],
+                  ),
+                ),
+              ),
+            ],
           ),
-          for (final option in _assetOptions) ...[
-            const Divider(thickness: 0.5, height: 1, color: AppColors.border),
-            _addOption(
-              option.icon,
-              option.color,
-              option.label,
-              onTap: () {
-                Navigator.pop(ctx, option.type);
-              },
-            ),
-          ],
-        ],
+        ),
       ),
     ),
   );
@@ -105,7 +141,7 @@ Widget _addOption(
       child: Icon(icon, size: 18, color: color),
     ),
     title: Text(label, style: TextStyles.bodyRegular),
-    trailing: const Icon(Icons.chevron_right, color: AppColors.textSecondary),
+    trailing: Icon(Icons.chevron_right, color: AppColors.textSecondary),
     onTap: onTap,
   );
 }
@@ -679,15 +715,15 @@ Widget _dialogTextField(TextEditingController ctrl, String hint) {
       contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),
-        borderSide: const BorderSide(color: AppColors.border),
+        borderSide: BorderSide(color: AppColors.border),
       ),
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),
-        borderSide: const BorderSide(color: AppColors.border),
+        borderSide: BorderSide(color: AppColors.border),
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),
-        borderSide: const BorderSide(color: AppColors.textTertiary),
+        borderSide: BorderSide(color: AppColors.textTertiary),
       ),
     ),
   );
@@ -716,7 +752,7 @@ Widget _currencySelector(
             color: AppColors.surface,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10),
-              side: const BorderSide(color: AppColors.border),
+              side: BorderSide(color: AppColors.border),
             ),
             constraints: const BoxConstraints(maxHeight: 300),
             items: currencies.map((c) {
@@ -729,9 +765,9 @@ Widget _currencySelector(
                     SizedBox(
                       width: 16,
                       child: isSel
-                          ? const Icon(
+                          ? Icon(
                               Icons.check,
-                              color: Colors.white,
+                              color: AppColors.textPrimary,
                               size: 16,
                             )
                           : null,
@@ -817,7 +853,7 @@ Widget _durationSelector(int selected, ValueChanged<int> onChanged) {
             color: AppColors.surface,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10),
-              side: const BorderSide(color: AppColors.border),
+              side: BorderSide(color: AppColors.border),
             ),
             constraints: const BoxConstraints(maxHeight: 300),
             items: options.map((m) {
@@ -830,9 +866,9 @@ Widget _durationSelector(int selected, ValueChanged<int> onChanged) {
                     SizedBox(
                       width: 16,
                       child: isSel
-                          ? const Icon(
+                          ? Icon(
                               Icons.check,
-                              color: Colors.white,
+                              color: AppColors.textPrimary,
                               size: 16,
                             )
                           : null,

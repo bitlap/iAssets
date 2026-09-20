@@ -56,6 +56,7 @@ class StockDataManager {
   /// 构建行情查询参数列表
   static List<StockSearchResult> buildSearchResults(List<StockModel> stocks) {
     return stocks
+        .where((stock) => !stock.isCustom)
         .map(
           (stock) => StockSearchResult(
             code: stock.symbol,

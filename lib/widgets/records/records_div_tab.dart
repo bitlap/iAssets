@@ -79,11 +79,7 @@ class _DividendRecordsTabState extends State<DividendRecordsTab> {
             ),
             alignment: Alignment.centerRight,
             padding: const EdgeInsets.only(right: 16),
-            child: const Icon(
-              Icons.delete,
-              color: AppColors.redAccent,
-              size: 20,
-            ),
+            child: Icon(Icons.delete, color: AppColors.redAccent, size: 20),
           ),
           confirmDismiss: (_) => ConfirmDeleteDialog.show(
             context,
@@ -147,11 +143,7 @@ class _DividendRecordsTabState extends State<DividendRecordsTab> {
         color: Colors.amber.withValues(alpha: 0.15),
         borderRadius: BorderRadius.circular(10),
       ),
-      child: const Icon(
-        Icons.monetization_on,
-        color: AppColors.amber,
-        size: 16,
-      ),
+      child: Icon(Icons.monetization_on, color: AppColors.amber, size: 16),
     );
   }
 

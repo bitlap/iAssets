@@ -8,18 +8,19 @@ import '../../config/app_colors.dart';
 import '../../utils/center_toast.dart';
 import '../../utils/market_util.dart';
 import '../../utils/currency_util.dart';
+import '../../utils/logo_cacher.dart';
 import '../../services/stock_quote_service.dart';
 import '../../services/exchange_rate_service.dart';
 import '../../services/settings_service.dart';
 import '../../services/stock_data_manager.dart';
 import '../common/empty_state_widget.dart';
 import '../common/app_ui.dart';
-import '../common/section_title.dart';
 import 'stock_card.dart';
 import 'stock_list_header.dart';
 import '../records/records_dialog.dart';
 import 'edit_delete_dialogs.dart';
 import 'search_stock_dialog.dart';
+import 'add_stock_sheet.dart';
 import 'stock_header_card.dart';
 import '../dividend/global_dividend_page.dart';
 import '../common/backup_dialog.dart';
@@ -29,11 +30,13 @@ import '../settings_page.dart';
 class StockPortfolioPage extends StatefulWidget {
   final String selectedCurrency;
   final ValueChanged<String>? onCurrencyChanged;
+  final VoidCallback? onHeaderChanged;
 
   const StockPortfolioPage({
     super.key,
     this.selectedCurrency = AppConfig.defaultCurrency,
     this.onCurrencyChanged,
+    this.onHeaderChanged,
   });
 
   @override
@@ -153,6 +156,7 @@ class StockPortfolioPageState extends State<StockPortfolioPage>
           .toList();
       _lastRefreshTime = DateTime.now();
     });
+    widget.onHeaderChanged?.call();
     await _loadTodayBaseline();
   }
 
@@ -259,6 +263,7 @@ class StockPortfolioPageState extends State<StockPortfolioPage>
       await _loadTodayBaseline();
       if (mounted) {
         setState(() => _lastRefreshTime = DateTime.now());
+        widget.onHeaderChanged?.call();
         _scrollController.animateTo(
           0,
           duration: const Duration(milliseconds: 200),
@@ -288,6 +293,7 @@ class StockPortfolioPageState extends State<StockPortfolioPage>
     await _loadTodayBaseline();
     if (mounted) {
       setState(() => _lastRefreshTime = DateTime.now());
+      widget.onHeaderChanged?.call();
       _scrollController.animateTo(
         0,
         duration: const Duration(milliseconds: 200),
@@ -320,6 +326,10 @@ class StockPortfolioPageState extends State<StockPortfolioPage>
   double get totalCost => _assetSummary.totalCost;
   double get totalProfit => _assetSummary.totalProfit;
   double get totalAfterTaxDividends => _assetSummary.totalAfterTaxDividends;
+  String get headerSubtitle => _buildSubtitle();
+  void showDividendOverview() => _showDividendOverview();
+  void showBackupDialog() => _showBackupDialog();
+  void showSettingsPage() => _showSettingsPage();
   double get totalSellAmount => _assetSummary.totalSellAmount;
   double get totalRealizedPL => _assetSummary.totalRealizedPL;
   double get totalProfitPercent => _assetSummary.totalProfitPercent;
@@ -374,12 +384,14 @@ class StockPortfolioPageState extends State<StockPortfolioPage>
       MarketUtil.searchMarketUS,
       MarketUtil.searchMarketHK,
       MarketUtil.searchMarketCN,
+      MarketUtil.customMarket,
     ];
     final labels = [
       MarketUtil.marketLabel(MarketUtil.searchAll),
       MarketUtil.marketLabel(MarketUtil.searchMarketUS),
       MarketUtil.marketLabel(MarketUtil.searchMarketHK),
       MarketUtil.marketLabel(MarketUtil.searchMarketCN),
+      MarketUtil.marketLabel(MarketUtil.customMarket),
     ];
     showDialog(
       context: context,
@@ -387,7 +399,7 @@ class StockPortfolioPageState extends State<StockPortfolioPage>
         backgroundColor: AppColors.surface,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16),
-          side: const BorderSide(color: AppColors.border, width: 0.5),
+          side: BorderSide(color: AppColors.border, width: 0.5),
         ),
         title: Text(
           StockConfig.filterMarketTitle,
@@ -426,7 +438,7 @@ class StockPortfolioPageState extends State<StockPortfolioPage>
                         color: selected
                             ? (markets[i] != null
                                   ? MarketUtil.marketColor(markets[i])
-                                  : Colors.white)
+                                  : AppColors.textPrimary)
                             : (markets[i] != null
                                   ? MarketUtil.marketColor(markets[i])
                                   : AppColors.textSecondary),
@@ -437,13 +449,17 @@ class StockPortfolioPageState extends State<StockPortfolioPage>
                         style: TextStyles.body13.copyWith(
                           fontSize: 14,
                           color: selected
-                              ? Colors.white
+                              ? AppColors.textPrimary
                               : AppColors.textSecondary,
                         ),
                       ),
                       if (selected) const Spacer(),
                       if (selected)
-                        const Icon(Icons.check, size: 16, color: Colors.white),
+                        Icon(
+                          Icons.check,
+                          size: 16,
+                          color: AppColors.textPrimary,
+                        ),
                     ],
                   ),
                 ),
@@ -685,11 +701,89 @@ class StockPortfolioPageState extends State<StockPortfolioPage>
     );
   }
 
+  Future<void> showAddStockMenu() async {
+    _collapseExpandedStock();
+    final method = await showAddStockMethodSheet(context);
+    if (!mounted || method == null) return;
+    switch (method) {
+      case AddStockMethod.search:
+        showSearchStockDialog();
+      case AddStockMethod.custom:
+        await _showCustomStockSheet();
+    }
+  }
+
+  Future<void> _showCustomStockSheet() async {
+    final draft = await showCustomStockSheet(
+      context,
+      initialCurrency: selectedCurrency,
+      existingSymbols: stocks.map((stock) => stock.symbol).toSet(),
+    );
+    if (!mounted || draft == null) return;
+    await _addCustomStock(draft);
+  }
+
+  Future<void> _addCustomStock(CustomStockDraft draft) async {
+    final id = draft.stockCode.trim().toUpperCase();
+    final hasConflict = stocks.any(
+      (stock) => stock.symbol.trim().toUpperCase() == id,
+    );
+    if (hasConflict) {
+      CenterToast.warning(
+        context,
+        StockConfig.customStockCodeConflict.replaceAll('{code}', id),
+      );
+      return;
+    }
+    if (draft.imageBytes != null) {
+      try {
+        await LogoCacher.cacheLocalImageBytes(id, draft.imageBytes!);
+      } catch (_) {
+        if (mounted) {
+          CenterToast.warning(context, StockConfig.customStockImageFailed);
+        }
+      }
+    }
+    if (!mounted) return;
+
+    final stock = StockModel(
+      symbol: id,
+      companyName: draft.companyName,
+      currentPrice: draft.currentPrice,
+      shares: draft.shares,
+      totalValue: draft.currentPrice * draft.shares,
+      profitLossPercent: 0,
+      profitLossAmount: 0,
+      isPositive: true,
+      marketType: MarketUtil.customMarket,
+      currency: draft.currency,
+      secid: 'CUSTOM.$id',
+      isCustom: true,
+    );
+    final record = OperationRecord(
+      date: DateTime.now(),
+      type: StockConfig.opBuyType,
+      description: '${StockConfig.opOpenPosition} $id',
+      amount: draft.currentPrice,
+      shares: draft.shares,
+    );
+
+    setState(() {
+      stocks.add(stock);
+      _operationRecords[id] = [record];
+    });
+    _markDirty();
+    CenterToast.success(context, StockConfig.resultAddStockSuccess);
+  }
+
   void showSearchStockDialog() {
     _collapseExpandedStock();
     final existingSymbols = stocks.map((s) => s.symbol).toSet();
-    showDialog(
+    showModalBottomSheet(
       context: context,
+      isScrollControlled: true,
+      useSafeArea: true,
+      backgroundColor: Colors.transparent,
       builder: (_) => SearchStockDialog(
         existingSymbols: existingSymbols,
         onStockAdded: (newStock, buyRecord) {
@@ -852,14 +946,6 @@ class StockPortfolioPageState extends State<StockPortfolioPage>
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    SectionTitle(
-                      title: StockConfig.homeTitle,
-                      subtitle: _buildSubtitle(),
-                      onDividendOverview: () => _showDividendOverview(),
-                      onBackup: () => _showBackupDialog(),
-                      onSettings: _showSettingsPage,
-                    ),
-                    const SizedBox(height: 8),
                     StockHeaderCard(
                       selectedCurrency: selectedCurrency,
                       totalAssets: totalAssets,
