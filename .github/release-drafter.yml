@@ -1,0 +1,7 @@
+# Release Drafter 配置：https://github.com/release-drafter/release-drafter
+# 版本号在 workflow 中从 pubspec.yaml 读取，无需在此配置 name/tag
+
+template: |
+  ## 更新内容
+
+  $CHANGES
