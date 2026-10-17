@@ -427,7 +427,6 @@ const Map<String, String> stringsEn = {
   "cryptoApiSecret": "API Secret",
   "cryptoTitle": "Crypto",
   "cryptoReadOnly": "Read-only exchange sync",
-  "cryptoTotal": "Total crypto assets",
   "cryptoSpot": "Spot balances",
   "cryptoContracts": "Futures positions",
   "cryptoOverview": "Overview",
@@ -516,8 +515,6 @@ const Map<String, String> stringsEn = {
   "cryptoPartial":
       "Some assets could not be valued or are outside the supported scope.",
   "cryptoRefresh": "Refresh",
-  'cryptoShowAmount': 'Show amounts',
-  'cryptoHideAmount': 'Hide amounts',
   'cryptoAccountRole': 'Account purpose',
   'cryptoRegularAccount': 'Regular account',
   "cryptoScopeBinanceLead":

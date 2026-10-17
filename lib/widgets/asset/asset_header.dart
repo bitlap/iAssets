@@ -40,22 +40,30 @@ class AssetHeader extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
-          Wrap(
-            alignment: WrapAlignment.spaceBetween,
-            runSpacing: 8,
-            spacing: 12,
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(StockConfig.assetTotalAssets, style: TextStyles.body13),
-                  const SizedBox(width: 8),
-                  CurrencySelectorButton(
-                    currency: currency,
-                    onTap: onCurrencyTap,
+              Expanded(
+                child: FittedBox(
+                  fit: BoxFit.scaleDown,
+                  alignment: Alignment.centerLeft,
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        StockConfig.assetTotalAssets,
+                        style: TextStyles.body13,
+                      ),
+                      const SizedBox(width: 8),
+                      CurrencySelectorButton(
+                        currency: currency,
+                        onTap: onCurrencyTap,
+                      ),
+                    ],
                   ),
-                ],
+                ),
               ),
+              const SizedBox(width: 8),
               _buildStockRatioColumn(context),
             ],
           ),

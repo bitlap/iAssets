@@ -9,6 +9,7 @@ class AppFormSheet extends StatelessWidget {
   final VoidCallback? onClose;
   final Widget? action;
   final Color? backgroundColor;
+  final bool closeButtonOnRight;
   const AppFormSheet({
     super.key,
     required this.title,
@@ -16,6 +17,7 @@ class AppFormSheet extends StatelessWidget {
     this.onClose,
     this.action,
     this.backgroundColor,
+    this.closeButtonOnRight = false,
   });
 
   @override
@@ -46,16 +48,10 @@ class AppFormSheet extends StatelessWidget {
                     const SizedBox(height: 8),
                     Row(
                       children: [
-                        IconButton(
-                          onPressed: onClose,
-                          tooltip: MaterialLocalizations.of(
-                            context,
-                          ).closeButtonTooltip,
-                          icon: Icon(
-                            Icons.close,
-                            color: AppColors.textSecondary,
-                          ),
-                        ),
+                        if (closeButtonOnRight)
+                          action ?? const SizedBox(width: 48)
+                        else
+                          _closeButton(context),
                         Expanded(
                           child: Text(
                             title,
@@ -63,7 +59,10 @@ class AppFormSheet extends StatelessWidget {
                             style: TextStyles.sectionTitle,
                           ),
                         ),
-                        action ?? const SizedBox(width: 48),
+                        if (closeButtonOnRight)
+                          _closeButton(context)
+                        else
+                          action ?? const SizedBox(width: 48),
                       ],
                     ),
                   ],
@@ -76,6 +75,12 @@ class AppFormSheet extends StatelessWidget {
         ),
       ),
     ),
+  );
+
+  Widget _closeButton(BuildContext context) => IconButton(
+    onPressed: onClose,
+    tooltip: MaterialLocalizations.of(context).closeButtonTooltip,
+    icon: Icon(Icons.close, color: AppColors.textSecondary),
   );
 }
 

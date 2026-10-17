@@ -134,6 +134,7 @@ class _AddExchangeSheetState extends State<AddExchangeSheet> {
     child: AppFormSheet(
       title: L10n.t('cryptoAdd'),
       backgroundColor: CryptoStyle.panel,
+      closeButtonOnRight: true,
       onClose: _busy ? null : () => Navigator.pop(context),
       child: Form(
         key: _form,

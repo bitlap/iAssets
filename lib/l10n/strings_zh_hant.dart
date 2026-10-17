@@ -416,7 +416,6 @@ const Map<String, String> stringsZhHant = {
   "cryptoApiSecret": "API Secret（簽章金鑰）",
   "cryptoTitle": "數字幣",
   "cryptoReadOnly": "交易所唯讀同步",
-  "cryptoTotal": "數字幣總資產",
   "cryptoSpot": "現貨 / 幣種餘額",
   "cryptoContracts": "合約倉位",
   "cryptoOverview": "總覽",
@@ -490,8 +489,6 @@ const Map<String, String> stringsZhHant = {
   "cryptoCredentialsChanged": "憑證已變更，請重新測試。",
   "cryptoPartial": "部分資產缺少估值行情或超出支援範圍。",
   "cryptoRefresh": "重新整理",
-  'cryptoShowAmount': '顯示金額',
-  'cryptoHideAmount': '隱藏金額',
   'cryptoAccountRole': '帳戶用途',
   'cryptoRegularAccount': '一般帳戶',
   "cryptoScopeBinanceLead":

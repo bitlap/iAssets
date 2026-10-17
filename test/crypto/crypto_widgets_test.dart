@@ -4,6 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:assets/l10n/l10n.dart';
 import 'package:assets/config/app_colors.dart';
 import 'package:assets/config/app_theme.dart';
+import 'package:assets/config/stock_config.dart';
 import 'package:assets/widgets/common/currency_selector.dart';
 import 'package:assets/widgets/common/form_sheet.dart';
 import 'package:assets/widgets/stock/add_stock_sheet.dart';
@@ -56,7 +57,9 @@ void main() {
             ),
           );
           await tester.pumpAndSettle();
-          expect(find.text(L10n.t('cryptoTotal')), findsOneWidget);
+          expect(find.text(StockConfig.assetTotalAssets), findsOneWidget);
+          expect(find.byIcon(Icons.visibility_outlined), findsNothing);
+          expect(find.byIcon(Icons.visibility_off_outlined), findsNothing);
           expect(find.text('Account'), findsOneWidget);
           expect(
             find.widgetWithText(TextButton, L10n.t('cryptoAdd')),
@@ -95,6 +98,11 @@ void main() {
           );
           await tester.pumpAndSettle();
           expect(find.text(L10n.t('cryptoTitle')), findsOneWidget);
+          final header = tester.getRect(find.byType(AssetHeader));
+          final ratio = tester.getRect(
+            find.text(StockConfig.assetPositionRatioLabel),
+          );
+          expect(header.right - ratio.right, lessThan(45));
           expect(tester.takeException(), isNull);
           await tester.pumpWidget(const SizedBox());
           store.dispose();
@@ -159,6 +167,10 @@ void main() {
         expect(tester.takeException(), isNull, reason: 'form opened');
         expect(find.byType(AppFormSheet), findsOneWidget);
         expect(
+          tester.getCenter(find.byIcon(Icons.close)).dx,
+          greaterThan(tester.getCenter(find.text(L10n.t('cryptoAdd'))).dx),
+        );
+        expect(
           tester
               .widget<DropdownButton<CryptoAccountRole>>(
                 find.byType(DropdownButton<CryptoAccountRole>),
@@ -184,6 +196,10 @@ void main() {
         await tester.pumpAndSettle();
         expect(tester.takeException(), isNull, reason: 'form opened');
         expect(find.byType(AppFormSheet), findsOneWidget);
+        expect(
+          tester.getCenter(find.byIcon(Icons.close)).dx,
+          lessThan(tester.getCenter(find.text(StockConfig.addCustomStock)).dx),
+        );
         tester.view.viewInsets = const FakeViewPadding(bottom: 240);
         await tester.pumpAndSettle();
         expect(tester.takeException(), isNull);

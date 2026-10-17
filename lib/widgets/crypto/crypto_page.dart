@@ -1,6 +1,7 @@
 import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
 import '../../config/app_colors.dart';
+import '../../config/stock_config.dart';
 import '../../l10n/l10n.dart';
 import '../../models/crypto/crypto_models.dart';
 import '../../services/crypto/crypto_store.dart';
@@ -34,14 +35,11 @@ class CryptoPageState extends State<CryptoPage>
   String? _connection;
   String _search = '';
   bool _hideSmall = false;
-  bool _hideAmount = false;
   @override
   bool get wantKeepAlive => true;
   Future<void> addConnection() => showAddExchangeSheet(context, widget.store);
   String _money(Decimal? usd, {bool showSymbol = true}) => usd == null
       ? L10n.t('cryptoUnknown')
-      : _hideAmount
-      ? '••••'
       : '${showSymbol ? CurrencyUtil.getSymbol(widget.currency) : ''}${CurrencyUtil.formatCompact(CurrencyUtil.convertCurrency(usd.toDouble(), 'USD', widget.currency))}';
 
   @override
@@ -82,7 +80,7 @@ class CryptoPageState extends State<CryptoPage>
                       children: [
                         Expanded(
                           child: Text(
-                            L10n.t('cryptoTotal'),
+                            StockConfig.assetTotalAssets,
                             style: TextStyles.body13,
                           ),
                         ),
@@ -92,19 +90,6 @@ class CryptoPageState extends State<CryptoPage>
                             context: context,
                             selectedCurrency: widget.currency,
                             onCurrencyChanged: widget.onCurrencyChanged,
-                          ),
-                        ),
-                        IconButton(
-                          onPressed: () =>
-                              setState(() => _hideAmount = !_hideAmount),
-                          tooltip: _hideAmount
-                              ? L10n.t('cryptoShowAmount')
-                              : L10n.t('cryptoHideAmount'),
-                          icon: Icon(
-                            _hideAmount
-                                ? Icons.visibility_off_outlined
-                                : Icons.visibility_outlined,
-                            size: 18,
                           ),
                         ),
                       ],
@@ -387,16 +372,12 @@ class CryptoPageState extends State<CryptoPage>
             if (w.walletBalance != null)
               _row(
                 L10n.t('cryptoWalletBalance'),
-                _hideAmount
-                    ? '••••'
-                    : '${w.walletBalance} ${w.settlement ?? ''}',
+                '${w.walletBalance} ${w.settlement ?? ''}',
               ),
             if (w.unrealizedPnl != null)
               _row(
                 L10n.t('cryptoPnl'),
-                _hideAmount
-                    ? '••••'
-                    : '${w.unrealizedPnl} ${w.settlement ?? ''}',
+                '${w.unrealizedPnl} ${w.settlement ?? ''}',
                 valueColor: _pnlColor(w.unrealizedPnl),
               ),
           ],
@@ -440,21 +421,12 @@ class CryptoPageState extends State<CryptoPage>
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   _row(b.asset, _money(b.valueUsd)),
-                  _row(
-                    L10n.t('cryptoQuantity'),
-                    _hideAmount ? '••••' : '${b.quantity} ${b.asset}',
-                  ),
+                  _row(L10n.t('cryptoQuantity'), '${b.quantity} ${b.asset}'),
                   _row(L10n.t('cryptoPrice'), _money(b.priceUsd)),
                   if (b.available != null)
-                    _row(
-                      L10n.t('cryptoAvailable'),
-                      _hideAmount ? '••••' : '${b.available}',
-                    ),
+                    _row(L10n.t('cryptoAvailable'), '${b.available}'),
                   if (b.frozen != null)
-                    _row(
-                      L10n.t('cryptoFrozen'),
-                      _hideAmount ? '••••' : '${b.frozen}',
-                    ),
+                    _row(L10n.t('cryptoFrozen'), '${b.frozen}'),
                 ],
               ),
             ),
@@ -507,9 +479,7 @@ class CryptoPageState extends State<CryptoPage>
                 const SizedBox(height: 6),
                 _row(
                   L10n.t('cryptoQuantity'),
-                  _hideAmount
-                      ? '••••'
-                      : '${p.quantity} ${p.unit == 'contracts' ? L10n.t('cryptoUnitContracts') : p.unit}',
+                  '${p.quantity} ${p.unit == 'contracts' ? L10n.t('cryptoUnitContracts') : p.unit}',
                 ),
                 _row(
                   L10n.t('cryptoMarkPrice'),
@@ -517,9 +487,7 @@ class CryptoPageState extends State<CryptoPage>
                 ),
                 _row(
                   L10n.t('cryptoPnl'),
-                  _hideAmount
-                      ? '••••'
-                      : '${p.unrealizedPnl ?? '—'} ${p.settlement}',
+                  '${p.unrealizedPnl ?? '—'} ${p.settlement}',
                   valueColor: _pnlColor(p.unrealizedPnl),
                 ),
                 if (p.leverage != null)
@@ -554,8 +522,7 @@ class CryptoPageState extends State<CryptoPage>
       : p.symbol.contains('USDC')
       ? 'USDC'
       : 'USD';
-  Color _pnlColor(Decimal? value) =>
-      _hideAmount || value == null || value == Decimal.zero
+  Color _pnlColor(Decimal? value) => value == null || value == Decimal.zero
       ? AppColors.textPrimary
       : value > Decimal.zero
       ? AppColors.rise
