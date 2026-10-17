@@ -471,7 +471,7 @@ class SummaryCardFrame extends StatelessWidget {
   );
 }
 
-/// 顶部汇总卡片共用的刷新反馈，与数字币同步进度保持一致。
+/// 资产汇总卡片的刷新反馈。
 class SummaryRefreshIndicator extends StatelessWidget {
   final Color color;
 

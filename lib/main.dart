@@ -221,7 +221,6 @@ class _AppShellState extends State<_AppShell> with WidgetsBindingObserver {
   void _onTabChanged(int index) {
     _syncStockTotalValue();
     setState(() => _currentIndex = index);
-    if (index != 0) unawaited(_refreshCrypto());
     _pageController.animateToPage(
       index,
       duration: const Duration(milliseconds: 300),
@@ -280,7 +279,6 @@ class _AppShellState extends State<_AppShell> with WidgetsBindingObserver {
                           onPageChanged: (i) {
                             _syncStockTotalValue();
                             setState(() => _currentIndex = i);
-                            if (i != 0) unawaited(_refreshCrypto());
                           },
                           children: [
                             StockPortfolioPage(

@@ -178,8 +178,6 @@ class CryptoPageState extends State<CryptoPage>
                           ),
                       ],
                     ),
-                    if (widget.store.syncing)
-                      SummaryRefreshIndicator(color: AppColors.accent),
                   ],
                 ),
               ),

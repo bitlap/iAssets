@@ -18,7 +18,7 @@ void main() {
   });
 
   for (final brightness in Brightness.values) {
-    testWidgets('summary cards show refresh progress in $brightness', (
+    testWidgets('only asset summary shows refresh progress in $brightness', (
       tester,
     ) async {
       AppColors.applyBrightness(brightness);
@@ -27,7 +27,7 @@ void main() {
         home: Scaffold(body: SingleChildScrollView(child: child)),
       );
 
-      Widget stock(bool refreshing) => StockHeaderCard(
+      Widget stock() => StockHeaderCard(
         selectedCurrency: 'USD',
         totalAssets: 100,
         totalMarketValue: 100,
@@ -39,14 +39,11 @@ void main() {
         todayProfitPercent: 1,
         totalAfterTaxDividends: 0,
         totalSellAmount: 0,
-        isRefreshing: refreshing,
         onCurrencyChanged: (_) {},
       );
 
-      await tester.pumpWidget(page(stock(false)));
+      await tester.pumpWidget(page(stock()));
       expect(find.byType(SummaryRefreshIndicator), findsNothing);
-      await tester.pumpWidget(page(stock(true)));
-      expect(find.byType(SummaryRefreshIndicator), findsOneWidget);
       final stockGradient =
           tester
                   .widget<SummaryCardFrame>(find.byType(SummaryCardFrame))
@@ -56,14 +53,7 @@ void main() {
         stockGradient.colors.first.computeLuminance(),
         brightness == Brightness.light ? greaterThan(.7) : lessThan(.1),
       );
-      expect(
-        tester
-            .widget<LinearProgressIndicator>(
-              find.byType(LinearProgressIndicator),
-            )
-            .color,
-        AppColors.accent,
-      );
+      expect(find.byType(LinearProgressIndicator), findsNothing);
       expect(tester.takeException(), isNull);
 
       Widget asset(bool refreshing) => AssetHeader(
