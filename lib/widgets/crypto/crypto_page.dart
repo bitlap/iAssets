@@ -39,14 +39,38 @@ class CryptoPageState extends State<CryptoPage>
   @override
   bool get wantKeepAlive => true;
   Future<void> addConnection() => showAddExchangeSheet(context, widget.store);
-  String _summaryMoney(Decimal? usd, {bool showSymbol = true}) =>
-      '${showSymbol ? CurrencyUtil.getSymbol(widget.currency) : ''}${CurrencyUtil.formatCompact(CurrencyUtil.convertCurrency((usd ?? Decimal.zero).toDouble(), 'USD', widget.currency))}';
+  String _summaryMoney(Decimal? usd, {bool showSymbol = true}) => usd == null
+      ? L10n.t('cryptoUnknown')
+      : '${showSymbol ? CurrencyUtil.getSymbol(widget.currency) : ''}${CurrencyUtil.formatCompact(CurrencyUtil.convertCurrency(usd.toDouble(), 'USD', widget.currency))}';
+
+  Decimal? _categoryAmount(CryptoWalletKind kind) {
+    final store = widget.store;
+    if (store.connections.isEmpty || store.storageError != null) return null;
+    var total = Decimal.zero;
+    for (final c in store.connections) {
+      final isLead = c.role == CryptoAccountRole.lead;
+      if ((kind == CryptoWalletKind.lead) != isLead) continue;
+      final snapshot = store.snapshot(c.id);
+      if (snapshot == null || store.errors.containsKey(c.id)) return null;
+      final wallets = snapshot.wallets.where((w) => w.kind == kind).toList();
+      if ((isLead && !snapshot.complete) ||
+          (kind == CryptoWalletKind.futures && !snapshot.coverageComplete) ||
+          wallets.any((w) => w.equityUsd == null) ||
+          snapshot.balances.any(
+            (b) => b.priceUsd == null && wallets.any((w) => w.name == b.wallet),
+          )) {
+        return null;
+      }
+      total += snapshot.subtotal(kind);
+    }
+    return total;
+  }
 
   String _decimal(Decimal? value) =>
       value == null ? '--' : value.truncate(scale: 8).toStringAsFixed(8);
 
   String _money(Decimal? usd) {
-    if (usd == null) return '--';
+    if (usd == null) return L10n.t('cryptoUnknown');
     // Rates are quoted per USD. Keep the amount in Decimal through conversion
     // and display, including values smaller than a cent.
     final rate = widget.currency == 'USD'
@@ -110,7 +134,14 @@ class CryptoPageState extends State<CryptoPage>
                         ),
                       ],
                     ),
-                    Text(_summaryMoney(total), style: TextStyles.amountLarge),
+                    Text(
+                      _summaryMoney(
+                        snapshots.isEmpty || widget.store.incomplete
+                            ? null
+                            : total,
+                      ),
+                      style: TextStyles.amountLarge,
+                    ),
                     const SizedBox(height: 12),
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -170,12 +201,7 @@ class CryptoPageState extends State<CryptoPage>
                                     alignment: Alignment.centerLeft,
                                     child: Text(
                                       _summaryMoney(
-                                        snapshots.fold<Decimal>(
-                                          Decimal.zero,
-                                          (value, snapshot) =>
-                                              value +
-                                              snapshot.subtotal(entry.$1),
-                                        ),
+                                        _categoryAmount(entry.$1),
                                         showSymbol: false,
                                       ),
                                       style: TextStyles.subtitle,

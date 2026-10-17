@@ -7,6 +7,7 @@ import 'package:assets/widgets/common/app_theme.dart';
 import 'package:assets/config/stock_config.dart';
 import 'package:assets/widgets/common/currency_selector.dart';
 import 'package:assets/widgets/common/form_sheet.dart';
+import 'package:assets/widgets/common/app_ui.dart';
 import 'package:assets/widgets/stock/add_stock_sheet.dart';
 import 'package:assets/models/crypto/crypto_models.dart';
 import 'package:assets/services/crypto/crypto_store.dart';
@@ -98,20 +99,20 @@ void main() {
       }
 
       await showCurrency('USD');
-      expect(find.text(r'$123456.12'), findsOneWidget);
+      expect(find.text(L10n.t('cryptoUnknown')), findsOneWidget);
       expect(find.text(r'$123456.12345678'), findsOneWidget);
       await tester.tap(find.text(L10n.t('cryptoSpot')));
       await tester.pumpAndSettle();
       expect(find.text('0.00000000'), findsNWidgets(3));
       expect(find.text(r'$0.00000001'), findsOneWidget);
       expect(find.text(r'$0.00000000'), findsOneWidget);
-      expect(find.text('--'), findsNWidgets(2));
+      expect(find.text(L10n.t('cryptoUnknown')), findsNWidgets(3));
       expect(find.text(r'$0.00'), findsNothing);
 
       await showCurrency('CNY');
       expect(find.text('¥0.00000008'), findsOneWidget);
       expect(find.text('¥0.00000000'), findsOneWidget);
-      expect(find.text('--'), findsNWidgets(2));
+      expect(find.text(L10n.t('cryptoUnknown')), findsNWidgets(3));
       await tester.tap(find.text(L10n.t('cryptoContracts')));
       await tester.pumpAndSettle();
       expect(find.text('¥835797.95580246'), findsOneWidget);
@@ -121,6 +122,113 @@ void main() {
       expect(tester.takeException(), isNull);
     },
   );
+  for (final brightness in Brightness.values) {
+    for (final lang in [L10n.langZh, L10n.langEn, L10n.langZhHant]) {
+      testWidgets(
+        'crypto summary distinguishes missing valuations and zero in $lang / $brightness',
+        (tester) async {
+          tester.view.physicalSize = const Size(320, 1000);
+          tester.view.devicePixelRatio = 1;
+          addTearDown(tester.view.resetPhysicalSize);
+          addTearDown(tester.view.resetDevicePixelRatio);
+          AppColors.applyBrightness(brightness);
+          L10n.applyLanguage(lang);
+          final time = DateTime.utc(2026, 10, 17);
+          final reader = fixtures.FakeReader(
+            CryptoSnapshot(
+              accountId: '123',
+              updatedAt: time,
+              balances: [
+                CryptoBalance(
+                  asset: 'UNKNOWN',
+                  wallet: 'Spot',
+                  quantity: amount('1'),
+                ),
+              ],
+              positions: [],
+              wallets: [
+                CryptoWallet(
+                  name: 'Spot',
+                  kind: CryptoWalletKind.spot,
+                  equityUsd: amount('0'),
+                ),
+                CryptoWallet(
+                  name: 'USD-M',
+                  kind: CryptoWalletKind.futures,
+                  equityUsd: amount('100'),
+                ),
+              ],
+            ),
+          );
+          final store = CryptoStore(
+            reader: reader,
+            persistence: fixtures.MemoryPersistence(),
+            clock: () => time,
+          );
+          addTearDown(store.dispose);
+          await tester.pumpWidget(
+            MaterialApp(
+              theme: AppTheme.data(brightness),
+              home: Scaffold(
+                body: CryptoPage(
+                  store: store,
+                  currency: 'USD',
+                  onCurrencyChanged: (_) {},
+                ),
+              ),
+            ),
+          );
+          await tester.pumpAndSettle();
+          Finder summaryText(String text) => find.descendant(
+            of: find.byType(SummaryCardFrame),
+            matching: find.text(text),
+          );
+          expect(summaryText(L10n.t('cryptoUnknown')), findsNWidgets(4));
+          expect(summaryText(r'$0.00'), findsNothing);
+
+          await store.add(await store.test(fixtures.connection()));
+          await tester.pumpAndSettle();
+          // A missing spot quote affects spot and the total, while futures is known.
+          expect(summaryText(L10n.t('cryptoUnknown')), findsNWidgets(2));
+          expect(summaryText('100.00'), findsOneWidget);
+          expect(summaryText('0.00'), findsOneWidget);
+          expect(find.text(L10n.t('cryptoIncomplete')), findsNothing);
+
+          reader.snapshot = CryptoSnapshot(
+            accountId: '123',
+            updatedAt: time,
+            balances: [],
+            positions: [],
+            wallets: [
+              CryptoWallet(
+                name: 'Spot',
+                kind: CryptoWalletKind.spot,
+                equityUsd: amount('0'),
+              ),
+              CryptoWallet(
+                name: 'USD-M',
+                kind: CryptoWalletKind.futures,
+                equityUsd: amount('0'),
+              ),
+            ],
+          );
+          await store.refresh();
+          await tester.pumpAndSettle();
+          expect(summaryText(L10n.t('cryptoUnknown')), findsNothing);
+          expect(summaryText(r'$0.00'), findsOneWidget);
+          expect(summaryText('0.00'), findsNWidgets(3));
+
+          reader.fail = true;
+          await store.refresh();
+          await tester.pumpAndSettle();
+          expect(summaryText(L10n.t('cryptoUnknown')), findsNWidgets(3));
+          expect(find.text(L10n.t('cryptoIncomplete')), findsNothing);
+          expect(tester.takeException(), isNull);
+          await tester.pumpWidget(const SizedBox());
+        },
+      );
+    }
+  }
   for (final brightness in Brightness.values) {
     for (final lang in [L10n.langZh, L10n.langEn, L10n.langZhHant]) {
       testWidgets(

@@ -49,3 +49,7 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# Local App Store Connect release credentials
+/scripts/release_ios.env
+*.p8
