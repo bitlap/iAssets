@@ -15,11 +15,13 @@ import '../common/app_ui.dart';
 import 'asset_card.dart';
 import 'asset_header.dart';
 import 'asset_dialogs.dart';
+import 'asset_style.dart';
 
 class AssetsPage extends StatefulWidget {
   final double stockTotalValue;
   final double cryptoTotalValue;
   final bool cryptoIncomplete;
+  final bool cryptoSyncing;
   final DateTime? cryptoUpdatedAt;
   final Future<void> Function()? onRefreshCrypto;
   final String currency;
@@ -31,6 +33,7 @@ class AssetsPage extends StatefulWidget {
     required this.stockTotalValue,
     this.cryptoTotalValue = 0,
     this.cryptoIncomplete = false,
+    this.cryptoSyncing = false,
     this.cryptoUpdatedAt,
     this.onRefreshCrypto,
     required this.currency,
@@ -45,6 +48,8 @@ class AssetsPage extends StatefulWidget {
 class AssetsPageState extends State<AssetsPage> {
   List<AssetBase> _assets = [];
   bool _isLoading = false;
+  bool _isRefreshing = false;
+  Future<void>? _refreshInFlight;
   DateTime? _lastRefreshTime;
   final Set<AssetType> _expandedTypes = {};
   List<AssetType> _sectionOrder = [
@@ -81,19 +86,33 @@ class AssetsPageState extends State<AssetsPage> {
     _load();
   }
 
-  Future<void> _load() async {
-    setState(() => _isLoading = true);
+  Future<void> _load({bool showOverlay = true}) async {
+    if (showOverlay) setState(() => _isLoading = true);
     final (assets, order) = await AssetDataManager.loadAssetsAndOrder();
     if (!mounted) return;
     setState(() {
       _assets = assets;
       _expandedTypes.clear();
       _sectionOrder = order;
-      _isLoading = false;
+      if (showOverlay) _isLoading = false;
       _lastRefreshTime = DateTime.now();
     });
     widget.onHeaderChanged?.call();
     _rebuildFlatItems();
+  }
+
+  Future<void> _refreshAssets() {
+    if (_refreshInFlight != null) return _refreshInFlight!;
+    setState(() => _isRefreshing = true);
+    final future = Future.wait([
+      _load(showOverlay: false),
+      if (widget.onRefreshCrypto != null) widget.onRefreshCrypto!(),
+    ]);
+    _refreshInFlight = future;
+    return future.whenComplete(() {
+      _refreshInFlight = null;
+      if (mounted) setState(() => _isRefreshing = false);
+    });
   }
 
   Future<void> _save() async {
@@ -360,12 +379,7 @@ class AssetsPageState extends State<AssetsPage> {
     return Stack(
       children: [
         RefreshIndicator(
-          onRefresh: () async {
-            await Future.wait([
-              _load(),
-              if (widget.onRefreshCrypto != null) widget.onRefreshCrypto!(),
-            ]);
-          },
+          onRefresh: _refreshAssets,
           color: AppColors.accent,
           backgroundColor: AppColors.surface,
           child: CustomScrollView(
@@ -378,6 +392,7 @@ class AssetsPageState extends State<AssetsPage> {
                   cryptoTotalValue: widget.cryptoTotalValue,
                   cryptoIncomplete: widget.cryptoIncomplete,
                   cryptoUpdatedAt: widget.cryptoUpdatedAt,
+                  isRefreshing: _isRefreshing || widget.cryptoSyncing,
                   currency: widget.currency,
                   totalsByType: _totalByType(widget.currency),
                   onCurrencyTap: _showCurrencyMenu,
@@ -432,25 +447,25 @@ class AssetsPageState extends State<AssetsPage> {
     final total = _totalByType(widget.currency)[type] ?? 0;
 
     final (icon, iconColor, label) = switch (type) {
-      AssetType.cash => (Icons.payments, AppColors.success, AssetConfig.cash),
+      AssetType.cash => (Icons.payments, AssetStyle.cash, AssetConfig.cash),
       AssetType.timeDeposit => (
         Icons.savings,
-        AppColors.warning,
+        AssetStyle.deposit,
         AssetConfig.timeDeposit,
       ),
       AssetType.wealthProduct => (
         Icons.monetization_on,
-        AppColors.accent,
+        AssetStyle.wealth,
         AssetConfig.wealthProduct,
       ),
       AssetType.current => (
         Icons.account_balance,
-        AppColors.cyan,
+        AssetStyle.current,
         AssetConfig.current,
       ),
       AssetType.providentFund => (
         Icons.home_work,
-        AppColors.purple,
+        AssetStyle.provident,
         AssetConfig.providentFund,
       ),
     };
@@ -464,8 +479,9 @@ class AssetsPageState extends State<AssetsPage> {
         margin: const EdgeInsets.fromLTRB(16, 4, 16, 4),
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
         decoration: BoxDecoration(
-          color: iconColor.withValues(alpha: 0.08),
+          color: AssetStyle.tint(iconColor),
           borderRadius: BorderRadius.circular(10),
+          border: Border.all(color: AssetStyle.border(iconColor)),
         ),
         child: Row(
           children: [
@@ -590,7 +606,7 @@ class AssetsPageState extends State<AssetsPage> {
         ),
       ),
       icon: Icons.payments,
-      iconColor: AppColors.success,
+      iconColor: AssetStyle.cash,
       name: cash.name.isNotEmpty
           ? cash.name
           : AssetConfig.defaultNameCash.replaceAll('{currency}', cash.currency),
@@ -626,7 +642,7 @@ class AssetsPageState extends State<AssetsPage> {
         ),
       ),
       icon: Icons.savings,
-      iconColor: AppColors.warning,
+      iconColor: AssetStyle.deposit,
       name: td.name.isNotEmpty ? td.name : AssetConfig.defaultNameTD,
       createdAt: td.createdAt,
       updatedAt: td.updatedAt,
@@ -648,7 +664,7 @@ class AssetsPageState extends State<AssetsPage> {
               style: TextStyles.caption.copyWith(
                 color: daysLeft > 0
                     ? AppColors.textSecondary
-                    : AppColors.warning,
+                    : AssetStyle.deposit,
               ),
             ),
           ],
@@ -675,7 +691,7 @@ class AssetsPageState extends State<AssetsPage> {
         ),
       ),
       icon: Icons.monetization_on,
-      iconColor: AppColors.accent,
+      iconColor: AssetStyle.wealth,
       name: wp.name.isNotEmpty ? wp.name : AssetConfig.defaultNameWP,
       createdAt: wp.createdAt,
       updatedAt: wp.updatedAt,
@@ -708,7 +724,7 @@ class AssetsPageState extends State<AssetsPage> {
         ),
       ),
       icon: Icons.account_balance,
-      iconColor: AppColors.cyan,
+      iconColor: AssetStyle.current,
       name: account.name.isNotEmpty
           ? account.name
           : AssetConfig.defaultNameCurrent.replaceAll(
@@ -746,7 +762,7 @@ class AssetsPageState extends State<AssetsPage> {
         ),
       ),
       icon: Icons.home_work,
-      iconColor: AppColors.purple,
+      iconColor: AssetStyle.provident,
       name: account.name.isNotEmpty
           ? account.name
           : AssetConfig.defaultNameProvidentFund.replaceAll(

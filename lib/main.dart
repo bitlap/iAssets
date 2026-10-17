@@ -304,6 +304,7 @@ class _AppShellState extends State<_AppShell> with WidgetsBindingObserver {
                                 _selectedCurrency,
                               ),
                               cryptoIncomplete: _crypto.incomplete,
+                              cryptoSyncing: _crypto.syncing,
                               cryptoUpdatedAt: _crypto.oldestUpdate,
                               onRefreshCrypto: () => _refreshCrypto(),
                               currency: _selectedCurrency,

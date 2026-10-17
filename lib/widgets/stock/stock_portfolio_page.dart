@@ -59,6 +59,8 @@ class StockPortfolioPageState extends State<StockPortfolioPage>
   final ExchangeRateService _exchangeRateService = ExchangeRateService();
   Timer? _priceRefreshTimer;
   bool _isForeground = true;
+  bool _isRefreshing = false;
+  Future<void>? _refreshInFlight;
 
   /// 今日盈亏基线（存于 defaultCurrency 的总盈亏）
   double _todayBaseline = 0;
@@ -236,8 +238,19 @@ class StockPortfolioPageState extends State<StockPortfolioPage>
   }
 
   /// 统一刷新：同步云端→推送本地脏数据→拉取汇率→加载股票→拉取行情
-  Future<void> _refreshAll() async {
-    if (!_isForeground || !mounted) return;
+  Future<void> _refreshAll() {
+    if (!_isForeground || !mounted) return Future.value();
+    if (_refreshInFlight != null) return _refreshInFlight!;
+    setState(() => _isRefreshing = true);
+    final future = _performRefresh();
+    _refreshInFlight = future;
+    return future.whenComplete(() {
+      _refreshInFlight = null;
+      if (mounted) setState(() => _isRefreshing = false);
+    });
+  }
+
+  Future<void> _performRefresh() async {
     _collapseExpandedStock();
 
     await StockDataManager.loadSettings();
@@ -958,6 +971,7 @@ class StockPortfolioPageState extends State<StockPortfolioPage>
                       todayProfitPercent: todayProfitPercent,
                       totalAfterTaxDividends: totalAfterTaxDividends,
                       totalSellAmount: totalSellAmount,
+                      isRefreshing: _isRefreshing,
                       onCurrencyChanged: _onCurrencyChanged,
                       onCollapse: _collapseExpandedStock,
                     ),

@@ -177,10 +177,7 @@ class CryptoPageState extends State<CryptoPage>
                       ],
                     ),
                     if (widget.store.syncing)
-                      Padding(
-                        padding: const EdgeInsets.only(top: 8),
-                        child: LinearProgressIndicator(color: AppColors.accent),
-                      ),
+                      SummaryRefreshIndicator(color: AppColors.accent),
                   ],
                 ),
               ),

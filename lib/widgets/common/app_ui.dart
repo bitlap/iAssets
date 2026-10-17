@@ -470,3 +470,43 @@ class SummaryCardFrame extends StatelessWidget {
     child: child,
   );
 }
+
+/// 顶部汇总卡片共用的刷新反馈，与数字币同步进度保持一致。
+class SummaryRefreshIndicator extends StatelessWidget {
+  final Color color;
+
+  const SummaryRefreshIndicator({super.key, required this.color});
+
+  @override
+  Widget build(BuildContext context) => Padding(
+    padding: const EdgeInsets.only(top: 8),
+    child: LinearProgressIndicator(color: color),
+  );
+}
+
+/// 股票和资产汇总卡片的主题色，浅色保留清晰边界，深色避免纯黑卡片单调。
+class SummaryCardPalette {
+  SummaryCardPalette._();
+
+  static Gradient get stockGradient => LinearGradient(
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+    colors: AppColors.isDark
+        ? const [Color(0xFF1B2940), Color(0xFF151E2D), Color(0xFF142B31)]
+        : const [Color(0xFFEEF5FF), Color(0xFFF8FAFF), Color(0xFFF0FAFC)],
+  );
+
+  static Gradient get assetGradient => LinearGradient(
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+    colors: AppColors.isDark
+        ? const [Color(0xFF30271D), Color(0xFF222530), Color(0xFF192A2A)]
+        : const [Color(0xFFFFF5E9), Color(0xFFF9FAFD), Color(0xFFF0FAF7)],
+  );
+
+  static Color get stockBorder =>
+      AppColors.accent.withValues(alpha: AppColors.isDark ? .28 : .20);
+
+  static Color get assetBorder =>
+      AppColors.warning.withValues(alpha: AppColors.isDark ? .28 : .20);
+}

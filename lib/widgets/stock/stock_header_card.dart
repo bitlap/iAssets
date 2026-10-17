@@ -20,6 +20,7 @@ class StockHeaderCard extends StatefulWidget {
   final double todayProfitPercent;
   final double totalAfterTaxDividends;
   final double totalSellAmount;
+  final bool isRefreshing;
   final ValueChanged<String> onCurrencyChanged;
   final VoidCallback? onCollapse;
 
@@ -36,6 +37,7 @@ class StockHeaderCard extends StatefulWidget {
     required this.todayProfitPercent,
     required this.totalAfterTaxDividends,
     required this.totalSellAmount,
+    this.isRefreshing = false,
     required this.onCurrencyChanged,
     this.onCollapse,
   });
@@ -58,6 +60,8 @@ class _StockHeaderCardState extends State<StockHeaderCard> {
   Widget build(BuildContext context) {
     return SummaryCardFrame(
       margin: const EdgeInsets.symmetric(horizontal: 16),
+      gradient: SummaryCardPalette.stockGradient,
+      borderColor: SummaryCardPalette.stockBorder,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
@@ -110,6 +114,8 @@ class _StockHeaderCardState extends State<StockHeaderCard> {
             totalProfit: widget.totalProfit,
             targetCurrency: widget.selectedCurrency,
           ),
+          if (widget.isRefreshing)
+            SummaryRefreshIndicator(color: AppColors.accent),
         ],
       ),
     );

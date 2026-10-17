@@ -7,6 +7,7 @@ import '../common/app_ui.dart';
 import '../common/currency_selector.dart';
 import '../common/dialog_utils.dart';
 import '../../l10n/l10n.dart';
+import 'asset_style.dart';
 
 // Header (Summary Card)
 
@@ -16,6 +17,7 @@ class AssetHeader extends StatelessWidget {
   final double cryptoTotalValue;
   final bool cryptoIncomplete;
   final DateTime? cryptoUpdatedAt;
+  final bool isRefreshing;
   final String currency;
   final VoidCallback onCurrencyTap;
   final Map<AssetType, double> totalsByType;
@@ -27,6 +29,7 @@ class AssetHeader extends StatelessWidget {
     this.cryptoTotalValue = 0,
     this.cryptoIncomplete = false,
     this.cryptoUpdatedAt,
+    this.isRefreshing = false,
     required this.currency,
     required this.onCurrencyTap,
     required this.totalsByType,
@@ -36,6 +39,8 @@ class AssetHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return SummaryCardFrame(
       margin: const EdgeInsets.symmetric(horizontal: 16),
+      gradient: SummaryCardPalette.assetGradient,
+      borderColor: SummaryCardPalette.assetBorder,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
@@ -77,7 +82,7 @@ class AssetHeader extends StatelessWidget {
                 cryptoIncomplete && cryptoUpdatedAt == null
                     ? '—'
                     : CurrencyUtil.formatCompact(cryptoTotalValue),
-                iconColor: AppColors.purple,
+                iconColor: AssetStyle.crypto,
               ),
               const SizedBox(width: 8),
               _summaryChip(
@@ -86,10 +91,11 @@ class AssetHeader extends StatelessWidget {
                 CurrencyUtil.formatCompact(
                   totalAssets - stockTotalValue - cryptoTotalValue,
                 ),
-                iconColor: AppColors.warning,
+                iconColor: AssetStyle.deposit,
               ),
             ],
           ),
+          if (isRefreshing) SummaryRefreshIndicator(color: AssetStyle.deposit),
         ],
       ),
     );
@@ -99,7 +105,7 @@ class AssetHeader extends StatelessWidget {
     final entries = <(IconData, Color, String, double)>[
       (
         Icons.currency_bitcoin,
-        AppColors.purple,
+        AssetStyle.crypto,
         L10n.t('cryptoTitle'),
         cryptoTotalValue,
       ),
@@ -114,31 +120,31 @@ class AssetHeader extends StatelessWidget {
           switch (type) {
             AssetType.cash => (
               Icons.payments,
-              AppColors.success,
+              AssetStyle.cash,
               AssetConfig.cash,
               totalsByType[type]!,
             ),
             AssetType.timeDeposit => (
               Icons.savings,
-              AppColors.warning,
+              AssetStyle.deposit,
               AssetConfig.timeDeposit,
               totalsByType[type]!,
             ),
             AssetType.wealthProduct => (
               Icons.monetization_on,
-              AppColors.accent,
+              AssetStyle.wealth,
               AssetConfig.wealthProduct,
               totalsByType[type]!,
             ),
             AssetType.current => (
               Icons.account_balance,
-              AppColors.cyan,
+              AssetStyle.current,
               AssetConfig.current,
               totalsByType[type]!,
             ),
             AssetType.providentFund => (
               Icons.home_work,
-              AppColors.purple,
+              AssetStyle.provident,
               AssetConfig.providentFund,
               totalsByType[type]!,
             ),
