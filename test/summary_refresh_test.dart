@@ -18,7 +18,7 @@ void main() {
   });
 
   for (final brightness in Brightness.values) {
-    testWidgets('only asset summary shows refresh progress in $brightness', (
+    testWidgets('summary cards omit internal refresh bars in $brightness', (
       tester,
     ) async {
       AppColors.applyBrightness(brightness);
@@ -43,7 +43,6 @@ void main() {
       );
 
       await tester.pumpWidget(page(stock()));
-      expect(find.byType(SummaryRefreshIndicator), findsNothing);
       final stockGradient =
           tester
                   .widget<SummaryCardFrame>(find.byType(SummaryCardFrame))
@@ -56,19 +55,16 @@ void main() {
       expect(find.byType(LinearProgressIndicator), findsNothing);
       expect(tester.takeException(), isNull);
 
-      Widget asset(bool refreshing) => AssetHeader(
+      Widget asset() => AssetHeader(
         totalAssets: 100,
         stockTotalValue: 50,
         currency: 'USD',
         onCurrencyTap: () {},
         totalsByType: const {},
-        isRefreshing: refreshing,
       );
 
-      await tester.pumpWidget(page(asset(false)));
-      expect(find.byType(SummaryRefreshIndicator), findsNothing);
-      await tester.pumpWidget(page(asset(true)));
-      expect(find.byType(SummaryRefreshIndicator), findsOneWidget);
+      await tester.pumpWidget(page(asset()));
+      expect(find.byType(LinearProgressIndicator), findsNothing);
       final assetGradient =
           tester
                   .widget<SummaryCardFrame>(find.byType(SummaryCardFrame))

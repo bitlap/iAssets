@@ -17,7 +17,6 @@ class AssetHeader extends StatelessWidget {
   final double cryptoTotalValue;
   final bool cryptoIncomplete;
   final DateTime? cryptoUpdatedAt;
-  final bool isRefreshing;
   final String currency;
   final VoidCallback onCurrencyTap;
   final Map<AssetType, double> totalsByType;
@@ -29,7 +28,6 @@ class AssetHeader extends StatelessWidget {
     this.cryptoTotalValue = 0,
     this.cryptoIncomplete = false,
     this.cryptoUpdatedAt,
-    this.isRefreshing = false,
     required this.currency,
     required this.onCurrencyTap,
     required this.totalsByType,
@@ -95,7 +93,6 @@ class AssetHeader extends StatelessWidget {
               ),
             ],
           ),
-          if (isRefreshing) SummaryRefreshIndicator(color: AssetStyle.deposit),
         ],
       ),
     );

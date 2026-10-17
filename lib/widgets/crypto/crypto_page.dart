@@ -206,40 +206,47 @@ class CryptoPageState extends State<CryptoPage>
               if (connections.isNotEmpty) ...[
                 const SizedBox(height: 8),
                 if (connections.length > 1)
-                  DropdownButtonFormField<String>(
-                    key: ValueKey('filter-$_connection-${connections.length}'),
-                    initialValue: connections.any((c) => c.id == _connection)
-                        ? _connection
-                        : null,
-                    decoration: appInputDecoration(),
-                    dropdownColor: AppColors.surfaceElevated,
-                    style: TextStyles.body13,
-                    isExpanded: true,
-                    borderRadius: BorderRadius.circular(12),
-                    menuMaxHeight: MediaQuery.sizeOf(context).height * .45,
-                    iconEnabledColor: AppColors.textSecondary,
-                    items: [
-                      DropdownMenuItem(
-                        value: null,
-                        child: Text(
-                          L10n.t('cryptoAll'),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
+                  ButtonTheme.fromButtonThemeData(
+                    data: ButtonTheme.of(
+                      context,
+                    ).copyWith(alignedDropdown: true),
+                    child: DropdownButtonFormField<String>(
+                      key: ValueKey(
+                        'filter-$_connection-${connections.length}',
                       ),
-                      ...connections.map(
-                        (c) => DropdownMenuItem(
-                          value: c.id,
+                      initialValue: connections.any((c) => c.id == _connection)
+                          ? _connection
+                          : null,
+                      decoration: appInputDecoration(),
+                      dropdownColor: AppColors.surface,
+                      style: TextStyles.body13,
+                      isExpanded: true,
+                      borderRadius: BorderRadius.circular(12),
+                      menuMaxHeight: MediaQuery.sizeOf(context).height * .45,
+                      iconEnabledColor: AppColors.textSecondary,
+                      items: [
+                        DropdownMenuItem(
+                          value: null,
                           child: Text(
-                            c.name,
+                            L10n.t('cryptoAll'),
                             maxLines: 1,
-                            softWrap: false,
                             overflow: TextOverflow.ellipsis,
                           ),
                         ),
-                      ),
-                    ],
-                    onChanged: (v) => setState(() => _connection = v),
+                        ...connections.map(
+                          (c) => DropdownMenuItem(
+                            value: c.id,
+                            child: Text(
+                              c.name,
+                              maxLines: 1,
+                              softWrap: false,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        ),
+                      ],
+                      onChanged: (v) => setState(() => _connection = v),
+                    ),
                   ),
                 if (connections.length > 1) const SizedBox(height: 8),
                 SingleChildScrollView(

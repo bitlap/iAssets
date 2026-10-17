@@ -21,7 +21,6 @@ class AssetsPage extends StatefulWidget {
   final double stockTotalValue;
   final double cryptoTotalValue;
   final bool cryptoIncomplete;
-  final bool cryptoSyncing;
   final DateTime? cryptoUpdatedAt;
   final Future<void> Function()? onRefreshCrypto;
   final String currency;
@@ -33,7 +32,6 @@ class AssetsPage extends StatefulWidget {
     required this.stockTotalValue,
     this.cryptoTotalValue = 0,
     this.cryptoIncomplete = false,
-    this.cryptoSyncing = false,
     this.cryptoUpdatedAt,
     this.onRefreshCrypto,
     required this.currency,
@@ -48,7 +46,6 @@ class AssetsPage extends StatefulWidget {
 class AssetsPageState extends State<AssetsPage> {
   List<AssetBase> _assets = [];
   bool _isLoading = false;
-  bool _isRefreshing = false;
   Future<void>? _refreshInFlight;
   DateTime? _lastRefreshTime;
   final Set<AssetType> _expandedTypes = {};
@@ -103,7 +100,6 @@ class AssetsPageState extends State<AssetsPage> {
 
   Future<void> _refreshAssets() {
     if (_refreshInFlight != null) return _refreshInFlight!;
-    setState(() => _isRefreshing = true);
     final future = Future.wait([
       _load(showOverlay: false),
       if (widget.onRefreshCrypto != null) widget.onRefreshCrypto!(),
@@ -111,7 +107,6 @@ class AssetsPageState extends State<AssetsPage> {
     _refreshInFlight = future;
     return future.whenComplete(() {
       _refreshInFlight = null;
-      if (mounted) setState(() => _isRefreshing = false);
     });
   }
 
@@ -392,7 +387,6 @@ class AssetsPageState extends State<AssetsPage> {
                   cryptoTotalValue: widget.cryptoTotalValue,
                   cryptoIncomplete: widget.cryptoIncomplete,
                   cryptoUpdatedAt: widget.cryptoUpdatedAt,
-                  isRefreshing: _isRefreshing || widget.cryptoSyncing,
                   currency: widget.currency,
                   totalsByType: _totalByType(widget.currency),
                   onCurrencyTap: _showCurrencyMenu,

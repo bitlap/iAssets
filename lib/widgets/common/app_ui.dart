@@ -398,16 +398,3 @@ class SummaryCardFrame extends StatelessWidget {
     child: child,
   );
 }
-
-/// 资产汇总卡片的刷新反馈。
-class SummaryRefreshIndicator extends StatelessWidget {
-  final Color color;
-
-  const SummaryRefreshIndicator({super.key, required this.color});
-
-  @override
-  Widget build(BuildContext context) => Padding(
-    padding: const EdgeInsets.only(top: 8),
-    child: LinearProgressIndicator(color: color),
-  );
-}

@@ -186,12 +186,30 @@ void main() {
         );
         await tester.pumpAndSettle();
         expect(find.text(r'$1250.00'), findsOneWidget);
-        await tester.tap(find.byType(DropdownButtonFormField<String>));
+        final filterField = find.byType(DropdownButtonFormField<String>);
+        final fieldRect = tester.getRect(filterField);
+        await tester.tap(filterField);
         await tester.pumpAndSettle();
         final option = find.text(longName).last;
         final optionRect = tester.getRect(option);
         expect(optionRect.left, greaterThanOrEqualTo(0));
         expect(optionRect.right, lessThanOrEqualTo(320));
+        final menuRect = tester.getRect(
+          find.ancestor(of: option, matching: find.byType(ClipRRect)).first,
+        );
+        expect(menuRect.left, closeTo(fieldRect.left, 1));
+        expect(menuRect.right, closeTo(fieldRect.right, 1));
+        expect(
+          tester
+              .widget<DropdownButton<String>>(
+                find.descendant(
+                  of: filterField,
+                  matching: find.byType(DropdownButton<String>),
+                ),
+              )
+              .dropdownColor,
+          AppColors.surface,
+        );
         expect(tester.takeException(), isNull);
         await tester.tap(option);
         await tester.pumpAndSettle();
