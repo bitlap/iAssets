@@ -141,6 +141,70 @@ void main() {
   }
   for (final brightness in Brightness.values) {
     testWidgets(
+      'connection filter stays on screen and does not change the total in $brightness',
+      (tester) async {
+        tester.view.physicalSize = const Size(320, 740);
+        tester.view.devicePixelRatio = 1;
+        addTearDown(tester.view.resetPhysicalSize);
+        addTearDown(tester.view.resetDevicePixelRatio);
+        L10n.applyLanguage(L10n.langZh);
+        AppColors.applyBrightness(brightness);
+        final time = DateTime.utc(2026, 10, 17);
+        final reader = fixtures.FakeReader(fixtures.sample(time));
+        final store = CryptoStore(
+          reader: reader,
+          persistence: fixtures.MemoryPersistence(),
+          clock: () => time,
+        );
+        addTearDown(store.dispose);
+        await store.add(await store.test(fixtures.connection()));
+        const longName =
+            'This account name is much wider than a narrow phone screen';
+        reader.snapshot = fixtures.sample(time, uid: '456', equity: '200');
+        await store.add(
+          await store.test(
+            const ExchangeConnection(
+              id: 'b',
+              exchange: CryptoExchange.binance,
+              name: longName,
+              apiKey: 'another-key',
+              secret: 'another-secret',
+            ),
+          ),
+        );
+        await tester.pumpWidget(
+          MaterialApp(
+            theme: AppTheme.data(brightness),
+            home: Scaffold(
+              body: CryptoPage(
+                store: store,
+                currency: 'USD',
+                onCurrencyChanged: (_) {},
+              ),
+            ),
+          ),
+        );
+        await tester.pumpAndSettle();
+        expect(find.text(r'$1250.00'), findsOneWidget);
+        await tester.tap(find.byType(DropdownButtonFormField<String>));
+        await tester.pumpAndSettle();
+        final option = find.text(longName).last;
+        final optionRect = tester.getRect(option);
+        expect(optionRect.left, greaterThanOrEqualTo(0));
+        expect(optionRect.right, lessThanOrEqualTo(320));
+        expect(tester.takeException(), isNull);
+        await tester.tap(option);
+        await tester.pumpAndSettle();
+        expect(find.text(r'$1250.00'), findsOneWidget);
+        expect(find.text(r'$1050.00'), findsNothing);
+        expect(find.text(r'$200.00'), findsOneWidget);
+        expect(find.text('Account'), findsNothing);
+        expect(tester.takeException(), isNull);
+      },
+    );
+  }
+  for (final brightness in Brightness.values) {
+    testWidgets(
       'shared currency, confirmation and stock/crypto form sheets work in $brightness',
       (tester) async {
         tester.view.physicalSize = const Size(320, 740);

@@ -398,6 +398,8 @@ class AssetsPageState extends State<AssetsPage> {
                   onCurrencyTap: _showCurrencyMenu,
                 ),
               ),
+              if (_flatItems.isNotEmpty)
+                const SliverToBoxAdapter(child: SizedBox(height: 4)),
               if (_flatItems.isEmpty)
                 SliverFillRemaining(
                   hasScrollBody: false,

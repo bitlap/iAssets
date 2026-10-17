@@ -55,7 +55,7 @@ class CryptoPageState extends State<CryptoPage>
         final selected = connections
             .where((c) => _connection == null || c.id == _connection)
             .toList();
-        final snapshots = selected
+        final snapshots = connections
             .map((c) => widget.store.snapshot(c.id))
             .whereType<CryptoSnapshot>()
             .toList();
@@ -96,7 +96,9 @@ class CryptoPageState extends State<CryptoPage>
                     ),
                     Text(
                       _money(
-                        snapshots.isEmpty && selected.isNotEmpty ? null : total,
+                        snapshots.isEmpty && connections.isNotEmpty
+                            ? null
+                            : total,
                       ),
                       style: TextStyles.amountLarge,
                     ),
@@ -181,7 +183,7 @@ class CryptoPageState extends State<CryptoPage>
                   ],
                 ),
               ),
-              const SizedBox(height: 12),
+              const SizedBox(height: 8),
               Row(
                 children: [
                   Expanded(
@@ -215,15 +217,28 @@ class CryptoPageState extends State<CryptoPage>
                     dropdownColor: AppColors.surfaceElevated,
                     style: TextStyles.body13,
                     isExpanded: true,
+                    borderRadius: BorderRadius.circular(12),
+                    menuMaxHeight: MediaQuery.sizeOf(context).height * .45,
                     iconEnabledColor: AppColors.textSecondary,
                     items: [
                       DropdownMenuItem(
                         value: null,
-                        child: Text(L10n.t('cryptoAll')),
+                        child: Text(
+                          L10n.t('cryptoAll'),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
                       ),
                       ...connections.map(
-                        (c) =>
-                            DropdownMenuItem(value: c.id, child: Text(c.name)),
+                        (c) => DropdownMenuItem(
+                          value: c.id,
+                          child: Text(
+                            c.name,
+                            maxLines: 1,
+                            softWrap: false,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
                       ),
                     ],
                     onChanged: (v) => setState(() => _connection = v),
