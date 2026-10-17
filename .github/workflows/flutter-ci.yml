@@ -31,6 +31,24 @@ jobs:
       - name: Analyze project source
         run: flutter analyze --no-pub 2>&1 | grep -E "(^Analyzing|error)" || true
       
+  test:
+    name: Flutter Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.44.4'
+          channel: 'stable'
+          cache: true
+
+      - name: Install dependencies
+        run: flutter pub get
+
       - name: Run tests
         run: flutter test --no-pub
-        continue-on-error: true
