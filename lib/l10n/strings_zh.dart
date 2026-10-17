@@ -480,6 +480,7 @@ const Map<String, String> stringsZh = {
   "cryptoErrorTimeout": "查询超时，请重试。",
   "cryptoErrorResponse": "交易所返回数据不完整，仍显示当前会话上次成功结果。",
   "cryptoErrorDuplicate": "该交易所账户已添加，请勿重复添加。",
+  "cryptoErrorDuplicateCredentials": "这组 API Key 和 Secret 已添加，请勿重复添加。",
   "cryptoErrorRetest": "测试结果已过期，请重新测试连接。",
   "cryptoErrorStorage": "无法访问本机安全存储，请解锁设备后重试。",
   "cryptoErrorAccountChanged": "账户身份发生变化，请移除连接并重新添加。",

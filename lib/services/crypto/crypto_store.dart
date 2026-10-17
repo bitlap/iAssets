@@ -133,6 +133,7 @@ class CryptoStore extends ChangeNotifier {
     await initialize();
     if (!initialized) throw const CryptoSyncException('storage');
     _requireSupported(c);
+    _checkDuplicateCredentials(c);
     final s = await reader.read(c);
     if (s.accountId.isEmpty) throw const CryptoSyncException('response');
     final identified = c.identified(s.accountId, s.accountReferences);
@@ -147,15 +148,27 @@ class CryptoStore extends ChangeNotifier {
   }
 
   void _checkDuplicate(ExchangeConnection c) {
+    _checkDuplicateCredentials(c);
     if (_connections.any(
       (existing) =>
           existing.exchange == c.exchange &&
           existing.region == c.region &&
           (existing.accountId == c.accountId ||
-              existing.apiKey == c.apiKey ||
               existing.accountReferences.any(c.accountReferences.contains)),
     )) {
       throw const CryptoSyncException('duplicate');
+    }
+  }
+
+  void _checkDuplicateCredentials(ExchangeConnection c) {
+    if (_connections.any(
+      (existing) =>
+          existing.exchange == c.exchange &&
+          existing.region == c.region &&
+          existing.apiKey == c.apiKey &&
+          existing.secret == c.secret,
+    )) {
+      throw const CryptoSyncException('duplicateCredentials');
     }
   }
 

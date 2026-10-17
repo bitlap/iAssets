@@ -481,6 +481,7 @@ const Map<String, String> stringsZhHant = {
   "cryptoErrorTimeout": "查詢逾時，請重試。",
   "cryptoErrorResponse": "交易所返回資料不完整，仍顯示目前工作階段上次成功結果。",
   "cryptoErrorDuplicate": "該交易所帳戶已新增，請勿重複新增。",
+  "cryptoErrorDuplicateCredentials": "這組 API Key 和 Secret 已新增，請勿重複新增。",
   "cryptoErrorRetest": "測試結果已過期，請重新測試。",
   "cryptoErrorStorage": "無法存取本機安全儲存，請解鎖裝置後重試。",
   "cryptoErrorAccountChanged": "帳戶身分改變，請移除連線後重新新增。",

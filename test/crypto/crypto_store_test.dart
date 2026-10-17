@@ -226,6 +226,49 @@ void main() {
     );
     expect(store.connections, isEmpty);
   });
+  test(
+    'same API Key and Secret are rejected before another network test',
+    () async {
+      await store.add(await store.test(connection()));
+      expect(reader.calls, 1);
+      final duplicate = ExchangeConnection(
+        id: 'b',
+        exchange: CryptoExchange.binance,
+        name: 'Other name and role',
+        apiKey: 'key',
+        secret: 'sensitive-secret',
+        role: CryptoAccountRole.lead,
+      );
+      await expectLater(
+        store.test(duplicate),
+        throwsA(
+          isA<CryptoSyncException>().having(
+            (e) => e.code,
+            'code',
+            'duplicateCredentials',
+          ),
+        ),
+      );
+      expect(reader.calls, 1);
+      expect(store.connections, hasLength(1));
+    },
+  );
+  test('save rechecks credentials after another test succeeds', () async {
+    final first = await store.test(connection());
+    final second = await store.test(connection(id: 'b'));
+    await store.add(first);
+    await expectLater(
+      store.add(second),
+      throwsA(
+        isA<CryptoSyncException>().having(
+          (e) => e.code,
+          'code',
+          'duplicateCredentials',
+        ),
+      ),
+    );
+    expect(store.connections, hasLength(1));
+  });
   test('same account cannot be added with another API key', () async {
     await store.add(await store.test(connection()));
     await expectLater(

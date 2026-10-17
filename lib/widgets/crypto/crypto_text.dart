@@ -12,6 +12,7 @@ String cryptoError(Object error) {
     'timeout' => 'cryptoErrorTimeout',
     'response' => 'cryptoErrorResponse',
     'duplicate' => 'cryptoErrorDuplicate',
+    'duplicateCredentials' => 'cryptoErrorDuplicateCredentials',
     'retest' => 'cryptoErrorRetest',
     'storage' => 'cryptoErrorStorage',
     'accountChanged' => 'cryptoErrorAccountChanged',

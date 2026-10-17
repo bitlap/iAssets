@@ -503,6 +503,8 @@ const Map<String, String> stringsEn = {
   "cryptoErrorResponse":
       "Incomplete exchange response. The last successful result from this session is still shown.",
   "cryptoErrorDuplicate": "This exchange account is already connected.",
+  "cryptoErrorDuplicateCredentials":
+      "This API Key and Secret have already been added.",
   "cryptoErrorRetest": "Test result expired. Please test the connection again.",
   "cryptoErrorStorage":
       "Secure storage is unavailable. Unlock this device and retry.",
