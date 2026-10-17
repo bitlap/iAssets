@@ -429,7 +429,7 @@ const Map<String, String> stringsZhHant = {
   "cryptoEU": "歐洲經濟區",
   "cryptoNotes": "連線注意事項",
   "cryptoNotesBody":
-      "請務必優先使用專用於本 App 的唯讀 API，關閉交易、提領和轉帳權限。含交易權限的 API 存在資產損失風險，請注意；測試成功並確認風險後仍可新增，本 App 始終僅查詢，不執行交易。憑證僅儲存於本機 Keychain，不上傳開發者伺服器，不參與 iCloud 同步或備份。請核對 IP 白名單。幣種按參考行情估值，法幣金額按 App 匯率換算，僅供參考。",
+      "請務必優先使用專用於本 App 的唯讀 API，關閉交易、提領和轉帳權限。含交易權限的 API 存在資產損失風險，請注意；測試成功並確認風險後仍可新增，本 App 始終僅查詢，不執行交易。憑證僅儲存於本機 Keychain，不上傳開發者伺服器，不參與 iCloud 同步或備份。請核對 IP 白名單。幣種按參考行情估值，匯率參考 Coinbase；法幣金額按 App 匯率換算，僅供參考。",
   "cryptoAcknowledge": "我已閱讀注意事項，了解應優先使用唯讀 API，並已關閉提領、轉帳權限",
   "cryptoTest": "測試連線",
   "cryptoTesting": "正在驗證帳戶與權限…",
@@ -513,7 +513,7 @@ const Map<String, String> stringsZhHant = {
   "cryptoFuturesLead": "合約帶單",
   "cryptoLeadAcknowledge": "我已核對帶單項目並閱讀注意事項，了解應優先使用唯讀 API，已關閉提領、轉帳權限",
   "cryptoLeadNotesBody":
-      "請務必優先使用對應帶單項目的唯讀 API，現貨與合約分別新增。部分專用 API 自帶交易權限，存在資產損失風險，請注意；測試成功並確認風險後仍可新增。請關閉可關閉的交易權限，以及提領、轉帳權限。本 App 始終僅查詢，不執行交易。憑證僅儲存於本機 Keychain，不上傳開發者伺服器，不參與 iCloud 或備份。幣種按參考行情估值，法幣金額按 App 匯率換算，僅供參考。",
+      "請務必優先使用對應帶單項目的唯讀 API，現貨與合約分別新增。部分專用 API 自帶交易權限，存在資產損失風險，請注意；測試成功並確認風險後仍可新增。請關閉可關閉的交易權限，以及提領、轉帳權限。本 App 始終僅查詢，不執行交易。憑證僅儲存於本機 Keychain，不上傳開發者伺服器，不參與 iCloud 或備份。幣種按參考行情估值，匯率參考 Coinbase；法幣金額按 App 匯率換算，僅供參考。",
   "cryptoScopeBinanceSpotLead":
       "使用對應現貨帶單項目 API，同步幣種可用、凍結和總數量及參考估值。每個項目單獨新增，不讀取合約帳戶，不計算成本或現貨未實現損益。建議使用唯讀 API；含交易權限時須注意風險並確認後新增。",
   "cryptoLeadTradingPermission":

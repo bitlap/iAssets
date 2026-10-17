@@ -440,7 +440,7 @@ const Map<String, String> stringsEn = {
   "cryptoEU": "EEA",
   "cryptoNotes": "Before connecting",
   "cryptoNotesBody":
-      "Always prefer a dedicated read-only API key. Disable trading, withdrawals and transfers. Trading-enabled keys carry a risk of asset loss; take care. They can still be added after a successful test and risk acknowledgement. This app only queries data and never trades. Credentials stay in this device’s Keychain, outside developer servers, iCloud and backups. Check IP restrictions. Coin values use reference market prices; fiat amounts use the app’s exchange rates. Estimates are for reference only.",
+      "Always prefer a dedicated read-only API key. Disable trading, withdrawals and transfers. Trading-enabled keys carry a risk of asset loss; take care. They can still be added after a successful test and risk acknowledgement. This app only queries data and never trades. Credentials stay in this device’s Keychain, outside developer servers, iCloud and backups. Check IP restrictions. Coin values use reference market prices and Coinbase exchange rates; fiat amounts use the app’s exchange rates. Estimates are for reference only.",
   "cryptoAcknowledge":
       "I have read the notes, understand that read-only keys are preferred, and disabled withdrawals and transfers",
   "cryptoTest": "Test connection",
@@ -548,7 +548,7 @@ const Map<String, String> stringsEn = {
   "cryptoLeadAcknowledge":
       "I have checked the portfolio and notes, understand that read-only keys are preferred, and disabled withdrawals and transfers",
   "cryptoLeadNotesBody":
-      "Always prefer a read-only API for the corresponding lead portfolio. Add Spot and Futures separately. Some dedicated keys have trading permission, which carries a risk of asset loss; take care. They can still be added after a successful test and risk acknowledgement. Disable trading where possible, and disable withdrawals and transfers. This app only queries data and never trades. Credentials stay in this device’s Keychain, outside developer servers, iCloud and backups. Coin values use reference prices; fiat amounts use the app’s exchange rates.",
+      "Always prefer a read-only API for the corresponding lead portfolio. Add Spot and Futures separately. Some dedicated keys have trading permission, which carries a risk of asset loss; take care. They can still be added after a successful test and risk acknowledgement. Disable trading where possible, and disable withdrawals and transfers. This app only queries data and never trades. Credentials stay in this device’s Keychain, outside developer servers, iCloud and backups. Coin values use reference prices and Coinbase exchange rates; fiat amounts use the app’s exchange rates.",
   "cryptoScopeBinanceSpotLead":
       "Uses the corresponding Spot lead API to sync available, locked and total quantities and estimated values. Add each portfolio separately. No Futures queries, cost basis or Spot unrealized P&L. Read-only keys are recommended; trading permissions require risk acknowledgement before adding.",
   "cryptoLeadTradingPermission":

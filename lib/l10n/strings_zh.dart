@@ -428,7 +428,7 @@ const Map<String, String> stringsZh = {
   "cryptoEU": "欧洲经济区",
   "cryptoNotes": "连接注意事项",
   "cryptoNotesBody":
-      "请务必优先使用专用于本 App 的只读 API，关闭交易、提现和转账权限。含交易权限的 API 存在资产损失风险，请注意；测试成功并确认风险后仍可添加，本 App 始终仅查询，不执行交易。凭证仅保存于本机 Keychain，不上传开发者服务器，不参与 iCloud 同步或备份。请核对 IP 白名单。币种按参考行情估值，法币金额按 App 汇率换算，仅供参考。",
+      "请务必优先使用专用于本 App 的只读 API，关闭交易、提现和转账权限。含交易权限的 API 存在资产损失风险，请注意；测试成功并确认风险后仍可添加，本 App 始终仅查询，不执行交易。凭证仅保存于本机 Keychain，不上传开发者服务器，不参与 iCloud 同步或备份。请核对 IP 白名单。币种按参考行情估值，汇率参考 Coinbase；法币金额按 App 汇率换算，仅供参考。",
   "cryptoAcknowledge": "我已阅读注意事项，了解应优先使用只读 API，并已关闭提现、转账权限",
   "cryptoTest": "测试连接",
   "cryptoTesting": "正在验证账户与权限…",
@@ -512,7 +512,7 @@ const Map<String, String> stringsZh = {
   "cryptoFuturesLead": "合约带单",
   "cryptoLeadAcknowledge": "我已核对带单项目并阅读注意事项，了解应优先使用只读 API，已关闭提现、转账权限",
   "cryptoLeadNotesBody":
-      "请务必优先使用对应带单项目的只读 API，现货与合约分别添加。部分专用 API 自带交易权限，存在资产损失风险，请注意；测试成功并确认风险后仍可添加。请关闭可关闭的交易权限，以及提现、转账权限。本 App 始终仅查询，不执行交易。凭证仅保存于本机 Keychain，不上传开发者服务器，不参与 iCloud 或备份。币种按参考行情估值，法币金额按 App 汇率换算，仅供参考。",
+      "请务必优先使用对应带单项目的只读 API，现货与合约分别添加。部分专用 API 自带交易权限，存在资产损失风险，请注意；测试成功并确认风险后仍可添加。请关闭可关闭的交易权限，以及提现、转账权限。本 App 始终仅查询，不执行交易。凭证仅保存于本机 Keychain，不上传开发者服务器，不参与 iCloud 或备份。币种按参考行情估值，汇率参考 Coinbase；法币金额按 App 汇率换算，仅供参考。",
   "cryptoScopeBinanceSpotLead":
       "使用对应现货带单项目 API，同步币种可用、冻结和总数量及参考估值。每个项目单独添加，不读取合约账户，不计算成本或现货未实现盈亏。建议使用只读 API；含交易权限时须注意风险并确认后添加。",
   "cryptoLeadTradingPermission":
