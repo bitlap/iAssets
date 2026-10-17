@@ -41,30 +41,19 @@ class AssetHeader extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Expanded(
-                child: FittedBox(
-                  fit: BoxFit.scaleDown,
-                  alignment: Alignment.centerLeft,
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        StockConfig.assetTotalAssets,
-                        style: TextStyles.body13,
-                      ),
-                      const SizedBox(width: 8),
-                      CurrencySelectorButton(
-                        currency: currency,
-                        onTap: onCurrencyTap,
-                      ),
-                    ],
-                  ),
+              Text(StockConfig.assetTotalAssets, style: TextStyles.body13),
+              const SizedBox(width: 4),
+              GestureDetector(
+                onTap: () => _showRatioHelpDialog(context),
+                child: Icon(
+                  Icons.help_outline,
+                  size: 13,
+                  color: AppColors.warning,
                 ),
               ),
-              const SizedBox(width: 8),
-              _buildStockRatioColumn(context),
+              const Spacer(),
+              CurrencySelectorButton(currency: currency, onTap: onCurrencyTap),
             ],
           ),
           const SizedBox(height: 4),
@@ -103,46 +92,6 @@ class AssetHeader extends StatelessWidget {
           ),
         ],
       ),
-    );
-  }
-
-  Widget _buildStockRatioColumn(BuildContext context) {
-    final ratio = totalAssets > 0 ? stockTotalValue / totalAssets : 0.0;
-    final percent = '${(ratio * 100).toStringAsFixed(1)}%';
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.end,
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              StockConfig.assetPositionRatioLabel,
-              style: TextStyles.body13.copyWith(
-                color: AppColors.textSecondary,
-                height: 1.0,
-              ),
-            ),
-            const SizedBox(width: 2),
-            GestureDetector(
-              onTap: () => _showRatioHelpDialog(context),
-              child: Icon(
-                Icons.help_outline,
-                size: 13,
-                color: AppColors.textSecondary,
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(height: 2),
-        Text(
-          percent,
-          style: TextStyles.body13.copyWith(
-            color: AppColors.textPrimary,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-      ],
     );
   }
 
@@ -210,9 +159,12 @@ class AssetHeader extends StatelessWidget {
               children: [
                 Icon(Icons.pie_chart, color: AppColors.accent, size: 20),
                 const SizedBox(width: 8),
-                Text(
-                  StockConfig.assetPositionRatioLabel,
-                  style: TextStyles.subtitle,
+                Flexible(
+                  child: Text(
+                    StockConfig.assetPositionRatioLabel,
+                    textAlign: TextAlign.center,
+                    style: TextStyles.subtitle,
+                  ),
                 ),
               ],
             ),
@@ -284,13 +236,7 @@ Widget _summaryChip(
           ],
         ),
         const SizedBox(height: 4),
-        Text(
-          value,
-          style: TextStyles.bodyRegular.copyWith(
-            fontWeight: FontWeight.w700,
-            height: 1.1,
-          ),
-        ),
+        Text(value, style: TextStyles.valueMedium),
       ],
     ),
   );

@@ -114,10 +114,24 @@ void main() {
           expect(find.text(L10n.t('cryptoTitle')), findsOneWidget);
           expect(find.text(L10n.t('cryptoIncomplete')), findsNothing);
           final header = tester.getRect(find.byType(AssetHeader));
-          final ratio = tester.getRect(
-            find.text(StockConfig.assetPositionRatioLabel),
+          final title = tester.getRect(find.text(StockConfig.assetTotalAssets));
+          final help = tester.getRect(find.byIcon(Icons.help_outline));
+          final currency = tester.getRect(find.byType(CurrencySelectorButton));
+          expect(find.text(StockConfig.assetPositionRatioLabel), findsNothing);
+          expect(
+            tester.widget<Icon>(find.byIcon(Icons.help_outline)).color,
+            AppColors.warning,
           );
-          expect(header.right - ratio.right, lessThan(45));
+          expect(help.left, greaterThanOrEqualTo(title.right));
+          expect(help.left - title.right, lessThan(12));
+          expect(currency.left, greaterThan(help.right));
+          expect(header.right - currency.right, lessThan(45));
+          await tester.tap(find.byIcon(Icons.help_outline));
+          await tester.pumpAndSettle();
+          expect(
+            find.text(StockConfig.assetPositionRatioLabel),
+            findsOneWidget,
+          );
           expect(tester.takeException(), isNull);
           await tester.pumpWidget(const SizedBox());
           store.dispose();
