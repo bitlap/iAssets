@@ -26,6 +26,101 @@ void main() {
           (call) async => '/tmp/iassets-tests',
         );
   });
+  testWidgets(
+    'crypto details truncate to eight decimal places across currencies',
+    (tester) async {
+      tester.view.physicalSize = const Size(320, 1600);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.resetPhysicalSize);
+      addTearDown(tester.view.resetDevicePixelRatio);
+      L10n.applyLanguage(L10n.langZh);
+      final time = DateTime.utc(2026, 10, 17);
+      final store = CryptoStore(
+        reader: fixtures.FakeReader(
+          CryptoSnapshot(
+            accountId: '123',
+            updatedAt: time,
+            balances: [
+              CryptoBalance(
+                asset: 'TINY',
+                wallet: 'Spot',
+                quantity: amount('0.000000000000000001'),
+                available: amount('0.000000000000000001'),
+                frozen: amount('0'),
+                priceUsd: amount('0.0000000123456789'),
+              ),
+              CryptoBalance(
+                asset: 'UNKNOWN',
+                wallet: 'Spot',
+                quantity: amount('1'),
+              ),
+            ],
+            positions: [
+              CryptoPosition(
+                symbol: 'BTCUSDT',
+                wallet: 'Futures',
+                isLong: true,
+                quantity: amount('0.1234567890123456789'),
+                unit: 'BTC',
+                settlement: 'USDT',
+                markPrice: amount('123456.1234567890123456789'),
+                unrealizedPnl: amount('-0.1234567890123456789'),
+              ),
+            ],
+            wallets: [
+              CryptoWallet(
+                name: 'USD-M',
+                kind: CryptoWalletKind.futures,
+                equityUsd: amount('123456.1234567890123456789'),
+              ),
+            ],
+          ),
+        ),
+        persistence: fixtures.MemoryPersistence(),
+        clock: () => time,
+      );
+      addTearDown(store.dispose);
+      await store.add(await store.test(fixtures.connection()));
+      Future<void> showCurrency(String currency) async {
+        await tester.pumpWidget(
+          MaterialApp(
+            theme: AppTheme.data(Brightness.light),
+            home: Scaffold(
+              body: CryptoPage(
+                store: store,
+                currency: currency,
+                onCurrencyChanged: (_) {},
+              ),
+            ),
+          ),
+        );
+        await tester.pumpAndSettle();
+      }
+
+      await showCurrency('USD');
+      expect(find.text(r'$123456.12'), findsOneWidget);
+      expect(find.text(r'$123456.12345678'), findsOneWidget);
+      await tester.tap(find.text(L10n.t('cryptoSpot')));
+      await tester.pumpAndSettle();
+      expect(find.text('0.00000000'), findsNWidgets(3));
+      expect(find.text(r'$0.00000001'), findsOneWidget);
+      expect(find.text(r'$0.00000000'), findsOneWidget);
+      expect(find.text('--'), findsNWidgets(2));
+      expect(find.text(r'$0.00'), findsNothing);
+
+      await showCurrency('CNY');
+      expect(find.text('¥0.00000008'), findsOneWidget);
+      expect(find.text('¥0.00000000'), findsOneWidget);
+      expect(find.text('--'), findsNWidgets(2));
+      await tester.tap(find.text(L10n.t('cryptoContracts')));
+      await tester.pumpAndSettle();
+      expect(find.text('¥835797.95580246'), findsOneWidget);
+      expect(find.text('0.12345678 BTC'), findsOneWidget);
+      expect(find.text('123456.12345678 USDT'), findsOneWidget);
+      expect(find.text('-0.12345678 USDT'), findsOneWidget);
+      expect(tester.takeException(), isNull);
+    },
+  );
   for (final brightness in Brightness.values) {
     for (final lang in [L10n.langZh, L10n.langEn, L10n.langZhHant]) {
       testWidgets(
@@ -217,7 +312,7 @@ void main() {
         expect(find.text('Binance-$longName'), findsWidgets);
         expect(find.text(r'$1250.00'), findsOneWidget);
         expect(find.text(r'$1050.00'), findsNothing);
-        expect(find.text(r'$200.00'), findsOneWidget);
+        expect(find.text(r'$200.00000000'), findsOneWidget);
         expect(find.text('Account'), findsNothing);
         expect(tester.takeException(), isNull);
       },
@@ -445,12 +540,12 @@ void main() {
         await tester.pumpAndSettle();
         Color? color(String text) =>
             tester.widget<Text>(find.text(text)).style?.color;
-        expect(color('50 USDT'), AppColors.danger);
-        expect(color('-10 USDT'), AppColors.success);
+        expect(color('50.00000000 USDT'), AppColors.danger);
+        expect(color('-10.00000000 USDT'), AppColors.success);
         AppColors.applyMarketColorPreference(false);
         await tester.pumpAndSettle();
-        expect(color('50 USDT'), AppColors.success);
-        expect(color('-10 USDT'), AppColors.danger);
+        expect(color('50.00000000 USDT'), AppColors.success);
+        expect(color('-10.00000000 USDT'), AppColors.danger);
         await tester.pumpWidget(const SizedBox());
         store.dispose();
       },
