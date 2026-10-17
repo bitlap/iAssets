@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -8,6 +7,7 @@ import 'package:workmanager/workmanager.dart';
 import 'config/app_config.dart';
 import 'widgets/common/app_colors.dart';
 import 'widgets/common/app_theme.dart';
+import 'widgets/common/floating_bottom_bar.dart';
 import 'l10n/l10n.dart';
 import 'services/settings_service.dart';
 import 'services/crypto/crypto_store.dart';
@@ -328,129 +328,15 @@ class _AppShellState extends State<_AppShell> with WidgetsBindingObserver {
     );
   }
 
-  Widget _buildBottomTabBar() {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 4),
-      child: Center(
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(24),
-          child: BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 30, sigmaY: 30),
-            child: Container(
-              decoration: BoxDecoration(
-                color: AppColors.surfaceElevated.withValues(alpha: 0.88),
-                borderRadius: BorderRadius.circular(24),
-              ),
-              padding: const EdgeInsets.all(4),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  _buildTabItem(
-                    icon: Icons.show_chart,
-                    label: StockConfig.tabStock,
-                    index: 0,
-                  ),
-                  const SizedBox(width: 4),
-                  _buildTabItem(
-                    icon: Icons.currency_bitcoin,
-                    label: L10n.t('cryptoTitle'),
-                    index: 1,
-                  ),
-                  const SizedBox(width: 4),
-                  _buildTabItem(
-                    icon: Icons.account_balance_wallet,
-                    label: StockConfig.tabAsset,
-                    index: 2,
-                  ),
-                  const SizedBox(width: 4),
-                  _buildAddItem(icon: Icons.add, label: AppConfig.btnAdd),
-                ],
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildTabItem({
-    required IconData icon,
-    required String label,
-    required int index,
-  }) {
-    final isSelected = _currentIndex == index;
-    final selectedColor = switch (index) {
-      0 => AppColors.accent,
-      1 => AppColors.purple,
-      _ => AppColors.warning,
-    };
-    return GestureDetector(
-      onTap: () => _onTabChanged(index),
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        decoration: BoxDecoration(
-          color: isSelected
-              ? selectedColor.withValues(alpha: AppColors.isDark ? 0.2 : 0.12)
-              : Colors.transparent,
-          borderRadius: BorderRadius.circular(20),
-          border: isSelected
-              ? Border.all(
-                  color: selectedColor.withValues(alpha: 0.3),
-                  width: 0.5,
-                )
-              : null,
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(
-              icon,
-              size: 18,
-              color: isSelected ? selectedColor : AppColors.textSecondary,
-            ),
-            const SizedBox(height: 2),
-            Text(
-              label,
-              style: TextStyle(
-                fontSize: 11,
-                fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
-                color: isSelected
-                    ? AppColors.textPrimary
-                    : AppColors.textSecondary,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildAddItem({required IconData icon, required String label}) {
-    return GestureDetector(
-      onTap: _onAddTap,
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        decoration: BoxDecoration(
-          color: Colors.transparent,
-          borderRadius: BorderRadius.circular(20),
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(icon, color: AppColors.textSecondary, size: 18),
-            const SizedBox(height: 2),
-            Text(
-              label,
-              style: TextStyle(
-                fontSize: 11,
-                fontWeight: FontWeight.w600,
-                color: AppColors.textSecondary,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
+  Widget _buildBottomTabBar() => FloatingBottomBar(
+    selectedIndex: _currentIndex,
+    labels: [
+      StockConfig.tabStock,
+      L10n.t('cryptoTitle'),
+      StockConfig.tabAsset,
+      AppConfig.btnAdd,
+    ],
+    onSelected: _onTabChanged,
+    onAdd: _onAddTap,
+  );
 }
