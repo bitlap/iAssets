@@ -1,9 +1,12 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 import 'package:assets/models/crypto/crypto_models.dart';
 import 'package:assets/services/crypto/exchange_client.dart';
+import 'package:assets/widgets/crypto/crypto_text.dart';
+import 'package:assets/l10n/l10n.dart';
 
 ExchangeConnection key(CryptoExchange exchange) => ExchangeConnection(
   id: 'a',
@@ -705,21 +708,74 @@ void main() {
     },
   );
   test(
-    'HTTP errors expose only safe codes, never signed URL or returned credentials',
+    'a dropped Binance connection is retried once with a fresh signature timestamp',
     () async {
+      var calls = 0;
+      final timestamps = <String>[];
+      final client = ExchangeClient(
+        clock: () => DateTime.fromMillisecondsSinceEpoch((calls + 1) * 1000),
+        client: MockClient((request) async {
+          calls++;
+          timestamps.add(request.url.queryParameters['timestamp']!);
+          if (calls == 1) throw const SocketException('closed connection');
+          return json({'enableReading': true});
+        }),
+      );
+      final result = await client.binance(
+        key(CryptoExchange.binance),
+        'api.binance.com',
+        '/sapi/v1/account/apiRestrictions',
+      );
+      expect(result, {'enableReading': true});
+      expect(calls, 2);
+      expect(timestamps, ['1000', '2000']);
+    },
+  );
+  test(
+    'transport errors identify the failing Binance stage without exposing request secrets',
+    () async {
+      L10n.applyLanguage(L10n.langZh);
       final client = ExchangeClient(
         client: MockClient(
-          (request) async => json({
+          (_) async => throw const SocketException(
+            'fake-secret signature=private-value',
+          ),
+        ),
+      );
+      try {
+        await client.read(key(CryptoExchange.binance));
+        fail('expected failure');
+      } on CryptoSyncException catch (error) {
+        expect(error.code, 'networkConnection');
+        expect(error.stage, 'cryptoStagePermissions');
+        expect(error.detail, 'api.binance.com');
+        expect(cryptoError(error), contains('权限检查'));
+        expect(cryptoError(error), isNot(contains('fake-secret')));
+        expect(cryptoError(error), isNot(contains('signature')));
+      }
+    },
+  );
+  test(
+    'HTTP errors expose only safe codes, never signed URL or returned credentials',
+    () async {
+      var calls = 0;
+      final client = ExchangeClient(
+        client: MockClient((request) async {
+          calls++;
+          return json({
             'code': -2015,
             'msg': 'fake-secret fake-key ${request.url}',
-          }, 401),
-        ),
+          }, 401);
+        }),
       );
       try {
         await client.read(key(CryptoExchange.binance));
         fail('expected failure');
       } on CryptoSyncException catch (e) {
         expect(e.detail, '-2015');
+        expect(e.stage, 'cryptoStagePermissions');
+        expect(cryptoError(e), contains('IP 白名单'));
+        expect(calls, 1);
         expect('$e', isNot(contains('fake-secret')));
         expect('$e', isNot(contains('signature')));
       }

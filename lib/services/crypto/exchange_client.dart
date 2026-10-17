@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io' show HandshakeException, SocketException;
 import 'package:crypto/crypto.dart';
 import 'package:decimal/decimal.dart';
 import 'package:http/http.dart' as http;
@@ -83,9 +84,13 @@ class ExchangeClient implements ExchangeReader {
     } on CryptoSyncException {
       rethrow;
     } on TimeoutException {
-      throw const CryptoSyncException('timeout');
+      throw CryptoSyncException('timeout', host);
+    } on HandshakeException {
+      throw CryptoSyncException('networkTls', host);
+    } on SocketException {
+      throw CryptoSyncException('networkConnection', host);
     } catch (_) {
-      throw const CryptoSyncException('network');
+      throw CryptoSyncException('networkConnection', host);
     }
   }
 
@@ -104,19 +109,36 @@ class ExchangeClient implements ExchangeReader {
     String host,
     String path, [
     Map<String, String> params = const {},
-  ]) {
-    final q = {
-      ...params,
-      'timestamp': '${now().millisecondsSinceEpoch}',
-      'recvWindow': '10000',
-    };
-    final encoded = Uri(queryParameters: q).query;
-    return get(
-      host,
-      path,
-      query: {...q, 'signature': _hmac(c.secret, encoded)},
-      headers: {'X-MBX-APIKEY': c.apiKey},
-    );
+  ]) async {
+    for (var attempt = 0; attempt < 2; attempt++) {
+      // A dropped keep-alive connection can fail before Binance responds.
+      // Re-sign the read-only GET for the retry so its timestamp stays fresh.
+      final q = {
+        ...params,
+        'timestamp': '${now().millisecondsSinceEpoch}',
+        'recvWindow': '10000',
+      };
+      final encoded = Uri(queryParameters: q).query;
+      try {
+        return await get(
+          host,
+          path,
+          query: {...q, 'signature': _hmac(c.secret, encoded)},
+          headers: {'X-MBX-APIKEY': c.apiKey},
+        );
+      } on CryptoSyncException catch (error) {
+        if (attempt == 0 && error.code == 'networkConnection') continue;
+        throw CryptoSyncException(error.code, error.detail, switch (host) {
+          'fapi.binance.com' => 'cryptoStageUsdm',
+          'dapi.binance.com' => 'cryptoStageCoinm',
+          _ =>
+            path == '/sapi/v1/account/apiRestrictions'
+                ? 'cryptoStagePermissions'
+                : 'cryptoStageSpot',
+        });
+      }
+    }
+    throw StateError('unreachable');
   }
 
   String okxHost(ExchangeConnection c) => switch (c.region) {
@@ -382,7 +404,7 @@ class ExchangeClient implements ExchangeReader {
       } on CryptoSyncException catch (e) {
         // Never interpret permission, IP or network failures as an empty wallet.
         if (e.detail == '-2015') {
-          throw const CryptoSyncException('futuresUnavailable');
+          throw CryptoSyncException('futuresUnavailable', '-2015', e.stage);
         }
         rethrow;
       }

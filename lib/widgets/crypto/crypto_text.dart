@@ -3,23 +3,32 @@ import '../../models/crypto/crypto_models.dart';
 
 String cryptoError(Object error) {
   if (error is! CryptoSyncException) return L10n.t('cryptoErrorStorage');
-  final key = switch (error.code) {
-    'unsupportedExchange' => 'cryptoBinanceOnly',
-    'copyUnavailable' => 'cryptoNoticeCopyUnavailable',
-    'copyUnsupported' => 'cryptoBinanceCopyUnsupported',
-    'permissionUnverified' => 'cryptoPermissionUnverified',
-    'readOnly' => 'cryptoErrorReadOnly',
-    'timeout' => 'cryptoErrorTimeout',
-    'response' => 'cryptoErrorResponse',
-    'duplicate' => 'cryptoErrorDuplicate',
-    'duplicateCredentials' => 'cryptoErrorDuplicateCredentials',
-    'retest' => 'cryptoErrorRetest',
-    'storage' => 'cryptoErrorStorage',
-    'accountChanged' => 'cryptoErrorAccountChanged',
-    'futuresUnavailable' => 'cryptoErrorFuturesUnavailable',
-    _ => 'cryptoErrorNetwork',
+  final key = switch ((error.code, error.detail)) {
+    ('network' || 'api', '-2015') => 'cryptoErrorBinanceAccess',
+    ('network' || 'api', '-1021') => 'cryptoErrorBinanceTime',
+    ('network' || 'api', '-1022') => 'cryptoErrorBinanceSignature',
+    _ => switch (error.code) {
+      'unsupportedExchange' => 'cryptoBinanceOnly',
+      'copyUnavailable' => 'cryptoNoticeCopyUnavailable',
+      'copyUnsupported' => 'cryptoBinanceCopyUnsupported',
+      'permissionUnverified' => 'cryptoPermissionUnverified',
+      'readOnly' => 'cryptoErrorReadOnly',
+      'timeout' => 'cryptoErrorTimeout',
+      'response' => 'cryptoErrorResponse',
+      'duplicate' => 'cryptoErrorDuplicate',
+      'duplicateCredentials' => 'cryptoErrorDuplicateCredentials',
+      'retest' => 'cryptoErrorRetest',
+      'storage' => 'cryptoErrorStorage',
+      'accountChanged' => 'cryptoErrorAccountChanged',
+      'futuresUnavailable' => 'cryptoErrorFuturesUnavailable',
+      'networkConnection' => 'cryptoErrorNetworkConnection',
+      'networkTls' => 'cryptoErrorNetworkTls',
+      _ => 'cryptoErrorNetwork',
+    },
   };
-  return '${L10n.t(key)}${error.detail == null ? '' : ' (${error.detail})'}';
+  final stage = error.stage == null ? '' : ' [${L10n.t(error.stage!)}]';
+  final detail = error.detail == null ? '' : ' (${error.detail})';
+  return '${L10n.t(key)}$stage$detail';
 }
 
 String cryptoNotice(String code) => L10n.t(switch (code) {

@@ -499,6 +499,20 @@ const Map<String, String> stringsEn = {
       "Read access is required. Disable withdrawals and transfers, then test again.",
   "cryptoErrorNetwork":
       "Cannot read account. Check network, API permissions, registration region and IP allowlist.",
+  "cryptoErrorNetworkConnection":
+      "Could not connect to the exchange. Check your network or proxy settings and retry.",
+  "cryptoErrorNetworkTls":
+      "Secure connection failed. Check the device clock and network certificates, then retry.",
+  "cryptoErrorBinanceAccess":
+      "Binance rejected the API request. Check the API key, read permission and IP allowlist.",
+  "cryptoErrorBinanceTime":
+      "The device clock differs from Binance server time. Correct it and retry.",
+  "cryptoErrorBinanceSignature":
+      "API signature rejected. Check the API secret and retry.",
+  "cryptoStagePermissions": "Permission check",
+  "cryptoStageSpot": "Spot account",
+  "cryptoStageUsdm": "USD-M Futures",
+  "cryptoStageCoinm": "COIN-M Futures",
   "cryptoErrorTimeout": "Request timed out. Please retry.",
   "cryptoErrorResponse":
       "Incomplete exchange response. The last successful result from this session is still shown.",

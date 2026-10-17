@@ -273,7 +273,8 @@ class CryptoSnapshot {
 class CryptoSyncException implements Exception {
   final String code;
   final String? detail;
-  const CryptoSyncException(this.code, [this.detail]);
+  final String? stage;
+  const CryptoSyncException(this.code, [this.detail, this.stage]);
   // Never include server response bodies, signed URLs or credentials in errors.
   @override
   String toString() =>
