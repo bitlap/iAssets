@@ -3,6 +3,7 @@ Asset Management — Your Personal Investment Manager
 Core Features
 • Unified asset management: Cash, demand deposits, time deposits, wealth management, and provident fund organized by category, with expand/collapse and drag-to-reorder support
 • Stock portfolio management: Add Hong Kong, US, and A-share stocks (including on-exchange and off-exchange funds) in one tap, with full buy, add, sell, and position-close workflows
+• Read-only crypto sync: Connect Binance accounts to view spot balances, futures positions, and lead trader assets alongside your other holdings
 • Real-time quotes: Automatically fetch the latest stock prices and exchange rates, with profit/loss updating in real time — no manual refresh needed
 • Today's P&L: Automatically tracks today's profit/loss amount and rate based on US trading days, so you can see gains at a glance
 • Profit curve: View return trends across multiple time ranges (Today / 7D / 30D / 180D / 360D)
@@ -18,16 +19,23 @@ Stock Management
 • Flexible sorting: Sort by P&L amount, position size, or stock name, in ascending or descending order
 • Keep closed positions: Option to retain closed positions for easy review of past trades
 
+Crypto Assets
+• Supports regular Binance accounts and separate spot or futures lead trader accounts; copy trader portfolios are not currently supported
+• View spot quantities, reference prices and estimated values, plus futures equity, positions and unrealized P&L; no cost entry, trading, or asset editing
+• Tests the account and API permissions before adding a connection to prevent double counting; read-only API keys are recommended, and trading permission triggers a risk warning
+• Refreshes every 5 minutes while in the foreground, with pull-to-refresh available; crypto asset data is shown for the current session only
+
 Asset Overview
-• Total assets, total cost, total P&L, and total dividends — four core metrics on one screen
-• Real-time position ratio and dividend yield calculations to help you evaluate your investment structure
+• Total assets combine stocks, crypto, and deposits or wealth products; tap the help icon to view the allocation breakdown
+• Switch display currency to view estimated values using reference exchange rates
 
 Multi-Language Support
 • Switch between 简体中文 / 繁體中文 / English with one tap, or follow the system language automatically
 
 Data Security
-• iCloud sync: Data is automatically backed up to iCloud for seamless continuity across devices
-• Local-first: Works offline, with automatic sync once the network is restored
+• iCloud sync: Stocks, manually managed assets, settings, and related data are backed up for continuity across devices
+• Local-first: Stocks and manually managed assets work offline, with automatic sync once the network is restored
+• Crypto credentials stay in the device Keychain; crypto balances and positions are not saved to local files or iCloud
 
 Design Philosophy
 • Theme switching: Light, dark, and system-follow modes — switch at will
