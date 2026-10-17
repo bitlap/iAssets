@@ -18,6 +18,10 @@ import 'asset_dialogs.dart';
 
 class AssetsPage extends StatefulWidget {
   final double stockTotalValue;
+  final double cryptoTotalValue;
+  final bool cryptoIncomplete;
+  final DateTime? cryptoUpdatedAt;
+  final Future<void> Function()? onRefreshCrypto;
   final String currency;
   final ValueChanged<String>? onCurrencyChanged;
   final VoidCallback? onHeaderChanged;
@@ -25,6 +29,10 @@ class AssetsPage extends StatefulWidget {
   const AssetsPage({
     super.key,
     required this.stockTotalValue,
+    this.cryptoTotalValue = 0,
+    this.cryptoIncomplete = false,
+    this.cryptoUpdatedAt,
+    this.onRefreshCrypto,
     required this.currency,
     this.onCurrencyChanged,
     this.onHeaderChanged,
@@ -52,6 +60,7 @@ class AssetsPageState extends State<AssetsPage> {
     _assets,
     widget.stockTotalValue,
     widget.currency,
+    cryptoTotalValue: widget.cryptoTotalValue,
   );
   String get headerSubtitle => _buildSubtitle();
 
@@ -351,15 +360,24 @@ class AssetsPageState extends State<AssetsPage> {
     return Stack(
       children: [
         RefreshIndicator(
-          onRefresh: _load,
+          onRefresh: () async {
+            await Future.wait([
+              _load(),
+              if (widget.onRefreshCrypto != null) widget.onRefreshCrypto!(),
+            ]);
+          },
           color: AppColors.accent,
           backgroundColor: AppColors.surface,
           child: CustomScrollView(
+            physics: const AlwaysScrollableScrollPhysics(),
             slivers: [
               SliverToBoxAdapter(
                 child: AssetHeader(
                   totalAssets: _totalAssets,
                   stockTotalValue: widget.stockTotalValue,
+                  cryptoTotalValue: widget.cryptoTotalValue,
+                  cryptoIncomplete: widget.cryptoIncomplete,
+                  cryptoUpdatedAt: widget.cryptoUpdatedAt,
                   currency: widget.currency,
                   totalsByType: _totalByType(widget.currency),
                   onCurrencyTap: _showCurrencyMenu,

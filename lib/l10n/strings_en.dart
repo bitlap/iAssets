@@ -411,4 +411,137 @@ const Map<String, String> stringsEn = {
   'fileBrowserSave': 'Save',
   'fileBrowserSaveFail': 'Save failed',
   'fileBrowserImportConfirm': 'Import',
+
+  // Crypto exchange read-only assets
+  "cryptoAccountEquity": "Account equity",
+  "cryptoBinanceOnly": "Only Binance is currently supported",
+  "cryptoRiskTestPassed":
+      "Account queries passed. Trading permissions detected; acknowledge the risk before adding.",
+  "cryptoBreakdownLead": "Lead",
+  "cryptoBreakdownFutures": "Futures",
+  "cryptoBreakdownSpot": "Spot",
+  "cryptoUsdMarginedWallet": "USDⓈ-M Futures",
+  "cryptoCoinMarginedWallet": "COIN-M Futures",
+  "cryptoBinanceName": "Binance",
+  "cryptoApiKey": "API Key",
+  "cryptoApiSecret": "API Secret",
+  "cryptoTitle": "Crypto",
+  "cryptoReadOnly": "Read-only exchange sync",
+  "cryptoTotal": "Total crypto assets",
+  "cryptoSpot": "Spot balances",
+  "cryptoContracts": "Futures positions",
+  "cryptoOverview": "Overview",
+  "cryptoConnections": "Exchange connections",
+  "cryptoAdd": "Add account",
+  "cryptoName": "Connection name",
+  "cryptoExchange": "Exchange",
+  "cryptoRegion": "Account registration region",
+  "cryptoGlobal": "Global",
+  "cryptoUS": "US / Australia",
+  "cryptoEU": "EEA",
+  "cryptoNotes": "Before connecting",
+  "cryptoNotesBody":
+      "Always prefer a dedicated read-only API key. Disable trading, withdrawals and transfers. Trading-enabled keys carry a risk of asset loss; take care. They can still be added after a successful test and risk acknowledgement. This app only queries data and never trades. Credentials stay in this device’s Keychain, outside developer servers, iCloud and backups. Check IP restrictions. Coin values use reference market prices; fiat amounts use the app’s exchange rates. Estimates are for reference only.",
+  "cryptoAcknowledge":
+      "I have read the notes, understand that read-only keys are preferred, and disabled withdrawals and transfers",
+  "cryptoTest": "Test connection",
+  "cryptoTesting": "Verifying account and permissions…",
+  "cryptoTestPassed":
+      "Account queries and permission checks completed. Ready to add.",
+  "cryptoSave": "Add connection",
+  "cryptoRemove": "Remove connection",
+  "cryptoRemoveConfirm":
+      "Remove this connection and its local credentials? Your exchange account is unaffected.",
+  "cryptoCancel": "Cancel",
+  "cryptoEmpty": "No exchange connected",
+  "cryptoEmptyHint":
+      "Add a read-only API to view assets. Pull down to refresh.",
+  "cryptoNoBalances": "No assets to display",
+  "cryptoNoPositions": "No futures positions to display",
+  "cryptoNoTime": "Not synced yet",
+  "cryptoUpdated": "Updated {time}",
+  "cryptoIncomplete": "Incomplete valuation",
+  "cryptoRefreshHint":
+      "Refreshes every 5 minutes while the app is in the foreground. Pull down to refresh immediately. Asset data is kept only for the current session and is not saved to this device.",
+  "cryptoUnknown": "Not valued",
+  "cryptoAvailable": "Available balance",
+  "cryptoFrozen": "Locked balance",
+  "cryptoQuantity": "Quantity",
+  "cryptoPrice": "Reference price",
+  "cryptoMarkPrice": "Mark price",
+  "cryptoPnl": "Unrealized P&L",
+  "cryptoLeverage": "Leverage",
+  "cryptoLiquidation": "Estimated liquidation price",
+  "cryptoLong": "Long",
+  "cryptoShort": "Short",
+  "cryptoUnitContracts": "contracts",
+  "cryptoAll": "All accounts",
+  "cryptoSearch": "Search coin or contract",
+  "cryptoHideSmall": "Hide assets below \$1",
+  "cryptoSpotEquity": "Spot value",
+  "cryptoFuturesEquity": "Futures equity",
+  "cryptoUnifiedEquity": "Unified account equity",
+  "cryptoLeadEquity": "Lead trader account",
+  "cryptoCopyEquity": "Copy trading account",
+  "cryptoScope": "Account coverage",
+  "cryptoScopeBinance":
+      "Syncs Spot balances, USD-M and COIN-M equity and positions. No orders or asset edits. Add lead portfolios separately using the corresponding type and API. Read-only keys are recommended; trading permissions trigger a risk warning. Follower portfolios, Funding, Earn, margin and other subaccounts are outside coverage.",
+  "cryptoScopeOkx":
+      "Reads current trading account equity and positions, including lead/copy funds returned within it, counted once. Funding, Earn and other subaccounts are outside coverage.",
+  "cryptoScopeBybit":
+      "Global unified trading and copy trading equity/coin quantities returned by Asset Overview. Connect a separate master-trader account using its own API key. Copy portfolio position details may be unavailable.",
+  "cryptoNoticeUnified":
+      "Unified equity already includes collateral and derivatives P&L. Balance and position rows are informational and are not added again.",
+  "cryptoNoticeCopyUnavailable":
+      "Copy trading query failed or is unsupported; those assets are missing from the valuation.",
+  "cryptoNoticeCopyPositions":
+      "Copy trading uses exchange-reported equity; unavailable portfolio position details do not mean zero positions.",
+  "cryptoErrorReadOnly":
+      "Read access is required. Disable withdrawals and transfers, then test again.",
+  "cryptoErrorNetwork":
+      "Cannot read account. Check network, API permissions, registration region and IP allowlist.",
+  "cryptoErrorTimeout": "Request timed out. Please retry.",
+  "cryptoErrorResponse":
+      "Incomplete exchange response. The last successful result from this session is still shown.",
+  "cryptoErrorDuplicate": "This exchange account is already connected.",
+  "cryptoErrorRetest": "Test result expired. Please test the connection again.",
+  "cryptoErrorStorage":
+      "Secure storage is unavailable. Unlock this device and retry.",
+  "cryptoErrorAccountChanged":
+      "Account identity changed. Remove and reconnect.",
+  "cryptoErrorFuturesUnavailable":
+      "Unable to read the futures account. Check account activation, API read permissions and IP restrictions.",
+  "cryptoRequired": "Required",
+  "cryptoCredentialsChanged": "Credentials changed. Test again.",
+  "cryptoPartial":
+      "Some assets could not be valued or are outside the supported scope.",
+  "cryptoRefresh": "Refresh",
+  'cryptoShowAmount': 'Show amounts',
+  'cryptoHideAmount': 'Hide amounts',
+  'cryptoAccountRole': 'Account purpose',
+  'cryptoRegularAccount': 'Regular account',
+  "cryptoScopeBinanceLead":
+      "Uses the corresponding Futures lead API to sync USDT wallet balance, equity, unrealized P&L and positions. Add each portfolio separately. No Spot or COIN-M queries. Read-only keys are recommended; trading permissions require risk acknowledgement before adding.",
+  "cryptoPermissionUnverified":
+      "API permissions could not be verified. Check the API settings and test again before adding.",
+  "cryptoTestPassedUnverified":
+      "API permissions could not be verified. Check the API settings and test again before adding.",
+  "cryptoWalletBalance": "Wallet balance",
+  "cryptoBinanceCopyUnsupported":
+      "Binance follower portfolio assets are not available through the supported API. For a lead portfolio, select Lead trader account, choose Spot or Futures, and use its dedicated portfolio API key.",
+  "cryptoLeadMarket": "Lead portfolio type",
+  "cryptoSpotLead": "Spot lead portfolio",
+  "cryptoFuturesLead": "Futures lead portfolio",
+  "cryptoLeadAcknowledge":
+      "I have checked the portfolio and notes, understand that read-only keys are preferred, and disabled withdrawals and transfers",
+  "cryptoLeadNotesBody":
+      "Always prefer a read-only API for the corresponding lead portfolio. Add Spot and Futures separately. Some dedicated keys have trading permission, which carries a risk of asset loss; take care. They can still be added after a successful test and risk acknowledgement. Disable trading where possible, and disable withdrawals and transfers. This app only queries data and never trades. Credentials stay in this device’s Keychain, outside developer servers, iCloud and backups. Coin values use reference prices; fiat amounts use the app’s exchange rates.",
+  "cryptoScopeBinanceSpotLead":
+      "Uses the corresponding Spot lead API to sync available, locked and total quantities and estimated values. Add each portfolio separately. No Futures queries, cost basis or Spot unrealized P&L. Read-only keys are recommended; trading permissions require risk acknowledgement before adding.",
+  "cryptoLeadTradingPermission":
+      "Take care: this API key has trading permissions and carries a risk of asset loss. Disable trading if possible. Acknowledge the risk to continue adding. This app only queries data and never trades.",
+  "cryptoLeadTestPassed":
+      "Lead portfolio queries and permission checks completed. Ready to add.",
+  "cryptoSpotLeadNoContracts":
+      "Spot lead portfolios have no Futures positions. View holdings under Spot / coin balances.",
 };

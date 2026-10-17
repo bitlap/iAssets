@@ -4,13 +4,18 @@ import '../../utils/currency_util.dart';
 import '../../config/app_config.dart';
 import '../../config/app_colors.dart';
 import '../common/app_ui.dart';
+import '../common/currency_selector.dart';
 import '../common/dialog_utils.dart';
+import '../../l10n/l10n.dart';
 
 // Header (Summary Card)
 
 class AssetHeader extends StatelessWidget {
   final double totalAssets;
   final double stockTotalValue;
+  final double cryptoTotalValue;
+  final bool cryptoIncomplete;
+  final DateTime? cryptoUpdatedAt;
   final String currency;
   final VoidCallback onCurrencyTap;
   final Map<AssetType, double> totalsByType;
@@ -19,6 +24,9 @@ class AssetHeader extends StatelessWidget {
     super.key,
     required this.totalAssets,
     required this.stockTotalValue,
+    this.cryptoTotalValue = 0,
+    this.cryptoIncomplete = false,
+    this.cryptoUpdatedAt,
     required this.currency,
     required this.onCurrencyTap,
     required this.totalsByType,
@@ -26,54 +34,25 @@ class AssetHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SummaryCardFrame(
       margin: const EdgeInsets.symmetric(horizontal: 16),
-      padding: const EdgeInsets.fromLTRB(12, 10, 12, 12),
-      decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.circular(24),
-        boxShadow: AppColors.summaryCardShadow,
-        border: Border.all(color: AppColors.border, width: 0.5),
-      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.start,
+          Wrap(
+            alignment: WrapAlignment.spaceBetween,
+            runSpacing: 8,
+            spacing: 12,
             children: [
               Row(
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(StockConfig.assetTotalAssets, style: TextStyles.body13),
                   const SizedBox(width: 8),
-                  GestureDetector(
+                  CurrencySelectorButton(
+                    currency: currency,
                     onTap: onCurrencyTap,
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 8),
-                      decoration: BoxDecoration(
-                        color: AppColors.tertiaryBg,
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text(
-                            currency,
-                            style: TextStyles.body13.copyWith(
-                              fontWeight: FontWeight.w600,
-                              height: 1.0,
-                            ),
-                          ),
-                          const SizedBox(width: 2),
-                          Icon(
-                            Icons.arrow_drop_down,
-                            size: 18,
-                            color: AppColors.textPrimary,
-                          ),
-                        ],
-                      ),
-                    ),
                   ),
                 ],
               ),
@@ -96,13 +75,35 @@ class AssetHeader extends StatelessWidget {
               ),
               const SizedBox(width: 8),
               _summaryChip(
+                Icons.currency_bitcoin,
+                L10n.t('cryptoTitle'),
+                cryptoIncomplete && cryptoUpdatedAt == null
+                    ? '—'
+                    : CurrencyUtil.formatCompact(cryptoTotalValue),
+                iconColor: AppColors.purple,
+              ),
+              const SizedBox(width: 8),
+              _summaryChip(
                 Icons.account_balance,
                 AssetConfig.depositWealthLabel,
-                CurrencyUtil.formatCompact(totalAssets - stockTotalValue),
+                CurrencyUtil.formatCompact(
+                  totalAssets - stockTotalValue - cryptoTotalValue,
+                ),
                 iconColor: AppColors.warning,
               ),
             ],
           ),
+          if (cryptoIncomplete) ...[
+            const SizedBox(height: 8),
+            Text(
+              L10n.t('cryptoIncomplete'),
+              style: TextStyles.caption.copyWith(
+                color: cryptoIncomplete
+                    ? AppColors.warning
+                    : AppColors.textSecondary,
+              ),
+            ),
+          ],
         ],
       ),
     );
@@ -150,6 +151,12 @@ class AssetHeader extends StatelessWidget {
 
   void _showRatioHelpDialog(BuildContext context) {
     final entries = <(IconData, Color, String, double)>[
+      (
+        Icons.currency_bitcoin,
+        AppColors.purple,
+        L10n.t('cryptoTitle'),
+        cryptoTotalValue,
+      ),
       (
         Icons.show_chart,
         AppColors.accent,
@@ -269,7 +276,14 @@ Widget _summaryChip(
           children: [
             Icon(icon, size: 10, color: iconColor),
             const SizedBox(width: 4),
-            Text(label, style: TextStyles.caption),
+            Flexible(
+              child: Text(
+                label,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyles.caption,
+              ),
+            ),
           ],
         ),
         const SizedBox(height: 4),

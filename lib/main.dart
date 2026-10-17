@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -9,11 +10,16 @@ import 'config/app_colors.dart';
 import 'config/app_theme.dart';
 import 'l10n/l10n.dart';
 import 'services/settings_service.dart';
+import 'services/crypto/crypto_store.dart';
+import 'services/exchange_rate_service.dart';
+import 'utils/currency_util.dart';
+import 'widgets/crypto/crypto_page.dart';
 import 'utils/logo_cacher.dart';
 import 'widgets/stock/stock_portfolio_page.dart';
 import 'widgets/asset/assets_page.dart';
 import 'widgets/asset/asset_dialogs.dart';
 import 'widgets/common/section_title.dart';
+import 'widgets/common/app_ui.dart';
 import 'task/profit_task.dart';
 
 void main() async {
@@ -120,10 +126,14 @@ class _AppShell extends StatefulWidget {
   State<_AppShell> createState() => _AppShellState();
 }
 
-class _AppShellState extends State<_AppShell> {
+class _AppShellState extends State<_AppShell> with WidgetsBindingObserver {
   int _currentIndex = 0;
   final GlobalKey<StockPortfolioPageState> _stockKey = GlobalKey();
   final GlobalKey<AssetsPageState> _assetKey = GlobalKey();
+  final GlobalKey<CryptoPageState> _cryptoKey = GlobalKey();
+  final CryptoStore _crypto = CryptoStore.instance;
+  Timer? _cryptoTimer;
+  bool _foreground = true;
   final PageController _pageController = PageController();
   String _selectedCurrency = AppConfig.defaultCurrency;
   double _stockTotalValue = 0;
@@ -132,6 +142,24 @@ class _AppShellState extends State<_AppShell> {
   void initState() {
     super.initState();
     _loadDefaultCurrency();
+    WidgetsBinding.instance.addObserver(this);
+    _crypto.addListener(_refreshHeader);
+    unawaited(_refreshCrypto());
+    _cryptoTimer = Timer.periodic(const Duration(minutes: 5), (_) {
+      if (_foreground) unawaited(_refreshCrypto());
+    });
+  }
+
+  Future<void> _refreshCrypto() async {
+    await _crypto.refresh();
+    await ExchangeRateService().fetchRates();
+    _refreshHeader();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    _foreground = state == AppLifecycleState.resumed;
+    if (_foreground) unawaited(_refreshCrypto());
   }
 
   Future<void> _loadDefaultCurrency() async {
@@ -147,6 +175,7 @@ class _AppShellState extends State<_AppShell> {
   }
 
   void _refreshHeader() {
+    _syncStockTotalValue();
     if (mounted) setState(() {});
   }
 
@@ -154,15 +183,34 @@ class _AppShellState extends State<_AppShell> {
       _stockKey.currentState?.headerSubtitle ??
       StockConfig.homeSubtitleRefresh.replaceAll('{time}', '-');
 
+  String get _cryptoSubtitle => StockConfig.homeSubtitleRefresh.replaceAll(
+    '{time}',
+    _crypto.oldestUpdate == null
+        ? '-'
+        : formatRefreshTime(_crypto.oldestUpdate!),
+  );
+
   String get _assetSubtitle =>
       _assetKey.currentState?.headerSubtitle ??
       AssetConfig.assetSubtitleRefresh.replaceAll('{time}', '-');
+
+  void _changeCurrency(String currency) {
+    final stock = _stockKey.currentState;
+    if (stock != null) stock.setState(() => stock.selectedCurrency = currency);
+    setState(() {
+      _selectedCurrency = currency;
+      _syncStockTotalValue();
+    });
+    SettingsService.setDefaultCurrency(currency);
+  }
 
   void _onAddTap() {
     switch (_currentIndex) {
       case 0:
         _stockKey.currentState?.showAddStockMenu();
       case 1:
+        _cryptoKey.currentState?.addConnection();
+      case 2:
         showAddAssetSheet(context).then((type) {
           if (type == null || !mounted) return;
           _assetKey.currentState?.onAddAsset(type);
@@ -173,6 +221,7 @@ class _AppShellState extends State<_AppShell> {
   void _onTabChanged(int index) {
     _syncStockTotalValue();
     setState(() => _currentIndex = index);
+    if (index != 0) unawaited(_refreshCrypto());
     _pageController.animateToPage(
       index,
       duration: const Duration(milliseconds: 300),
@@ -182,6 +231,9 @@ class _AppShellState extends State<_AppShell> {
 
   @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    _cryptoTimer?.cancel();
+    _crypto.removeListener(_refreshHeader);
     _pageController.dispose();
     super.dispose();
   }
@@ -207,6 +259,8 @@ class _AppShellState extends State<_AppShell> {
                           : _currentIndex.toDouble(),
                       stockTitle: StockConfig.homeTitle,
                       stockSubtitle: _stockSubtitle,
+                      cryptoTitle: L10n.t('cryptoTitle'),
+                      cryptoSubtitle: _cryptoSubtitle,
                       assetTitle: StockConfig.tabAsset,
                       assetSubtitle: _assetSubtitle,
                       onDividendOverview: () =>
@@ -226,41 +280,35 @@ class _AppShellState extends State<_AppShell> {
                           onPageChanged: (i) {
                             _syncStockTotalValue();
                             setState(() => _currentIndex = i);
+                            if (i != 0) unawaited(_refreshCrypto());
                           },
                           children: [
                             StockPortfolioPage(
                               key: _stockKey,
                               selectedCurrency: _selectedCurrency,
                               onHeaderChanged: _refreshHeader,
-                              onCurrencyChanged: (c) {
-                                setState(() {
-                                  _selectedCurrency = c;
-                                  _stockTotalValue =
-                                      _stockKey.currentState?.totalAssets ??
-                                      _stockTotalValue;
-                                });
-                                SettingsService.setDefaultCurrency(c);
-                              },
+                              onCurrencyChanged: _changeCurrency,
+                            ),
+                            CryptoPage(
+                              key: _cryptoKey,
+                              store: _crypto,
+                              currency: _selectedCurrency,
+                              onCurrencyChanged: _changeCurrency,
                             ),
                             AssetsPage(
                               key: _assetKey,
                               stockTotalValue: _stockTotalValue,
+                              cryptoTotalValue: CurrencyUtil.convertCurrency(
+                                _crypto.totalUsd.toDouble(),
+                                'USD',
+                                _selectedCurrency,
+                              ),
+                              cryptoIncomplete: _crypto.incomplete,
+                              cryptoUpdatedAt: _crypto.oldestUpdate,
+                              onRefreshCrypto: () => _refreshCrypto(),
                               currency: _selectedCurrency,
                               onHeaderChanged: _refreshHeader,
-                              onCurrencyChanged: (c) {
-                                _stockKey.currentState?.setState(
-                                  () =>
-                                      _stockKey.currentState!.selectedCurrency =
-                                          c,
-                                );
-                                setState(() {
-                                  _selectedCurrency = c;
-                                  _stockTotalValue =
-                                      _stockKey.currentState?.totalAssets ??
-                                      _stockTotalValue;
-                                });
-                                SettingsService.setDefaultCurrency(c);
-                              },
+                              onCurrencyChanged: _changeCurrency,
                             ),
                           ],
                         ),
@@ -306,9 +354,15 @@ class _AppShellState extends State<_AppShell> {
                   ),
                   const SizedBox(width: 4),
                   _buildTabItem(
+                    icon: Icons.currency_bitcoin,
+                    label: L10n.t('cryptoTitle'),
+                    index: 1,
+                  ),
+                  const SizedBox(width: 4),
+                  _buildTabItem(
                     icon: StockConfig.iconTabAsset,
                     label: StockConfig.tabAsset,
-                    index: 1,
+                    index: 2,
                   ),
                   const SizedBox(width: 4),
                   _buildAddItem(
@@ -330,12 +384,16 @@ class _AppShellState extends State<_AppShell> {
     required int index,
   }) {
     final isSelected = _currentIndex == index;
-    final selectedColor = index == 0 ? AppColors.accent : AppColors.warning;
+    final selectedColor = switch (index) {
+      0 => AppColors.accent,
+      1 => AppColors.purple,
+      _ => AppColors.warning,
+    };
     return GestureDetector(
       onTap: () => _onTabChanged(index),
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
-        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         decoration: BoxDecoration(
           color: isSelected
               ? selectedColor.withValues(alpha: AppColors.isDark ? 0.2 : 0.12)
@@ -377,7 +435,7 @@ class _AppShellState extends State<_AppShell> {
     return GestureDetector(
       onTap: _onAddTap,
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         decoration: BoxDecoration(
           color: Colors.transparent,
           borderRadius: BorderRadius.circular(20),

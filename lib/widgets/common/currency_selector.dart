@@ -56,11 +56,12 @@ class CurrencySelector {
                       padding: const EdgeInsets.fromLTRB(14, 12, 14, 8),
                       child: Row(
                         children: [
-                          Text(
-                            StockConfig.assetSelectCurrency,
-                            style: TextStyles.bodyMedium,
+                          Expanded(
+                            child: Text(
+                              StockConfig.assetSelectCurrency,
+                              style: TextStyles.bodyMedium,
+                            ),
                           ),
-                          const Spacer(),
                           GestureDetector(
                             onTap: _close,
                             child: Icon(
@@ -114,9 +115,16 @@ class CurrencySelector {
                                       style: TextStyles.listTileTitle,
                                     ),
                                   ),
-                                  Text(
-                                    '$symbol ${CurrencyUtil.formatRate(rate)}',
-                                    style: TextStyles.body13Grey,
+                                  Flexible(
+                                    flex: 2,
+                                    child: FittedBox(
+                                      fit: BoxFit.scaleDown,
+                                      alignment: Alignment.centerRight,
+                                      child: Text(
+                                        '$symbol ${CurrencyUtil.formatRate(rate)}',
+                                        style: TextStyles.body13Grey,
+                                      ),
+                                    ),
                                   ),
                                 ],
                               ),
@@ -141,4 +149,40 @@ class CurrencySelector {
     _entry?.remove();
     _entry = null;
   }
+}
+
+/// 顶部汇总卡片共用的货币入口，与 CurrencySelector 浮层配合。
+class CurrencySelectorButton extends StatelessWidget {
+  final String currency;
+  final VoidCallback onTap;
+  const CurrencySelectorButton({
+    super.key,
+    required this.currency,
+    required this.onTap,
+  });
+  @override
+  Widget build(BuildContext context) => GestureDetector(
+    onTap: onTap,
+    child: Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8),
+      decoration: BoxDecoration(
+        color: AppColors.tertiaryBg,
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            currency,
+            style: TextStyles.body13.copyWith(
+              fontWeight: FontWeight.w600,
+              height: 1,
+            ),
+          ),
+          const SizedBox(width: 2),
+          Icon(Icons.arrow_drop_down, size: 18, color: AppColors.textPrimary),
+        ],
+      ),
+    ),
+  );
 }
