@@ -5,6 +5,7 @@ import '../../config/stock_config.dart';
 import '../../l10n/l10n.dart';
 import '../../models/crypto/crypto_models.dart';
 import '../../services/crypto/crypto_store.dart';
+import '../../services/exchange_rate_service.dart';
 import '../../utils/currency_util.dart';
 import '../common/app_ui.dart';
 import '../common/currency_selector.dart';
@@ -38,8 +39,24 @@ class CryptoPageState extends State<CryptoPage>
   @override
   bool get wantKeepAlive => true;
   Future<void> addConnection() => showAddExchangeSheet(context, widget.store);
-  String _money(Decimal? usd, {bool showSymbol = true}) =>
+  String _summaryMoney(Decimal? usd, {bool showSymbol = true}) =>
       '${showSymbol ? CurrencyUtil.getSymbol(widget.currency) : ''}${CurrencyUtil.formatCompact(CurrencyUtil.convertCurrency((usd ?? Decimal.zero).toDouble(), 'USD', widget.currency))}';
+
+  String _decimal(Decimal? value) =>
+      value == null ? '--' : value.truncate(scale: 8).toStringAsFixed(8);
+
+  String _money(Decimal? usd) {
+    if (usd == null) return '--';
+    // Rates are quoted per USD. Keep the amount in Decimal through conversion
+    // and display, including values smaller than a cent.
+    final rate = widget.currency == 'USD'
+        ? Decimal.one
+        : Decimal.parse(
+            (ExchangeRateService().effectiveRates[widget.currency] ?? 1)
+                .toString(),
+          );
+    return '${CurrencyUtil.getSymbol(widget.currency)}${_decimal(usd * rate)}';
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -93,7 +110,7 @@ class CryptoPageState extends State<CryptoPage>
                         ),
                       ],
                     ),
-                    Text(_money(total), style: TextStyles.amountLarge),
+                    Text(_summaryMoney(total), style: TextStyles.amountLarge),
                     const SizedBox(height: 12),
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -152,7 +169,7 @@ class CryptoPageState extends State<CryptoPage>
                                     fit: BoxFit.scaleDown,
                                     alignment: Alignment.centerLeft,
                                     child: Text(
-                                      _money(
+                                      _summaryMoney(
                                         snapshots.fold<Decimal>(
                                           Decimal.zero,
                                           (value, snapshot) =>
@@ -372,12 +389,12 @@ class CryptoPageState extends State<CryptoPage>
             if (w.walletBalance != null)
               _row(
                 L10n.t('cryptoWalletBalance'),
-                '${w.walletBalance} ${w.settlement ?? ''}',
+                '${_decimal(w.walletBalance)} ${w.settlement ?? ''}',
               ),
             if (w.unrealizedPnl != null)
               _row(
                 L10n.t('cryptoPnl'),
-                '${w.unrealizedPnl} ${w.settlement ?? ''}',
+                '${_decimal(w.unrealizedPnl)} ${w.settlement ?? ''}',
                 valueColor: _pnlColor(w.unrealizedPnl),
               ),
           ],
@@ -421,12 +438,12 @@ class CryptoPageState extends State<CryptoPage>
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   _row(b.asset, _money(b.valueUsd)),
-                  _row(L10n.t('cryptoQuantity'), '${b.quantity} ${b.asset}'),
+                  _row(L10n.t('cryptoQuantity'), _decimal(b.quantity)),
                   _row(L10n.t('cryptoPrice'), _money(b.priceUsd)),
                   if (b.available != null)
-                    _row(L10n.t('cryptoAvailable'), '${b.available}'),
+                    _row(L10n.t('cryptoAvailable'), _decimal(b.available)),
                   if (b.frozen != null)
-                    _row(L10n.t('cryptoFrozen'), '${b.frozen}'),
+                    _row(L10n.t('cryptoFrozen'), _decimal(b.frozen)),
                 ],
               ),
             ),
@@ -482,24 +499,24 @@ class CryptoPageState extends State<CryptoPage>
                 const SizedBox(height: 6),
                 _row(
                   L10n.t('cryptoQuantity'),
-                  '${p.quantity} ${p.unit == 'contracts' ? L10n.t('cryptoUnitContracts') : p.unit}',
+                  '${_decimal(p.quantity)} ${p.unit == 'contracts' ? L10n.t('cryptoUnitContracts') : p.unit}',
                 ),
                 _row(
                   L10n.t('cryptoMarkPrice'),
-                  '${p.markPrice ?? '—'} ${_priceUnit(p)}',
+                  '${_decimal(p.markPrice)} ${_priceUnit(p)}',
                 ),
                 _row(
                   L10n.t('cryptoPnl'),
-                  '${p.unrealizedPnl ?? '—'} ${p.settlement}',
+                  '${_decimal(p.unrealizedPnl)} ${p.settlement}',
                   valueColor: _pnlColor(p.unrealizedPnl),
                 ),
                 if (p.leverage != null)
-                  _row(L10n.t('cryptoLeverage'), '${p.leverage}×'),
+                  _row(L10n.t('cryptoLeverage'), '${_decimal(p.leverage)}×'),
                 if (p.liquidationPrice != null &&
                     p.liquidationPrice! > Decimal.zero)
                   _row(
                     L10n.t('cryptoLiquidation'),
-                    '${p.liquidationPrice} ${_priceUnit(p)}',
+                    '${_decimal(p.liquidationPrice)} ${_priceUnit(p)}',
                   ),
               ],
             ),
