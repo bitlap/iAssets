@@ -52,3 +52,6 @@ jobs:
 
       - name: Run tests
         run: flutter test --no-pub
+
+      - name: Check iOS release script syntax
+        run: bash -n scripts/release_ios.sh
