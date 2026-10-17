@@ -237,7 +237,7 @@ class CryptoPageState extends State<CryptoPage>
                           (c) => DropdownMenuItem(
                             value: c.id,
                             child: Text(
-                              c.name,
+                              '${cryptoExchangeName(c.exchange)}-${c.name}',
                               maxLines: 1,
                               softWrap: false,
                               overflow: TextOverflow.ellipsis,

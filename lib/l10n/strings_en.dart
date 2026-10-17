@@ -422,7 +422,6 @@ const Map<String, String> stringsEn = {
   "cryptoBreakdownSpot": "Spot",
   "cryptoUsdMarginedWallet": "USDⓈ-M Futures",
   "cryptoCoinMarginedWallet": "COIN-M Futures",
-  "cryptoBinanceName": "Binance",
   "cryptoApiKey": "API Key",
   "cryptoApiSecret": "API Secret",
   "cryptoTitle": "Crypto",

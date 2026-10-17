@@ -147,7 +147,7 @@ class _AddExchangeSheetState extends State<AddExchangeSheet> {
                 decoration: appInputDecoration(
                   labelText: L10n.t('cryptoExchange'),
                 ),
-                child: Text(L10n.t('cryptoBinanceName')),
+                child: const Text('Binance'),
               ),
               const SizedBox(height: 12),
               InputDecorator(

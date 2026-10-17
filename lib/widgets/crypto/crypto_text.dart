@@ -1,6 +1,12 @@
 import '../../l10n/l10n.dart';
 import '../../models/crypto/crypto_models.dart';
 
+String cryptoExchangeName(CryptoExchange exchange) => switch (exchange) {
+  CryptoExchange.binance => 'Binance',
+  CryptoExchange.okx => 'OKX',
+  CryptoExchange.bybit => 'Bybit',
+};
+
 String cryptoError(Object error) {
   if (error is! CryptoSyncException) return L10n.t('cryptoErrorStorage');
   final key = switch ((error.code, error.detail)) {

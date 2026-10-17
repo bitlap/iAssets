@@ -410,7 +410,6 @@ const Map<String, String> stringsZh = {
   "cryptoBreakdownSpot": "现货",
   "cryptoUsdMarginedWallet": "U 本位合约",
   "cryptoCoinMarginedWallet": "币本位合约",
-  "cryptoBinanceName": "币安",
   "cryptoApiKey": "API Key（访问密钥）",
   "cryptoApiSecret": "API Secret（签名密钥）",
   "cryptoTitle": "数字币",

@@ -190,7 +190,8 @@ void main() {
         final fieldRect = tester.getRect(filterField);
         await tester.tap(filterField);
         await tester.pumpAndSettle();
-        final option = find.text(longName).last;
+        expect(find.text('Binance-Account'), findsOneWidget);
+        final option = find.text('Binance-$longName').last;
         final optionRect = tester.getRect(option);
         expect(optionRect.left, greaterThanOrEqualTo(0));
         expect(optionRect.right, lessThanOrEqualTo(320));
@@ -213,6 +214,7 @@ void main() {
         expect(tester.takeException(), isNull);
         await tester.tap(option);
         await tester.pumpAndSettle();
+        expect(find.text('Binance-$longName'), findsWidgets);
         expect(find.text(r'$1250.00'), findsOneWidget);
         expect(find.text(r'$1050.00'), findsNothing);
         expect(find.text(r'$200.00'), findsOneWidget);

@@ -411,7 +411,6 @@ const Map<String, String> stringsZhHant = {
   "cryptoBreakdownSpot": "現貨",
   "cryptoUsdMarginedWallet": "U 本位合約",
   "cryptoCoinMarginedWallet": "幣本位合約",
-  "cryptoBinanceName": "幣安",
   "cryptoApiKey": "API Key（存取金鑰）",
   "cryptoApiSecret": "API Secret（簽章金鑰）",
   "cryptoTitle": "數字幣",
