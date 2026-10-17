@@ -38,9 +38,8 @@ class CryptoPageState extends State<CryptoPage>
   @override
   bool get wantKeepAlive => true;
   Future<void> addConnection() => showAddExchangeSheet(context, widget.store);
-  String _money(Decimal? usd, {bool showSymbol = true}) => usd == null
-      ? L10n.t('cryptoUnknown')
-      : '${showSymbol ? CurrencyUtil.getSymbol(widget.currency) : ''}${CurrencyUtil.formatCompact(CurrencyUtil.convertCurrency(usd.toDouble(), 'USD', widget.currency))}';
+  String _money(Decimal? usd, {bool showSymbol = true}) =>
+      '${showSymbol ? CurrencyUtil.getSymbol(widget.currency) : ''}${CurrencyUtil.formatCompact(CurrencyUtil.convertCurrency((usd ?? Decimal.zero).toDouble(), 'USD', widget.currency))}';
 
   @override
   Widget build(BuildContext context) {
@@ -94,14 +93,7 @@ class CryptoPageState extends State<CryptoPage>
                         ),
                       ],
                     ),
-                    Text(
-                      _money(
-                        snapshots.isEmpty && connections.isNotEmpty
-                            ? null
-                            : total,
-                      ),
-                      style: TextStyles.amountLarge,
-                    ),
+                    Text(_money(total), style: TextStyles.amountLarge),
                     const SizedBox(height: 12),
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
