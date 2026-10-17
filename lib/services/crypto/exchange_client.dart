@@ -305,7 +305,7 @@ class ExchangeClient implements ExchangeReader {
       ),
     ];
     final positions = <CryptoPosition>[];
-    final notices = <String>['binanceCopyUnsupported', ...permissionNotices];
+    final notices = <String>[...permissionNotices];
     final references = <String>['spot:$uid'];
     for (final coinM in [false, true]) {
       final host = coinM ? 'dapi.binance.com' : 'fapi.binance.com';
@@ -394,7 +394,6 @@ class ExchangeClient implements ExchangeReader {
       positions: positions,
       wallets: wallets,
       notices: notices,
-      coverageComplete: false,
       accountReferences: references.toSet().toList(),
     );
   }

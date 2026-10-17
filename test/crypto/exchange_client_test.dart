@@ -356,6 +356,80 @@ void main() {
     },
   );
   test(
+    'Binance regular account is complete when Spot and both Futures wallets are priced',
+    () async {
+      final client = ExchangeClient(
+        client: MockClient(
+          (request) async => switch (request.url.path) {
+            '/sapi/v1/account/apiRestrictions' => json({'enableReading': true}),
+            '/api/v3/account' => json({
+              'uid': 123,
+              'balances': [
+                {'asset': 'BTC', 'free': '1', 'locked': '0'},
+              ],
+            }),
+            '/api/v3/ticker/price' => json([
+              {'symbol': 'BTCUSDT', 'price': '100'},
+            ]),
+            '/v2/exchange-rates' => json({
+              'data': {
+                'rates': {'USDT': '1', 'BTC': '0.01'},
+              },
+            }),
+            '/fapi/v3/account' => json({
+              'assets': [
+                {'asset': 'USDT', 'marginBalance': '50'},
+              ],
+            }),
+            '/dapi/v1/account' => json({'assets': []}),
+            '/fapi/v3/balance' ||
+            '/dapi/v1/balance' ||
+            '/fapi/v3/positionRisk' ||
+            '/dapi/v1/positionRisk' => json([]),
+            _ => throw StateError('Unexpected API'),
+          },
+        ),
+      );
+      final snapshot = await client.read(key(CryptoExchange.binance));
+      expect(snapshot.totalUsd, amount('150'));
+      expect(snapshot.complete, true);
+      expect(snapshot.notices, isNot(contains('binanceCopyUnsupported')));
+    },
+  );
+  test(
+    'Binance regular account reports incomplete only when an owned asset lacks a price',
+    () async {
+      final client = ExchangeClient(
+        client: MockClient(
+          (request) async => switch (request.url.path) {
+            '/sapi/v1/account/apiRestrictions' => json({'enableReading': true}),
+            '/api/v3/account' => json({
+              'uid': 123,
+              'balances': [
+                {'asset': 'UNKNOWN', 'free': '1', 'locked': '0'},
+              ],
+            }),
+            '/api/v3/ticker/price' => json([]),
+            '/v2/exchange-rates' => json({
+              'data': {
+                'rates': {'USDT': '1'},
+              },
+            }),
+            '/fapi/v3/account' || '/dapi/v1/account' => json({'assets': []}),
+            '/fapi/v3/balance' ||
+            '/dapi/v1/balance' ||
+            '/fapi/v3/positionRisk' ||
+            '/dapi/v1/positionRisk' => json([]),
+            _ => throw StateError('Unexpected API'),
+          },
+        ),
+      );
+      final snapshot = await client.read(key(CryptoExchange.binance));
+      expect(snapshot.balances.single.priceUsd, isNull);
+      expect(snapshot.complete, false);
+    },
+  );
+  test(
     'Binance futures permission failure cannot masquerade as an empty wallet',
     () async {
       final client = ExchangeClient(

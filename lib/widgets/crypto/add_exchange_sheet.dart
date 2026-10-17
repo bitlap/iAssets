@@ -150,73 +150,68 @@ class _AddExchangeSheetState extends State<AddExchangeSheet> {
                 child: Text(L10n.t('cryptoBinanceName')),
               ),
               const SizedBox(height: 12),
-              DropdownButtonFormField<CryptoAccountRole>(
-                initialValue: _role,
-                borderRadius: BorderRadius.circular(12),
-                dropdownColor: AppColors.surfaceElevated,
-                style: TextStyles.inputText,
-                iconEnabledColor: AppColors.textSecondary,
-                isExpanded: true,
+              InputDecorator(
                 decoration: appInputDecoration(
                   labelText: L10n.t('cryptoAccountRole'),
                 ),
-                items: CryptoAccountRole.values
-                    .map(
-                      (role) => DropdownMenuItem(
-                        value: role,
-                        child: Text(
-                          L10n.t(switch (role) {
-                            CryptoAccountRole.regular => 'cryptoRegularAccount',
-                            CryptoAccountRole.lead => 'cryptoLeadEquity',
-                            CryptoAccountRole.copy => 'cryptoCopyEquity',
-                          }),
-                        ),
+                child: Wrap(
+                  spacing: 8,
+                  runSpacing: 8,
+                  children: [
+                    for (final role in [
+                      CryptoAccountRole.regular,
+                      CryptoAccountRole.lead,
+                    ])
+                      _optionChip(
+                        key: ValueKey('crypto-role-${role.name}'),
+                        label: L10n.t(switch (role) {
+                          CryptoAccountRole.regular => 'cryptoRegularAccount',
+                          CryptoAccountRole.lead => 'cryptoLeadEquity',
+                          CryptoAccountRole.copy => 'cryptoCopyEquity',
+                        }),
+                        selected: _role == role,
+                        onSelected: _busy
+                            ? null
+                            : () => setState(() {
+                                _role = role;
+                                _acknowledged = false;
+                                _tested = null;
+                                _error = null;
+                              }),
                       ),
-                    )
-                    .toList(),
-                onChanged: _busy
-                    ? null
-                    : (role) => setState(() {
-                        _role = role!;
-                        _acknowledged = false;
-                        _tested = null;
-                        _error = null;
-                      }),
+                  ],
+                ),
               ),
               const SizedBox(height: 12),
               if (_binanceLead) ...[
-                DropdownButtonFormField<CryptoLeadMarket>(
-                  initialValue: _leadMarket,
-                  borderRadius: BorderRadius.circular(12),
-                  dropdownColor: AppColors.surfaceElevated,
-                  style: TextStyles.inputText,
-                  iconEnabledColor: AppColors.textSecondary,
-                  isExpanded: true,
+                InputDecorator(
                   decoration: appInputDecoration(
                     labelText: L10n.t('cryptoLeadMarket'),
                   ),
-                  items: CryptoLeadMarket.values
-                      .map(
-                        (market) => DropdownMenuItem(
-                          value: market,
-                          child: Text(
-                            L10n.t(
-                              market == CryptoLeadMarket.spot
-                                  ? 'cryptoSpotLead'
-                                  : 'cryptoFuturesLead',
-                            ),
+                  child: Wrap(
+                    spacing: 8,
+                    runSpacing: 8,
+                    children: [
+                      for (final market in CryptoLeadMarket.values)
+                        _optionChip(
+                          key: ValueKey('crypto-market-${market.name}'),
+                          label: L10n.t(
+                            market == CryptoLeadMarket.spot
+                                ? 'cryptoSpotLead'
+                                : 'cryptoFuturesLead',
                           ),
+                          selected: _leadMarket == market,
+                          onSelected: _busy
+                              ? null
+                              : () => setState(() {
+                                  _leadMarket = market;
+                                  _tested = null;
+                                  _error = null;
+                                  _acknowledged = false;
+                                }),
                         ),
-                      )
-                      .toList(),
-                  onChanged: _busy
-                      ? null
-                      : (value) => setState(() {
-                          _leadMarket = value!;
-                          _tested = null;
-                          _error = null;
-                          _acknowledged = false;
-                        }),
+                    ],
+                  ),
                 ),
                 const SizedBox(height: 12),
               ],
@@ -339,6 +334,25 @@ class _AddExchangeSheetState extends State<AddExchangeSheet> {
         ),
       ),
     ),
+  );
+
+  Widget _optionChip({
+    required Key key,
+    required String label,
+    required bool selected,
+    required VoidCallback? onSelected,
+  }) => ChoiceChip(
+    key: key,
+    label: Text(label),
+    selected: selected,
+    showCheckmark: false,
+    backgroundColor: AppColors.surface,
+    selectedColor: AppColors.accent.withValues(alpha: .14),
+    side: BorderSide(color: selected ? AppColors.accent : AppColors.border),
+    labelStyle: TextStyles.body13.copyWith(
+      color: selected ? AppColors.accent : AppColors.textPrimary,
+    ),
+    onSelected: onSelected == null ? null : (_) => onSelected(),
   );
 
   Widget _infoPanel({

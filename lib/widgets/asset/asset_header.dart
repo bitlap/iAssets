@@ -101,17 +101,6 @@ class AssetHeader extends StatelessWidget {
               ),
             ],
           ),
-          if (cryptoIncomplete) ...[
-            const SizedBox(height: 8),
-            Text(
-              L10n.t('cryptoIncomplete'),
-              style: TextStyles.caption.copyWith(
-                color: cryptoIncomplete
-                    ? AppColors.warning
-                    : AppColors.textSecondary,
-              ),
-            ),
-          ],
         ],
       ),
     );

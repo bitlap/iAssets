@@ -105,14 +105,14 @@ class CryptoPageState extends State<CryptoPage>
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         for (final entry in [
-                          (CryptoWalletKind.lead, 'cryptoBreakdownLead'),
                           (CryptoWalletKind.futures, 'cryptoBreakdownFutures'),
                           (CryptoWalletKind.spot, 'cryptoBreakdownSpot'),
+                          (CryptoWalletKind.lead, 'cryptoBreakdownLead'),
                         ])
                           Expanded(
                             child: Container(
                               margin: EdgeInsets.only(
-                                right: entry.$1 == CryptoWalletKind.spot
+                                right: entry.$1 == CryptoWalletKind.lead
                                     ? 0
                                     : 6,
                               ),
@@ -176,16 +176,6 @@ class CryptoPageState extends State<CryptoPage>
                           ),
                       ],
                     ),
-                    if (widget.store.incomplete)
-                      Padding(
-                        padding: const EdgeInsets.only(top: 6),
-                        child: Text(
-                          L10n.t('cryptoIncomplete'),
-                          style: TextStyles.bodySmall.copyWith(
-                            color: CryptoStyle.caution,
-                          ),
-                        ),
-                      ),
                     if (widget.store.syncing)
                       Padding(
                         padding: const EdgeInsets.only(top: 8),
@@ -217,6 +207,7 @@ class CryptoPageState extends State<CryptoPage>
                   subtitle: L10n.t('cryptoEmptyHint'),
                 ),
               if (connections.isNotEmpty) ...[
+                const SizedBox(height: 8),
                 if (connections.length > 1)
                   DropdownButtonFormField<String>(
                     key: ValueKey('filter-$_connection-${connections.length}'),
@@ -240,7 +231,7 @@ class CryptoPageState extends State<CryptoPage>
                     ],
                     onChanged: (v) => setState(() => _connection = v),
                   ),
-                const SizedBox(height: 12),
+                if (connections.length > 1) const SizedBox(height: 8),
                 SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: Row(
@@ -266,7 +257,7 @@ class CryptoPageState extends State<CryptoPage>
                     ],
                   ),
                 ),
-                const SizedBox(height: 12),
+                if (_tab != 0) const SizedBox(height: 8),
                 if (_tab != 0)
                   TextField(
                     style: TextStyles.inputText,
@@ -290,7 +281,7 @@ class CryptoPageState extends State<CryptoPage>
                     ),
                   ),
                 for (final c in selected) ...[
-                  const SizedBox(height: 12),
+                  const SizedBox(height: 8),
                   _connectionStatus(c),
                   if (_tab == 0) _overview(c),
                   if (_tab == 1) ..._balances(c),
@@ -458,7 +449,10 @@ class CryptoPageState extends State<CryptoPage>
       for (final wallet in snapshot.wallets.where(
         (w) => w.kind != CryptoWalletKind.spot,
       ))
-        _card(_row(_walletLabel(wallet), _money(wallet.equityUsd))),
+        Padding(
+          padding: const EdgeInsets.only(top: 8),
+          child: _card(_row(_walletLabel(wallet), _money(wallet.equityUsd))),
+        ),
       if (positions.isEmpty)
         Padding(
           padding: const EdgeInsets.all(16),

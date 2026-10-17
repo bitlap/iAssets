@@ -67,13 +67,25 @@ void main() {
           );
           expect(find.text(updateText(time)), findsNothing);
           for (final key in [
-            'cryptoBreakdownLead',
             'cryptoBreakdownFutures',
             'cryptoBreakdownSpot',
+            'cryptoBreakdownLead',
           ]) {
             expect(find.text(L10n.t(key)), findsOneWidget);
           }
+          final futuresX = tester
+              .getTopLeft(find.text(L10n.t('cryptoBreakdownFutures')))
+              .dx;
+          final spotX = tester
+              .getTopLeft(find.text(L10n.t('cryptoBreakdownSpot')))
+              .dx;
+          final leadX = tester
+              .getTopLeft(find.text(L10n.t('cryptoBreakdownLead')))
+              .dx;
+          expect(futuresX, lessThan(spotX));
+          expect(spotX, lessThan(leadX));
           expect(find.text(L10n.t('cryptoScope')), findsNothing);
+          expect(find.text(L10n.t('cryptoIncomplete')), findsNothing);
           expect(find.text(L10n.t('cryptoNotes')), findsNothing);
           expect(find.text(L10n.t('cryptoRefreshHint')), findsNothing);
 
@@ -88,6 +100,8 @@ void main() {
                     totalAssets: 1350,
                     stockTotalValue: 200,
                     cryptoTotalValue: 1050,
+                    cryptoIncomplete: true,
+                    cryptoUpdatedAt: time,
                     currency: 'USD',
                     onCurrencyTap: () {},
                     totalsByType: const {},
@@ -98,6 +112,7 @@ void main() {
           );
           await tester.pumpAndSettle();
           expect(find.text(L10n.t('cryptoTitle')), findsOneWidget);
+          expect(find.text(L10n.t('cryptoIncomplete')), findsNothing);
           final header = tester.getRect(find.byType(AssetHeader));
           final ratio = tester.getRect(
             find.text(StockConfig.assetPositionRatioLabel),
@@ -170,14 +185,16 @@ void main() {
           tester.getCenter(find.byIcon(Icons.close)).dx,
           greaterThan(tester.getCenter(find.text(L10n.t('cryptoAdd'))).dx),
         );
-        expect(
-          tester
-              .widget<DropdownButton<CryptoAccountRole>>(
-                find.byType(DropdownButton<CryptoAccountRole>),
-              )
-              .dropdownColor,
-          AppColors.surfaceElevated,
-        );
+        for (final role in [
+          CryptoAccountRole.regular,
+          CryptoAccountRole.lead,
+        ]) {
+          expect(
+            find.byKey(ValueKey('crypto-role-${role.name}')),
+            findsOneWidget,
+          );
+        }
+        expect(find.byKey(const ValueKey('crypto-role-copy')), findsNothing);
         tester.view.viewInsets = const FakeViewPadding(bottom: 240);
         await tester.pumpAndSettle();
         await tester.ensureVisible(find.byType(TextFormField).last);
@@ -210,6 +227,62 @@ void main() {
         store.dispose();
       },
     );
+  }
+  for (final brightness in Brightness.values) {
+    for (final lang in [L10n.langZh, L10n.langEn]) {
+      testWidgets(
+        'account choices stay inside a narrow $brightness / $lang sheet',
+        (tester) async {
+          tester.view.physicalSize = const Size(320, 640);
+          tester.view.devicePixelRatio = 1;
+          addTearDown(tester.view.resetPhysicalSize);
+          addTearDown(tester.view.resetDevicePixelRatio);
+          addTearDown(tester.view.resetViewInsets);
+          AppColors.applyBrightness(brightness);
+          L10n.applyLanguage(lang);
+          final store = CryptoStore(
+            reader: fixtures.FakeReader(fixtures.sample(DateTime.utc(2026))),
+            persistence: fixtures.MemoryPersistence(),
+          );
+          addTearDown(store.dispose);
+          await tester.pumpWidget(
+            MaterialApp(
+              theme: AppTheme.data(brightness),
+              home: Scaffold(
+                body: Builder(
+                  builder: (context) => TextButton(
+                    onPressed: () => showAddExchangeSheet(context, store),
+                    child: const Text('Open'),
+                  ),
+                ),
+              ),
+            ),
+          );
+          await tester.tap(find.text('Open'));
+          await tester.pumpAndSettle();
+          await tester.tap(find.byKey(const ValueKey('crypto-role-lead')));
+          await tester.pumpAndSettle();
+          for (final key in [
+            'crypto-role-regular',
+            'crypto-role-lead',
+            'crypto-market-spot',
+            'crypto-market-futures',
+          ]) {
+            final rect = tester.getRect(find.byKey(ValueKey(key)));
+            expect(rect.left, greaterThanOrEqualTo(0));
+            expect(rect.right, lessThanOrEqualTo(320));
+          }
+          await tester.tap(find.byKey(const ValueKey('crypto-market-spot')));
+          await tester.pumpAndSettle();
+          tester.view.viewInsets = const FakeViewPadding(bottom: 260);
+          await tester.pumpAndSettle();
+          await tester.ensureVisible(
+            find.byKey(const ValueKey('crypto-market-futures')),
+          );
+          expect(tester.takeException(), isNull);
+        },
+      );
+    }
   }
   for (final brightness in Brightness.values) {
     testWidgets(
@@ -372,17 +445,18 @@ void main() {
         ),
       );
       await tester.pumpAndSettle();
-      await tester.tap(find.byType(DropdownButtonFormField<CryptoAccountRole>));
-      await tester.pumpAndSettle();
-      await tester.tap(find.text(L10n.t('cryptoLeadEquity')).last);
+      await tester.tap(find.byKey(const ValueKey('crypto-role-lead')));
       await tester.pumpAndSettle();
       expect(
         find.byType(DropdownButtonFormField<CryptoLeadMarket>),
+        findsNothing,
+      );
+      expect(
+        find.byKey(const ValueKey('crypto-market-futures')),
         findsOneWidget,
       );
-      await tester.tap(find.byType(DropdownButtonFormField<CryptoLeadMarket>));
-      await tester.pumpAndSettle();
-      await tester.tap(find.text(L10n.t('cryptoSpotLead')).last);
+      expect(find.byKey(const ValueKey('crypto-market-spot')), findsOneWidget);
+      await tester.tap(find.byKey(const ValueKey('crypto-market-spot')));
       await tester.pumpAndSettle();
       expect(find.text(L10n.t('cryptoScopeBinanceSpotLead')), findsOneWidget);
       final fields = find.byType(TextFormField);
@@ -400,11 +474,9 @@ void main() {
       );
       expect(addButton().onTap, isNotNull);
       await tester.ensureVisible(
-        find.byType(DropdownButtonFormField<CryptoLeadMarket>),
+        find.byKey(const ValueKey('crypto-market-futures')),
       );
-      await tester.tap(find.byType(DropdownButtonFormField<CryptoLeadMarket>));
-      await tester.pumpAndSettle();
-      await tester.tap(find.text(L10n.t('cryptoFuturesLead')).last);
+      await tester.tap(find.byKey(const ValueKey('crypto-market-futures')));
       await tester.pumpAndSettle();
       expect(addButton().onTap, isNull);
       expect(
