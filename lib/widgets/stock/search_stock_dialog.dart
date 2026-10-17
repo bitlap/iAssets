@@ -11,11 +11,12 @@ import '../../utils/currency_util.dart';
 import '../../utils/logo_cacher.dart';
 import '../../utils/market_util.dart';
 import '../../config/app_config.dart';
-import '../../config/app_colors.dart';
+import '../common/app_colors.dart';
 import '../common/app_number_field.dart';
 import '../common/info_row_widget.dart';
 import '../common/dialog_utils.dart';
 import '../common/app_ui.dart';
+import 'stock_style.dart';
 
 /// 股票搜索弹窗 - 支持按名称/代码搜索港股、美股
 class SearchStockDialog extends StatefulWidget {
@@ -624,7 +625,7 @@ class _SearchStockDialogState extends State<SearchStockDialog> {
                         MarketUtil.marketLabel(stock.market),
                         style: TextStyles.label.copyWith(
                           fontWeight: FontWeight.w600,
-                          color: MarketUtil.marketColor(stock.market),
+                          color: StockStyle.marketColor(stock.market),
                         ),
                       ),
                     ],

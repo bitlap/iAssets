@@ -43,9 +43,10 @@ class AssetCalculator {
   static double calculateTotalAssets(
     List<AssetBase> assets,
     double stockTotalValue,
-    String targetCurrency,
-  ) {
-    double sum = stockTotalValue;
+    String targetCurrency, {
+    double cryptoTotalValue = 0,
+  }) {
+    double sum = stockTotalValue + cryptoTotalValue;
     for (final a in assets) {
       sum += getAssetValue(a, targetCurrency);
     }

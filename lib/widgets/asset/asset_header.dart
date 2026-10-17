@@ -2,15 +2,21 @@ import 'package:flutter/material.dart';
 import '../../models/asset_account.dart';
 import '../../utils/currency_util.dart';
 import '../../config/app_config.dart';
-import '../../config/app_colors.dart';
+import '../common/app_colors.dart';
 import '../common/app_ui.dart';
+import '../common/currency_selector.dart';
 import '../common/dialog_utils.dart';
+import '../../l10n/l10n.dart';
+import 'asset_style.dart';
 
 // Header (Summary Card)
 
 class AssetHeader extends StatelessWidget {
   final double totalAssets;
   final double stockTotalValue;
+  final double cryptoTotalValue;
+  final bool cryptoIncomplete;
+  final DateTime? cryptoUpdatedAt;
   final String currency;
   final VoidCallback onCurrencyTap;
   final Map<AssetType, double> totalsByType;
@@ -19,6 +25,9 @@ class AssetHeader extends StatelessWidget {
     super.key,
     required this.totalAssets,
     required this.stockTotalValue,
+    this.cryptoTotalValue = 0,
+    this.cryptoIncomplete = false,
+    this.cryptoUpdatedAt,
     required this.currency,
     required this.onCurrencyTap,
     required this.totalsByType,
@@ -26,58 +35,28 @@ class AssetHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SummaryCardFrame(
       margin: const EdgeInsets.symmetric(horizontal: 16),
-      padding: const EdgeInsets.fromLTRB(12, 10, 12, 12),
-      decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.circular(24),
-        boxShadow: AppColors.summaryCardShadow,
-        border: Border.all(color: AppColors.border, width: 0.5),
-      ),
+      gradient: AssetStyle.summaryGradient,
+      borderColor: AssetStyle.summaryBorder,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
-                children: [
-                  Text(StockConfig.assetTotalAssets, style: TextStyles.body13),
-                  const SizedBox(width: 8),
-                  GestureDetector(
-                    onTap: onCurrencyTap,
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 8),
-                      decoration: BoxDecoration(
-                        color: AppColors.tertiaryBg,
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text(
-                            currency,
-                            style: TextStyles.body13.copyWith(
-                              fontWeight: FontWeight.w600,
-                              height: 1.0,
-                            ),
-                          ),
-                          const SizedBox(width: 2),
-                          Icon(
-                            Icons.arrow_drop_down,
-                            size: 18,
-                            color: AppColors.textPrimary,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
+              Text(StockConfig.assetTotalAssets, style: TextStyles.body13),
+              const SizedBox(width: 4),
+              GestureDetector(
+                onTap: () => _showRatioHelpDialog(context),
+                child: Icon(
+                  Icons.help_outline,
+                  size: 13,
+                  color: AppColors.warning,
+                ),
               ),
-              _buildStockRatioColumn(context),
+              const Spacer(),
+              CurrencySelectorButton(currency: currency, onTap: onCurrencyTap),
             ],
           ),
           const SizedBox(height: 4),
@@ -96,10 +75,21 @@ class AssetHeader extends StatelessWidget {
               ),
               const SizedBox(width: 8),
               _summaryChip(
+                Icons.currency_bitcoin,
+                L10n.t('cryptoTitle'),
+                cryptoIncomplete && cryptoUpdatedAt == null
+                    ? '—'
+                    : CurrencyUtil.formatCompact(cryptoTotalValue),
+                iconColor: AssetStyle.crypto,
+              ),
+              const SizedBox(width: 8),
+              _summaryChip(
                 Icons.account_balance,
                 AssetConfig.depositWealthLabel,
-                CurrencyUtil.formatCompact(totalAssets - stockTotalValue),
-                iconColor: AppColors.warning,
+                CurrencyUtil.formatCompact(
+                  totalAssets - stockTotalValue - cryptoTotalValue,
+                ),
+                iconColor: AssetStyle.deposit,
               ),
             ],
           ),
@@ -108,48 +98,14 @@ class AssetHeader extends StatelessWidget {
     );
   }
 
-  Widget _buildStockRatioColumn(BuildContext context) {
-    final ratio = totalAssets > 0 ? stockTotalValue / totalAssets : 0.0;
-    final percent = '${(ratio * 100).toStringAsFixed(1)}%';
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.end,
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              StockConfig.assetPositionRatioLabel,
-              style: TextStyles.body13.copyWith(
-                color: AppColors.textSecondary,
-                height: 1.0,
-              ),
-            ),
-            const SizedBox(width: 2),
-            GestureDetector(
-              onTap: () => _showRatioHelpDialog(context),
-              child: Icon(
-                Icons.help_outline,
-                size: 13,
-                color: AppColors.textSecondary,
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(height: 2),
-        Text(
-          percent,
-          style: TextStyles.body13.copyWith(
-            color: AppColors.textPrimary,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-      ],
-    );
-  }
-
   void _showRatioHelpDialog(BuildContext context) {
     final entries = <(IconData, Color, String, double)>[
+      (
+        Icons.currency_bitcoin,
+        AssetStyle.crypto,
+        L10n.t('cryptoTitle'),
+        cryptoTotalValue,
+      ),
       (
         Icons.show_chart,
         AppColors.accent,
@@ -161,31 +117,31 @@ class AssetHeader extends StatelessWidget {
           switch (type) {
             AssetType.cash => (
               Icons.payments,
-              AppColors.success,
+              AssetStyle.cash,
               AssetConfig.cash,
               totalsByType[type]!,
             ),
             AssetType.timeDeposit => (
               Icons.savings,
-              AppColors.warning,
+              AssetStyle.deposit,
               AssetConfig.timeDeposit,
               totalsByType[type]!,
             ),
             AssetType.wealthProduct => (
               Icons.monetization_on,
-              AppColors.accent,
+              AssetStyle.wealth,
               AssetConfig.wealthProduct,
               totalsByType[type]!,
             ),
             AssetType.current => (
               Icons.account_balance,
-              AppColors.cyan,
+              AssetStyle.current,
               AssetConfig.current,
               totalsByType[type]!,
             ),
             AssetType.providentFund => (
               Icons.home_work,
-              AppColors.purple,
+              AssetStyle.provident,
               AssetConfig.providentFund,
               totalsByType[type]!,
             ),
@@ -206,9 +162,12 @@ class AssetHeader extends StatelessWidget {
               children: [
                 Icon(Icons.pie_chart, color: AppColors.accent, size: 20),
                 const SizedBox(width: 8),
-                Text(
-                  StockConfig.assetPositionRatioLabel,
-                  style: TextStyles.subtitle,
+                Flexible(
+                  child: Text(
+                    StockConfig.assetPositionRatioLabel,
+                    textAlign: TextAlign.center,
+                    style: TextStyles.subtitle,
+                  ),
                 ),
               ],
             ),
@@ -269,17 +228,18 @@ Widget _summaryChip(
           children: [
             Icon(icon, size: 10, color: iconColor),
             const SizedBox(width: 4),
-            Text(label, style: TextStyles.caption),
+            Flexible(
+              child: Text(
+                label,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyles.caption,
+              ),
+            ),
           ],
         ),
         const SizedBox(height: 4),
-        Text(
-          value,
-          style: TextStyles.bodyRegular.copyWith(
-            fontWeight: FontWeight.w700,
-            height: 1.1,
-          ),
-        ),
+        Text(value, style: TextStyles.valueMedium),
       ],
     ),
   );

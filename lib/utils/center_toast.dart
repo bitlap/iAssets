@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../config/app_colors.dart';
+import '../widgets/common/app_colors.dart';
 import '../widgets/common/app_ui.dart';
 
 /// 屏幕中间弹出的 Toast 提示

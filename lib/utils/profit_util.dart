@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../config/app_colors.dart';
+import '../widgets/common/app_colors.dart';
 import 'currency_util.dart';
 
 /// 涨跌显示工具：按用户偏好显示涨跌色，零值灰显。

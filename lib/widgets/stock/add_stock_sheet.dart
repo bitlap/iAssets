@@ -3,12 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 
-import '../../config/app_colors.dart';
+import '../common/app_colors.dart';
 import '../../config/app_config.dart';
 import '../../services/exchange_rate_service.dart';
 import '../../utils/center_toast.dart';
 import '../common/app_number_field.dart';
 import '../common/app_ui.dart';
+import '../common/form_sheet.dart';
+import 'stock_style.dart';
 
 enum AddStockMethod { search, custom }
 
@@ -275,90 +277,33 @@ class _CustomStockSheetState extends State<_CustomStockSheet> {
 
   @override
   Widget build(BuildContext context) {
-    final bottomInset = MediaQuery.viewInsetsOf(context).bottom;
-    return AnimatedPadding(
-      duration: const Duration(milliseconds: 180),
-      padding: EdgeInsets.only(bottom: bottomInset),
-      child: FractionallySizedBox(
-        heightFactor: 0.9,
-        child: Container(
-          decoration: BoxDecoration(
-            color: AppColors.surface,
-            borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
-          ),
-          child: SafeArea(
-            top: false,
-            child: Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(16, 10, 8, 8),
-                  child: Column(
-                    children: [
-                      Container(
-                        width: 36,
-                        height: 4,
-                        decoration: BoxDecoration(
-                          color: AppColors.separator,
-                          borderRadius: BorderRadius.circular(2),
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      Row(
-                        children: [
-                          IconButton(
-                            onPressed: () => Navigator.pop(context),
-                            icon: Icon(
-                              Icons.close,
-                              color: AppColors.textSecondary,
-                            ),
-                          ),
-                          Expanded(
-                            child: Text(
-                              StockConfig.addCustomStock,
-                              textAlign: TextAlign.center,
-                              style: TextStyles.sectionTitle,
-                            ),
-                          ),
-                          TextButton(
-                            onPressed: _submit,
-                            child: Text(AppConfig.btnAdd),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-                Divider(height: 1, color: AppColors.border),
-                Expanded(
-                  child: SingleChildScrollView(
-                    padding: const EdgeInsets.fromLTRB(20, 20, 20, 24),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        _buildImagePicker(),
-                        const SizedBox(height: 20),
-                        _buildIdentityFields(),
-                        const SizedBox(height: 16),
-                        AppNumberField(
-                          controller: _sharesController,
-                          label: StockConfig.customStockShares,
-                          hintText: StockConfig.customStockSharesHint,
-                        ),
-                        const SizedBox(height: 16),
-                        AppNumberField(
-                          controller: _priceController,
-                          label: StockConfig.customStockPrice,
-                          hintText: StockConfig.customStockPriceHint,
-                        ),
-                        const SizedBox(height: 16),
-                        _buildCurrencyField(),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
+    return AppFormSheet(
+      title: StockConfig.addCustomStock,
+      onClose: () => Navigator.pop(context),
+      action: TextButton(onPressed: _submit, child: Text(AppConfig.btnAdd)),
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.fromLTRB(20, 20, 20, 24),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _buildImagePicker(),
+            const SizedBox(height: 20),
+            _buildIdentityFields(),
+            const SizedBox(height: 16),
+            AppNumberField(
+              controller: _sharesController,
+              label: StockConfig.customStockShares,
+              hintText: StockConfig.customStockSharesHint,
             ),
-          ),
+            const SizedBox(height: 16),
+            AppNumberField(
+              controller: _priceController,
+              label: StockConfig.customStockPrice,
+              hintText: StockConfig.customStockPriceHint,
+            ),
+            const SizedBox(height: 16),
+            _buildCurrencyField(),
+          ],
         ),
       ),
     );
@@ -423,8 +368,8 @@ class _CustomStockSheetState extends State<_CustomStockSheet> {
   ButtonStyle _imagePickerButtonStyle() {
     return OutlinedButton.styleFrom(
       foregroundColor: AppColors.accent,
-      backgroundColor: AppColors.imagePickerBackground,
-      side: BorderSide(color: AppColors.imagePickerBorder, width: 0.7),
+      backgroundColor: StockStyle.imagePickerBackground,
+      side: BorderSide(color: StockStyle.imagePickerBorder, width: 0.7),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
     );
   }
@@ -518,25 +463,8 @@ class _CustomStockSheetState extends State<_CustomStockSheet> {
     );
   }
 
-  InputDecoration _inputDecoration(String hint) {
-    final border = OutlineInputBorder(
-      borderRadius: BorderRadius.circular(12),
-      borderSide: BorderSide(color: AppColors.border),
-    );
-    return InputDecoration(
-      hintText: hint,
-      hintStyle: TextStyles.hintText,
-      filled: true,
-      fillColor: AppColors.surface,
-      contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
-      border: border,
-      enabledBorder: border,
-      focusedBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(12),
-        borderSide: BorderSide(color: AppColors.accent),
-      ),
-    );
-  }
+  InputDecoration _inputDecoration(String hint) =>
+      appInputDecoration(hintText: hint);
 }
 
 class _UpperCaseTextFormatter extends TextInputFormatter {

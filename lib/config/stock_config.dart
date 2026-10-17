@@ -1,13 +1,7 @@
-import 'package:flutter/material.dart';
 import '../l10n/l10n.dart';
 
 class StockConfig {
   StockConfig._();
-
-  // 底部 Tab 图标
-  static const IconData iconTabStock = Icons.show_chart;
-  static const IconData iconTabAsset = Icons.account_balance_wallet;
-  static const IconData iconAdd = Icons.add;
 
   // StockHeaderCard 文案
   static String get assetTotalAssets => L10n.t('assetTotalAssets');

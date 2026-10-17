@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../../models/stock_model.dart';
-import '../../config/app_colors.dart';
+import '../common/app_colors.dart';
 import '../../config/app_config.dart';
 import '../../utils/currency_util.dart';
 import '../common/app_ui.dart';

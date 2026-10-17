@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../config/app_config.dart';
-import '../../config/app_colors.dart';
+import 'app_colors.dart';
 import 'app_ui.dart';
 
 Color get _bg => AppColors.surface;
@@ -49,7 +49,7 @@ Widget dialogFrame({
     child: SizedBox(
       width:
           MediaQuery.of(context).size.width *
-          (widthRatio ?? AppConfig.dialogWidthRatio),
+          (widthRatio ?? AppLayout.dialogWidthRatio),
       child: Container(
         padding: padding ?? const EdgeInsets.all(20),
         decoration: dialogFrameDecoration(
@@ -66,8 +66,9 @@ Widget dialogFrame({
   );
 }
 
-Widget cancelButton({required VoidCallback onTap, String? text}) {
+Widget cancelButton({required VoidCallback? onTap, String? text, Key? key}) {
   return GestureDetector(
+    key: key,
     onTap: onTap,
     child: Container(
       padding: const EdgeInsets.symmetric(vertical: 12),
@@ -76,32 +77,43 @@ Widget cancelButton({required VoidCallback onTap, String? text}) {
         border: Border.all(color: _borderColor),
       ),
       child: Center(
-        child: Text(text ?? AppConfig.btnCancel, style: TextStyles.bodyMedium),
+        child: Text(
+          text ?? AppConfig.btnCancel,
+          style: TextStyles.bodyMedium.copyWith(
+            color: onTap == null
+                ? AppColors.textSecondary
+                : AppColors.textPrimary,
+          ),
+        ),
       ),
     ),
   );
 }
 
 Widget confirmButton({
-  required VoidCallback onTap,
+  required VoidCallback? onTap,
+  Key? key,
   required String text,
   Color? bgColor,
   Gradient? gradient,
 }) {
   assert(bgColor != null || gradient != null);
   return GestureDetector(
+    key: key,
     onTap: onTap,
     child: Container(
       padding: const EdgeInsets.symmetric(vertical: 12),
       decoration: BoxDecoration(
         borderRadius: _radius12,
-        color: bgColor,
-        gradient: gradient,
+        color: onTap == null ? AppColors.surfaceElevated : bgColor,
+        gradient: onTap == null ? null : gradient,
       ),
       child: Center(
         child: Text(
           text,
-          style: TextStyles.bodyMedium.copyWith(color: AppColors.onAccent),
+          style: TextStyles.bodyMedium.copyWith(
+            color: onTap == null ? AppColors.textSecondary : AppColors.onAccent,
+          ),
         ),
       ),
     ),
@@ -192,7 +204,7 @@ class InfoDialog extends StatelessWidget {
       insetPadding: const EdgeInsets.symmetric(horizontal: 40, vertical: 24),
       title: title,
       content: SizedBox(
-        width: MediaQuery.of(context).size.width * AppConfig.dialogWidthRatio,
+        width: MediaQuery.of(context).size.width * AppLayout.dialogWidthRatio,
         child: content,
       ),
       actions: [

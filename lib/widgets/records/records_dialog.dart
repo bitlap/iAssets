@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../models/stock_model.dart';
 import '../../config/app_config.dart';
-import '../../config/app_colors.dart';
+import '../common/app_colors.dart';
 import '../common/app_ui.dart';
 import '../common/dialog_utils.dart';
 import 'records_op_tab.dart';

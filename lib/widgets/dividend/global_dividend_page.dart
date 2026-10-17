@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../../models/stock_model.dart';
 import '../../models/calculator_models.dart';
 import '../../config/app_config.dart';
-import '../../config/app_colors.dart';
+import '../common/app_colors.dart';
 import '../../utils/currency_util.dart';
 import '../../utils/market_util.dart';
 import '../../utils/stock_calculator.dart';
@@ -11,6 +11,7 @@ import '../common/app_ui.dart';
 import 'dividend_header.dart';
 import 'dividend_filter_row.dart';
 import 'dividend_stock_section.dart';
+import 'dividend_style.dart';
 
 /// 全局股息记录页面 - 按股票聚合展示所有股息记录
 class GlobalDividendPage extends StatefulWidget {
@@ -132,7 +133,7 @@ class _GlobalDividendPageState extends State<GlobalDividendPage> {
       appBar: AppBar(
         backgroundColor: AppColors.surface,
         elevation: 0,
-        toolbarHeight: AppConfig.appBarHeight,
+        toolbarHeight: DividendStyle.appBarHeight,
         scrolledUnderElevation: 0,
         leading: IconButton(
           icon: Icon(

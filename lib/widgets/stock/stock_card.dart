@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import '../../models/stock_model.dart';
 import '../../config/app_config.dart';
-import '../../config/app_colors.dart';
+import '../common/app_colors.dart';
 import '../../utils/currency_util.dart';
-import '../../utils/market_util.dart';
 import '../../utils/stock_calculator.dart';
 import '../../utils/profit_util.dart';
 import '../../utils/logo_cacher.dart';
 import '../common/app_ui.dart';
+import 'market_badges.dart';
 
 /// 股票卡片组件（纯UI展示）
 class StockCard extends StatelessWidget {
@@ -37,7 +37,12 @@ class StockCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.border, width: 0.5),
+        border: Border.all(
+          color: isExpanded
+              ? AppColors.accent.withValues(alpha: AppColors.isDark ? .38 : .25)
+              : AppColors.border,
+          width: 0.5,
+        ),
       ),
       child: Column(
         children: [
@@ -294,7 +299,9 @@ class StockCard extends StatelessWidget {
         padding: const EdgeInsets.symmetric(vertical: 8),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
-          color: AppColors.surfaceElevated,
+          color: AppColors.accent.withValues(
+            alpha: AppColors.isDark ? .18 : .08,
+          ),
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -315,7 +322,9 @@ class StockCard extends StatelessWidget {
         padding: const EdgeInsets.symmetric(vertical: 8),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
-          color: AppColors.surfaceElevated,
+          color: AppColors.warning.withValues(
+            alpha: AppColors.isDark ? .17 : .09,
+          ),
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,

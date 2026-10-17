@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../config/app_colors.dart';
+import 'app_colors.dart';
 import 'app_ui.dart';
 
 /// 通用信息行组件 - 左侧标签 + 右侧值，用于弹窗中的信息展示

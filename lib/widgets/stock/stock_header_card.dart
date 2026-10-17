@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import '../../config/app_config.dart';
-import '../../config/app_colors.dart';
+import '../common/app_colors.dart';
 import '../../utils/currency_util.dart';
 import '../../utils/profit_util.dart';
 import '../common/profit_chart.dart';
 import '../common/dialog_utils.dart';
 import '../common/currency_selector.dart';
 import '../common/app_ui.dart';
+import 'stock_style.dart';
 
 class StockHeaderCard extends StatefulWidget {
   final String selectedCurrency;
@@ -56,15 +57,10 @@ class _StockHeaderCardState extends State<StockHeaderCard> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SummaryCardFrame(
       margin: const EdgeInsets.symmetric(horizontal: 16),
-      padding: const EdgeInsets.fromLTRB(12, 10, 12, 12),
-      decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.circular(24),
-        boxShadow: AppColors.summaryCardShadow,
-        border: Border.all(color: AppColors.border, width: 0.5),
-      ),
+      gradient: StockStyle.summaryGradient,
+      borderColor: StockStyle.summaryBorder,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
@@ -122,32 +118,10 @@ class _StockHeaderCardState extends State<StockHeaderCard> {
     );
   }
 
-  Widget _buildCurrencyButton() {
-    return GestureDetector(
-      onTap: _toggleDropdown,
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 8),
-        decoration: BoxDecoration(
-          color: AppColors.tertiaryBg,
-          borderRadius: BorderRadius.circular(10),
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              widget.selectedCurrency,
-              style: TextStyles.body13.copyWith(
-                fontWeight: FontWeight.w600,
-                height: 1.0,
-              ),
-            ),
-            const SizedBox(width: 2),
-            Icon(Icons.arrow_drop_down, size: 18, color: AppColors.textPrimary),
-          ],
-        ),
-      ),
-    );
-  }
+  Widget _buildCurrencyButton() => CurrencySelectorButton(
+    currency: widget.selectedCurrency,
+    onTap: _toggleDropdown,
+  );
 
   /// 今日盈亏：上方文字，中间数字，下方盈亏比例，右对齐
   Widget _buildTodayProfitColumn() {

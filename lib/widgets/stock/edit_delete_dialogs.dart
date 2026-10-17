@@ -7,7 +7,7 @@ import '../../services/settings_service.dart';
 import '../../services/stock_quote_service.dart';
 import '../../utils/center_toast.dart';
 import '../../config/app_config.dart';
-import '../../config/app_colors.dart';
+import '../common/app_colors.dart';
 import '../common/app_number_field.dart';
 import '../common/info_row_widget.dart';
 import '../common/confirm_delete_dialog.dart';
@@ -361,7 +361,7 @@ class MoreOptionsDialog extends StatelessWidget {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       insetPadding: const EdgeInsets.symmetric(horizontal: 40, vertical: 24),
       child: SizedBox(
-        width: MediaQuery.of(context).size.width * AppConfig.dialogWidthRatio,
+        width: MediaQuery.of(context).size.width * AppLayout.dialogWidthRatio,
         child: Container(
           padding: const EdgeInsets.symmetric(vertical: 8),
           decoration: BoxDecoration(

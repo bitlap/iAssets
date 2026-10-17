@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../config/app_colors.dart';
+import 'app_colors.dart';
 import 'app_ui.dart';
 
 class SectionTitle extends StatelessWidget {
@@ -122,6 +122,8 @@ class AnimatedHomeHeader extends StatelessWidget {
   final double page;
   final String stockTitle;
   final String stockSubtitle;
+  final String cryptoTitle;
+  final String cryptoSubtitle;
   final String assetTitle;
   final String assetSubtitle;
   final VoidCallback onDividendOverview;
@@ -133,6 +135,8 @@ class AnimatedHomeHeader extends StatelessWidget {
     required this.page,
     required this.stockTitle,
     required this.stockSubtitle,
+    required this.cryptoTitle,
+    required this.cryptoSubtitle,
     required this.assetTitle,
     required this.assetSubtitle,
     required this.onDividendOverview,
@@ -142,7 +146,7 @@ class AnimatedHomeHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final progress = page.clamp(0.0, 1.0);
+    final progress = page.clamp(0.0, 2.0);
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: Row(
@@ -157,13 +161,18 @@ class AnimatedHomeHeader extends StatelessWidget {
                   _buildTitle(
                     title: stockTitle,
                     subtitle: stockSubtitle,
-                    opacity: 1 - progress,
+                    opacity: (1 - progress).clamp(0.0, 1.0),
                     showDividend: true,
+                  ),
+                  _buildTitle(
+                    title: cryptoTitle,
+                    subtitle: cryptoSubtitle,
+                    opacity: (1 - (progress - 1).abs()).clamp(0.0, 1.0),
                   ),
                   _buildTitle(
                     title: assetTitle,
                     subtitle: assetSubtitle,
-                    opacity: progress,
+                    opacity: (progress - 1).clamp(0.0, 1.0),
                   ),
                 ],
               ),

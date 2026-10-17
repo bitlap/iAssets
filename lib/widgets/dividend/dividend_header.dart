@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../config/app_colors.dart';
+import '../common/app_colors.dart';
 import '../../config/app_config.dart';
 import '../../utils/currency_util.dart';
 import '../../models/calculator_models.dart';

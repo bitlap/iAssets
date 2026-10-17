@@ -4,11 +4,12 @@ import '../../utils/currency_util.dart';
 import '../../services/exchange_rate_service.dart';
 import '../../utils/center_toast.dart';
 import '../../config/app_config.dart';
-import '../../config/app_colors.dart';
+import '../common/app_colors.dart';
 import '../../config/asset_config.dart';
 import '../common/app_number_field.dart';
 import '../common/dialog_utils.dart';
 import '../common/app_ui.dart';
+import 'asset_style.dart';
 
 // Add Asset Sheet
 
@@ -30,7 +31,7 @@ List<_AssetOption> get _assetOptions => [
   ),
   _AssetOption(
     Icons.account_balance,
-    AppColors.cyan,
+    AssetStyle.cyan,
     AssetConfig.current,
     AssetType.current,
   ),
