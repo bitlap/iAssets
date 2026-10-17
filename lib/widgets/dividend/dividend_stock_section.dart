@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../../models/calculator_models.dart';
 import '../../models/stock_model.dart';
-import '../../config/app_colors.dart';
+import '../common/app_colors.dart';
 import '../../config/app_config.dart';
 import '../../utils/currency_util.dart';
 import '../common/app_ui.dart';
+import '../stock/market_badges.dart';
 import 'dividend_record_list.dart';
 
 /// 每只股票的股息聚合区块

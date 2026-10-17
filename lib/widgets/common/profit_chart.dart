@@ -1,7 +1,7 @@
 import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import '../../config/app_colors.dart';
+import 'app_colors.dart';
 import '../../config/app_config.dart';
 import '../../services/stock_data_manager.dart';
 import '../../models/stock_model.dart';

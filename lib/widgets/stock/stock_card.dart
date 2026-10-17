@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import '../../models/stock_model.dart';
 import '../../config/app_config.dart';
-import '../../config/app_colors.dart';
+import '../common/app_colors.dart';
 import '../../utils/currency_util.dart';
 import '../../utils/stock_calculator.dart';
 import '../../utils/profit_util.dart';
 import '../../utils/logo_cacher.dart';
 import '../common/app_ui.dart';
+import 'market_badges.dart';
 
 /// 股票卡片组件（纯UI展示）
 class StockCard extends StatelessWidget {

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../config/app_colors.dart';
+import '../common/app_colors.dart';
 import '../../models/crypto/crypto_models.dart';
 
 /// 数字币分类配色；浅色使用较深前景，深色使用较亮前景。

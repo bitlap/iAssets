@@ -1,6 +1,6 @@
 import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
-import '../../config/app_colors.dart';
+import '../common/app_colors.dart';
 import '../../config/stock_config.dart';
 import '../../l10n/l10n.dart';
 import '../../models/crypto/crypto_models.dart';

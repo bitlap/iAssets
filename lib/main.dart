@@ -6,8 +6,8 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:workmanager/workmanager.dart';
 
 import 'config/app_config.dart';
-import 'config/app_colors.dart';
-import 'config/app_theme.dart';
+import 'widgets/common/app_colors.dart';
+import 'widgets/common/app_theme.dart';
 import 'l10n/l10n.dart';
 import 'services/settings_service.dart';
 import 'services/crypto/crypto_store.dart';
@@ -347,7 +347,7 @@ class _AppShellState extends State<_AppShell> with WidgetsBindingObserver {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   _buildTabItem(
-                    icon: StockConfig.iconTabStock,
+                    icon: Icons.show_chart,
                     label: StockConfig.tabStock,
                     index: 0,
                   ),
@@ -359,15 +359,12 @@ class _AppShellState extends State<_AppShell> with WidgetsBindingObserver {
                   ),
                   const SizedBox(width: 4),
                   _buildTabItem(
-                    icon: StockConfig.iconTabAsset,
+                    icon: Icons.account_balance_wallet,
                     label: StockConfig.tabAsset,
                     index: 2,
                   ),
                   const SizedBox(width: 4),
-                  _buildAddItem(
-                    icon: StockConfig.iconAdd,
-                    label: AppConfig.btnAdd,
-                  ),
+                  _buildAddItem(icon: Icons.add, label: AppConfig.btnAdd),
                 ],
               ),
             ),

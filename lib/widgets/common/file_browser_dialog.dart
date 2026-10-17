@@ -2,7 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import '../../config/app_config.dart';
-import '../../config/app_colors.dart';
+import 'app_colors.dart';
 import 'app_ui.dart';
 import 'dialog_utils.dart';
 
@@ -158,7 +158,7 @@ class _FileBrowserDialogState extends State<FileBrowserDialog> {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       insetPadding: const EdgeInsets.symmetric(horizontal: 40, vertical: 24),
       child: SizedBox(
-        width: MediaQuery.of(context).size.width * AppConfig.dialogWidthRatio,
+        width: MediaQuery.of(context).size.width * AppLayout.dialogWidthRatio,
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
           child: _buildContent(),

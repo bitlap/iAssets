@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../../models/asset_account.dart';
 import '../../utils/currency_util.dart';
 import '../../config/app_config.dart';
-import '../../config/app_colors.dart';
+import '../common/app_colors.dart';
 import '../common/app_ui.dart';
 import '../common/currency_selector.dart';
 import '../common/dialog_utils.dart';
@@ -39,8 +39,8 @@ class AssetHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return SummaryCardFrame(
       margin: const EdgeInsets.symmetric(horizontal: 16),
-      gradient: SummaryCardPalette.assetGradient,
-      borderColor: SummaryCardPalette.assetBorder,
+      gradient: AssetStyle.summaryGradient,
+      borderColor: AssetStyle.summaryBorder,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,

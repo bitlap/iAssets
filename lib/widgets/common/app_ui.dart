@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 import 'dart:math';
-import '../../config/app_colors.dart';
-import '../../utils/market_util.dart';
+import 'app_colors.dart';
+
+class AppLayout {
+  AppLayout._();
+
+  static const double dialogWidthRatio = 0.75;
+}
 
 // ═══════════════════════════════════════
 //  通用文本样式
@@ -185,30 +190,6 @@ String formatRefreshTime(DateTime t) {
 //  标签组件
 // ═══════════════════════════════════════
 
-/// 市场标签 - 带颜色背景
-class MarketBadge extends StatelessWidget {
-  final String market;
-  final double fontSize;
-
-  const MarketBadge(this.market, {super.key, this.fontSize = 10});
-
-  @override
-  Widget build(BuildContext context) {
-    final color = MarketUtil.marketColor(market);
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-      decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.12),
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: Text(
-        MarketUtil.marketLabel(market),
-        style: TextStyles.smallBold.copyWith(fontSize: fontSize, color: color),
-      ),
-    );
-  }
-}
-
 /// 收益率展示瓦片（深灰底，标签在上，大号值在下）
 class YieldTile extends StatelessWidget {
   final String label;
@@ -241,59 +222,6 @@ class YieldTile extends StatelessWidget {
           ),
         ],
       ),
-    );
-  }
-}
-
-/// 货币标签 - 深灰背景
-class CurrencyBadge extends StatelessWidget {
-  final String currency;
-  final double fontSize;
-
-  const CurrencyBadge(this.currency, {super.key, this.fontSize = 10});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-      decoration: BoxDecoration(
-        color: AppColors.surfaceElevated,
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: Text(
-        currency,
-        style: TextStyles.smallBold.copyWith(
-          fontSize: fontSize,
-          color: AppColors.textSecondary,
-          fontWeight: FontWeight.w500,
-        ),
-      ),
-    );
-  }
-}
-
-/// 市场 + 货币组合标签
-class MarketAndCurrencyBadges extends StatelessWidget {
-  final String market;
-  final String currency;
-  final double fontSize;
-
-  const MarketAndCurrencyBadges({
-    super.key,
-    required this.market,
-    required this.currency,
-    this.fontSize = 10,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        CurrencyBadge(currency, fontSize: fontSize),
-        const SizedBox(width: 4),
-        MarketBadge(market, fontSize: fontSize),
-      ],
     );
   }
 }
@@ -482,31 +410,4 @@ class SummaryRefreshIndicator extends StatelessWidget {
     padding: const EdgeInsets.only(top: 8),
     child: LinearProgressIndicator(color: color),
   );
-}
-
-/// 股票和资产汇总卡片的主题色，浅色保留清晰边界，深色避免纯黑卡片单调。
-class SummaryCardPalette {
-  SummaryCardPalette._();
-
-  static Gradient get stockGradient => LinearGradient(
-    begin: Alignment.topLeft,
-    end: Alignment.bottomRight,
-    colors: AppColors.isDark
-        ? const [Color(0xFF1B2940), Color(0xFF151E2D), Color(0xFF142B31)]
-        : const [Color(0xFFEEF5FF), Color(0xFFF8FAFF), Color(0xFFF0FAFC)],
-  );
-
-  static Gradient get assetGradient => LinearGradient(
-    begin: Alignment.topLeft,
-    end: Alignment.bottomRight,
-    colors: AppColors.isDark
-        ? const [Color(0xFF30271D), Color(0xFF222530), Color(0xFF192A2A)]
-        : const [Color(0xFFFFF5E9), Color(0xFFF9FAFD), Color(0xFFF0FAF7)],
-  );
-
-  static Color get stockBorder =>
-      AppColors.accent.withValues(alpha: AppColors.isDark ? .28 : .20);
-
-  static Color get assetBorder =>
-      AppColors.warning.withValues(alpha: AppColors.isDark ? .28 : .20);
 }

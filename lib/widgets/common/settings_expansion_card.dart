@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../config/app_colors.dart';
+import 'app_colors.dart';
 import 'app_ui.dart';
 
 /// 设置页通用折叠卡片 - 统一设置页中所有 ExpansionTile 卡片的样式

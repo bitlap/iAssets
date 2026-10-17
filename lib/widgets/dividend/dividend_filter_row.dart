@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../../config/app_config.dart';
 import '../../utils/market_util.dart';
 import '../common/app_ui.dart';
+import '../stock/stock_style.dart';
 
 /// 全局股息页筛选 + 排序行
 class DividendFilterRow extends StatelessWidget {
@@ -71,7 +72,7 @@ class DividendFilterRow extends StatelessWidget {
                     selected: selected,
                     onTap: () => onFilterChanged(markets[i]),
                     color: markets[i] != null
-                        ? MarketUtil.marketColor(markets[i])
+                        ? StockStyle.marketColor(markets[i])
                         : null,
                   ),
                 );

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:assets/config/app_colors.dart';
-import 'package:assets/config/app_theme.dart';
+import 'package:assets/widgets/common/app_colors.dart';
+import 'package:assets/widgets/common/app_theme.dart';
 import 'package:assets/widgets/asset/asset_header.dart';
 import 'package:assets/widgets/stock/stock_header_card.dart';
 import 'package:assets/widgets/common/app_ui.dart';

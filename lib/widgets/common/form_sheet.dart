@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../config/app_colors.dart';
+import 'app_colors.dart';
 import 'app_ui.dart';
 
 /// 股票与账户表单共用的底部弹窗，处理键盘、安全区域与固定标题。

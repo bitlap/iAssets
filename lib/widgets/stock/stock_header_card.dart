@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import '../../config/app_config.dart';
-import '../../config/app_colors.dart';
+import '../common/app_colors.dart';
 import '../../utils/currency_util.dart';
 import '../../utils/profit_util.dart';
 import '../common/profit_chart.dart';
 import '../common/dialog_utils.dart';
 import '../common/currency_selector.dart';
 import '../common/app_ui.dart';
+import 'stock_style.dart';
 
 class StockHeaderCard extends StatefulWidget {
   final String selectedCurrency;
@@ -58,8 +59,8 @@ class _StockHeaderCardState extends State<StockHeaderCard> {
   Widget build(BuildContext context) {
     return SummaryCardFrame(
       margin: const EdgeInsets.symmetric(horizontal: 16),
-      gradient: SummaryCardPalette.stockGradient,
-      borderColor: SummaryCardPalette.stockBorder,
+      gradient: StockStyle.summaryGradient,
+      borderColor: StockStyle.summaryBorder,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../config/app_colors.dart';
+import '../common/app_colors.dart';
 import '../../l10n/l10n.dart';
 import '../../models/crypto/crypto_models.dart';
 import '../../services/crypto/crypto_store.dart';

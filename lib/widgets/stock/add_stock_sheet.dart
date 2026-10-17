@@ -3,13 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 
-import '../../config/app_colors.dart';
+import '../common/app_colors.dart';
 import '../../config/app_config.dart';
 import '../../services/exchange_rate_service.dart';
 import '../../utils/center_toast.dart';
 import '../common/app_number_field.dart';
 import '../common/app_ui.dart';
 import '../common/form_sheet.dart';
+import 'stock_style.dart';
 
 enum AddStockMethod { search, custom }
 
@@ -367,8 +368,8 @@ class _CustomStockSheetState extends State<_CustomStockSheet> {
   ButtonStyle _imagePickerButtonStyle() {
     return OutlinedButton.styleFrom(
       foregroundColor: AppColors.accent,
-      backgroundColor: AppColors.imagePickerBackground,
-      side: BorderSide(color: AppColors.imagePickerBorder, width: 0.7),
+      backgroundColor: StockStyle.imagePickerBackground,
+      side: BorderSide(color: StockStyle.imagePickerBorder, width: 0.7),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
     );
   }

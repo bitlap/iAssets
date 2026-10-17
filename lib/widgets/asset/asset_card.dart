@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../config/asset_config.dart';
-import '../../config/app_colors.dart';
+import '../common/app_colors.dart';
 import '../common/app_ui.dart';
 
 class AssetCardFrame extends StatelessWidget {

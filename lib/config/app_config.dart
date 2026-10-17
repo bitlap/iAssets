@@ -17,10 +17,6 @@ class AppConfig {
   // 默认币种
   static const String defaultCurrency = 'USD';
 
-  // UI 布局
-  static const double appBarHeight = 44.0;
-  static const double dialogWidthRatio = 0.75;
-
   // 开发者信息
   static const String developerName = 'LI GUOBIN';
   static const String developerEmail = 'dreamylost@outlook.com';

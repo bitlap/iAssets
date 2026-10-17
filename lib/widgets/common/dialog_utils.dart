@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../config/app_config.dart';
-import '../../config/app_colors.dart';
+import 'app_colors.dart';
 import 'app_ui.dart';
 
 Color get _bg => AppColors.surface;
@@ -49,7 +49,7 @@ Widget dialogFrame({
     child: SizedBox(
       width:
           MediaQuery.of(context).size.width *
-          (widthRatio ?? AppConfig.dialogWidthRatio),
+          (widthRatio ?? AppLayout.dialogWidthRatio),
       child: Container(
         padding: padding ?? const EdgeInsets.all(20),
         decoration: dialogFrameDecoration(
@@ -204,7 +204,7 @@ class InfoDialog extends StatelessWidget {
       insetPadding: const EdgeInsets.symmetric(horizontal: 40, vertical: 24),
       title: title,
       content: SizedBox(
-        width: MediaQuery.of(context).size.width * AppConfig.dialogWidthRatio,
+        width: MediaQuery.of(context).size.width * AppLayout.dialogWidthRatio,
         child: content,
       ),
       actions: [

@@ -6,7 +6,7 @@ import '../../utils/center_toast.dart';
 import '../../utils/asset_calculator.dart';
 import '../../utils/asset_reorder_util.dart';
 import '../../config/app_config.dart';
-import '../../config/app_colors.dart';
+import '../common/app_colors.dart';
 import '../../services/asset_data_manager.dart';
 import '../common/empty_state_widget.dart';
 import '../common/currency_selector.dart';

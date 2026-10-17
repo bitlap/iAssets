@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import '../../models/stock_model.dart';
 import '../../models/calculator_models.dart';
 import '../../config/app_config.dart';
-import '../../config/app_colors.dart';
+import '../common/app_colors.dart';
 import '../../utils/center_toast.dart';
 import '../../utils/market_util.dart';
 import '../../utils/currency_util.dart';
@@ -22,6 +22,7 @@ import 'edit_delete_dialogs.dart';
 import 'search_stock_dialog.dart';
 import 'add_stock_sheet.dart';
 import 'stock_header_card.dart';
+import 'stock_style.dart';
 import '../dividend/global_dividend_page.dart';
 import '../common/backup_dialog.dart';
 import '../settings_page.dart';
@@ -442,15 +443,15 @@ class StockPortfolioPageState extends State<StockPortfolioPage>
                     children: [
                       Icon(
                         markets[i] != null
-                            ? MarketUtil.marketIcon(markets[i])
+                            ? StockStyle.marketIcon(markets[i])
                             : Icons.all_inclusive,
                         size: 20,
                         color: selected
                             ? (markets[i] != null
-                                  ? MarketUtil.marketColor(markets[i])
+                                  ? StockStyle.marketColor(markets[i])
                                   : AppColors.textPrimary)
                             : (markets[i] != null
-                                  ? MarketUtil.marketColor(markets[i])
+                                  ? StockStyle.marketColor(markets[i])
                                   : AppColors.textSecondary),
                       ),
                       const SizedBox(width: 12),

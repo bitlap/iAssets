@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart';
-import '../config/app_colors.dart';
 import '../l10n/l10n.dart';
 
 class MarketUtil {
@@ -52,38 +50,6 @@ class MarketUtil {
     exchangeIndex,
     exchangeNEEQ,
   };
-
-  static Color marketColor(String? market) {
-    if (isChineseMarket(market ?? '')) {
-      return AppColors.marketA;
-    }
-    switch (market) {
-      case searchMarketHK:
-        return AppColors.marketHK;
-      case searchMarketUS:
-        return AppColors.marketUS;
-      case customMarket:
-        return AppColors.purple;
-      default:
-        return AppColors.textTertiary;
-    }
-  }
-
-  static IconData marketIcon(String? market) {
-    if (isChineseMarket(market ?? '')) {
-      return Icons.flag;
-    }
-    switch (market) {
-      case searchMarketUS:
-        return Icons.language;
-      case searchMarketHK:
-        return Icons.location_city;
-      case customMarket:
-        return Icons.edit_outlined;
-      default:
-        return Icons.all_inclusive;
-    }
-  }
 
   static String tencentPrefix(String market, String secid) {
     final exchange = secid.split('.')[0];

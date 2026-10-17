@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../config/app_config.dart';
-import '../../config/app_colors.dart';
+import 'app_colors.dart';
 import 'app_ui.dart';
 
 /// 通用删除确认弹窗 - 消除项目中所有删除确认弹窗的重复代码
@@ -36,7 +36,7 @@ class ConfirmDeleteDialog extends StatelessWidget {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         insetPadding: const EdgeInsets.symmetric(horizontal: 40, vertical: 24),
         child: SizedBox(
-          width: MediaQuery.of(context).size.width * AppConfig.dialogWidthRatio,
+          width: MediaQuery.of(context).size.width * AppLayout.dialogWidthRatio,
           child: Container(
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
@@ -120,7 +120,7 @@ class ConfirmDeleteDialog extends StatelessWidget {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       insetPadding: const EdgeInsets.symmetric(horizontal: 40, vertical: 24),
       child: SizedBox(
-        width: MediaQuery.of(context).size.width * AppConfig.dialogWidthRatio,
+        width: MediaQuery.of(context).size.width * AppLayout.dialogWidthRatio,
         child: Container(
           padding: const EdgeInsets.all(20),
           decoration: BoxDecoration(

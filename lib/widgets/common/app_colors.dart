@@ -51,10 +51,6 @@ class AppColors {
       isDark ? const Color(0xFF3A3A3C) : const Color(0xFFE5E5EA);
   static Color get switchInactiveThumb =>
       isDark ? const Color(0xFF8E8E93) : const Color(0xFFFFFFFF);
-  static Color get imagePickerBorder =>
-      isDark ? const Color(0xFF48484A) : const Color(0xFFDCE7F7);
-  static Color get imagePickerBackground =>
-      isDark ? const Color(0xFF111216) : const Color(0xFFF8FAFE);
 
   // 功能色
   static Color get accent =>
@@ -66,13 +62,7 @@ class AppColors {
   static Color get rise => redUpGreenDown ? danger : success;
   static Color get fall => redUpGreenDown ? success : danger;
 
-  // 市场色
-  static const Color marketUS = Color(0xFFFF3B30);
-  static const Color marketHK = Color(0xFF34C759);
-  static const Color marketA = Color(0xFFFF9500);
-
-  // 资产分类色
-  static const Color cyan = Color(0xFF5AC8FA);
+  // 跨页面强调色
   static const Color purple = Color(0xFFAF52DE);
 
   // 业务专用色
