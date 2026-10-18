@@ -7,6 +7,7 @@ import '../../services/stock_data_manager.dart';
 import '../../models/stock_model.dart';
 import '../../utils/currency_util.dart';
 import '../../utils/trading_day_util.dart';
+import '../../utils/profit_util.dart';
 import 'app_ui.dart';
 
 class ProfitChartWidget extends StatefulWidget {
@@ -209,7 +210,7 @@ class _ProfitChartWidgetState extends State<ProfitChartWidget> {
           painter: _MiniChartPainter(
             data: data.map((s) => s.totalProfit).toList(),
             isPositive: data.last.totalProfit >= 0,
-            color: data.last.totalProfit >= 0 ? AppColors.rise : AppColors.fall,
+            color: ProfitUtil.colorOf(data.last.totalProfit),
           ),
         ),
       ),
@@ -291,10 +292,8 @@ class _ProfitChartWidgetState extends State<ProfitChartWidget> {
                     size: Size(constraints.maxWidth, constraints.maxHeight),
                     painter: _ProfitChartPainter(
                       snapshots: data,
-                      isPositive: widget.totalProfit >= 0,
-                      color: widget.totalProfit >= 0
-                          ? AppColors.rise
-                          : AppColors.fall,
+                      isPositive: data.last.totalProfit >= 0,
+                      color: ProfitUtil.colorOf(data.last.totalProfit),
                       selectedIndex: _selectedIndex,
                       selectedRange: _selectedRange,
                     ),
