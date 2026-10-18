@@ -122,37 +122,57 @@ class _ProfitChartWidgetState extends State<ProfitChartWidget> {
     _snapshots.sort((a, b) => a.time.compareTo(b.time));
   }
 
+  void _toggleExpanded() {
+    setState(() {
+      _isExpanded = !_isExpanded;
+      _selectedIndex = null;
+    });
+    if (_isExpanded) _loadSnapshots();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
-        GestureDetector(
-          onTap: () => setState(() {
-            _isExpanded = !_isExpanded;
-            _selectedIndex = null;
-            if (_isExpanded) _loadSnapshots();
-          }),
-          child: Row(
-            children: [
-              Icon(Icons.timeline, size: 12, color: AppColors.warning),
-              const Spacer(),
-              Icon(
-                _isExpanded ? Icons.expand_less : Icons.expand_more,
-                size: 16,
-                color: AppColors.textSecondary,
-              ),
-            ],
-          ),
-        ),
-        if (!_isExpanded) ...[const SizedBox(height: 6), _buildMiniChart()],
+        if (!_isExpanded) _buildMiniChart(),
         if (_isExpanded) ...[
-          const SizedBox(height: 8),
           _buildRangeSelector(),
           const SizedBox(height: 8),
           _buildChart(),
         ],
+        Semantics(
+          expanded: _isExpanded,
+          label:
+              '${_isExpanded ? StockConfig.profitCollapse : StockConfig.profitExpand} ${StockConfig.profitChartTitle}',
+          child: SizedBox(
+            width: double.infinity,
+            child: TextButton(
+              onPressed: _toggleExpanded,
+              style: TextButton.styleFrom(
+                minimumSize: const Size.fromHeight(14),
+                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                padding: EdgeInsets.zero,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+              ),
+              child: SizedBox(
+                height: 14,
+                child: OverflowBox(
+                  minHeight: 22,
+                  maxHeight: 22,
+                  child: Icon(
+                    _isExpanded ? Icons.expand_less : Icons.expand_more,
+                    size: 22,
+                    color: AppColors.textSecondary,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
       ],
     );
   }
@@ -184,7 +204,8 @@ class _ProfitChartWidgetState extends State<ProfitChartWidget> {
   }
 
   Widget _buildRangeSelector() {
-    return Row(
+    return Wrap(
+      runSpacing: 6,
       children: _rangeOptions.map((option) {
         final isSelected = option.index == _selectedRange;
         return Padding(

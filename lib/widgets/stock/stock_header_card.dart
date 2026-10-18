@@ -65,30 +65,24 @@ class _StockHeaderCardState extends State<StockHeaderCard> {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
-          // 总资产 + 货币选择（左），今日盈亏（右）
+          // Keep the heading height independent of daily profit values.
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
-                children: [
-                  Text(StockConfig.assetTotalAssets, style: TextStyles.body13),
-                  const SizedBox(width: 4),
-                  GestureDetector(
-                    onTap: _showTotalAssetsHelpDialog,
-                    child: Icon(
-                      Icons.help_outline,
-                      size: 13,
-                      color: AppColors.warning,
-                    ),
-                  ),
-                  const SizedBox(width: 8),
-                  _buildCurrencyButton(),
-                ],
+              Text(StockConfig.assetTotalAssets, style: TextStyles.body13),
+              const SizedBox(width: 4),
+              GestureDetector(
+                onTap: _showTotalAssetsHelpDialog,
+                child: Icon(
+                  Icons.help_outline,
+                  size: 13,
+                  color: AppColors.warning,
+                ),
               ),
-              _buildTodayProfitColumn(),
+              const Spacer(),
+              _buildCurrencyButton(),
             ],
           ),
+          const SizedBox(height: 4),
           // 总金额（已经是目标币种，直接格式化）
           Text(
             '${CurrencyUtil.getSymbol(widget.selectedCurrency)}${CurrencyUtil.formatCompact(widget.totalAssets)}',
@@ -108,6 +102,10 @@ class _StockHeaderCardState extends State<StockHeaderCard> {
               ],
             ),
           ),
+          const SizedBox(height: 12),
+          Divider(height: 1, thickness: .5, color: AppColors.border),
+          const SizedBox(height: 8),
+          _buildTodayProfitRow(),
           const SizedBox(height: 6),
           ProfitChartWidget(
             totalProfit: widget.totalProfit,
@@ -123,45 +121,56 @@ class _StockHeaderCardState extends State<StockHeaderCard> {
     onTap: _toggleDropdown,
   );
 
-  /// 今日盈亏：上方文字，中间数字，下方盈亏比例，右对齐
-  Widget _buildTodayProfitColumn() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.end,
-      mainAxisSize: MainAxisSize.min,
+  /// Daily performance sits with the chart rather than above the asset total.
+  Widget _buildTodayProfitRow() {
+    final color = ProfitUtil.colorOf(widget.todayProfit);
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              StockConfig.assetTodayProfit,
-              style: TextStyles.body13.copyWith(
-                color: AppColors.textSecondary,
-                height: 1.0,
+        Expanded(
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Flexible(
+                child: Text(
+                  StockConfig.assetTodayProfit,
+                  style: TextStyles.body13.copyWith(
+                    color: AppColors.textSecondary,
+                  ),
+                ),
               ),
-            ),
-            const SizedBox(width: 2),
-            GestureDetector(
-              onTap: _showTodayProfitHelpDialog,
-              child: Icon(
-                Icons.help_outline,
-                size: 13,
-                color: AppColors.textSecondary,
+              const SizedBox(width: 4),
+              GestureDetector(
+                onTap: _showTodayProfitHelpDialog,
+                child: Icon(
+                  Icons.help_outline,
+                  size: 13,
+                  color: AppColors.textSecondary,
+                ),
               ),
-            ),
-          ],
-        ),
-        const SizedBox(height: 2),
-        Text(
-          ProfitUtil.amount(widget.todayProfit),
-          style: TextStyles.body13.copyWith(
-            color: ProfitUtil.colorOf(widget.todayProfit),
-            fontWeight: FontWeight.w600,
+            ],
           ),
         ),
-        Text(
-          ProfitUtil.percent(widget.todayProfitPercent),
-          style: TextStyles.caption.copyWith(
-            color: ProfitUtil.colorOf(widget.todayProfit),
+        const SizedBox(width: 12),
+        Expanded(
+          child: Wrap(
+            alignment: WrapAlignment.end,
+            crossAxisAlignment: WrapCrossAlignment.center,
+            spacing: 8,
+            runSpacing: 2,
+            children: [
+              Text(
+                ProfitUtil.amount(widget.todayProfit),
+                style: TextStyles.body13.copyWith(
+                  color: color,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              Text(
+                ProfitUtil.percent(widget.todayProfitPercent),
+                style: TextStyles.caption.copyWith(color: color),
+              ),
+            ],
           ),
         ),
       ],
@@ -176,7 +185,14 @@ class _StockHeaderCardState extends State<StockHeaderCard> {
           children: [
             Icon(Icons.account_balance, size: 10, color: AppColors.accent),
             const SizedBox(width: 4),
-            Text(StockConfig.assetTotalCost, style: TextStyles.caption),
+            Flexible(
+              child: Text(
+                StockConfig.assetTotalCost,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyles.caption,
+              ),
+            ),
             const SizedBox(width: 2),
             GestureDetector(
               onTap: _showTotalCostHelpDialog,
@@ -262,7 +278,14 @@ class _StockHeaderCardState extends State<StockHeaderCard> {
               color: ProfitUtil.colorOf(widget.totalProfit),
             ),
             const SizedBox(width: 4),
-            Text(StockConfig.assetTotalProfit, style: TextStyles.caption),
+            Flexible(
+              child: Text(
+                StockConfig.assetTotalProfit,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyles.caption,
+              ),
+            ),
             const SizedBox(width: 2),
             GestureDetector(
               onTap: _showProfitHelpDialog,
@@ -342,7 +365,14 @@ class _StockHeaderCardState extends State<StockHeaderCard> {
           children: [
             Icon(Icons.monetization_on, size: 10, color: AppColors.warning),
             const SizedBox(width: 4),
-            Text(StockConfig.assetTotalDividends, style: TextStyles.caption),
+            Flexible(
+              child: Text(
+                StockConfig.assetTotalDividends,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyles.caption,
+              ),
+            ),
             const SizedBox(width: 2),
           ],
         ),

@@ -22,7 +22,6 @@ import 'edit_delete_dialogs.dart';
 import 'search_stock_dialog.dart';
 import 'add_stock_sheet.dart';
 import 'stock_header_card.dart';
-import 'stock_style.dart';
 import '../dividend/global_dividend_page.dart';
 import '../common/backup_dialog.dart';
 import '../settings_page.dart';
@@ -387,99 +386,6 @@ class StockPortfolioPageState extends State<StockPortfolioPage>
         _sortAscending = false;
       }
     });
-  }
-
-  void _showMarketFilter() {
-    final markets = <String?>[
-      null,
-      MarketUtil.searchMarketUS,
-      MarketUtil.searchMarketHK,
-      MarketUtil.searchMarketCN,
-      MarketUtil.customMarket,
-    ];
-    final labels = [
-      MarketUtil.marketLabel(MarketUtil.searchAll),
-      MarketUtil.marketLabel(MarketUtil.searchMarketUS),
-      MarketUtil.marketLabel(MarketUtil.searchMarketHK),
-      MarketUtil.marketLabel(MarketUtil.searchMarketCN),
-      MarketUtil.marketLabel(MarketUtil.customMarket),
-    ];
-    showDialog(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        backgroundColor: AppColors.surface,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
-          side: BorderSide(color: AppColors.border, width: 0.5),
-        ),
-        title: Text(
-          StockConfig.filterMarketTitle,
-          style: TextStyles.sectionTitleRegular,
-        ),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: List.generate(markets.length, (i) {
-            final selected = _filterMarket == markets[i];
-            return Padding(
-              padding: const EdgeInsets.symmetric(vertical: 2),
-              child: GestureDetector(
-                onTap: () {
-                  setState(() => _filterMarket = markets[i]);
-                  Navigator.pop(ctx);
-                },
-                child: Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 12,
-                    vertical: 10,
-                  ),
-                  decoration: BoxDecoration(
-                    color: selected
-                        ? AppColors.surfaceElevated.withValues(alpha: 0.5)
-                        : Colors.transparent,
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Row(
-                    children: [
-                      Icon(
-                        markets[i] != null
-                            ? StockStyle.marketIcon(markets[i])
-                            : Icons.all_inclusive,
-                        size: 20,
-                        color: selected
-                            ? (markets[i] != null
-                                  ? StockStyle.marketColor(markets[i])
-                                  : AppColors.textPrimary)
-                            : (markets[i] != null
-                                  ? StockStyle.marketColor(markets[i])
-                                  : AppColors.textSecondary),
-                      ),
-                      const SizedBox(width: 12),
-                      Text(
-                        labels[i],
-                        style: TextStyles.body13.copyWith(
-                          fontSize: 14,
-                          color: selected
-                              ? AppColors.textPrimary
-                              : AppColors.textSecondary,
-                        ),
-                      ),
-                      if (selected) const Spacer(),
-                      if (selected)
-                        Icon(
-                          Icons.check,
-                          size: 16,
-                          color: AppColors.textPrimary,
-                        ),
-                    ],
-                  ),
-                ),
-              ),
-            );
-          }),
-        ),
-      ),
-    );
   }
 
   // 事件处理
@@ -978,7 +884,8 @@ class StockPortfolioPageState extends State<StockPortfolioPage>
                       sortAscending: _sortAscending,
                       onColumnTap: _onColumnTap,
                       filterMarket: _filterMarket,
-                      onFilterTap: _showMarketFilter,
+                      onMarketChanged: (market) =>
+                          setState(() => _filterMarket = market),
                       stockCount: _sortedStocks.length,
                     ),
                     const SizedBox(height: 2),

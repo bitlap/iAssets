@@ -8,6 +8,7 @@ import '../../services/crypto/crypto_store.dart';
 import '../../services/exchange_rate_service.dart';
 import '../../utils/currency_util.dart';
 import '../common/app_ui.dart';
+import '../common/app_filter_dropdown.dart';
 import '../common/currency_selector.dart';
 import '../common/confirm_delete_dialog.dart';
 import '../common/empty_state_widget.dart';
@@ -134,6 +135,7 @@ class CryptoPageState extends State<CryptoPage>
                         ),
                       ],
                     ),
+                    const SizedBox(height: 4),
                     Text(
                       _summaryMoney(
                         snapshots.isEmpty || widget.store.incomplete
@@ -164,12 +166,6 @@ class CryptoPageState extends State<CryptoPage>
                                   CryptoStyle.category(entry.$1),
                                 ),
                                 borderRadius: BorderRadius.circular(12),
-                                border: Border.all(
-                                  color: CryptoStyle.border(
-                                    CryptoStyle.category(entry.$1),
-                                  ),
-                                  width: .5,
-                                ),
                               ),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -237,47 +233,30 @@ class CryptoPageState extends State<CryptoPage>
               if (connections.isNotEmpty) ...[
                 const SizedBox(height: 8),
                 if (connections.length > 1)
-                  ButtonTheme.fromButtonThemeData(
-                    data: ButtonTheme.of(
-                      context,
-                    ).copyWith(alignedDropdown: true),
-                    child: DropdownButtonFormField<String>(
-                      key: ValueKey(
-                        'filter-$_connection-${connections.length}',
+                  AppFilterDropdown<String>(
+                    value: _connection,
+                    items: [
+                      DropdownMenuItem(
+                        value: null,
+                        child: Text(
+                          L10n.t('cryptoAll'),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
                       ),
-                      initialValue: connections.any((c) => c.id == _connection)
-                          ? _connection
-                          : null,
-                      decoration: appInputDecoration(),
-                      dropdownColor: AppColors.surface,
-                      style: TextStyles.body13,
-                      isExpanded: true,
-                      borderRadius: BorderRadius.circular(12),
-                      menuMaxHeight: MediaQuery.sizeOf(context).height * .45,
-                      iconEnabledColor: AppColors.textSecondary,
-                      items: [
-                        DropdownMenuItem(
-                          value: null,
+                      ...connections.map(
+                        (c) => DropdownMenuItem(
+                          value: c.id,
                           child: Text(
-                            L10n.t('cryptoAll'),
+                            '${cryptoExchangeName(c.exchange)}-${c.name}',
                             maxLines: 1,
+                            softWrap: false,
                             overflow: TextOverflow.ellipsis,
                           ),
                         ),
-                        ...connections.map(
-                          (c) => DropdownMenuItem(
-                            value: c.id,
-                            child: Text(
-                              '${cryptoExchangeName(c.exchange)}-${c.name}',
-                              maxLines: 1,
-                              softWrap: false,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ),
-                        ),
-                      ],
-                      onChanged: (v) => setState(() => _connection = v),
-                    ),
+                      ),
+                    ],
+                    onChanged: (v) => setState(() => _connection = v),
                   ),
                 if (connections.length > 1) const SizedBox(height: 8),
                 SingleChildScrollView(
