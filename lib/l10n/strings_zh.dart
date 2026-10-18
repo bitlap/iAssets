@@ -177,6 +177,7 @@ const Map<String, String> stringsZh = {
   'stockRecord': '记录',
   'stockMore': '更多',
   'stockSharesSuffix': '股',
+  'stockDetailTradingActivity': '交易统计',
   'stockDetailTotalCost': '总成本',
   'stockDetailAvgPrice': '持仓均价',
   'stockDetailMaxPrice': '最高购买价',
@@ -255,6 +256,7 @@ const Map<String, String> stringsZh = {
   'recordsEmptyDiv': '暂无派息记录',
   'recordsEmptyDivHint': '点击更多菜单中的"派息"添加记录',
   'profitNoData': '暂无数据',
+  'stockMarketTitle': '股票市场',
   'filterMarketTitle': '筛选市场',
   'dragBetweenCategoriesHint': '请在分类标题之间拖拽',
   'recordsDivAmountPerShare': '每股',
@@ -284,6 +286,8 @@ const Map<String, String> stringsZh = {
   'resultAddStockSuccess': '添加成功',
 
   // 收益曲线
+  'profitExpand': '展开',
+  'profitCollapse': '收起',
   'profitChartTitle': '盈亏曲线',
   'profitRangeToday': '今天',
   'profitRange7d': '7天',

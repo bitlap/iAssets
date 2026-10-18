@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:assets/l10n/l10n.dart';
@@ -54,6 +55,8 @@ void main() {
                 asset: 'UNKNOWN',
                 wallet: 'Spot',
                 quantity: amount('1'),
+                available: amount('0.12000000'),
+                frozen: amount('0.88000000'),
               ),
             ],
             positions: [
@@ -66,6 +69,7 @@ void main() {
                 settlement: 'USDT',
                 markPrice: amount('123456.1234567890123456789'),
                 unrealizedPnl: amount('-0.1234567890123456789'),
+                leverage: amount('20.00000000'),
               ),
             ],
             wallets: [
@@ -103,15 +107,18 @@ void main() {
       expect(find.text(r'$123456.12345678'), findsOneWidget);
       await tester.tap(find.text(L10n.t('cryptoSpot')));
       await tester.pumpAndSettle();
-      expect(find.text('0.00000000'), findsNWidgets(3));
+      expect(find.text('0 TINY'), findsNWidgets(3));
+      expect(find.text('1 UNKNOWN'), findsOneWidget);
+      expect(find.text('0.12 UNKNOWN'), findsOneWidget);
+      expect(find.text('0.88 UNKNOWN'), findsOneWidget);
       expect(find.text(r'$0.00000001'), findsOneWidget);
-      expect(find.text(r'$0.00000000'), findsOneWidget);
+      expect(find.text(r'$0'), findsOneWidget);
       expect(find.text(L10n.t('cryptoUnknown')), findsNWidgets(3));
       expect(find.text(r'$0.00'), findsNothing);
 
       await showCurrency('CNY');
       expect(find.text('¥0.00000008'), findsOneWidget);
-      expect(find.text('¥0.00000000'), findsOneWidget);
+      expect(find.text('¥0'), findsOneWidget);
       expect(find.text(L10n.t('cryptoUnknown')), findsNWidgets(3));
       await tester.tap(find.text(L10n.t('cryptoContracts')));
       await tester.pumpAndSettle();
@@ -119,9 +126,143 @@ void main() {
       expect(find.text('0.12345678 BTC'), findsOneWidget);
       expect(find.text('123456.12345678 USDT'), findsOneWidget);
       expect(find.text('-0.12345678 USDT'), findsOneWidget);
+      expect(find.text('20×'), findsOneWidget);
       expect(tester.takeException(), isNull);
     },
   );
+  for (final brightness in Brightness.values) {
+    testWidgets(
+      'long crypto details wrap on a small screen with large text in $brightness',
+      (tester) async {
+        tester.view.physicalSize = const Size(280, 640);
+        tester.view.devicePixelRatio = 1;
+        addTearDown(tester.view.resetPhysicalSize);
+        addTearDown(tester.view.resetDevicePixelRatio);
+        L10n.applyLanguage(L10n.langEn);
+        AppColors.applyBrightness(brightness);
+        const asset = 'VERYLONGTOKENIDENTIFIER';
+        const number = '12345678901234567890.12345678';
+        final time = DateTime.utc(2026, 10, 17);
+        final store = CryptoStore(
+          reader: fixtures.FakeReader(
+            CryptoSnapshot(
+              accountId: '123',
+              updatedAt: time,
+              balances: [
+                CryptoBalance(
+                  asset: asset,
+                  wallet: 'Spot',
+                  quantity: amount('${number}9'),
+                  available: amount('1.23000000'),
+                  frozen: amount('0'),
+                  priceUsd: amount('1'),
+                ),
+              ],
+              positions: [
+                CryptoPosition(
+                  symbol: '${asset}USDT',
+                  wallet: 'USD-M',
+                  isLong: true,
+                  quantity: amount('${number}9'),
+                  unit: asset,
+                  settlement: 'USDT',
+                  markPrice: amount('123.45000000'),
+                  unrealizedPnl: amount('-0.12000000'),
+                  leverage: amount('20'),
+                ),
+              ],
+              wallets: [
+                CryptoWallet(
+                  name: 'USD-M',
+                  kind: CryptoWalletKind.futures,
+                  equityUsd: amount(number),
+                ),
+              ],
+            ),
+          ),
+          persistence: fixtures.MemoryPersistence(),
+          clock: () => time,
+        );
+        addTearDown(store.dispose);
+        await store.add(await store.test(fixtures.connection()));
+        await tester.pumpWidget(
+          MaterialApp(
+            theme: AppTheme.data(brightness),
+            home: MediaQuery(
+              data: const MediaQueryData(textScaler: TextScaler.linear(2)),
+              child: Scaffold(
+                body: CryptoPage(
+                  store: store,
+                  currency: 'USD',
+                  onCurrencyChanged: (_) {},
+                ),
+              ),
+            ),
+          ),
+        );
+        await tester.pumpAndSettle();
+        final scrollable = find
+            .descendant(
+              of: find.byType(ListView),
+              matching: find.byType(Scrollable),
+            )
+            .first;
+        Future<void> showText(String text) async {
+          await tester.scrollUntilVisible(
+            find.text(text),
+            100,
+            scrollable: scrollable,
+          );
+          await tester.pumpAndSettle();
+          expect(tester.takeException(), isNull);
+        }
+
+        Future<void> showTab(String key) async {
+          tester.state<ScrollableState>(scrollable).position.jumpTo(0);
+          await tester.pumpAndSettle();
+          await showText(L10n.t(key));
+          await tester.tap(find.text(L10n.t(key)));
+          await tester.pumpAndSettle();
+        }
+
+        void expectWrapped(String text) {
+          final finder = find.text(text);
+          final paragraph = tester.renderObject<RenderParagraph>(finder);
+          final boxes = paragraph.getBoxesForSelection(
+            TextSelection(baseOffset: 0, extentOffset: text.length),
+          );
+          expect(boxes.map((box) => box.top).toSet().length, greaterThan(1));
+          for (final box in boxes) {
+            expect(box.left, greaterThanOrEqualTo(-0.01));
+            expect(box.right, lessThanOrEqualTo(paragraph.size.width + 0.01));
+          }
+          expect(paragraph.didExceedMaxLines, isFalse);
+        }
+
+        await showText('\$$number');
+        expectWrapped('\$$number');
+        await showTab('cryptoSpot');
+        await showText('$number $asset');
+        expectWrapped('$number $asset');
+        expect(
+          tester.getTopLeft(find.text('$number $asset')).dy,
+          greaterThan(
+            tester.getTopLeft(find.text(L10n.t('cryptoQuantity'))).dy,
+          ),
+        );
+        await showText('1.23 $asset');
+        await showText('0 $asset');
+        await showTab('cryptoContracts');
+        await showText('$number $asset');
+        expectWrapped('$number $asset');
+        await showText('123.45 USDT');
+        await showText('-0.12 USDT');
+        await showText('20×');
+        expect(tester.takeException(), isNull);
+        await tester.pumpWidget(const SizedBox());
+      },
+    );
+  }
   for (final brightness in Brightness.values) {
     for (final lang in [L10n.langZh, L10n.langEn, L10n.langZhHant]) {
       testWidgets(
@@ -420,7 +561,7 @@ void main() {
         expect(find.text('Binance-$longName'), findsWidgets);
         expect(find.text(r'$1250.00'), findsOneWidget);
         expect(find.text(r'$1050.00'), findsNothing);
-        expect(find.text(r'$200.00000000'), findsOneWidget);
+        expect(find.text(r'$200'), findsOneWidget);
         expect(find.text('Account'), findsNothing);
         expect(tester.takeException(), isNull);
       },
@@ -648,12 +789,12 @@ void main() {
         await tester.pumpAndSettle();
         Color? color(String text) =>
             tester.widget<Text>(find.text(text)).style?.color;
-        expect(color('50.00000000 USDT'), AppColors.danger);
-        expect(color('-10.00000000 USDT'), AppColors.success);
+        expect(color('50 USDT'), AppColors.danger);
+        expect(color('-10 USDT'), AppColors.success);
         AppColors.applyMarketColorPreference(false);
         await tester.pumpAndSettle();
-        expect(color('50.00000000 USDT'), AppColors.success);
-        expect(color('-10.00000000 USDT'), AppColors.danger);
+        expect(color('50 USDT'), AppColors.success);
+        expect(color('-10 USDT'), AppColors.danger);
         await tester.pumpWidget(const SizedBox());
         store.dispose();
       },

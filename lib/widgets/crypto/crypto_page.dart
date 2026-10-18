@@ -8,6 +8,7 @@ import '../../services/crypto/crypto_store.dart';
 import '../../services/exchange_rate_service.dart';
 import '../../utils/currency_util.dart';
 import '../common/app_ui.dart';
+import '../common/app_filter_dropdown.dart';
 import '../common/currency_selector.dart';
 import '../common/confirm_delete_dialog.dart';
 import '../common/empty_state_widget.dart';
@@ -67,7 +68,7 @@ class CryptoPageState extends State<CryptoPage>
   }
 
   String _decimal(Decimal? value) =>
-      value == null ? '--' : value.truncate(scale: 8).toStringAsFixed(8);
+      value == null ? '--' : value.truncate(scale: 8).toString();
 
   String _money(Decimal? usd) {
     if (usd == null) return L10n.t('cryptoUnknown');
@@ -134,6 +135,7 @@ class CryptoPageState extends State<CryptoPage>
                         ),
                       ],
                     ),
+                    const SizedBox(height: 4),
                     Text(
                       _summaryMoney(
                         snapshots.isEmpty || widget.store.incomplete
@@ -164,12 +166,6 @@ class CryptoPageState extends State<CryptoPage>
                                   CryptoStyle.category(entry.$1),
                                 ),
                                 borderRadius: BorderRadius.circular(12),
-                                border: Border.all(
-                                  color: CryptoStyle.border(
-                                    CryptoStyle.category(entry.$1),
-                                  ),
-                                  width: .5,
-                                ),
                               ),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -196,16 +192,12 @@ class CryptoPageState extends State<CryptoPage>
                                     ],
                                   ),
                                   const SizedBox(height: 6),
-                                  FittedBox(
-                                    fit: BoxFit.scaleDown,
-                                    alignment: Alignment.centerLeft,
-                                    child: Text(
-                                      _summaryMoney(
-                                        _categoryAmount(entry.$1),
-                                        showSymbol: false,
-                                      ),
-                                      style: TextStyles.subtitle,
+                                  Text(
+                                    _summaryMoney(
+                                      _categoryAmount(entry.$1),
+                                      showSymbol: false,
                                     ),
+                                    style: TextStyles.subtitle,
                                   ),
                                 ],
                               ),
@@ -241,47 +233,30 @@ class CryptoPageState extends State<CryptoPage>
               if (connections.isNotEmpty) ...[
                 const SizedBox(height: 8),
                 if (connections.length > 1)
-                  ButtonTheme.fromButtonThemeData(
-                    data: ButtonTheme.of(
-                      context,
-                    ).copyWith(alignedDropdown: true),
-                    child: DropdownButtonFormField<String>(
-                      key: ValueKey(
-                        'filter-$_connection-${connections.length}',
+                  AppFilterDropdown<String>(
+                    value: _connection,
+                    items: [
+                      DropdownMenuItem(
+                        value: null,
+                        child: Text(
+                          L10n.t('cryptoAll'),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
                       ),
-                      initialValue: connections.any((c) => c.id == _connection)
-                          ? _connection
-                          : null,
-                      decoration: appInputDecoration(),
-                      dropdownColor: AppColors.surface,
-                      style: TextStyles.body13,
-                      isExpanded: true,
-                      borderRadius: BorderRadius.circular(12),
-                      menuMaxHeight: MediaQuery.sizeOf(context).height * .45,
-                      iconEnabledColor: AppColors.textSecondary,
-                      items: [
-                        DropdownMenuItem(
-                          value: null,
+                      ...connections.map(
+                        (c) => DropdownMenuItem(
+                          value: c.id,
                           child: Text(
-                            L10n.t('cryptoAll'),
+                            '${cryptoExchangeName(c.exchange)}-${c.name}',
                             maxLines: 1,
+                            softWrap: false,
                             overflow: TextOverflow.ellipsis,
                           ),
                         ),
-                        ...connections.map(
-                          (c) => DropdownMenuItem(
-                            value: c.id,
-                            child: Text(
-                              '${cryptoExchangeName(c.exchange)}-${c.name}',
-                              maxLines: 1,
-                              softWrap: false,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ),
-                        ),
-                      ],
-                      onChanged: (v) => setState(() => _connection = v),
-                    ),
+                      ),
+                    ],
+                    onChanged: (v) => setState(() => _connection = v),
                   ),
                 if (connections.length > 1) const SizedBox(height: 8),
                 SingleChildScrollView(
@@ -464,12 +439,21 @@ class CryptoPageState extends State<CryptoPage>
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   _row(b.asset, _money(b.valueUsd)),
-                  _row(L10n.t('cryptoQuantity'), _decimal(b.quantity)),
+                  _row(
+                    L10n.t('cryptoQuantity'),
+                    '${_decimal(b.quantity)} ${b.asset}',
+                  ),
                   _row(L10n.t('cryptoPrice'), _money(b.priceUsd)),
                   if (b.available != null)
-                    _row(L10n.t('cryptoAvailable'), _decimal(b.available)),
+                    _row(
+                      L10n.t('cryptoAvailable'),
+                      '${_decimal(b.available)} ${b.asset}',
+                    ),
                   if (b.frozen != null)
-                    _row(L10n.t('cryptoFrozen'), _decimal(b.frozen)),
+                    _row(
+                      L10n.t('cryptoFrozen'),
+                      '${_decimal(b.frozen)} ${b.asset}',
+                    ),
                 ],
               ),
             ),
@@ -537,7 +521,10 @@ class CryptoPageState extends State<CryptoPage>
                   valueColor: _pnlColor(p.unrealizedPnl),
                 ),
                 if (p.leverage != null)
-                  _row(L10n.t('cryptoLeverage'), '${_decimal(p.leverage)}×'),
+                  _row(
+                    L10n.t('cryptoLeverage'),
+                    '${p.leverage!.truncate().toString()}×',
+                  ),
                 if (p.liquidationPrice != null &&
                     p.liquidationPrice! > Decimal.zero)
                   _row(
@@ -576,19 +563,45 @@ class CryptoPageState extends State<CryptoPage>
 
   Widget _row(String label, String value, {Color? valueColor}) => Padding(
     padding: const EdgeInsets.symmetric(vertical: 5),
-    child: Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Expanded(child: Text(label, style: TextStyles.bodySmall)),
-        const SizedBox(width: 8),
-        Flexible(
-          child: Text(
-            value,
-            textAlign: TextAlign.end,
-            style: TextStyles.subtitle.copyWith(color: valueColor),
-          ),
-        ),
-      ],
+    child: LayoutBuilder(
+      builder: (context, constraints) {
+        final valueStyle = TextStyles.subtitle.copyWith(color: valueColor);
+        double textWidth(String text, TextStyle style) {
+          final painter = TextPainter(
+            text: TextSpan(text: text, style: style),
+            textDirection: Directionality.of(context),
+            textScaler: MediaQuery.textScalerOf(context),
+          )..layout();
+          final width = painter.width;
+          painter.dispose();
+          return width;
+        }
+
+        final labelText = Text(label, style: TextStyles.bodySmall);
+        final valueText = Text(
+          value,
+          textAlign: TextAlign.end,
+          style: valueStyle,
+          softWrap: true,
+        );
+        if (textWidth(label, TextStyles.bodySmall) +
+                8 +
+                textWidth(value, valueStyle) >
+            constraints.maxWidth) {
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [labelText, const SizedBox(height: 4), valueText],
+          );
+        }
+        return Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(child: labelText),
+            const SizedBox(width: 8),
+            Flexible(child: valueText),
+          ],
+        );
+      },
     ),
   );
   Widget _card(Widget child) => Container(

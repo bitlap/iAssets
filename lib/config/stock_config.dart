@@ -49,6 +49,8 @@ class StockConfig {
   static String get stockRecord => L10n.t('stockRecord');
   static String get stockMore => L10n.t('stockMore');
   static String get stockSharesSuffix => L10n.t('stockSharesSuffix');
+  static String get stockDetailTradingActivity =>
+      L10n.t('stockDetailTradingActivity');
   static String get stockDetailTotalCost => L10n.t('stockDetailTotalCost');
   static String get stockDetailAvgPrice => L10n.t('stockDetailAvgPrice');
   static String get stockDetailMaxPrice => L10n.t('stockDetailMaxPrice');
@@ -162,6 +164,7 @@ class StockConfig {
   static String get recordsEmptyDiv => L10n.t('recordsEmptyDiv');
   static String get recordsEmptyDivHint => L10n.t('recordsEmptyDivHint');
   static String get profitNoData => L10n.t('profitNoData');
+  static String get stockMarketTitle => L10n.t('stockMarketTitle');
   static String get filterMarketTitle => L10n.t('filterMarketTitle');
   static String get dragBetweenCategoriesHint =>
       L10n.t('dragBetweenCategoriesHint');
@@ -198,6 +201,8 @@ class StockConfig {
   static String get resultAddStockSuccess => L10n.t('resultAddStockSuccess');
 
   // 收益曲线 文案
+  static String get profitExpand => L10n.t('profitExpand');
+  static String get profitCollapse => L10n.t('profitCollapse');
   static String get profitChartTitle => L10n.t('profitChartTitle');
   static String get profitRangeToday => L10n.t('profitRangeToday');
   static String get profitRange7d => L10n.t('profitRange7d');

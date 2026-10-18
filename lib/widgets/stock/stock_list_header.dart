@@ -3,14 +3,16 @@ import '../common/app_colors.dart';
 import '../../config/app_config.dart';
 import '../common/app_ui.dart';
 import '../common/sort_indicator.dart';
-import 'stock_style.dart';
+import '../../utils/market_util.dart';
+import '../common/app_filter_dropdown.dart';
+import 'stock_columns.dart';
 
 class StockListHeader extends StatelessWidget {
   final String sortColumn;
   final bool sortAscending;
   final ValueChanged<String> onColumnTap;
   final String? filterMarket;
-  final VoidCallback onFilterTap;
+  final ValueChanged<String?> onMarketChanged;
   final int stockCount;
 
   const StockListHeader({
@@ -19,108 +21,123 @@ class StockListHeader extends StatelessWidget {
     required this.sortAscending,
     required this.onColumnTap,
     required this.filterMarket,
-    required this.onFilterTap,
+    required this.onMarketChanged,
     this.stockCount = 0,
   });
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(26, 2, 26, 2),
-      child: Row(
+      padding: const EdgeInsets.fromLTRB(16, 2, 16, 2),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SizedBox(
-            width: 24,
-            child: GestureDetector(
-              onTap: onFilterTap,
-              child: Icon(
-                filterMarket != null
-                    ? Icons.filter_alt
-                    : Icons.filter_alt_outlined,
-                size: 18,
-                color: StockStyle.marketColor(filterMarket),
-              ),
-            ),
-          ),
-          const SizedBox(width: 24),
-          Expanded(
-            flex: 2,
-            child: GestureDetector(
-              onTap: () => onColumnTap('name'),
-              behavior: HitTestBehavior.opaque,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text(
-                    StockConfig.homeStockHeader,
-                    style: TextStyles.body13.copyWith(
-                      fontWeight: FontWeight.w600,
-                      color: AppColors.textSecondary,
-                    ),
+          Text(StockConfig.stockMarketTitle, style: TextStyles.bodyMedium),
+          const SizedBox(height: 8),
+          AppFilterDropdown<String>(
+            value: filterMarket,
+            items: [
+              for (final market in <String?>[
+                null,
+                MarketUtil.searchMarketUS,
+                MarketUtil.searchMarketHK,
+                MarketUtil.searchMarketCN,
+                MarketUtil.customMarket,
+              ])
+                DropdownMenuItem(
+                  value: market,
+                  child: Text(
+                    MarketUtil.marketLabel(market ?? MarketUtil.searchAll),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                   ),
-                  if (stockCount > 0)
-                    Text(
-                      '($stockCount)',
-                      style: TextStyles.body13.copyWith(
-                        color: AppColors.textSecondary,
-                      ),
-                    ),
-                  SortIndicator(
-                    isActive: sortColumn == 'name',
-                    isAscending: sortAscending,
-                  ),
-                ],
-              ),
-            ),
+                ),
+            ],
+            onChanged: onMarketChanged,
           ),
-          Expanded(
-            flex: 2,
-            child: GestureDetector(
-              onTap: () => onColumnTap('holdings'),
-              behavior: HitTestBehavior.opaque,
-              child: Align(
-                alignment: Alignment.centerLeft,
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      StockConfig.homeHoldingHeader,
-                      style: TextStyles.subtitleRegular.copyWith(
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.textSecondary,
+          const SizedBox(height: 8),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10.5),
+            child: StockColumns(
+              name: GestureDetector(
+                onTap: () => onColumnTap('name'),
+                behavior: HitTestBehavior.opaque,
+                child: FittedBox(
+                  fit: BoxFit.scaleDown,
+                  alignment: Alignment.centerLeft,
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Text(
+                        StockConfig.homeStockHeader,
+                        style: TextStyles.body13.copyWith(
+                          fontWeight: FontWeight.w600,
+                          color: AppColors.textSecondary,
+                        ),
                       ),
-                    ),
-                    SortIndicator(
-                      isActive: sortColumn == 'holdings',
-                      isAscending: sortAscending,
-                    ),
-                  ],
+                      if (stockCount > 0)
+                        Text(
+                          '($stockCount)',
+                          style: TextStyles.body13.copyWith(
+                            color: AppColors.textSecondary,
+                          ),
+                        ),
+                      SortIndicator(
+                        isActive: sortColumn == 'name',
+                        isAscending: sortAscending,
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
-          ),
-          Expanded(
-            flex: 1,
-            child: Align(
-              alignment: Alignment.centerRight,
-              child: GestureDetector(
-                onTap: () => onColumnTap('profit'),
+              holdings: GestureDetector(
+                onTap: () => onColumnTap('holdings'),
                 behavior: HitTestBehavior.opaque,
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    SortIndicator(
-                      isActive: sortColumn == 'profit',
-                      isAscending: sortAscending,
-                    ),
-                    Text(
-                      StockConfig.homeProfitHeader,
-                      style: TextStyles.body13.copyWith(
-                        fontWeight: FontWeight.w600,
-                        color: AppColors.textSecondary,
+                child: FittedBox(
+                  fit: BoxFit.scaleDown,
+                  alignment: Alignment.centerLeft,
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        StockConfig.homeHoldingHeader,
+                        style: TextStyles.subtitleRegular.copyWith(
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.textSecondary,
+                        ),
                       ),
-                    ),
-                  ],
+                      SortIndicator(
+                        isActive: sortColumn == 'holdings',
+                        isAscending: sortAscending,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              profit: FittedBox(
+                fit: BoxFit.scaleDown,
+                alignment: Alignment.centerRight,
+                child: GestureDetector(
+                  onTap: () => onColumnTap('profit'),
+                  behavior: HitTestBehavior.opaque,
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      SortIndicator(
+                        isActive: sortColumn == 'profit',
+                        isAscending: sortAscending,
+                      ),
+                      Text(
+                        StockConfig.homeProfitHeader,
+                        style: TextStyles.body13.copyWith(
+                          fontWeight: FontWeight.w600,
+                          color: AppColors.textSecondary,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),

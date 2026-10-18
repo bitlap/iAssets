@@ -178,6 +178,7 @@ const Map<String, String> stringsZhHant = {
   'stockRecord': '記錄',
   'stockMore': '更多',
   'stockSharesSuffix': '股',
+  'stockDetailTradingActivity': '交易統計',
   'stockDetailTotalCost': '總成本',
   'stockDetailAvgPrice': '持倉均價',
   'stockDetailMaxPrice': '最高購買價',
@@ -256,6 +257,7 @@ const Map<String, String> stringsZhHant = {
   'recordsEmptyDiv': '尚無派息記錄',
   'recordsEmptyDivHint': '點擊更多選單中的「派息」添加記錄',
   'profitNoData': '暫無資料',
+  'stockMarketTitle': '股票市場',
   'filterMarketTitle': '篩選市場',
   'dragBetweenCategoriesHint': '請在分類標題之間拖曳',
   'recordsDivAmountPerShare': '每股',
@@ -285,6 +287,8 @@ const Map<String, String> stringsZhHant = {
   'resultAddStockSuccess': '添加成功',
 
   // Profit chart
+  'profitExpand': '展開',
+  'profitCollapse': '收起',
   'profitChartTitle': '盈虧曲線',
   'profitRangeToday': '今天',
   'profitRange7d': '7天',

@@ -183,6 +183,7 @@ const Map<String, String> stringsEn = {
   'stockRecord': 'Records',
   'stockMore': 'More',
   'stockSharesSuffix': 'sh',
+  'stockDetailTradingActivity': 'Trading Activity',
   'stockDetailTotalCost': 'Total Cost',
   'stockDetailAvgPrice': 'Avg Price',
   'stockDetailMaxPrice': 'Max Buy Price',
@@ -261,6 +262,7 @@ const Map<String, String> stringsEn = {
   'recordsEmptyDiv': 'No dividends yet',
   'recordsEmptyDivHint': 'Add dividends from the "More" menu',
   'profitNoData': 'No data',
+  'stockMarketTitle': 'Stock Market',
   'filterMarketTitle': 'Filter Market',
   'dragBetweenCategoriesHint': 'Drag between category headers',
   'recordsDivAmountPerShare': 'Per share',
@@ -292,6 +294,8 @@ const Map<String, String> stringsEn = {
   'resultAddStockSuccess': 'Added',
 
   // Profit chart
+  'profitExpand': 'Expand',
+  'profitCollapse': 'Collapse',
   'profitChartTitle': 'Profit Curve',
   'profitRangeToday': 'Today',
   'profitRange7d': '7D',

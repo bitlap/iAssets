@@ -8,6 +8,7 @@ import '../../utils/profit_util.dart';
 import '../../utils/logo_cacher.dart';
 import '../common/app_ui.dart';
 import 'market_badges.dart';
+import 'stock_columns.dart';
 
 /// 股票卡片组件（纯UI展示）
 class StockCard extends StatelessWidget {
@@ -58,39 +59,43 @@ class StockCard extends StatelessWidget {
                       market: stock.marketType,
                       currency: stock.currency,
                     ),
-                    const Spacer(),
-                    Text(
-                      StockConfig.stockTotalValue,
-                      style: TextStyles.body13.copyWith(
-                        color: AppColors.textSecondary,
-                      ),
-                    ),
-                    const SizedBox(width: 2),
-                    FittedBox(
-                      fit: BoxFit.scaleDown,
-                      child: Text(
-                        '${CurrencyUtil.getSymbol(stock.currency)}${CurrencyUtil.formatCompact(stock.totalValue)}',
-                        style: TextStyles.valueSmall.copyWith(fontSize: 13),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: Wrap(
+                        alignment: WrapAlignment.end,
+                        crossAxisAlignment: WrapCrossAlignment.center,
+                        spacing: 2,
+                        runSpacing: 2,
+                        children: [
+                          Text(
+                            StockConfig.stockTotalValue,
+                            style: TextStyles.body13.copyWith(
+                              color: AppColors.textSecondary,
+                            ),
+                          ),
+                          Text(
+                            '${CurrencyUtil.getSymbol(stock.currency)}${CurrencyUtil.formatCompact(stock.totalValue)}',
+                            style: TextStyles.valueSmall.copyWith(fontSize: 13),
+                          ),
+                        ],
                       ),
                     ),
                   ],
                 ),
                 const SizedBox(height: 4),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    _buildLogo(),
-                    const SizedBox(width: 8),
-                    Expanded(flex: 2, child: _buildCompanyInfo()),
-                    Expanded(flex: 2, child: _buildSharesAndPrice()),
-                    Expanded(
-                      flex: 1,
-                      child: Align(
-                        alignment: Alignment.centerRight,
-                        child: _buildProfitLoss(),
-                      ),
-                    ),
-                  ],
+                StockColumns(
+                  name: Row(
+                    children: [
+                      _buildLogo(),
+                      const SizedBox(width: StockColumns.logoGap),
+                      Expanded(child: _buildCompanyInfo()),
+                    ],
+                  ),
+                  holdings: _buildSharesAndPrice(),
+                  profit: Align(
+                    alignment: Alignment.centerRight,
+                    child: _buildProfitLoss(),
+                  ),
                 ),
               ],
             ),
@@ -139,7 +144,7 @@ class StockCard extends StatelessWidget {
         ? stock.companyName[0]
         : stock.symbol[0];
     return Container(
-      width: 40,
+      width: StockColumns.logoWidth,
       height: 40,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
@@ -308,7 +313,14 @@ class StockCard extends StatelessWidget {
           children: [
             Icon(Icons.list_alt, size: 14, color: AppColors.accent),
             const SizedBox(width: 4),
-            Text(StockConfig.stockRecord, style: TextStyles.smallBold),
+            Flexible(
+              child: Text(
+                StockConfig.stockRecord,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyles.smallBold,
+              ),
+            ),
           ],
         ),
       ),
@@ -331,10 +343,14 @@ class StockCard extends StatelessWidget {
           children: [
             Icon(Icons.more_horiz, size: 14, color: AppColors.warning),
             const SizedBox(width: 4),
-            Text(
-              StockConfig.stockMore,
-              style: TextStyles.whiteBold12.copyWith(
-                fontWeight: FontWeight.w500,
+            Flexible(
+              child: Text(
+                StockConfig.stockMore,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyles.whiteBold12.copyWith(
+                  fontWeight: FontWeight.w500,
+                ),
               ),
             ),
           ],
@@ -343,81 +359,140 @@ class StockCard extends StatelessWidget {
     );
   }
 
-  /// 构建展开详情区域（每行2个，标题和值同一行）
+  /// Costs are primary; entry prices and trading activity provide context.
   List<Widget> _buildExpandedDetails() {
     final stats = StockCalculator.calculateRecordStats(operationRecords);
     final totalCost = stats.totalBuyAmount - stats.totalSellAmount;
-
-    final items = [
-      _DetailItem(
-        StockConfig.stockDetailTotalCost,
-        CurrencyUtil.formatCompact(totalCost),
-      ),
-      _DetailItem(
-        StockConfig.stockDetailAvgPrice,
-        CurrencyUtil.formatRate(stats.avgBuyPrice),
-      ),
-      _DetailItem(
-        StockConfig.stockDetailMaxPrice,
-        CurrencyUtil.formatRate(stats.maxBuyPrice),
-      ),
-      _DetailItem(
-        StockConfig.stockDetailMinPrice,
-        CurrencyUtil.formatRate(stats.minBuyPrice),
-      ),
-      _DetailItem(
-        StockConfig.stockDetailBuyCount,
-        '${stats.buyCount} ${AppConfig.suffixCount}',
-      ),
-      _DetailItem(
-        StockConfig.stockDetailSellCount,
-        '${stats.sellCount} ${AppConfig.suffixCount}',
-      ),
-    ];
-
-    final rows = <Widget>[];
-    for (int i = 0; i < items.length; i += 2) {
-      final rowItems = items.skip(i).take(2).toList();
-      rows.add(
-        Row(
+    return [
+      const SizedBox(height: 6),
+      Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 12),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Expanded(child: _buildDetailCell(rowItems[0], alignRight: false)),
+            Expanded(
+              child: _buildDetailMetric(
+                label: StockConfig.stockDetailTotalCost,
+                value: CurrencyUtil.formatCompact(totalCost),
+                prominent: true,
+              ),
+            ),
             const SizedBox(width: 16),
-            if (rowItems.length > 1)
-              Expanded(child: _buildDetailCell(rowItems[1], alignRight: true))
-            else
-              const Expanded(child: SizedBox.shrink()),
+            Expanded(
+              child: _buildDetailMetric(
+                label: StockConfig.stockDetailAvgPrice,
+                value: CurrencyUtil.formatRate(stats.avgBuyPrice),
+                prominent: true,
+              ),
+            ),
           ],
         ),
-      );
-      if (i + 2 < items.length) rows.add(const SizedBox(height: 8));
-    }
-    return rows;
-  }
-
-  Widget _buildDetailCell(_DetailItem item, {required bool alignRight}) {
-    return FittedBox(
-      fit: BoxFit.scaleDown,
-      alignment: alignRight ? Alignment.centerRight : Alignment.centerLeft,
-      child: RichText(
-        text: TextSpan(
-          children: alignRight
-              ? [
-                  TextSpan(text: item.value, style: TextStyles.smallBold),
-                  TextSpan(text: ' :${item.label}', style: TextStyles.caption),
-                ]
-              : [
-                  TextSpan(text: '${item.label}: ', style: TextStyles.caption),
-                  TextSpan(text: item.value, style: TextStyles.smallBold),
-                ],
+      ),
+      const SizedBox(height: 14),
+      Container(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+        decoration: BoxDecoration(
+          color: AppColors.surfaceMuted,
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              child: _buildDetailMetric(
+                label: StockConfig.stockDetailMinPrice,
+                value: CurrencyUtil.formatRate(stats.minBuyPrice),
+              ),
+            ),
+            const SizedBox(width: 16),
+            Expanded(
+              child: _buildDetailMetric(
+                label: StockConfig.stockDetailMaxPrice,
+                value: CurrencyUtil.formatRate(stats.maxBuyPrice),
+              ),
+            ),
+          ],
         ),
       ),
+      const SizedBox(height: 12),
+      Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Expanded(
+            child: Text(
+              StockConfig.stockDetailTradingActivity,
+              style: TextStyles.caption,
+            ),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            flex: 2,
+            child: Wrap(
+              spacing: 12,
+              runSpacing: 4,
+              alignment: WrapAlignment.end,
+              children: [
+                _buildTradeCount(StockConfig.opBuy, stats.buyCount),
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text('·', style: TextStyles.caption),
+                    const SizedBox(width: 8),
+                    _buildTradeCount(StockConfig.opSell, stats.sellCount),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+      const SizedBox(height: 4),
+    ];
+  }
+
+  Widget _buildDetailMetric({
+    required String label,
+    required String value,
+    bool prominent = false,
+  }) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text(label, style: TextStyles.caption),
+        const SizedBox(height: 5),
+        FittedBox(
+          fit: BoxFit.scaleDown,
+          alignment: Alignment.centerLeft,
+          child: Text(
+            value,
+            style: TextStyles.valueMedium.copyWith(
+              fontSize: prominent ? 16 : 14,
+              fontWeight: prominent ? FontWeight.w600 : FontWeight.w500,
+              color: AppColors.textPrimary,
+            ),
+          ),
+        ),
+      ],
     );
   }
-}
 
-class _DetailItem {
-  final String label;
-  final String value;
-  _DetailItem(this.label, this.value);
+  Widget _buildTradeCount(String label, int count) {
+    return Text.rich(
+      TextSpan(
+        text: '$label ',
+        children: [
+          TextSpan(
+            text: '$count',
+            style: TextStyles.caption.copyWith(
+              color: AppColors.textPrimary,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+          TextSpan(text: ' ${AppConfig.suffixCount}'),
+        ],
+      ),
+      style: TextStyles.caption,
+    );
+  }
 }
