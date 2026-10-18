@@ -6,6 +6,7 @@ import 'package:assets/l10n/l10n.dart';
 import 'package:assets/widgets/common/app_colors.dart';
 import 'package:assets/widgets/common/app_theme.dart';
 import 'package:assets/config/stock_config.dart';
+import 'package:assets/config/asset_config.dart';
 import 'package:assets/widgets/common/currency_selector.dart';
 import 'package:assets/widgets/common/form_sheet.dart';
 import 'package:assets/widgets/common/app_ui.dart';
@@ -417,6 +418,23 @@ void main() {
           ]) {
             expect(find.text(L10n.t(key)), findsOneWidget);
           }
+          Rect categoryValueRect(String label) {
+            final column = find
+                .ancestor(of: find.text(label), matching: find.byType(Expanded))
+                .first;
+            return tester.getRect(
+              find.descendant(of: column, matching: find.byType(Text)).last,
+            );
+          }
+
+          final cryptoValueLefts = [
+            for (final key in [
+              'cryptoBreakdownFutures',
+              'cryptoBreakdownSpot',
+              'cryptoBreakdownLead',
+            ])
+              categoryValueRect(L10n.t(key)).left,
+          ];
           final futuresX = tester
               .getTopLeft(find.text(L10n.t('cryptoBreakdownFutures')))
               .dx;
@@ -455,6 +473,17 @@ void main() {
             ),
           );
           await tester.pumpAndSettle();
+          final assetValueLefts = [
+            for (final label in [
+              StockConfig.tabStock,
+              L10n.t('cryptoTitle'),
+              AssetConfig.depositWealthLabel,
+            ])
+              categoryValueRect(label).left,
+          ];
+          for (var i = 0; i < 3; i++) {
+            expect(cryptoValueLefts[i], closeTo(assetValueLefts[i], .01));
+          }
           expect(find.text(L10n.t('cryptoTitle')), findsOneWidget);
           expect(find.text(L10n.t('cryptoIncomplete')), findsNothing);
           final header = tester.getRect(find.byType(AssetHeader));

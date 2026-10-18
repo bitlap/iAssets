@@ -375,19 +375,21 @@ class StatMetricCard extends StatelessWidget {
 class SummaryCardFrame extends StatelessWidget {
   final Widget child;
   final EdgeInsetsGeometry? margin;
+  final EdgeInsetsGeometry padding;
   final Gradient? gradient;
   final Color? borderColor;
   const SummaryCardFrame({
     super.key,
     required this.child,
     this.margin,
+    this.padding = const EdgeInsets.fromLTRB(12, 10, 12, 12),
     this.gradient,
     this.borderColor,
   });
   @override
   Widget build(BuildContext context) => Container(
     margin: margin,
-    padding: const EdgeInsets.fromLTRB(12, 10, 12, 12),
+    padding: padding,
     decoration: BoxDecoration(
       color: AppColors.surface,
       gradient: gradient,

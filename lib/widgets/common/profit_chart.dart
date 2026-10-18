@@ -10,6 +10,8 @@ import '../../utils/trading_day_util.dart';
 import 'app_ui.dart';
 
 class ProfitChartWidget extends StatefulWidget {
+  static const double footerSpacing = 6;
+
   final double totalProfit;
   final String targetCurrency;
 
@@ -140,7 +142,12 @@ class _ProfitChartWidgetState extends State<ProfitChartWidget> {
         if (_isExpanded) ...[
           _buildRangeSelector(),
           const SizedBox(height: 8),
-          _buildChart(),
+          Padding(
+            padding: const EdgeInsets.only(
+              bottom: ProfitChartWidget.footerSpacing,
+            ),
+            child: _buildChart(),
+          ),
         ],
         Semantics(
           expanded: _isExpanded,
@@ -154,6 +161,9 @@ class _ProfitChartWidgetState extends State<ProfitChartWidget> {
                 minimumSize: const Size.fromHeight(14),
                 tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                 padding: EdgeInsets.zero,
+                overlayColor: Colors.transparent,
+                splashFactory: NoSplash.splashFactory,
+                enableFeedback: false,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
@@ -190,7 +200,10 @@ class _ProfitChartWidgetState extends State<ProfitChartWidget> {
       borderRadius: BorderRadius.circular(10),
       child: Container(
         height: 50,
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+        padding: const EdgeInsets.symmetric(
+          horizontal: 12,
+          vertical: ProfitChartWidget.footerSpacing,
+        ),
         child: CustomPaint(
           size: const Size(double.infinity, 38),
           painter: _MiniChartPainter(

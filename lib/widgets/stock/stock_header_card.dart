@@ -59,6 +59,12 @@ class _StockHeaderCardState extends State<StockHeaderCard> {
   Widget build(BuildContext context) {
     return SummaryCardFrame(
       margin: const EdgeInsets.symmetric(horizontal: 16),
+      padding: const EdgeInsets.fromLTRB(
+        12,
+        10,
+        12,
+        ProfitChartWidget.footerSpacing,
+      ),
       gradient: StockStyle.summaryGradient,
       borderColor: StockStyle.summaryBorder,
       child: Column(

@@ -47,6 +47,17 @@ void main() {
           final rect = tester.getRect(button);
           expect(rect.width, 264);
           expect(rect.height, 14);
+          final style = tester.widget<TextButton>(button).style!;
+          expect(
+            style.overlayColor!.resolve({WidgetState.pressed}),
+            Colors.transparent,
+          );
+          expect(style.splashFactory, NoSplash.splashFactory);
+          expect(style.enableFeedback, isFalse);
+          expect(
+            tester.getCenter(find.byIcon(Icons.expand_more)).dy,
+            rect.center.dy,
+          );
           expect(find.text(StockConfig.profitChartTitle), findsNothing);
           expect(find.text(StockConfig.profitExpand), findsNothing);
           expect(

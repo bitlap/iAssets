@@ -144,65 +144,50 @@ class CryptoPageState extends State<CryptoPage>
                       ),
                       style: TextStyles.amountLarge,
                     ),
-                    const SizedBox(height: 12),
+                    const SizedBox(height: 8),
                     Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         for (final entry in [
                           (CryptoWalletKind.futures, 'cryptoBreakdownFutures'),
                           (CryptoWalletKind.spot, 'cryptoBreakdownSpot'),
                           (CryptoWalletKind.lead, 'cryptoBreakdownLead'),
-                        ])
+                        ]) ...[
+                          if (entry.$1 != CryptoWalletKind.futures)
+                            const SizedBox(width: 8),
                           Expanded(
-                            child: Container(
-                              margin: EdgeInsets.only(
-                                right: entry.$1 == CryptoWalletKind.lead
-                                    ? 0
-                                    : 6,
-                              ),
-                              padding: const EdgeInsets.all(8),
-                              decoration: BoxDecoration(
-                                color: CryptoStyle.tint(
-                                  CryptoStyle.category(entry.$1),
-                                ),
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Row(
-                                    children: [
-                                      Icon(
-                                        CryptoStyle.icon(entry.$1),
-                                        size: 13,
-                                        color: CryptoStyle.category(entry.$1),
-                                      ),
-                                      const SizedBox(width: 4),
-                                      Flexible(
-                                        child: Text(
-                                          L10n.t(entry.$2),
-                                          style: TextStyles.caption.copyWith(
-                                            color: CryptoStyle.category(
-                                              entry.$1,
-                                            ),
-                                            fontWeight: FontWeight.w600,
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  const SizedBox(height: 6),
-                                  Text(
-                                    _summaryMoney(
-                                      _categoryAmount(entry.$1),
-                                      showSymbol: false,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  children: [
+                                    Icon(
+                                      CryptoStyle.icon(entry.$1),
+                                      size: 10,
+                                      color: CryptoStyle.category(entry.$1),
                                     ),
-                                    style: TextStyles.subtitle,
+                                    const SizedBox(width: 4),
+                                    Flexible(
+                                      child: Text(
+                                        L10n.t(entry.$2),
+                                        maxLines: 2,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: TextStyles.caption,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(height: 4),
+                                Text(
+                                  _summaryMoney(
+                                    _categoryAmount(entry.$1),
+                                    showSymbol: false,
                                   ),
-                                ],
-                              ),
+                                  style: TextStyles.valueMedium,
+                                ),
+                              ],
                             ),
                           ),
+                        ],
                       ],
                     ),
                   ],
