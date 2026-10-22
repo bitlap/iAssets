@@ -48,7 +48,7 @@ class _SearchStockDialogState extends State<SearchStockDialog> {
   bool _hasSearched = false;
   String _errorMessage = '';
   Timer? _debounceTimer;
-  String? _selectedMarket; // 市场分组筛选，null 表示全部
+  String? _selectedMarket; // 按原始市场名称筛选，null 表示全部
 
   // 正在获取行情的股票（loading 状态）
   final Set<String> _loadingQuotes = {};

@@ -12,7 +12,7 @@ class StockStyle {
 
   static Color marketColor(String? market) {
     if (MarketUtil.isChineseMarket(market ?? '')) return marketA;
-    return switch (MarketUtil.normalizeMarket(market ?? '')) {
+    return switch (market) {
       MarketUtil.searchMarketHK => marketHK,
       MarketUtil.searchMarketUS => marketUS,
       MarketUtil.searchMarketJP => const Color(0xFFAF52DE),
@@ -26,7 +26,7 @@ class StockStyle {
 
   static IconData marketIcon(String? market) {
     if (MarketUtil.isChineseMarket(market ?? '')) return Icons.flag;
-    return switch (MarketUtil.normalizeMarket(market ?? '')) {
+    return switch (market) {
       MarketUtil.searchMarketUS => Icons.language,
       MarketUtil.searchMarketHK => Icons.location_city,
       MarketUtil.searchMarketJP ||

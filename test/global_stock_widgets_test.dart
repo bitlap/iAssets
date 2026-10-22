@@ -29,6 +29,8 @@ void main() {
 
   for (final language in [L10n.langZh, L10n.langZhHant, L10n.langEn]) {
     for (final entry in {
+      '沪A': ('600519', '1', 'CNY'),
+      '深A': ('000001', '0', 'CNY'),
       '日股': ('7203', '176', 'JPY'),
       '韩股': ('005930', '177', 'KRW'),
       '英股': ('HSBA', '155', 'GBP'),
@@ -82,14 +84,14 @@ void main() {
             expect(find.text(code), findsOneWidget);
             expect(tester.takeException(), isNull);
             // A different market shows an empty state; switching back restores results.
-            await tester.tap(find.text(MarketUtil.marketLabel('A股')));
+            await tester.tap(find.text(MarketUtil.marketLabel('港股')));
             await tester.pump();
             expect(find.text(code), findsNothing);
             expect(
               find.text(
                 StockConfig.searchNotFoundMarket.replaceAll(
                   '{market}',
-                  MarketUtil.marketLabel('A股'),
+                  MarketUtil.marketLabel('港股'),
                 ),
               ),
               findsOneWidget,
@@ -120,7 +122,10 @@ void main() {
             expect(tester.takeException(), isNull);
           },
           () => MockClient((request) async {
-            expect(request.url.host, isNot('qt.gtimg.cn'));
+            if (request.url.host == 'qt.gtimg.cn') {
+              expect(['沪A', '深A'], contains(entry.key));
+              return http.Response('v_test="1~company~$code~10~0";', 200);
+            }
             final Object response;
             if (request.url.host == 'searchapi.eastmoney.com') {
               response = {

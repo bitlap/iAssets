@@ -2,7 +2,7 @@
 class StockSearchResult {
   final String code; // 股票代码，如 AAPL, 00700
   final String name; // 股票名称
-  final String market; // 提供方的原始市场或子市场标识，如日股、沪A、深A
+  final String market; // 提供方的原始市场名称，如日股、沪A、深A
   final String secid; // 东方财富 secid，如 105.AAPL, 116.00700
 
   StockSearchResult({

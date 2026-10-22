@@ -10,53 +10,45 @@ void main() {
   final currencies = {
     '美股': 'USD',
     '港股': 'HKD',
-    'A股': 'CNY',
+    '沪A': 'CNY',
+    '深A': 'CNY',
+    '基金': 'CNY',
+    '债券': 'CNY',
+    '指数': 'CNY',
+    '三板': 'CNY',
     '日股': 'JPY',
     '韩股': 'KRW',
     '英股': 'GBP',
     '粉单': 'USD',
   };
   tearDown(() => L10n.applyLanguage(L10n.langZh));
-  test(
-    'all market groups, including A-share submarkets, filter and map currencies',
-    () {
-      expect(MarketUtil.searchMarkets.toSet(), currencies.keys.toSet());
-      expect(MarketUtil.holdingMarkets, contains(MarketUtil.customMarket));
-      for (final group in MarketUtil.marketGroups.entries) {
-        for (final submarket in group.value) {
-          expect(MarketUtil.supportMarket(submarket), isTrue);
-          expect(MarketUtil.normalizeMarket(submarket), group.key);
-          expect(
-            MarketUtil.currencyForMarket(submarket),
-            currencies[group.key],
-          );
-          expect(MarketUtil.matchesFilter(group.key, submarket), isTrue);
-          expect(MarketUtil.matchesFilter(null, submarket), isTrue);
-          expect(
-            MarketUtil.matchesFilter(MarketUtil.searchAll, submarket),
-            isTrue,
-          );
-          expect(
-            StockStyle.marketColor(submarket),
-            StockStyle.marketColor(group.key),
-          );
-          for (final other in currencies.keys.where((m) => m != group.key)) {
-            expect(MarketUtil.matchesFilter(other, submarket), isFalse);
-          }
-        }
+  test('provider markets filter independently and map to their currencies', () {
+    expect(MarketUtil.searchMarkets.toSet(), currencies.keys.toSet());
+    expect(MarketUtil.searchMarkets, isNot(contains('A股')));
+    expect(MarketUtil.holdingMarkets, contains(MarketUtil.customMarket));
+    for (final market in currencies.keys) {
+      expect(MarketUtil.supportMarket(market), isTrue);
+      expect(MarketUtil.currencyForMarket(market), currencies[market]);
+      expect(MarketUtil.matchesFilter(market, market), isTrue);
+      expect(MarketUtil.matchesFilter(null, market), isTrue);
+      expect(MarketUtil.matchesFilter(MarketUtil.searchAll, market), isTrue);
+      for (final other in currencies.keys.where((m) => m != market)) {
+        expect(MarketUtil.matchesFilter(other, market), isFalse);
       }
-      expect(MarketUtil.matchesFilter('A股', 'A股'), isTrue);
-      expect(MarketUtil.matchesFilter('沪A', '沪A'), isTrue);
-      expect(MarketUtil.matchesFilter('沪A', '深A'), isFalse);
-      expect(MarketUtil.supportMarket('外汇'), isFalse);
-      expect(MarketUtil.tencentPrefix('unknown', '999.ABC'), isNull);
-      for (final market in ['日股', '韩股', '英股', '粉单']) {
-        expect(MarketUtil.tencentPrefix(market, ''), isNull);
-        // Foreign market labels must not be mistaken for US even with a bad secid.
-        expect(MarketUtil.tencentPrefix(market, '105.ABC'), isNull);
-      }
-    },
-  );
+    }
+    expect(MarketUtil.matchesFilter('A股', '沪A'), isFalse);
+    expect(MarketUtil.matchesFilter('A股', '深A'), isFalse);
+    expect(MarketUtil.matchesFilter('A股', 'A股'), isTrue);
+    expect(MarketUtil.currencyForMarket('A股'), 'CNY');
+    expect(MarketUtil.supportMarket('外汇'), isFalse);
+    expect(MarketUtil.tencentPrefix('unknown', '999.ABC'), isNull);
+    for (final market in ['日股', '韩股', '英股', '粉单']) {
+      expect(MarketUtil.tencentPrefix(market, ''), isNull);
+      expect(MarketUtil.tencentPrefix(market, '105.ABC'), isNull);
+    }
+    expect(StockStyle.marketColor('沪A'), StockStyle.marketA);
+    expect(StockStyle.marketColor('深A'), StockStyle.marketA);
+  });
 
   test(
     'legacy stock records infer the new market currency without explicit currency',
@@ -71,16 +63,50 @@ void main() {
   );
 
   test('market labels are localized in all three languages', () {
+    final markets = [
+      '日股',
+      '韩股',
+      '英股',
+      '粉单',
+      '沪A',
+      '深A',
+      '基金',
+      '债券',
+      '指数',
+      '三板',
+    ];
     final labels = {
-      L10n.langZh: ['日股', '韩股', '英股', '粉单'],
-      L10n.langZhHant: ['日股', '韓股', '英股', '粉單'],
-      L10n.langEn: ['JP', 'KR', 'UK', 'Pink Sheets'],
+      L10n.langZh: markets,
+      L10n.langZhHant: [
+        '日股',
+        '韓股',
+        '英股',
+        '粉單',
+        '滬A',
+        '深A',
+        '基金',
+        '債券',
+        '指數',
+        '三板',
+      ],
+      L10n.langEn: [
+        'JP',
+        'KR',
+        'UK',
+        'Pink Sheets',
+        'Shanghai A',
+        'Shenzhen A',
+        'Funds',
+        'Bonds',
+        'Indices',
+        'NEEQ',
+      ],
     };
     for (final entry in labels.entries) {
       L10n.applyLanguage(entry.key);
-      expect(['日股', '韩股', '英股', '粉单'].map(MarketUtil.marketLabel), entry.value);
-      expect(MarketUtil.marketLabel('沪A'), MarketUtil.marketLabel('A股'));
-      expect(MarketUtil.marketLabel('深A'), MarketUtil.marketLabel('A股'));
+      expect(markets.map(MarketUtil.marketLabel), entry.value);
+      expect(MarketUtil.marketLabel('沪A'), isNot(MarketUtil.marketLabel('深A')));
+      expect(MarketUtil.marketLabel('沪A'), isNot(MarketUtil.marketLabel('A股')));
     }
   });
 }

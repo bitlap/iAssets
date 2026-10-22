@@ -13,18 +13,29 @@ class MarketUtil {
   static const String searchMarketPink = '粉单';
   static const String customMarket = '自定义';
 
-  /// 市场展示名称（内部标识保持中文，展示层本地化；A股细分统一归一为 CN）
+  /// 按接口原始市场名称本地化，不合并或归一化市场。
   static String marketLabel(String market) {
-    if (isChineseMarket(market)) {
-      return L10n.t('marketCN');
-    }
-    switch (normalizeMarket(market)) {
+    switch (market) {
       case searchAll:
         return L10n.t('marketAll');
       case searchMarketUS:
         return L10n.t('marketUS');
       case searchMarketHK:
         return L10n.t('marketHK');
+      case searchMarketCN:
+        return L10n.t('marketCN'); // 兼容历史数据中的 A股 名称。
+      case exchangeSH:
+        return L10n.t('marketSH');
+      case exchangeSZ:
+        return L10n.t('marketSZ');
+      case exchangeOTC:
+        return L10n.t('marketFund');
+      case exchangeBond:
+        return L10n.t('marketBond');
+      case exchangeIndex:
+        return L10n.t('marketIndex');
+      case exchangeNEEQ:
+        return L10n.t('marketNEEQ');
       case searchMarketJP:
         return L10n.t('marketJP');
       case searchMarketKR:
@@ -54,38 +65,26 @@ class MarketUtil {
   static const String secidSH = '1';
   static const String secidSZ = '0';
 
-  static const cnMarkets = {
+  /// 搜索、持仓和股息筛选共享接口返回的市场名称。
+  static const searchMarkets = [
+    searchMarketUS,
+    searchMarketHK,
     exchangeSH,
     exchangeSZ,
     exchangeOTC,
     exchangeBond,
     exchangeIndex,
     exchangeNEEQ,
-  };
+    searchMarketJP,
+    searchMarketKR,
+    searchMarketUK,
+    searchMarketPink,
+  ];
 
-  /// 展示层共享市场分组；持久化仍保留原始子市场，避免丢失交易所信息。
-  static const marketGroups = <String, Set<String>>{
-    searchMarketUS: {searchMarketUS},
-    searchMarketHK: {searchMarketHK},
-    searchMarketCN: {searchMarketCN, ...cnMarkets},
-    searchMarketJP: {searchMarketJP},
-    searchMarketKR: {searchMarketKR},
-    searchMarketUK: {searchMarketUK},
-    searchMarketPink: {searchMarketPink},
-  };
-
-  static Iterable<String> get searchMarkets => marketGroups.keys;
   static Iterable<String> get holdingMarkets => [
     ...searchMarkets,
     customMarket,
   ];
-
-  static String normalizeMarket(String market) {
-    for (final group in marketGroups.entries) {
-      if (group.value.contains(market)) return group.key;
-    }
-    return market;
-  }
 
   /// 腾讯仅支持已知交易所；其他市场交由东方财富，不能回退为美股。
   static String? tencentPrefix(String market, String secid) {
@@ -95,7 +94,7 @@ class MarketUtil {
       searchMarketKR,
       searchMarketUK,
       searchMarketPink,
-    }.contains(normalizeMarket(market))) {
+    }.contains(market)) {
       return null;
     }
     if (market == searchMarketUS ||
@@ -112,20 +111,28 @@ class MarketUtil {
     return null;
   }
 
-  /// 判断 stockMarket 是否匹配筛选 filter（"A股" 模糊匹配 "沪A"/"深A"）
+  /// 按接口原始市场名称精确筛选。
   static bool matchesFilter(String? filter, String stockMarket) {
     if (filter == null || filter == searchAll) return true;
-    return stockMarket == filter ||
-        marketGroups[filter]?.contains(stockMarket) == true;
+    return stockMarket == filter;
   }
 
   // 市场 → 币种 映射
   static bool isChineseMarket(String marketType) {
-    return normalizeMarket(marketType) == searchMarketCN;
+    return const {
+      searchMarketCN, // 仅兼容历史数据，不作为接口市场的父级。
+      exchangeSH,
+      exchangeSZ,
+      exchangeOTC,
+      exchangeBond,
+      exchangeIndex,
+      exchangeNEEQ,
+    }.contains(marketType);
   }
 
   static bool supportMarket(String marketType) {
-    return marketGroups.containsKey(normalizeMarket(marketType)) ||
+    return searchMarkets.contains(marketType) ||
+        marketType == searchMarketCN ||
         marketType == customMarket;
   }
 
@@ -133,7 +140,7 @@ class MarketUtil {
     if (isChineseMarket(marketType)) {
       return 'CNY';
     }
-    switch (normalizeMarket(marketType)) {
+    switch (marketType) {
       case searchMarketHK:
         return 'HKD';
       case searchMarketJP:

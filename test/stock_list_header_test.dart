@@ -50,6 +50,12 @@ void main() {
         );
         for (final target in [
           MarketUtil.searchMarketUS,
+          MarketUtil.exchangeSH,
+          MarketUtil.exchangeSZ,
+          MarketUtil.exchangeOTC,
+          MarketUtil.exchangeBond,
+          MarketUtil.exchangeIndex,
+          MarketUtil.exchangeNEEQ,
           MarketUtil.searchMarketJP,
           MarketUtil.searchMarketKR,
           MarketUtil.searchMarketUK,
