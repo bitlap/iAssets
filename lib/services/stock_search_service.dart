@@ -102,7 +102,11 @@ class StockSearchService {
 
       if (seenSecids.contains(secid)) continue;
 
-      final securityType = item['SecurityTypeName']?.toString() ?? '';
+      final securityType = MarketUtil.marketFromProvider(
+        item['SecurityTypeName']?.toString() ?? '',
+        exchange: item['JYS']?.toString() ?? '',
+        secid: secid,
+      );
       if (!MarketUtil.supportMarket(securityType)) {
         debugPrint(
           '[${DateTime.now().toString().substring(11, 19)}][搜索] ===> 不支持的股票市场: $securityType',

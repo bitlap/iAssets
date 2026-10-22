@@ -159,6 +159,9 @@ const Map<String, String> stringsEn = {
   // Market filter
   'marketAll': 'All',
   'marketUS': 'US',
+  'marketNASDAQ': 'NASDAQ',
+  'marketNYSE': 'NYSE',
+  'marketAMEX': 'AMEX',
   'marketHK': 'HK',
   'marketCN': 'CN',
   'marketSH': 'Shanghai A',

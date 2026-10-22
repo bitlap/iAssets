@@ -31,12 +31,15 @@ class StockModel {
     required this.profitLossAmount,
     required this.isPositive,
     this.logoUrl,
-    this.marketType = MarketUtil.searchMarketUS,
+    String marketType = MarketUtil.searchMarketUS,
     this.changePercent = 0.0,
     String? currency,
     required this.secid,
     this.isCustom = false,
-  }) : _currency = currency;
+  }) : marketType = isCustom
+           ? marketType
+           : MarketUtil.marketFromProvider(marketType, secid: secid),
+       _currency = currency;
 
   /// 复制并修改
   StockModel copyWith({

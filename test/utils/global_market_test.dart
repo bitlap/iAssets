@@ -8,7 +8,9 @@ import '../support/core_fixtures.dart';
 
 void main() {
   final currencies = {
-    '美股': 'USD',
+    'NASDAQ': 'USD',
+    'NYSE': 'USD',
+    'AMEX': 'USD',
     '港股': 'HKD',
     '沪A': 'CNY',
     '深A': 'CNY',
@@ -62,8 +64,63 @@ void main() {
     },
   );
 
+  test(
+    'legacy US holdings recover the exchange without changing custom records',
+    () {
+      for (final entry in {
+        '105': 'NASDAQ',
+        '106': 'NYSE',
+        '107': 'AMEX',
+      }.entries) {
+        final json = stocksToJson([stock()]).single;
+        json['marketType'] = '美股';
+        json['secid'] = '${entry.key}.TEST';
+        final restored = stocksFromJson([json]).single;
+        expect(restored.marketType, entry.value);
+        expect(restored.currency, 'USD');
+        expect(
+          stocksFromJson(stocksToJson([restored])).single.marketType,
+          entry.value,
+        );
+        expect(
+          MarketUtil.matchesFilter(entry.value, restored.marketType),
+          isTrue,
+        );
+        expect(StockStyle.marketColor(entry.value), StockStyle.marketUS);
+        json['isCustom'] = true;
+        expect(stocksFromJson([json]).single.marketType, '美股');
+      }
+      expect(
+        MarketUtil.marketFromProvider(
+          '美股',
+          exchange: 'NYSE',
+          secid: '105.TEST',
+        ),
+        'NYSE',
+      );
+      expect(MarketUtil.marketFromProvider('美股', secid: '999.TEST'), '美股');
+      expect(
+        MarketUtil.marketFromProvider(
+          '粉单',
+          exchange: 'OTCBB',
+          secid: '153.TEST',
+        ),
+        '粉单',
+      );
+      expect(
+        MarketUtil.marketFromProvider('指数', exchange: 'QQZS', secid: '100.NDX'),
+        '指数',
+      );
+      expect(MarketUtil.matchesFilter('NASDAQ', 'NYSE'), isFalse);
+      expect(MarketUtil.matchesFilter('美股', 'NASDAQ'), isFalse);
+    },
+  );
+
   test('market labels are localized in all three languages', () {
     final markets = [
+      'NASDAQ',
+      'NYSE',
+      'AMEX',
       '日股',
       '韩股',
       '英股',
@@ -76,8 +133,11 @@ void main() {
       '三板',
     ];
     final labels = {
-      L10n.langZh: markets,
+      L10n.langZh: ['纳斯达克', '纽交所', '美交所', ...markets.skip(3)],
       L10n.langZhHant: [
+        '納斯達克',
+        '紐交所',
+        '美交所',
         '日股',
         '韓股',
         '英股',
@@ -90,6 +150,9 @@ void main() {
         '三板',
       ],
       L10n.langEn: [
+        'NASDAQ',
+        'NYSE',
+        'AMEX',
         'JP',
         'KR',
         'UK',

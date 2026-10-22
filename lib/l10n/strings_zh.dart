@@ -153,6 +153,9 @@ const Map<String, String> stringsZh = {
   // 市场筛选
   'marketAll': '全部',
   'marketUS': '美股',
+  'marketNASDAQ': '纳斯达克',
+  'marketNYSE': '纽交所',
+  'marketAMEX': '美交所',
   'marketHK': '港股',
   'marketCN': 'A股',
   'marketSH': '沪A',

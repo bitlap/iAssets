@@ -49,7 +49,9 @@ void main() {
           greaterThan(dropdownRect.bottom),
         );
         for (final target in [
-          MarketUtil.searchMarketUS,
+          MarketUtil.exchangeNASDAQ,
+          MarketUtil.exchangeNYSE,
+          MarketUtil.exchangeAMEX,
           MarketUtil.exchangeSH,
           MarketUtil.exchangeSZ,
           MarketUtil.exchangeOTC,

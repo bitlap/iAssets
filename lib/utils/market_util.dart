@@ -5,6 +5,9 @@ class MarketUtil {
 
   static const String searchAll = '全部';
   static const String searchMarketUS = '美股';
+  static const String exchangeNASDAQ = 'NASDAQ';
+  static const String exchangeNYSE = 'NYSE';
+  static const String exchangeAMEX = 'AMEX';
   static const String searchMarketHK = '港股';
   static const String searchMarketCN = 'A股';
   static const String searchMarketJP = '日股';
@@ -20,6 +23,12 @@ class MarketUtil {
         return L10n.t('marketAll');
       case searchMarketUS:
         return L10n.t('marketUS');
+      case exchangeNASDAQ:
+        return L10n.t('marketNASDAQ');
+      case exchangeNYSE:
+        return L10n.t('marketNYSE');
+      case exchangeAMEX:
+        return L10n.t('marketAMEX');
       case searchMarketHK:
         return L10n.t('marketHK');
       case searchMarketCN:
@@ -67,7 +76,9 @@ class MarketUtil {
 
   /// 搜索、持仓和股息筛选共享接口返回的市场名称。
   static const searchMarkets = [
-    searchMarketUS,
+    exchangeNASDAQ,
+    exchangeNYSE,
+    exchangeAMEX,
     searchMarketHK,
     exchangeSH,
     exchangeSZ,
@@ -86,6 +97,27 @@ class MarketUtil {
     customMarket,
   ];
 
+  static const _usExchanges = {
+    secidUS: exchangeNASDAQ,
+    secidUSAlt: exchangeNYSE,
+    secidUS107: exchangeAMEX,
+  };
+
+  /// 美股的具体市场由接口 JYS 返回，历史记录用 QuoteID 前缀恢复。
+  /// 其他市场保留 SecurityTypeName；不按交易所覆盖港股、指数等名称。
+  static String marketFromProvider(
+    String market, {
+    String exchange = '',
+    String secid = '',
+  }) {
+    if (market != searchMarketUS) return market;
+    if (_usExchanges.containsValue(exchange)) return exchange;
+    return _usExchanges[secid.split('.').first] ?? market;
+  }
+
+  static bool isUSMarket(String market) =>
+      market == searchMarketUS || _usExchanges.containsValue(market);
+
   /// 腾讯仅支持已知交易所；其他市场交由东方财富，不能回退为美股。
   static String? tencentPrefix(String market, String secid) {
     final exchange = secid.split('.')[0];
@@ -97,7 +129,7 @@ class MarketUtil {
     }.contains(market)) {
       return null;
     }
-    if (market == searchMarketUS ||
+    if (isUSMarket(market) ||
         exchange == secidUS ||
         exchange == secidUSAlt ||
         exchange == secidUS107) {
@@ -133,6 +165,7 @@ class MarketUtil {
   static bool supportMarket(String marketType) {
     return searchMarkets.contains(marketType) ||
         marketType == searchMarketCN ||
+        marketType == searchMarketUS ||
         marketType == customMarket;
   }
 
@@ -150,6 +183,9 @@ class MarketUtil {
       case searchMarketUK:
         return 'GBP';
       case searchMarketUS:
+      case exchangeNASDAQ:
+      case exchangeNYSE:
+      case exchangeAMEX:
       case searchMarketPink:
         return 'USD';
       default:

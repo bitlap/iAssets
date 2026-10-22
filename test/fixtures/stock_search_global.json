@@ -35,7 +35,8 @@
         "Code": "AZN",
         "Name": "阿斯利康",
         "SecurityTypeName": "美股",
-        "QuoteID": "106.AZN"
+        "QuoteID": "106.AZN",
+        "JYS": "NYSE"
       },
       {
         "Code": "AZN",
@@ -66,6 +67,27 @@
         "Name": "华夏成长混合",
         "SecurityTypeName": "基金",
         "QuoteID": "150.000001"
+      },
+      {
+        "Code": "AAPL",
+        "Name": "苹果",
+        "SecurityTypeName": "美股",
+        "JYS": "NASDAQ",
+        "QuoteID": "105.AAPL"
+      },
+      {
+        "Code": "KO",
+        "Name": "可口可乐",
+        "SecurityTypeName": "美股",
+        "JYS": "NYSE",
+        "QuoteID": "106.KO"
+      },
+      {
+        "Code": "SPY",
+        "Name": "标普500ETF-SPDR",
+        "SecurityTypeName": "美股",
+        "JYS": "AMEX",
+        "QuoteID": "107.SPY"
       }
     ]
   }

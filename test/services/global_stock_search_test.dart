@@ -41,8 +41,21 @@ void main() {
         final results = await service.searchStocks('global-fixture');
         expect(
           results.map((s) => s.market),
-          containsAll(['日股', '韩股', '英股', '粉单', '沪A', '深A']),
+          containsAll([
+            'NASDAQ',
+            'NYSE',
+            'AMEX',
+            '日股',
+            '韩股',
+            '英股',
+            '粉单',
+            '沪A',
+            '深A',
+          ]),
         );
+        expect(results.singleWhere((s) => s.code == 'AAPL').market, 'NASDAQ');
+        expect(results.singleWhere((s) => s.code == 'KO').market, 'NYSE');
+        expect(results.singleWhere((s) => s.code == 'SPY').market, 'AMEX');
         expect(results.where((s) => s.code == 'AZN').map((s) => s.secid), [
           '106.AZN',
           '155.AZN',
@@ -73,6 +86,49 @@ void main() {
       }),
     );
   });
+
+  test(
+    'US exchanges retain logos and route to Tencent with USD quotes',
+    () async {
+      final exchanges = {
+        'NASDAQ': ('105', 'AAPL'),
+        'NYSE': ('106', 'KO'),
+        'AMEX': ('107', 'SPY'),
+      };
+      var requests = 0;
+      await http.runWithClient(
+        () async {
+          for (final entry in exchanges.entries) {
+            final (id, code) = entry.value;
+            final stock = StockSearchResult(
+              code: code,
+              name: code,
+              market: entry.key,
+              secid: '$id.$code',
+            );
+            final quotes = await StockQuoteService().getStockQuotesBatch([
+              stock,
+            ]);
+            final quote = quotes[stock.secid]!;
+            expect(quote.market, entry.key);
+            expect(quote.currentPrice, 10);
+            expect(
+              quote.logoUrl,
+              StockQuoteService.getLogoUrl(code, entry.key),
+            );
+            expect(quote.logoUrl, contains('/$code.png'));
+          }
+          expect(requests, 3);
+        },
+        () => MockClient((request) async {
+          requests++;
+          expect(request.url.host, 'qt.gtimg.cn');
+          expect(request.url.path, startsWith('/q=us'));
+          return http.Response('v_test="1~company~code~10~0";', 200);
+        }),
+      );
+    },
+  );
 
   test('missing provider data produces an empty search result', () async {
     await http.runWithClient(() async {

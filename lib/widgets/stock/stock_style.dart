@@ -14,7 +14,10 @@ class StockStyle {
     if (MarketUtil.isChineseMarket(market ?? '')) return marketA;
     return switch (market) {
       MarketUtil.searchMarketHK => marketHK,
-      MarketUtil.searchMarketUS => marketUS,
+      MarketUtil.searchMarketUS ||
+      MarketUtil.exchangeNASDAQ ||
+      MarketUtil.exchangeNYSE ||
+      MarketUtil.exchangeAMEX => marketUS,
       MarketUtil.searchMarketJP => const Color(0xFFAF52DE),
       MarketUtil.searchMarketKR => const Color(0xFF007AFF),
       MarketUtil.searchMarketUK => const Color(0xFF5856D6),
@@ -27,7 +30,10 @@ class StockStyle {
   static IconData marketIcon(String? market) {
     if (MarketUtil.isChineseMarket(market ?? '')) return Icons.flag;
     return switch (market) {
-      MarketUtil.searchMarketUS => Icons.language,
+      MarketUtil.searchMarketUS ||
+      MarketUtil.exchangeNASDAQ ||
+      MarketUtil.exchangeNYSE ||
+      MarketUtil.exchangeAMEX => Icons.language,
       MarketUtil.searchMarketHK => Icons.location_city,
       MarketUtil.searchMarketJP ||
       MarketUtil.searchMarketKR ||

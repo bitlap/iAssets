@@ -100,7 +100,7 @@ class EastMoneyQuoteService {
 
     final market = stock.market;
 
-    final logoUrl = market == MarketUtil.searchMarketUS
+    final logoUrl = MarketUtil.isUSMarket(market)
         ? 'https://logos.stocktwits-cdn.com/${stock.code.toUpperCase()}.png?w=64'
         : null;
 

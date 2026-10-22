@@ -29,6 +29,9 @@ void main() {
 
   for (final language in [L10n.langZh, L10n.langZhHant, L10n.langEn]) {
     for (final entry in {
+      'NASDAQ': ('AAPL', '105', 'USD'),
+      'NYSE': ('KO', '106', 'USD'),
+      'AMEX': ('SPY', '107', 'USD'),
       '沪A': ('600519', '1', 'CNY'),
       '深A': ('000001', '0', 'CNY'),
       '日股': ('7203', '176', 'JPY'),
@@ -123,8 +126,17 @@ void main() {
           },
           () => MockClient((request) async {
             if (request.url.host == 'qt.gtimg.cn') {
-              expect(['沪A', '深A'], contains(entry.key));
+              expect([
+                '沪A',
+                '深A',
+                'NASDAQ',
+                'NYSE',
+                'AMEX',
+              ], contains(entry.key));
               return http.Response('v_test="1~company~$code~10~0";', 200);
+            }
+            if (request.url.host == 'logos.stocktwits-cdn.com') {
+              return http.Response('', 404);
             }
             final Object response;
             if (request.url.host == 'searchapi.eastmoney.com') {
@@ -134,7 +146,10 @@ void main() {
                     {
                       'Code': code,
                       'Name': 'Global company',
-                      'SecurityTypeName': entry.key,
+                      'SecurityTypeName': MarketUtil.isUSMarket(entry.key)
+                          ? '美股'
+                          : entry.key,
+                      'JYS': entry.key,
                       'QuoteID': '$exchange.$code',
                     },
                   ],
@@ -214,6 +229,7 @@ void main() {
                 .descendant(of: row, matching: find.byType(Scrollable))
                 .first,
           );
+          await tester.pumpAndSettle();
           await tester.tap(pill);
           expect(selected, market);
         }

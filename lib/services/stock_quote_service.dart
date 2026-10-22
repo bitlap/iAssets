@@ -96,7 +96,7 @@ class StockQuoteService {
   }
 
   static String? getLogoUrl(String code, String market) {
-    if (market == MarketUtil.searchMarketUS) {
+    if (MarketUtil.isUSMarket(market)) {
       return 'https://logos.stocktwits-cdn.com/${code.toUpperCase()}.png?w=64';
     } else if (market == MarketUtil.searchMarketHK) {
       return null;

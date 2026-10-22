@@ -74,7 +74,7 @@ class TencentQuoteService {
         changePercent = double.tryParse(parts[32]) ?? 0.0;
       }
 
-      final logoUrl = stock.market == MarketUtil.searchMarketUS
+      final logoUrl = MarketUtil.isUSMarket(stock.market)
           ? 'https://logos.stocktwits-cdn.com/${stock.code.toUpperCase()}.png?w=64'
           : null;
 
