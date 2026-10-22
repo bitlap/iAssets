@@ -66,7 +66,15 @@ class StockSearchService {
       if (response.statusCode == 200) {
         _breaker.onSuccess();
         final data = json.decode(response.body);
-        final results = _parseSearchResults(data);
+        var results = _parseSearchResults(data);
+        // 东方财富以 BRK_B 表示类别股，界面和腾讯使用 BRK.B。
+        // 先保留原始搜索，避免影响其他市场中本来就含点号的代码。
+        if (results.isEmpty &&
+            RegExp(
+              r'^[A-Za-z][A-Za-z0-9]*\.[A-Za-z0-9]+$',
+            ).hasMatch(keyword.trim())) {
+          results = await searchStocks(keyword.trim().replaceAll('.', '_'));
+        }
         _searchCacheTime[keyword] = DateTime.now();
         _searchCacheValue[keyword] = results;
         debugPrint(
