@@ -11,17 +11,18 @@ void main() {
     'NASDAQ': 'USD',
     'NYSE': 'USD',
     'AMEX': 'USD',
-    '港股': 'HKD',
+    'HK': 'HKD',
     '沪A': 'CNY',
     '深A': 'CNY',
+    '京A': 'CNY',
     '基金': 'CNY',
     '债券': 'CNY',
     '指数': 'CNY',
     '三板': 'CNY',
-    '日股': 'JPY',
-    '韩股': 'KRW',
-    '英股': 'GBP',
-    '粉单': 'USD',
+    'JPX': 'JPY',
+    'KRX': 'KRW',
+    'LSE': 'GBP',
+    'OTCBB': 'USD',
   };
   tearDown(() => L10n.applyLanguage(L10n.langZh));
   test('provider markets filter independently and map to their currencies', () {
@@ -105,7 +106,7 @@ void main() {
           exchange: 'OTCBB',
           secid: '153.TEST',
         ),
-        '粉单',
+        'OTCBB',
       );
       expect(
         MarketUtil.marketFromProvider('指数', exchange: 'QQZS', secid: '100.NDX'),
@@ -116,34 +117,54 @@ void main() {
     },
   );
 
-  test('market labels are localized in all three languages', () {
+  test('exchange labels are localized without regional market names', () {
     final markets = [
       'NASDAQ',
       'NYSE',
       'AMEX',
-      '日股',
-      '韩股',
-      '英股',
-      '粉单',
+      'HK',
+      'JPX',
+      'KRX',
+      'LSE',
+      'OTCBB',
       '沪A',
       '深A',
+      '京A',
       '基金',
       '债券',
       '指数',
       '三板',
     ];
     final labels = {
-      L10n.langZh: ['纳斯达克', '纽交所', '美交所', ...markets.skip(3)],
+      L10n.langZh: [
+        '纳斯达克',
+        '纽交所',
+        '美交所',
+        '港交所',
+        '日本交易所',
+        '韩国交易所',
+        '伦交所',
+        '场外交易板',
+        '沪A',
+        '深A',
+        '京A',
+        '基金',
+        '债券',
+        '指数',
+        '三板',
+      ],
       L10n.langZhHant: [
         '納斯達克',
         '紐交所',
         '美交所',
-        '日股',
-        '韓股',
-        '英股',
-        '粉單',
+        '港交所',
+        '日本交易所',
+        '韓國交易所',
+        '倫交所',
+        '場外交易板',
         '滬A',
         '深A',
+        '京A',
         '基金',
         '債券',
         '指數',
@@ -153,12 +174,14 @@ void main() {
         'NASDAQ',
         'NYSE',
         'AMEX',
-        'JP',
-        'KR',
-        'UK',
-        'Pink Sheets',
+        'HKEX',
+        'JPX',
+        'KRX',
+        'LSE',
+        'OTCBB',
         'Shanghai A',
         'Shenzhen A',
+        'Beijing A',
         'Funds',
         'Bonds',
         'Indices',
@@ -170,6 +193,62 @@ void main() {
       expect(markets.map(MarketUtil.marketLabel), entry.value);
       expect(MarketUtil.marketLabel('沪A'), isNot(MarketUtil.marketLabel('深A')));
       expect(MarketUtil.marketLabel('沪A'), isNot(MarketUtil.marketLabel('A股')));
+    }
+  });
+
+  test('every historical regional market restores an independent exchange', () {
+    final cases = {
+      'A股': ('沪A', '1.600519', 'CNY'),
+      '港股': ('HK', '116.00700', 'HKD'),
+      '日股': ('JPX', '176.7203', 'JPY'),
+      '韩股': ('KRX', '177.005930', 'KRW'),
+      '英股': ('LSE', '155.HSBA', 'GBP'),
+      '粉单': ('OTCBB', '153.NSRGY', 'USD'),
+    };
+    for (final entry in cases.entries) {
+      final (exchange, secid, currency) = entry.value;
+      expect(MarketUtil.searchMarkets, isNot(contains(entry.key)));
+      expect(
+        MarketUtil.marketFromProvider(
+          entry.key,
+          exchange: exchange,
+          secid: secid,
+        ),
+        exchange,
+      );
+      final json = stocksToJson([stock()]).single..remove('currency');
+      json['marketType'] = entry.key;
+      json['secid'] = secid;
+      final restored = stocksFromJson([json]).single;
+      expect(restored.marketType, exchange);
+      expect(restored.currency, currency);
+      expect(
+        stocksFromJson(stocksToJson([restored])).single.marketType,
+        exchange,
+      );
+      expect(MarketUtil.matchesFilter(exchange, restored.marketType), isTrue);
+      expect(MarketUtil.matchesFilter(entry.key, restored.marketType), isFalse);
+      json['isCustom'] = true;
+      expect(stocksFromJson([json]).single.marketType, entry.key);
+    }
+    expect(MarketUtil.marketFromProvider('A股', secid: '0.000001'), '深A');
+    expect(MarketUtil.marketFromProvider('A股', secid: '0.920002'), '京A');
+    expect(
+      MarketUtil.marketFromProvider('日股', exchange: 'OTHER_JP'),
+      'OTHER_JP',
+    );
+    expect(
+      MarketUtil.marketFromProvider(
+        '美股',
+        exchange: 'OTHER_US',
+        secid: '105.TEST',
+      ),
+      'OTHER_US',
+    );
+    expect(MarketUtil.tencentPrefix('HK', '116.00700'), 'hk');
+    expect(MarketUtil.tencentPrefix('京A', '0.920002'), isNull);
+    for (final exchange in ['JPX', 'KRX', 'LSE', 'OTCBB']) {
+      expect(MarketUtil.tencentPrefix(exchange, '105.TEST'), isNull);
     }
   });
 }

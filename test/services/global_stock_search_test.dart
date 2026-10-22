@@ -7,6 +7,7 @@ import 'package:assets/services/east_money_quote_service.dart';
 import 'package:assets/services/stock_quote_service.dart';
 import 'package:assets/services/stock_search_service.dart';
 import 'package:assets/services/tencent_quote_service.dart';
+import 'package:assets/utils/market_util.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
@@ -45,17 +46,24 @@ void main() {
             'NASDAQ',
             'NYSE',
             'AMEX',
-            '日股',
-            '韩股',
-            '英股',
-            '粉单',
+            'JPX',
+            'KRX',
+            'LSE',
+            'OTCBB',
             '沪A',
             '深A',
+            '京A',
+            'HK',
           ]),
         );
         expect(results.singleWhere((s) => s.code == 'AAPL').market, 'NASDAQ');
         expect(results.singleWhere((s) => s.code == 'KO').market, 'NYSE');
         expect(results.singleWhere((s) => s.code == 'SPY').market, 'AMEX');
+        expect(results.singleWhere((s) => s.code == '00700').market, 'HK');
+        expect(results.singleWhere((s) => s.code == '920002').market, '京A');
+        for (final region in ['美股', '港股', '日股', '韩股', '英股', '粉单']) {
+          expect(results.map((s) => s.market), isNot(contains(region)));
+        }
         expect(results.where((s) => s.code == 'AZN').map((s) => s.secid), [
           '106.AZN',
           '155.AZN',
@@ -140,37 +148,37 @@ void main() {
     StockSearchResult(
       code: '7203',
       name: 'Toyota',
-      market: '日股',
+      market: 'JPX',
       secid: '176.7203',
     ),
     StockSearchResult(
       code: '005930',
       name: 'Samsung',
-      market: '韩股',
+      market: 'KRX',
       secid: '177.005930',
     ),
     StockSearchResult(
       code: 'HSBA',
       name: 'HSBC',
-      market: '英股',
+      market: 'LSE',
       secid: '155.HSBA',
     ),
     StockSearchResult(
       code: 'NSRGY',
       name: 'Nestle',
-      market: '粉单',
+      market: 'OTCBB',
       secid: '153.NSRGY',
     ),
     StockSearchResult(
       code: 'AZN',
       name: 'AstraZeneca US',
-      market: '美股',
+      market: 'NYSE',
       secid: '106.AZN',
     ),
     StockSearchResult(
       code: 'AZN',
       name: 'AstraZeneca UK',
-      market: '英股',
+      market: 'LSE',
       secid: '155.AZN',
     ),
   ];
@@ -192,7 +200,9 @@ void main() {
   test('new markets skip Tencent without making a request', () async {
     await http.runWithClient(
       () async {
-        for (final stock in stocks.where((s) => s.market != '美股')) {
+        for (final stock in stocks.where(
+          (s) => !MarketUtil.isUSMarket(s.market),
+        )) {
           expect(await TencentQuoteService().fetchQuote(stock), isNull);
         }
         expect(breaker.isInCooldown, isFalse);
@@ -231,8 +241,8 @@ void main() {
       expect(result['153.NSRGY']!.currentPrice, 102.83);
       expect(result['106.AZN']!.currentPrice, 172.585);
       expect(result['155.AZN']!.currentPrice, 129.26);
-      expect(result['106.AZN']!.market, '美股');
-      expect(result['155.AZN']!.market, '英股');
+      expect(result['106.AZN']!.market, 'NYSE');
+      expect(result['155.AZN']!.market, 'LSE');
       expect(result['176.7203']!.changePercent, -.32);
       expect(result['153.NSRGY']!.changePercent, 1.93);
     },
@@ -242,7 +252,9 @@ void main() {
     'quote service routes new markets to EastMoney and caches by secid',
     () async {
       var requests = 0;
-      final newMarkets = stocks.where((s) => s.market != '美股').toList();
+      final newMarkets = stocks
+          .where((s) => !MarketUtil.isUSMarket(s.market))
+          .toList();
       await http.runWithClient(
         () async {
           final service = StockQuoteService();

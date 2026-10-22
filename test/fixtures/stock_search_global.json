@@ -5,31 +5,36 @@
         "Code": "7203",
         "Name": "丰田汽车",
         "SecurityTypeName": "日股",
-        "QuoteID": "176.7203"
+        "QuoteID": "176.7203",
+        "JYS": "JPX"
       },
       {
         "Code": "005930",
         "Name": "三星电子",
         "SecurityTypeName": "韩股",
-        "QuoteID": "177.005930"
+        "QuoteID": "177.005930",
+        "JYS": "KRX"
       },
       {
         "Code": "005930",
         "Name": "创金合信汇利纯债三年定开债C",
         "SecurityTypeName": "基金",
-        "QuoteID": "150.005930"
+        "QuoteID": "150.005930",
+        "JYS": "OTCFUND"
       },
       {
         "Code": "HSBA",
         "Name": "汇丰控股",
         "SecurityTypeName": "英股",
-        "QuoteID": "155.HSBA"
+        "QuoteID": "155.HSBA",
+        "JYS": "LSE"
       },
       {
         "Code": "NSRGY",
         "Name": "雀巢(ADR)",
         "SecurityTypeName": "粉单",
-        "QuoteID": "153.NSRGY"
+        "QuoteID": "153.NSRGY",
+        "JYS": "OTCBB"
       },
       {
         "Code": "AZN",
@@ -42,31 +47,36 @@
         "Code": "AZN",
         "Name": "阿斯利康(UK)",
         "SecurityTypeName": "英股",
-        "QuoteID": "155.AZN"
+        "QuoteID": "155.AZN",
+        "JYS": "LSE"
       },
       {
         "Code": "600519",
         "Name": "贵州茅台",
         "SecurityTypeName": "沪A",
-        "QuoteID": "1.600519"
+        "QuoteID": "1.600519",
+        "JYS": "2"
       },
       {
         "Code": "000001",
         "Name": "平安银行",
         "SecurityTypeName": "深A",
-        "QuoteID": "0.000001"
+        "QuoteID": "0.000001",
+        "JYS": "6"
       },
       {
         "Code": "000001",
         "Name": "上证指数",
         "SecurityTypeName": "指数",
-        "QuoteID": "1.000001"
+        "QuoteID": "1.000001",
+        "JYS": "1"
       },
       {
         "Code": "000001",
         "Name": "华夏成长混合",
         "SecurityTypeName": "基金",
-        "QuoteID": "150.000001"
+        "QuoteID": "150.000001",
+        "JYS": "OTCFUND"
       },
       {
         "Code": "AAPL",
@@ -88,6 +98,20 @@
         "SecurityTypeName": "美股",
         "JYS": "AMEX",
         "QuoteID": "107.SPY"
+      },
+      {
+        "Code": "00700",
+        "Name": "腾讯控股",
+        "SecurityTypeName": "港股",
+        "JYS": "HK",
+        "QuoteID": "116.00700"
+      },
+      {
+        "Code": "920002",
+        "Name": "万达轴承",
+        "SecurityTypeName": "京A",
+        "JYS": "81",
+        "QuoteID": "0.920002"
       }
     ]
   }

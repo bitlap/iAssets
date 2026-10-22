@@ -32,12 +32,14 @@ void main() {
       'NASDAQ': ('AAPL', '105', 'USD'),
       'NYSE': ('KO', '106', 'USD'),
       'AMEX': ('SPY', '107', 'USD'),
+      'HK': ('00700', '116', 'HKD'),
+      '京A': ('920002', '0', 'CNY'),
       '沪A': ('600519', '1', 'CNY'),
       '深A': ('000001', '0', 'CNY'),
-      '日股': ('7203', '176', 'JPY'),
-      '韩股': ('005930', '177', 'KRW'),
-      '英股': ('HSBA', '155', 'GBP'),
-      '粉单': ('NSRGY', '153', 'USD'),
+      'JPX': ('7203', '176', 'JPY'),
+      'KRX': ('005930', '177', 'KRW'),
+      'LSE': ('HSBA', '155', 'GBP'),
+      'OTCBB': ('NSRGY', '153', 'USD'),
     }.entries) {
       testWidgets('search and add ${entry.key} in $language at 320px', (
         tester,
@@ -50,6 +52,7 @@ void main() {
         final (code, exchange, currency) = entry.value;
         StockModel? added;
         OperationRecord? trade;
+        final otherMarket = entry.key == 'NASDAQ' ? 'NYSE' : 'NASDAQ';
         await http.runWithClient(
           () async {
             await tester.pumpWidget(
@@ -87,14 +90,14 @@ void main() {
             expect(find.text(code), findsOneWidget);
             expect(tester.takeException(), isNull);
             // A different market shows an empty state; switching back restores results.
-            await tester.tap(find.text(MarketUtil.marketLabel('港股')));
+            await tester.tap(find.text(MarketUtil.marketLabel(otherMarket)));
             await tester.pump();
             expect(find.text(code), findsNothing);
             expect(
               find.text(
                 StockConfig.searchNotFoundMarket.replaceAll(
                   '{market}',
-                  MarketUtil.marketLabel('港股'),
+                  MarketUtil.marketLabel(otherMarket),
                 ),
               ),
               findsOneWidget,
@@ -129,6 +132,7 @@ void main() {
               expect([
                 '沪A',
                 '深A',
+                'HK',
                 'NASDAQ',
                 'NYSE',
                 'AMEX',
@@ -146,9 +150,18 @@ void main() {
                     {
                       'Code': code,
                       'Name': 'Global company',
-                      'SecurityTypeName': MarketUtil.isUSMarket(entry.key)
-                          ? '美股'
-                          : entry.key,
+                      'SecurityTypeName':
+                          {
+                            'NASDAQ': '美股',
+                            'NYSE': '美股',
+                            'AMEX': '美股',
+                            'HK': '港股',
+                            'JPX': '日股',
+                            'KRX': '韩股',
+                            'LSE': '英股',
+                            'OTCBB': '粉单',
+                          }[entry.key] ??
+                          entry.key,
                       'JYS': entry.key,
                       'QuoteID': '$exchange.$code',
                     },
@@ -163,7 +176,7 @@ void main() {
                       'f12': code,
                       'f13': int.parse(exchange),
                       'f1': 2,
-                      'f2': entry.key == '英股' ? 100000 : 1000,
+                      'f2': entry.key == 'LSE' ? 100000 : 1000,
                       'f3': 10,
                     },
                   ],
@@ -217,7 +230,7 @@ void main() {
           ...MarketUtil.holdingMarkets,
         ]);
         final row = find.byType(DividendFilterRow);
-        for (final market in ['日股', '韩股', '英股', '粉单']) {
+        for (final market in ['JPX', 'KRX', 'LSE', 'OTCBB']) {
           final pill = find.descendant(
             of: row,
             matching: find.text(MarketUtil.marketLabel(market)),

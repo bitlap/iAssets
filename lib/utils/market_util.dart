@@ -8,6 +8,12 @@ class MarketUtil {
   static const String exchangeNASDAQ = 'NASDAQ';
   static const String exchangeNYSE = 'NYSE';
   static const String exchangeAMEX = 'AMEX';
+  static const String exchangeHK = 'HK';
+  static const String exchangeJPX = 'JPX';
+  static const String exchangeKRX = 'KRX';
+  static const String exchangeLSE = 'LSE';
+  static const String exchangeOTCBB = 'OTCBB';
+  static const String exchangeBJ = '京A';
   static const String searchMarketHK = '港股';
   static const String searchMarketCN = 'A股';
   static const String searchMarketJP = '日股';
@@ -29,6 +35,18 @@ class MarketUtil {
         return L10n.t('marketNYSE');
       case exchangeAMEX:
         return L10n.t('marketAMEX');
+      case exchangeHK:
+        return L10n.t('marketHKEX');
+      case exchangeJPX:
+        return L10n.t('marketJPX');
+      case exchangeKRX:
+        return L10n.t('marketKRX');
+      case exchangeLSE:
+        return L10n.t('marketLSE');
+      case exchangeOTCBB:
+        return L10n.t('marketOTCBB');
+      case exchangeBJ:
+        return L10n.t('marketBJ');
       case searchMarketHK:
         return L10n.t('marketHK');
       case searchMarketCN:
@@ -79,17 +97,18 @@ class MarketUtil {
     exchangeNASDAQ,
     exchangeNYSE,
     exchangeAMEX,
-    searchMarketHK,
+    exchangeHK,
     exchangeSH,
     exchangeSZ,
+    exchangeBJ,
     exchangeOTC,
     exchangeBond,
     exchangeIndex,
     exchangeNEEQ,
-    searchMarketJP,
-    searchMarketKR,
-    searchMarketUK,
-    searchMarketPink,
+    exchangeJPX,
+    exchangeKRX,
+    exchangeLSE,
+    exchangeOTCBB,
   ];
 
   static Iterable<String> get holdingMarkets => [
@@ -103,17 +122,44 @@ class MarketUtil {
     secidUS107: exchangeAMEX,
   };
 
-  /// 美股的具体市场由接口 JYS 返回，历史记录用 QuoteID 前缀恢复。
-  /// 其他市场保留 SecurityTypeName；不按交易所覆盖港股、指数等名称。
+  static const _legacyExchanges = {
+    searchMarketHK: exchangeHK,
+    searchMarketJP: exchangeJPX,
+    searchMarketKR: exchangeKRX,
+    searchMarketUK: exchangeLSE,
+    searchMarketPink: exchangeOTCBB,
+  };
+
+  /// 使用接口的具体交易所。国内数字 JYS 不是名称，保留沪A、深A、京A等原值。
+  /// 历史地区名称只在读取时恢复交易所，不作为搜索或筛选分组。
   static String marketFromProvider(
     String market, {
     String exchange = '',
     String secid = '',
   }) {
-    if (market != searchMarketUS) return market;
-    if (_usExchanges.containsValue(exchange)) return exchange;
-    return _usExchanges[secid.split('.').first] ?? market;
+    if (market == searchMarketCN) {
+      final id = secid.split('.').first;
+      if (id == secidSH) return exchangeSH;
+      if (id == secidSZ) {
+        return secid.startsWith('0.92') ? exchangeBJ : exchangeSZ;
+      }
+      return market;
+    }
+    if (market == searchMarketUS) {
+      if (exchange.isNotEmpty && int.tryParse(exchange) == null) {
+        return exchange;
+      }
+      return _usExchanges[secid.split('.').first] ?? market;
+    }
+    final legacyExchange = _legacyExchanges[market];
+    if (legacyExchange == null) return market;
+    return exchange.isNotEmpty && int.tryParse(exchange) == null
+        ? exchange
+        : legacyExchange;
   }
+
+  static bool isUKMarket(String market) =>
+      market == exchangeLSE || market == searchMarketUK;
 
   static bool isUSMarket(String market) =>
       market == searchMarketUS || _usExchanges.containsValue(market);
@@ -126,6 +172,11 @@ class MarketUtil {
       searchMarketKR,
       searchMarketUK,
       searchMarketPink,
+      exchangeJPX,
+      exchangeKRX,
+      exchangeLSE,
+      exchangeOTCBB,
+      exchangeBJ,
     }.contains(market)) {
       return null;
     }
@@ -135,7 +186,11 @@ class MarketUtil {
         exchange == secidUS107) {
       return 'us';
     }
-    if (market == searchMarketHK || exchange == secidHK) return 'hk';
+    if (market == exchangeHK ||
+        market == searchMarketHK ||
+        exchange == secidHK) {
+      return 'hk';
+    }
     if (market == exchangeSH) return 'sh';
     if (market == exchangeSZ) return 'sz';
     if (exchange == secidSH) return 'sh';
@@ -155,6 +210,7 @@ class MarketUtil {
       searchMarketCN, // 仅兼容历史数据，不作为接口市场的父级。
       exchangeSH,
       exchangeSZ,
+      exchangeBJ,
       exchangeOTC,
       exchangeBond,
       exchangeIndex,
@@ -166,6 +222,7 @@ class MarketUtil {
     return searchMarkets.contains(marketType) ||
         marketType == searchMarketCN ||
         marketType == searchMarketUS ||
+        _legacyExchanges.containsKey(marketType) ||
         marketType == customMarket;
   }
 
@@ -175,18 +232,23 @@ class MarketUtil {
     }
     switch (marketType) {
       case searchMarketHK:
+      case exchangeHK:
         return 'HKD';
       case searchMarketJP:
+      case exchangeJPX:
         return 'JPY';
       case searchMarketKR:
+      case exchangeKRX:
         return 'KRW';
       case searchMarketUK:
+      case exchangeLSE:
         return 'GBP';
       case searchMarketUS:
       case exchangeNASDAQ:
       case exchangeNYSE:
       case exchangeAMEX:
       case searchMarketPink:
+      case exchangeOTCBB:
         return 'USD';
       default:
         return 'USD';

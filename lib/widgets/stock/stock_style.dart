@@ -13,15 +13,19 @@ class StockStyle {
   static Color marketColor(String? market) {
     if (MarketUtil.isChineseMarket(market ?? '')) return marketA;
     return switch (market) {
-      MarketUtil.searchMarketHK => marketHK,
+      MarketUtil.searchMarketHK || MarketUtil.exchangeHK => marketHK,
       MarketUtil.searchMarketUS ||
       MarketUtil.exchangeNASDAQ ||
       MarketUtil.exchangeNYSE ||
       MarketUtil.exchangeAMEX => marketUS,
-      MarketUtil.searchMarketJP => const Color(0xFFAF52DE),
-      MarketUtil.searchMarketKR => const Color(0xFF007AFF),
-      MarketUtil.searchMarketUK => const Color(0xFF5856D6),
-      MarketUtil.searchMarketPink => const Color(0xFFFF2D55),
+      MarketUtil.searchMarketJP ||
+      MarketUtil.exchangeJPX => const Color(0xFFAF52DE),
+      MarketUtil.searchMarketKR ||
+      MarketUtil.exchangeKRX => const Color(0xFF007AFF),
+      MarketUtil.searchMarketUK ||
+      MarketUtil.exchangeLSE => const Color(0xFF5856D6),
+      MarketUtil.searchMarketPink ||
+      MarketUtil.exchangeOTCBB => const Color(0xFFFF2D55),
       MarketUtil.customMarket => AppColors.purple,
       _ => AppColors.textTertiary,
     };
@@ -34,11 +38,15 @@ class StockStyle {
       MarketUtil.exchangeNASDAQ ||
       MarketUtil.exchangeNYSE ||
       MarketUtil.exchangeAMEX => Icons.language,
-      MarketUtil.searchMarketHK => Icons.location_city,
+      MarketUtil.searchMarketHK || MarketUtil.exchangeHK => Icons.location_city,
       MarketUtil.searchMarketJP ||
+      MarketUtil.exchangeJPX ||
       MarketUtil.searchMarketKR ||
+      MarketUtil.exchangeKRX ||
       MarketUtil.searchMarketUK ||
-      MarketUtil.searchMarketPink => Icons.language,
+      MarketUtil.exchangeLSE ||
+      MarketUtil.searchMarketPink ||
+      MarketUtil.exchangeOTCBB => Icons.language,
       MarketUtil.customMarket => Icons.edit_outlined,
       _ => Icons.all_inclusive,
     };
