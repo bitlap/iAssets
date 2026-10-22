@@ -22,9 +22,11 @@ class TencentQuoteService {
       return null;
     }
 
+    final prefix = MarketUtil.tencentPrefix(stock.market, stock.secid);
+    if (prefix == null) return null;
+
     try {
-      final symbol =
-          '${MarketUtil.tencentPrefix(stock.market, stock.secid)}${stock.code}';
+      final symbol = '$prefix${stock.code}';
 
       final client = Client();
       final uri = Uri.parse('$_baseUrl$symbol');
@@ -39,7 +41,7 @@ class TencentQuoteService {
         final quote = _parseQuote(response.body, stock);
         if (quote != null) {
           debugPrint(
-            '[${DateTime.now().toString().substring(11, 19)}][腾讯] ===> ${stock.code}: HKD${quote.currentPrice} (${quote.changePercent}%)',
+            '[${DateTime.now().toString().substring(11, 19)}][腾讯] ===> ${stock.code}: ${quote.currentPrice} (${quote.changePercent}%)',
           );
         }
         return quote;

@@ -13,7 +13,7 @@ class StockModel {
   final double profitLossAmount; // 股票自身币种盈亏
   final bool isPositive;
   final String? logoUrl; // Logo URL
-  final String marketType; // 市场类型：美股、港股
+  final String marketType; // 原始市场或子市场类型，展示和筛选使用 MarketUtil 分组
   final double changePercent; // 日涨跌幅（%）
   final String? _currency; // 股票币种
   String get currency =>

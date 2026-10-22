@@ -90,7 +90,7 @@ class StockSearchService {
 
   List<StockSearchResult> _parseSearchResults(Map<String, dynamic> data) {
     final results = <StockSearchResult>[];
-    final seenCodes = <String>{};
+    final seenSecids = <String>{};
     final quoteList = data['QuotationCodeTable']?['Data'];
     if (quoteList == null) return results;
 
@@ -100,7 +100,7 @@ class StockSearchService {
       final name = item['Name']?.toString() ?? '';
       final secid = item['QuoteID']?.toString() ?? '';
 
-      if (seenCodes.contains(code)) continue;
+      if (seenSecids.contains(secid)) continue;
 
       final securityType = item['SecurityTypeName']?.toString() ?? '';
       if (!MarketUtil.supportMarket(securityType)) {
@@ -110,6 +110,7 @@ class StockSearchService {
         continue;
       }
       if (secid.isNotEmpty && code.isNotEmpty) {
+        seenSecids.add(secid);
         results.add(
           StockSearchResult(
             code: code,

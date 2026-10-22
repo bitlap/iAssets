@@ -23,19 +23,12 @@ class DividendFilterRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final markets = <String?>[
-      null,
-      MarketUtil.searchMarketUS,
-      MarketUtil.searchMarketHK,
-      MarketUtil.searchMarketCN,
-      MarketUtil.customMarket,
-    ];
+    final markets = <String?>[null, ...MarketUtil.holdingMarkets];
     final marketLabels = [
-      StockConfig.dividendAllMarkets,
-      MarketUtil.marketLabel(MarketUtil.searchMarketUS),
-      MarketUtil.marketLabel(MarketUtil.searchMarketHK),
-      MarketUtil.marketLabel(MarketUtil.searchMarketCN),
-      MarketUtil.marketLabel(MarketUtil.customMarket),
+      for (final market in markets)
+        market == null
+            ? StockConfig.dividendAllMarkets
+            : MarketUtil.marketLabel(market),
     ];
     final sortOptions = [
       StockConfig.dividendSortYield,

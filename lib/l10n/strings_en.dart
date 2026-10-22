@@ -161,6 +161,10 @@ const Map<String, String> stringsEn = {
   'marketUS': 'US',
   'marketHK': 'HK',
   'marketCN': 'CN',
+  'marketJP': 'JP',
+  'marketKR': 'KR',
+  'marketUK': 'UK',
+  'marketPink': 'Pink Sheets',
 
   // Home
   'homeTitle': 'Stocks',
@@ -238,7 +242,7 @@ const Map<String, String> stringsEn = {
   'searchNotFound': 'No matching stocks found',
   'searchNotFoundMarket': 'No {market} stocks found',
   'searchFailed': 'Search failed, please retry',
-  'searchInitHint': 'Search HK/US/CN stocks by name or code',
+  'searchInitHint': 'Search global stocks by name or code',
   'searchInitExample': 'e.g. AAPL, Tencent, 00700, TSLA, 600519',
   'searchAlreadyExists': '{code} already in portfolio',
   'searchAddTitle': 'Add {code}',

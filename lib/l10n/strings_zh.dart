@@ -155,6 +155,10 @@ const Map<String, String> stringsZh = {
   'marketUS': '美股',
   'marketHK': '港股',
   'marketCN': 'A股',
+  'marketJP': '日股',
+  'marketKR': '韩股',
+  'marketUK': '英股',
+  'marketPink': '粉单',
 
   // 首页
   'homeTitle': '股票',
@@ -232,7 +236,7 @@ const Map<String, String> stringsZh = {
   'searchNotFound': '未找到相关股票',
   'searchNotFoundMarket': '未找到相关{market}股票',
   'searchFailed': '搜索失败，请重试',
-  'searchInitHint': '输入名称或代码搜索港股/美股/A股',
+  'searchInitHint': '输入名称或代码搜索全球市场股票',
   'searchInitExample': '如：AAPL、腾讯、00700、TSLA、600519',
   'searchAlreadyExists': '{code} 已在持仓中',
   'searchAddTitle': '添加 {code}',

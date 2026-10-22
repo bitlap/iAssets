@@ -12,9 +12,13 @@ class StockStyle {
 
   static Color marketColor(String? market) {
     if (MarketUtil.isChineseMarket(market ?? '')) return marketA;
-    return switch (market) {
+    return switch (MarketUtil.normalizeMarket(market ?? '')) {
       MarketUtil.searchMarketHK => marketHK,
       MarketUtil.searchMarketUS => marketUS,
+      MarketUtil.searchMarketJP => const Color(0xFFAF52DE),
+      MarketUtil.searchMarketKR => const Color(0xFF007AFF),
+      MarketUtil.searchMarketUK => const Color(0xFF5856D6),
+      MarketUtil.searchMarketPink => const Color(0xFFFF2D55),
       MarketUtil.customMarket => AppColors.purple,
       _ => AppColors.textTertiary,
     };
@@ -22,9 +26,13 @@ class StockStyle {
 
   static IconData marketIcon(String? market) {
     if (MarketUtil.isChineseMarket(market ?? '')) return Icons.flag;
-    return switch (market) {
+    return switch (MarketUtil.normalizeMarket(market ?? '')) {
       MarketUtil.searchMarketUS => Icons.language,
       MarketUtil.searchMarketHK => Icons.location_city,
+      MarketUtil.searchMarketJP ||
+      MarketUtil.searchMarketKR ||
+      MarketUtil.searchMarketUK ||
+      MarketUtil.searchMarketPink => Icons.language,
       MarketUtil.customMarket => Icons.edit_outlined,
       _ => Icons.all_inclusive,
     };

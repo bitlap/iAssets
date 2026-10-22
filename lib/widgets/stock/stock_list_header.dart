@@ -40,10 +40,7 @@ class StockListHeader extends StatelessWidget {
             items: [
               for (final market in <String?>[
                 null,
-                MarketUtil.searchMarketUS,
-                MarketUtil.searchMarketHK,
-                MarketUtil.searchMarketCN,
-                MarketUtil.customMarket,
+                ...MarketUtil.holdingMarkets,
               ])
                 DropdownMenuItem(
                   value: market,

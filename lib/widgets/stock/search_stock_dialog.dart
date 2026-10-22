@@ -18,7 +18,7 @@ import '../common/dialog_utils.dart';
 import '../common/app_ui.dart';
 import 'stock_style.dart';
 
-/// 股票搜索弹窗 - 支持按名称/代码搜索港股、美股
+/// 股票搜索弹窗 - 支持按名称/代码搜索多个市场
 class SearchStockDialog extends StatefulWidget {
   /// 选中股票后的回调，返回新构建的 StockModel 和建仓操作记录
   final void Function(StockModel stock, OperationRecord buyRecord) onStockAdded;
@@ -48,7 +48,7 @@ class _SearchStockDialogState extends State<SearchStockDialog> {
   bool _hasSearched = false;
   String _errorMessage = '';
   Timer? _debounceTimer;
-  String? _selectedMarket; // 市场筛选：null=全部, '美股', '港股'
+  String? _selectedMarket; // 市场分组筛选，null 表示全部
 
   // 正在获取行情的股票（loading 状态）
   final Set<String> _loadingQuotes = {};
@@ -140,7 +140,7 @@ class _SearchStockDialogState extends State<SearchStockDialog> {
           _errorMessage = _selectedMarket != null
               ? StockConfig.searchNotFoundMarket.replaceAll(
                   '{market}',
-                  _selectedMarket ?? '',
+                  MarketUtil.marketLabel(_selectedMarket!),
                 )
               : StockConfig.searchNotFound;
         }
@@ -351,21 +351,12 @@ class _SearchStockDialogState extends State<SearchStockDialog> {
           const SizedBox(height: 8),
           Wrap(
             spacing: 8,
+            runSpacing: 8,
             crossAxisAlignment: WrapCrossAlignment.center,
             children: [
               _buildTag(MarketUtil.searchAll, _selectedMarket == null),
-              _buildTag(
-                MarketUtil.searchMarketUS,
-                _selectedMarket == MarketUtil.searchMarketUS,
-              ),
-              _buildTag(
-                MarketUtil.searchMarketHK,
-                _selectedMarket == MarketUtil.searchMarketHK,
-              ),
-              _buildTag(
-                MarketUtil.searchMarketCN,
-                _selectedMarket == MarketUtil.searchMarketCN,
-              ),
+              for (final market in MarketUtil.searchMarkets)
+                _buildTag(market, _selectedMarket == market),
               if (_isLoading)
                 const SizedBox(
                   width: 14,
@@ -388,6 +379,12 @@ class _SearchStockDialogState extends State<SearchStockDialog> {
         setState(() {
           _selectedMarket = market == MarketUtil.searchAll ? null : market;
           _results = _applyMarketFilter(_allResults);
+          _errorMessage = _selectedMarket == null
+              ? StockConfig.searchNotFound
+              : StockConfig.searchNotFoundMarket.replaceAll(
+                  '{market}',
+                  MarketUtil.marketLabel(_selectedMarket!),
+                );
         });
       },
       child: Container(
@@ -617,10 +614,12 @@ class _SearchStockDialogState extends State<SearchStockDialog> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Row(
+                  Wrap(
+                    spacing: 6,
+                    runSpacing: 2,
+                    crossAxisAlignment: WrapCrossAlignment.center,
                     children: [
                       Text(stock.code, style: TextStyles.bodyMedium),
-                      const SizedBox(width: 6),
                       Text(
                         MarketUtil.marketLabel(stock.market),
                         style: TextStyles.label.copyWith(

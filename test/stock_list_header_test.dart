@@ -48,18 +48,37 @@ void main() {
           tester.getRect(find.text(StockConfig.homeHoldingHeader)).top,
           greaterThan(dropdownRect.bottom),
         );
+        for (final target in [
+          MarketUtil.searchMarketUS,
+          MarketUtil.searchMarketJP,
+          MarketUtil.searchMarketKR,
+          MarketUtil.searchMarketUK,
+          MarketUtil.searchMarketPink,
+          MarketUtil.customMarket,
+        ]) {
+          await tester.tap(dropdown);
+          await tester.pumpAndSettle();
+          final option = find.text(MarketUtil.marketLabel(target));
+          await tester.scrollUntilVisible(
+            option,
+            100,
+            scrollable: find.byType(Scrollable).last,
+          );
+          await tester.tap(option.last);
+          await tester.pumpAndSettle();
+          expect(market, target);
+        }
         await tester.tap(dropdown);
         await tester.pumpAndSettle();
-        await tester.tap(
-          find.text(MarketUtil.marketLabel(MarketUtil.searchMarketUS)).last,
+        final allOption = find.text(
+          MarketUtil.marketLabel(MarketUtil.searchAll),
         );
-        await tester.pumpAndSettle();
-        expect(market, MarketUtil.searchMarketUS);
-        await tester.tap(dropdown);
-        await tester.pumpAndSettle();
-        await tester.tap(
-          find.text(MarketUtil.marketLabel(MarketUtil.searchAll)).last,
+        await tester.scrollUntilVisible(
+          allOption,
+          -100,
+          scrollable: find.byType(Scrollable).last,
         );
+        await tester.tap(allOption.last);
         await tester.pumpAndSettle();
         expect(market, isNull);
         await tester.tap(find.text(StockConfig.homeHoldingHeader));
