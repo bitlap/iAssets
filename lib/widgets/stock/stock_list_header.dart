@@ -6,6 +6,7 @@ import '../common/sort_indicator.dart';
 import '../../utils/market_util.dart';
 import '../common/app_filter_dropdown.dart';
 import 'stock_columns.dart';
+import 'stock_style.dart';
 
 class StockListHeader extends StatelessWidget {
   final String sortColumn;
@@ -48,6 +49,11 @@ class StockListHeader extends StatelessWidget {
                     MarketUtil.marketLabel(market ?? MarketUtil.searchAll),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      color: market == null
+                          ? null
+                          : StockStyle.marketColor(market),
+                    ),
                   ),
                 ),
             ],

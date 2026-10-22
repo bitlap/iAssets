@@ -374,7 +374,12 @@ class _SearchStockDialogState extends State<SearchStockDialog> {
   }
 
   Widget _buildTag(String market, bool isSelected) {
-    return GestureDetector(
+    return FilterPill(
+      label: MarketUtil.marketLabel(market),
+      selected: isSelected,
+      color: market == MarketUtil.searchAll
+          ? null
+          : StockStyle.marketColor(market),
       onTap: () {
         setState(() {
           _selectedMarket = market == MarketUtil.searchAll ? null : market;
@@ -387,24 +392,6 @@ class _SearchStockDialogState extends State<SearchStockDialog> {
                 );
         });
       },
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-        decoration: BoxDecoration(
-          color: isSelected
-              ? AppColors.surfaceElevated.withValues(alpha: 0.5)
-              : AppColors.surfaceElevated.withValues(alpha: 0.2),
-          borderRadius: BorderRadius.circular(6),
-          border: Border.all(
-            color: isSelected
-                ? AppColors.surfaceElevated.withValues(alpha: 0.7)
-                : AppColors.surfaceElevated.withValues(alpha: 0.3),
-          ),
-        ),
-        child: Text(
-          MarketUtil.marketLabel(market),
-          style: isSelected ? TextStyles.smallBold : TextStyles.bodySmall,
-        ),
-      ),
     );
   }
 
@@ -916,6 +903,7 @@ class _AddStockConfirmDialogState extends State<_AddStockConfirmDialog> {
           InfoRowWidget(
             label: StockConfig.searchMarket,
             value: MarketUtil.marketLabel(widget.market),
+            valueColor: StockStyle.marketColor(widget.market),
           ),
           if (widget.defaultPrice > 0) ...[
             const SizedBox(height: 8),

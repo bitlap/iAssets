@@ -44,7 +44,9 @@ class _AppFilterDropdownState<T> extends State<AppFilterDropdown<T>> {
           focusNode: _focusNode,
           decoration: appInputDecoration(),
           dropdownColor: AppColors.surface,
-          style: TextStyles.body13,
+          style: Theme.of(
+            context,
+          ).textTheme.bodyMedium!.merge(TextStyles.body13),
           isExpanded: true,
           borderRadius: BorderRadius.circular(12),
           menuMaxHeight: MediaQuery.sizeOf(context).height * .45,

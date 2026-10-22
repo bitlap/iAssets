@@ -7,9 +7,12 @@ import 'package:assets/models/stock_model.dart';
 import 'package:assets/services/settings_service.dart';
 import 'package:assets/utils/market_util.dart';
 import 'package:assets/widgets/common/app_filter_dropdown.dart';
+import 'package:assets/widgets/common/app_ui.dart';
+import 'package:assets/widgets/common/info_row_widget.dart';
 import 'package:assets/widgets/dividend/dividend_filter_row.dart';
 import 'package:assets/widgets/stock/search_stock_dialog.dart';
 import 'package:assets/widgets/stock/stock_list_header.dart';
+import 'package:assets/widgets/stock/stock_style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
@@ -80,6 +83,10 @@ void main() {
             await tester.pumpAndSettle();
             for (final market in MarketUtil.searchMarkets) {
               expect(find.text(MarketUtil.marketLabel(market)), findsOneWidget);
+              final pill = tester.widget<FilterPill>(
+                find.widgetWithText(FilterPill, MarketUtil.marketLabel(market)),
+              );
+              expect(pill.color, StockStyle.marketColor(market));
             }
             await tester.tap(find.text(MarketUtil.marketLabel(entry.key)));
             await tester.enterText(find.byType(TextField), '$code-$language');
@@ -88,6 +95,10 @@ void main() {
             );
             await tester.pumpAndSettle();
             expect(find.text(code), findsOneWidget);
+            final resultLabel = tester.widget<Text>(
+              find.text(MarketUtil.marketLabel(entry.key)).last,
+            );
+            expect(resultLabel.style!.color, StockStyle.marketColor(entry.key));
             expect(tester.takeException(), isNull);
             // A different market shows an empty state; switching back restores results.
             await tester.tap(find.text(MarketUtil.marketLabel(otherMarket)));
@@ -109,6 +120,14 @@ void main() {
             await tester.tap(find.text(code));
             await tester.pumpAndSettle();
             final inputs = find.byType(TextField);
+            final marketInfo = tester.widget<InfoRowWidget>(
+              find.byWidgetPredicate(
+                (widget) =>
+                    widget is InfoRowWidget &&
+                    widget.label == StockConfig.searchMarket,
+              ),
+            );
+            expect(marketInfo.valueColor, StockStyle.marketColor(entry.key));
             expect(
               tester.widget<TextField>(inputs.at(1)).controller!.text,
               '10.0000',
@@ -229,6 +248,12 @@ void main() {
           null,
           ...MarketUtil.holdingMarkets,
         ]);
+        for (final item in dropdown.items.where((item) => item.value != null)) {
+          expect(
+            (item.child as Text).style!.color,
+            StockStyle.marketColor(item.value),
+          );
+        }
         final row = find.byType(DividendFilterRow);
         for (final market in ['JPX', 'KRX', 'LSE', 'OTCBB']) {
           final pill = find.descendant(
