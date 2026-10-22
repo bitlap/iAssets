@@ -1,45 +1,25 @@
-Asset Management — Your Personal Investment Manager
+Asset Management — Your Assets at a Glance
 
-Core Features
-• Unified asset management: Cash, demand deposits, time deposits, wealth management, and provident fund organized by category, with expand/collapse and drag-to-reorder support
-• Stock portfolio management: Add Hong Kong, US, and A-share stocks (including on-exchange and off-exchange funds) in one tap, with full buy, add, sell, and position-close workflows
-• Read-only crypto sync: Connect Binance accounts to view spot balances, futures positions, and lead trader assets alongside your other holdings
-• Real-time quotes: Automatically fetch the latest stock prices and exchange rates, with profit/loss updating in real time — no manual refresh needed
-• Today's P&L: Automatically tracks today's profit/loss amount and rate based on US trading days, so you can see gains at a glance
-• Profit curve: View return trends across multiple time ranges (Today / 7D / 30D / 180D / 360D)
-• Multi-currency support: Automatic conversion for CNY, USD, HKD, EUR, GBP, and JPY
-• Smart calculations: Automatically computes average cost, total P&L, dividend yield, position ratio, and other key metrics
+Keep stocks, crypto, savings and other investments together. See how your assets are allocated and how your returns change over time.
 
-Stock Management
-• Custom stock: Manually enter name, shares, current price and currency, with optional custom image — ideal for tracking non-listed assets
-• Stock search: Quickly find stocks by code or name, covering HK, US, and A-share markets
-• Market filtering: Filter by US / HK / A-share to quickly locate the stocks you follow
-• Transaction records: Full history of every buy/sell operation (time, price, quantity, fees) at a glance
-• Dividend management: Records per-share dividends and tax rates, automatically calculating after-tax income and cumulative dividends
-• Flexible sorting: Sort by P&L amount, position size, or stock name, in ascending or descending order
-• Keep closed positions: Option to retain closed positions for easy review of past trades
+Stocks & Dividends
+• Search by name or symbol across US, Hong Kong, Shanghai, Shenzhen, Beijing, Japanese, Korean, UK and over-the-counter markets
+• Filter search results, holdings and dividends by individual exchange or market, with clear color labels
+• Record buys, sells, dividends and fees, with automatic calculations for cost, P&L and after-tax dividends
+• Follow today's P&L and profit charts, and review your trading history
+• Add custom stocks to track other investments
 
 Crypto Assets
-• Supports regular Binance accounts and separate spot or futures lead trader accounts; copy trader portfolios are not currently supported
-• View spot quantities, reference prices and estimated values, plus futures equity, positions and unrealized P&L; no cost entry, trading, or asset editing
-• Tests the account and API permissions before adding a connection to prevent double counting; read-only API keys are recommended, and trading permission triggers a risk warning
-• Refreshes every 5 minutes while in the foreground, with pull-to-refresh available; crypto asset data is shown for the current session only
+• Connect regular Binance accounts or lead trader accounts to view spot balances, futures positions and estimated asset values
+• Refresh automatically or pull to refresh, and include crypto in your total assets and allocation
+• Viewing only, with no trading or transfers; copy trader portfolios are not currently supported
 
 Asset Overview
-• Total assets combine stocks, crypto, and deposits or wealth products; tap the help icon to view the allocation breakdown
-• Switch display currency to view estimated values using reference exchange rates
+• Organize cash, deposits, wealth products and provident fund by category, with collapsible groups and drag-to-reorder
+• View stocks, crypto and other assets together, with support for multiple display currencies
 
-Multi-Language Support
-• Switch between 简体中文 / 繁體中文 / English with one tap, or follow the system language automatically
-
-Data Security
-• iCloud sync: Stocks, manually managed assets, settings, and related data are backed up for continuity across devices
-• Local-first: Stocks and manually managed assets work offline, with automatic sync once the network is restored
-• Crypto credentials stay in the device Keychain; crypto balances and positions are not saved to local files or iCloud
-
-Design Philosophy
-• Theme switching: Light, dark, and system-follow modes — switch at will
-• Simple and efficient: No ads, no community, no in-app purchases — back to the essence of investment management
-• Light and fast: Quick launch, smooth operations, no bloat
-
-Perfect for every individual investor who takes their asset management seriously. For suggestions or feedback, feel free to contact the developer.
+Made for Everyday Use
+• Sync stocks, manually managed assets and settings with iCloud; view and record stocks and manual assets offline
+• Crypto connection details stay on your device; crypto balances and positions are not synced to iCloud
+• Choose Simplified Chinese, Traditional Chinese or English, light or dark themes, and your preferred gain/loss colors
+• No ads, no social feed and no in-app purchases — just personal asset management
