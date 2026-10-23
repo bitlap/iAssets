@@ -6,7 +6,6 @@
 
 <p align="center">
   看清资产，轻松记录<br>
-  Clear Overview, Easy Tracking<br>
   在一个 App 中查看股票、数字币、存款与理财。
 </p>
 
