@@ -46,13 +46,13 @@ void main() {
   );
 
   test(
-    'uq GBp CHF SEK quotes preserve native prices without any FX request',
+    'uq pence quotes normalize to GBP while CHF and SEK retain native prices',
     () async {
       var requests = 0;
       await http.runWithClient(
         () async {
           for (final row in [
-            ('UQLT', 'GBp', 4031.5),
+            ('UQLT', 'GBP', 40.315),
             ('0HCX', 'CHF', 24.565),
             ('0RUQ', 'SEK', .16),
           ]) {
@@ -121,7 +121,7 @@ void main() {
   );
 
   test(
-    'pence aliases are selectable and convert only for summaries or legacy holdings',
+    'pence aliases stay out of currency selection while legacy records still convert',
     () {
       for (final code in [
         'SEK',
@@ -135,12 +135,12 @@ void main() {
         'ILS',
         'MXN',
         'TRY',
-        'GBp',
-        'GBX',
       ]) {
         expect(ExchangeRateService.supportedCurrencies, contains(code));
         expect(ExchangeRateService().effectiveRates[code], greaterThan(0));
       }
+      expect(ExchangeRateService.supportedCurrencies, isNot(contains('GBp')));
+      expect(ExchangeRateService.supportedCurrencies, isNot(contains('GBX')));
       expect(
         CurrencyUtil.convertCurrency(100, 'GBp', 'GBP'),
         closeTo(1, 1e-12),
@@ -220,16 +220,21 @@ void main() {
   );
 
   test(
-    'all supported London currency codes preserve the exact provider price',
+    'London currencies preserve provider prices except the pence-to-pound unit conversion',
     () async {
-      for (final currency in ExchangeRateService.supportedCurrencies) {
+      for (final currency in [
+        ...ExchangeRateService.supportedCurrencies,
+        'GBp',
+        'GBX',
+      ]) {
         final body = jsonDecode(fixture('0HCX'));
         body['chart']['result'][0]['meta']['currency'] = currency;
         await http.runWithClient(
           () async {
             final quote = await YahooQuoteService().fetchQuote(stock('0HCX'));
-            expect(quote!.currentPrice, 24.565);
-            expect(quote.currency, currency);
+            final inPence = currency == 'GBp' || currency == 'GBX';
+            expect(quote!.currentPrice, inPence ? 24.565 / 100 : 24.565);
+            expect(quote.currency, inPence ? 'GBP' : currency);
           },
           () => MockClient((request) async {
             expect(request.url.host, 'query1.finance.yahoo.com');

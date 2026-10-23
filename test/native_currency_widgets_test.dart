@@ -183,8 +183,6 @@ void main() {
         'ILS',
         'MXN',
         'TRY',
-        'GBp',
-        'GBX',
       ]) {
         expect(ExchangeRateService.supportedCurrencies, contains(code));
         await tester.tap(find.text('Currency'));
@@ -199,6 +197,8 @@ void main() {
         await tester.pumpAndSettle();
         expect(selected, code);
       }
+      expect(ExchangeRateService.supportedCurrencies, isNot(contains('GBp')));
+      expect(ExchangeRateService.supportedCurrencies, isNot(contains('GBX')));
       expect(tester.takeException(), isNull);
     });
   }

@@ -68,11 +68,16 @@ class YahooQuoteService {
         if (meta == null || meta['symbol'] != symbol) continue;
         final currency = meta['currency'];
         final expectedCurrency = MarketUtil.currencyForMarket(stock.market);
+        final inPence =
+            MarketUtil.isUKMarket(stock.market) &&
+            (currency == 'GBp' || currency == 'GBX');
         final foreignLondonCurrency =
             MarketUtil.isUKMarket(stock.market) &&
             currency is String &&
             ExchangeRateService.supportedCurrencies.contains(currency);
-        if (currency != expectedCurrency && !foreignLondonCurrency) {
+        if (currency != expectedCurrency &&
+            !foreignLondonCurrency &&
+            !inPence) {
           continue;
         }
         final price = (meta['regularMarketPrice'] as num?)?.toDouble();
@@ -98,8 +103,8 @@ class YahooQuoteService {
             stock.market,
             secid: stock.secid,
           ).firstOrNull,
-          currentPrice: price,
-          currency: currency as String,
+          currentPrice: inPence ? price / 100 : price,
+          currency: inPence ? 'GBP' : currency as String,
           changePercent: (price / previous - 1) * 100,
         );
       }

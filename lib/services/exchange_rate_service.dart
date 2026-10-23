@@ -42,8 +42,6 @@ class ExchangeRateService {
     'ILS',
     'MXN',
     'TRY',
-    'GBp',
-    'GBX',
   };
 
   /// 默认汇率（实时汇率取不到时的回退值）
@@ -207,7 +205,7 @@ class ExchangeRateService {
     for (final c in supportedCurrencies) {
       if (_cachedRates!.containsKey(c)) merged[c] = _cachedRates![c]!;
     }
-    // 报价便士保持原单位；只在资产汇总或用户切换货币时按 100:1 换算。
+    // 仅兼容此前以便士保存的记录，不将这些单位列入货币选择。
     merged['GBp'] = merged['GBP']! * 100;
     merged['GBX'] = merged['GBP']! * 100;
     return merged;
