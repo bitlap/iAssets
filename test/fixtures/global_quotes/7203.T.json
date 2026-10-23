@@ -1,0 +1,71 @@
+{
+  "chart": {
+    "result": [
+      {
+        "meta": {
+          "currency": "JPY",
+          "symbol": "7203.T",
+          "exchangeName": "JPX",
+          "fullExchangeName": "Tokyo",
+          "instrumentType": "EQUITY",
+          "firstTradeDate": 925948800,
+          "regularMarketTime": 1792737000,
+          "hasPrePostMarketData": false,
+          "gmtoffset": 32400,
+          "timezone": "JST",
+          "exchangeTimezoneName": "Asia/Tokyo",
+          "regularMarketPrice": 3105.0,
+          "regularMarketChangePercent": 0.681,
+          "fulldayPrice": 3105.0,
+          "fulldayChange": 21.0,
+          "fulldayChangePercent": 0.681,
+          "fiftyTwoWeekHigh": 4000.0,
+          "fiftyTwoWeekLow": 2686.0,
+          "regularMarketDayHigh": 3119.0,
+          "regularMarketDayLow": 3064.0,
+          "regularMarketVolume": 23788700,
+          "longName": "Toyota Motor Corporation",
+          "shortName": "TOYOTA MOTOR CORP",
+          "chartPreviousClose": 3084.0,
+          "priceHint": 2,
+          "currentTradingPeriod": {
+            "pre": {
+              "timezone": "JST",
+              "end": 1792713600,
+              "start": 1792713600,
+              "gmtoffset": 32400
+            },
+            "regular": {
+              "timezone": "JST",
+              "end": 1792737000,
+              "start": 1792713600,
+              "gmtoffset": 32400
+            },
+            "post": {
+              "timezone": "JST",
+              "end": 1792737000,
+              "start": 1792737000,
+              "gmtoffset": 32400
+            }
+          },
+          "dataGranularity": "1d",
+          "range": "1d",
+          "validRanges": [
+            "1d",
+            "5d",
+            "1mo",
+            "3mo",
+            "6mo",
+            "1y",
+            "2y",
+            "5y",
+            "10y",
+            "ytd",
+            "max"
+          ]
+        }
+      }
+    ],
+    "error": null
+  }
+}

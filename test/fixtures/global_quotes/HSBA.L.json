@@ -1,0 +1,71 @@
+{
+  "chart": {
+    "result": [
+      {
+        "meta": {
+          "currency": "GBp",
+          "symbol": "HSBA.L",
+          "exchangeName": "LSE",
+          "fullExchangeName": "LSE",
+          "instrumentType": "EQUITY",
+          "firstTradeDate": 584089200,
+          "regularMarketTime": 1792748781,
+          "hasPrePostMarketData": false,
+          "gmtoffset": 3600,
+          "timezone": "BST",
+          "exchangeTimezoneName": "Europe/London",
+          "regularMarketPrice": 1351.8,
+          "regularMarketChangePercent": -1.083,
+          "fulldayPrice": 1351.8,
+          "fulldayChange": -14.8,
+          "fulldayChangePercent": -1.083,
+          "fiftyTwoWeekHigh": 1610.0,
+          "fiftyTwoWeekLow": 979.8,
+          "regularMarketDayHigh": 1369.6,
+          "regularMarketDayLow": 1350.0,
+          "regularMarketVolume": 3329169,
+          "longName": "HSBC Holdings plc",
+          "shortName": "HSBC HOLDINGS PLC ORD $0.50 (UK",
+          "chartPreviousClose": 1366.6,
+          "priceHint": 2,
+          "currentTradingPeriod": {
+            "pre": {
+              "timezone": "BST",
+              "start": 1792736100,
+              "end": 1792738800,
+              "gmtoffset": 3600
+            },
+            "regular": {
+              "timezone": "BST",
+              "start": 1792738800,
+              "end": 1792769400,
+              "gmtoffset": 3600
+            },
+            "post": {
+              "timezone": "BST",
+              "start": 1792769400,
+              "end": 1792772100,
+              "gmtoffset": 3600
+            }
+          },
+          "dataGranularity": "1d",
+          "range": "1d",
+          "validRanges": [
+            "1d",
+            "5d",
+            "1mo",
+            "3mo",
+            "6mo",
+            "1y",
+            "2y",
+            "5y",
+            "10y",
+            "ytd",
+            "max"
+          ]
+        }
+      }
+    ],
+    "error": null
+  }
+}

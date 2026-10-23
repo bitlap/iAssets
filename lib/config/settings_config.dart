@@ -96,6 +96,7 @@ class SettingsConfig {
   static String get dataSourceDescEastMoney =>
       L10n.t('dataSourceDescEastMoney');
   static String get dataSourceDescTencent => L10n.t('dataSourceDescTencent');
+  static String get dataSourceDescYahoo => L10n.t('dataSourceDescYahoo');
   static String get dataSourceDescExchangeRate =>
       L10n.t('dataSourceDescExchangeRate');
 

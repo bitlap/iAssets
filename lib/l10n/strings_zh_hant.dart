@@ -122,6 +122,7 @@ const Map<String, String> stringsZhHant = {
   'licenseDescWorkmanager': '背景定時任務排程',
   'dataSourceDescEastMoney': '股票搜尋 / 代碼查詢',
   'dataSourceDescTencent': '即時股價 / 漲跌幅',
+  'dataSourceDescYahoo': '日股、韓股、倫敦及場外市場備用行情（可能延遲）',
   'dataSourceDescExchangeRate': '即時匯率資料',
   'dataSourceNameEastMoney': '東方財富 API',
   'dataSourceAuthorEastMoney': '東方財富',
