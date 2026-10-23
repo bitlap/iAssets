@@ -8,7 +8,7 @@ Stocks & Dividends
 • Recognize your holdings more easily with company logos across more markets
 • Record buys, sells, dividends and fees, with automatic calculations for cost, P&L and after-tax dividends
 • Follow today's P&L and profit charts, and review your trading history
-• Add custom stocks to track other investments
+• Add custom stocks with a currency picker beside the price and an easy-to-reach button below
 • Quotes from Eastmoney, Tencent and Yahoo Finance; some market quotes may be delayed
 • Stock search shows prices and currency codes, with more display currencies supported
 
@@ -18,7 +18,8 @@ Crypto Assets
 • Viewing only, with no trading or transfers; copy trader portfolios are not currently supported
 
 Asset Overview
-• Organize cash, deposits, wealth products and provident fund by category, with collapsible groups and drag-to-reorder
+• Organize cash, deposits, wealth products and provident fund with colorful cards and consistent colors for each name
+• See creation and update times clearly, with collapsible groups and drag-to-reorder
 • View stocks, crypto and other assets together, with support for multiple display currencies
 
 Made for Everyday Use

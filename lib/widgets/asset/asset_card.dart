@@ -131,28 +131,35 @@ class AssetCardFrame extends StatelessWidget {
                               color: color.withValues(alpha: .14),
                             ),
                             const SizedBox(height: 8),
-                            Wrap(
-                              spacing: 12,
-                              runSpacing: 3,
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 if (createdAt != null)
-                                  Text(
-                                    AssetConfig.createdLabel.replaceAll(
-                                      '{date}',
-                                      _f(createdAt!),
-                                    ),
-                                    style: TextStyles.caption.copyWith(
-                                      color: AppColors.textSecondary,
+                                  Expanded(
+                                    child: Text(
+                                      AssetConfig.createdLabel.replaceAll(
+                                        '{date}',
+                                        _f(createdAt!),
+                                      ),
+                                      style: TextStyles.caption.copyWith(
+                                        color: AppColors.textSecondary,
+                                      ),
+                                      textAlign: TextAlign.left,
                                     ),
                                   ),
+                                if (createdAt != null && updatedAt != null)
+                                  const SizedBox(width: 12),
                                 if (updatedAt != null)
-                                  Text(
-                                    AssetConfig.updatedLabel.replaceAll(
-                                      '{date}',
-                                      _f(updatedAt!),
-                                    ),
-                                    style: TextStyles.caption.copyWith(
-                                      color: AppColors.textSecondary,
+                                  Expanded(
+                                    child: Text(
+                                      AssetConfig.updatedLabel.replaceAll(
+                                        '{date}',
+                                        _f(updatedAt!),
+                                      ),
+                                      style: TextStyles.caption.copyWith(
+                                        color: AppColors.textSecondary,
+                                      ),
+                                      textAlign: TextAlign.right,
                                     ),
                                   ),
                               ],
