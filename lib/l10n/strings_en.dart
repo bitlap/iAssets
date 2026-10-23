@@ -129,6 +129,8 @@ const Map<String, String> stringsEn = {
   'dataSourceDescTencent': 'Real-time quotes / change',
   'dataSourceDescYahoo':
       'Backup quotes for Japan, Korea, London and OTC (may be delayed)',
+  'dataSourceDescStockLogos':
+      'Company logos; Beijing stocks can fall back to company websites',
   'dataSourceDescExchangeRate': 'Real-time exchange rates',
   'dataSourceNameEastMoney': 'Eastmoney API',
   'dataSourceAuthorEastMoney': 'Eastmoney',

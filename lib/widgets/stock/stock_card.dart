@@ -6,6 +6,8 @@ import '../../utils/currency_util.dart';
 import '../../utils/stock_calculator.dart';
 import '../../utils/profit_util.dart';
 import '../../utils/logo_cacher.dart';
+import '../../utils/market_util.dart';
+import '../../utils/stock_logo_urls.dart';
 import '../common/app_ui.dart';
 import 'market_badges.dart';
 import 'stock_columns.dart';
@@ -169,25 +171,42 @@ class StockCard extends StatelessWidget {
   }
 
   Widget _buildLogoContent(String fallbackChar) {
-    final cached = LogoCacher.syncCached(stock.symbol);
+    final key = stock.isCustom
+        ? stock.symbol
+        : StockLogoUrls.cacheKey(stock.symbol, stock.marketType);
+    // 旧版本只下载美股公司图标，已有美股缓存仍可离线使用。
+    final cached =
+        LogoCacher.syncCached(key) ??
+        (!stock.isCustom && MarketUtil.isUSMarket(stock.marketType)
+            ? LogoCacher.syncCached(stock.symbol)
+            : null);
     if (cached != null) {
       return Image(
         image: cached,
-        fit: BoxFit.cover,
+        fit: stock.isCustom ? BoxFit.cover : BoxFit.contain,
         errorBuilder: (_, __, ___) => _buildFallbackChar(fallbackChar),
       );
     }
     if (stock.isCustom) return _buildFallbackChar(fallbackChar);
-    if (stock.logoUrl == null) return _buildFallbackChar(fallbackChar);
-    final logoFuture = LogoCacher.getLogo(stock.symbol, stock.logoUrl!);
-    return FutureBuilder<ImageProvider>(
+    final urls = StockLogoUrls.forStock(
+      stock.symbol,
+      stock.marketType,
+      secid: stock.secid,
+    );
+    if (urls.isEmpty) return _buildFallbackChar(fallbackChar);
+    final logoFuture = LogoCacher.getStockLogo(
+      stock.symbol,
+      stock.marketType,
+      secid: stock.secid,
+    );
+    return FutureBuilder<ImageProvider?>(
       future: logoFuture,
       builder: (_, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           if (snapshot.hasData) {
             return Image(
               image: snapshot.data!,
-              fit: BoxFit.cover,
+              fit: BoxFit.contain,
               errorBuilder: (_, __, ___) => _buildFallbackChar(fallbackChar),
             );
           }

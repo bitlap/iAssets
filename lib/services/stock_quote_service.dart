@@ -2,7 +2,7 @@ import 'package:flutter/foundation.dart';
 
 import '../config/app_config.dart';
 import '../models/stock_search_models.dart';
-import '../utils/market_util.dart';
+import '../utils/stock_logo_urls.dart';
 import 'circuit_breaker.dart';
 import 'tencent_quote_service.dart';
 import 'east_money_quote_service.dart';
@@ -110,13 +110,9 @@ class StockQuoteService {
     return null;
   }
 
-  static String? getLogoUrl(String code, String market) {
-    if (MarketUtil.isUSMarket(market)) {
-      return 'https://logos.stocktwits-cdn.com/${code.toUpperCase()}.png?w=64';
-    } else if (market == MarketUtil.searchMarketHK) {
-      return null;
-    }
-    return null;
+  static String? getLogoUrl(String code, String market, {String secid = ''}) {
+    final urls = StockLogoUrls.forStock(code, market, secid: secid);
+    return urls.isEmpty ? null : urls.first;
   }
 
   void _setCache(String secid, StockQuote? quote) {

@@ -6,6 +6,7 @@ import 'package:http/http.dart';
 import '../config/app_config.dart';
 import '../models/stock_search_models.dart';
 import '../utils/market_util.dart';
+import '../utils/stock_logo_urls.dart';
 
 /// 东方财富不可用时，为日、韩、伦敦和场外股票提供备用报价。
 class YahooQuoteService {
@@ -89,6 +90,11 @@ class YahooQuoteService {
           code: stock.code,
           name: stock.name,
           market: stock.market,
+          logoUrl: StockLogoUrls.forStock(
+            stock.code,
+            stock.market,
+            secid: stock.secid,
+          ).firstOrNull,
           currentPrice: inPence ? price / 100 : price,
           changePercent: (price / previous - 1) * 100,
         );

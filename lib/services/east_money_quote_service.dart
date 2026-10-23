@@ -5,6 +5,7 @@ import 'package:http/http.dart';
 import '../config/app_config.dart';
 import '../models/stock_search_models.dart';
 import '../utils/market_util.dart';
+import '../utils/stock_logo_urls.dart';
 import 'circuit_breaker.dart';
 
 class EastMoneyQuoteService {
@@ -100,9 +101,11 @@ class EastMoneyQuoteService {
 
     final market = stock.market;
 
-    final logoUrl = MarketUtil.isUSMarket(market)
-        ? 'https://logos.stocktwits-cdn.com/${stock.code.toUpperCase()}.png?w=64'
-        : null;
+    final logoUrl = StockLogoUrls.forStock(
+      stock.code,
+      market,
+      secid: stock.secid,
+    ).firstOrNull;
 
     return StockQuote(
       code: stock.code,
