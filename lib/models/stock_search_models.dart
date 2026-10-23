@@ -1,3 +1,5 @@
+import '../utils/market_util.dart';
+
 /// 股票搜索结果模型
 class StockSearchResult {
   final String code; // 股票代码，如 AAPL, 00700
@@ -15,6 +17,7 @@ class StockSearchResult {
 
 /// 股票实时行情
 class StockQuote {
+  final String currency;
   final String code;
   final String name;
   final double currentPrice;
@@ -29,5 +32,6 @@ class StockQuote {
     required this.changePercent,
     required this.market,
     this.logoUrl,
-  });
+    String? currency,
+  }) : currency = currency ?? MarketUtil.currencyForMarket(market);
 }

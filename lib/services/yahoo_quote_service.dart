@@ -68,14 +68,11 @@ class YahooQuoteService {
         if (meta == null || meta['symbol'] != symbol) continue;
         final currency = meta['currency'];
         final expectedCurrency = MarketUtil.currencyForMarket(stock.market);
-        final inPence = currency == 'GBp' || currency == 'GBX';
         final foreignLondonCurrency =
             MarketUtil.isUKMarket(stock.market) &&
             currency is String &&
-            RegExp(r'^[A-Z]{3}$').hasMatch(currency);
-        if (currency != expectedCurrency &&
-            !(expectedCurrency == 'GBP' && inPence) &&
-            !foreignLondonCurrency) {
+            ExchangeRateService.supportedCurrencies.contains(currency);
+        if (currency != expectedCurrency && !foreignLondonCurrency) {
           continue;
         }
         final price = (meta['regularMarketPrice'] as num?)?.toDouble();
@@ -92,16 +89,6 @@ class YahooQuoteService {
             previous <= 0) {
           continue;
         }
-        var holdingPrice = inPence ? price / 100 : price;
-        if (currency != expectedCurrency && !inPence) {
-          final rate = await ExchangeRateService().conversionRate(
-            currency as String,
-            expectedCurrency,
-          );
-          if (rate == null) continue;
-          holdingPrice *= rate;
-        }
-        if (!holdingPrice.isFinite || holdingPrice <= 0) continue;
         return StockQuote(
           code: stock.code,
           name: stock.name,
@@ -111,7 +98,8 @@ class YahooQuoteService {
             stock.market,
             secid: stock.secid,
           ).firstOrNull,
-          currentPrice: holdingPrice,
+          currentPrice: price,
+          currency: currency as String,
           changePercent: (price / previous - 1) * 100,
         );
       }

@@ -6,6 +6,7 @@ import '../../models/stock_search_models.dart';
 import '../../services/settings_service.dart';
 import '../../services/stock_search_service.dart';
 import '../../services/stock_quote_service.dart';
+import '../../services/exchange_rate_service.dart';
 import '../../utils/center_toast.dart';
 import '../../utils/currency_util.dart';
 import '../../utils/logo_cacher.dart';
@@ -103,7 +104,7 @@ class _SearchStockDialogState extends State<SearchStockDialog> {
       setState(() {
         _errorMessage = StockConfig.searchRateLimit.replaceAll(
           '{secs}',
-          '${cooldownSecs}',
+          '$cooldownSecs',
         );
         _hasSearched = true;
         _isLoading = false;
@@ -163,7 +164,7 @@ class _SearchStockDialogState extends State<SearchStockDialog> {
     if (widget.existingSymbols.contains(stock.code)) {
       CenterToast.warning(
         context,
-        StockConfig.searchAlreadyExists.replaceAll('{code}', '${stock.code}'),
+        StockConfig.searchAlreadyExists.replaceAll('{code}', stock.code),
       );
       return;
     }
@@ -176,7 +177,7 @@ class _SearchStockDialogState extends State<SearchStockDialog> {
       if (cooldownSecs > 0) {
         CenterToast.warning(
           context,
-          StockConfig.searchRateLimit.replaceAll('{secs}', '${cooldownSecs}'),
+          StockConfig.searchRateLimit.replaceAll('{secs}', '$cooldownSecs'),
         );
         return;
       }
@@ -191,7 +192,7 @@ class _SearchStockDialogState extends State<SearchStockDialog> {
 
     // 弹出输入价格和股数的弹窗
     if (!mounted) return;
-    final result = await showDialog<Map<String, double>>(
+    final result = await showDialog<Map<String, dynamic>>(
       context: context,
       barrierDismissible: true,
       builder: (_) => _AddStockConfirmDialog(
@@ -199,14 +200,17 @@ class _SearchStockDialogState extends State<SearchStockDialog> {
         stockName: quote?.name ?? stock.name,
         market: stock.market,
         defaultPrice: defaultPrice,
+        currency:
+            quote?.currency ?? CurrencyUtil.currencyForMarket(stock.market),
+        canSelectCurrency: quote == null && MarketUtil.isUKMarket(stock.market),
       ),
     );
 
     if (result == null) return; // 用户取消
 
-    final price = result['price']!;
-    final shares = result['shares']!;
-    final fee = result['fee'] ?? 0.0;
+    final price = result['price'] as double;
+    final shares = result['shares'] as double;
+    final fee = result['fee'] as double? ?? 0.0;
     final totalValue = price * shares;
 
     final stockModel = StockModel(
@@ -223,7 +227,7 @@ class _SearchStockDialogState extends State<SearchStockDialog> {
       logoUrl: StockQuoteService.getLogoUrl(stock.code, stock.market),
       marketType: stock.market,
       changePercent: quote?.changePercent ?? 0.0,
-      currency: CurrencyUtil.currencyForMarket(stock.market),
+      currency: result['currency'] as String,
       secid: stock.secid,
     );
 
@@ -231,7 +235,7 @@ class _SearchStockDialogState extends State<SearchStockDialog> {
     final buyRecord = OperationRecord(
       date: DateTime.now(),
       type: StockConfig.opBuyType,
-      description: StockConfig.opOpenPosition + ' ${stock.code}',
+      description: '${StockConfig.opOpenPosition} ${stock.code}',
       amount: price,
       shares: shares,
       fee: fee,
@@ -589,7 +593,7 @@ class _SearchStockDialogState extends State<SearchStockDialog> {
                               width: 36,
                               height: 36,
                               fit: BoxFit.contain,
-                              errorBuilder: (_, __, ___) =>
+                              errorBuilder: (_, _, _) =>
                                   _buildLogoFallback(stock),
                             );
                           }
@@ -673,14 +677,14 @@ class _SearchStockDialogState extends State<SearchStockDialog> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
-                          Text(
-                            MarketUtil.isUKMarket(stock.market)
-                                ? '£$priceLabel'
-                                : priceLabel,
-                            style: TextStyles.subtitle.copyWith(
-                              fontWeight: FontWeight.w500,
+                          FittedBox(
+                            fit: BoxFit.scaleDown,
+                            child: Text(
+                              '$priceLabel ${quote.currency}',
+                              style: TextStyles.subtitle.copyWith(
+                                fontWeight: FontWeight.w500,
+                              ),
                             ),
-                            overflow: TextOverflow.ellipsis,
                           ),
                           const SizedBox(height: 2),
                           Text(
@@ -771,12 +775,16 @@ class _AddStockConfirmDialog extends StatefulWidget {
   final String stockName;
   final String market;
   final double defaultPrice;
+  final String currency;
+  final bool canSelectCurrency;
 
   const _AddStockConfirmDialog({
     required this.stockCode,
     required this.stockName,
     required this.market,
     required this.defaultPrice,
+    required this.currency,
+    required this.canSelectCurrency,
   });
 
   @override
@@ -784,6 +792,7 @@ class _AddStockConfirmDialog extends StatefulWidget {
 }
 
 class _AddStockConfirmDialogState extends State<_AddStockConfirmDialog> {
+  late String _currency;
   late final TextEditingController _priceController;
   late final TextEditingController _sharesController;
   late final TextEditingController _feeController;
@@ -793,6 +802,7 @@ class _AddStockConfirmDialogState extends State<_AddStockConfirmDialog> {
   @override
   void initState() {
     super.initState();
+    _currency = widget.currency;
     _priceController = TextEditingController(
       text: widget.defaultPrice > 0
           ? CurrencyUtil.formatRate(widget.defaultPrice)
@@ -916,15 +926,36 @@ class _AddStockConfirmDialogState extends State<_AddStockConfirmDialog> {
             value: MarketUtil.marketLabel(widget.market),
             valueColor: StockStyle.marketColor(widget.market),
           ),
-          if (MarketUtil.isUKMarket(widget.market)) ...[
-            const SizedBox(height: 8),
-            InfoRowWidget(label: StockConfig.customStockCurrency, value: 'GBP'),
-          ],
+          const SizedBox(height: 8),
+          if (widget.canSelectCurrency)
+            DropdownButtonFormField<String>(
+              initialValue: _currency,
+              decoration: InputDecoration(
+                labelText: StockConfig.customStockCurrency,
+              ),
+              items: ExchangeRateService.supportedCurrencies
+                  .map(
+                    (currency) => DropdownMenuItem(
+                      value: currency,
+                      child: Text(currency),
+                    ),
+                  )
+                  .toList(),
+              onChanged: (currency) {
+                if (currency != null) setState(() => _currency = currency);
+              },
+            )
+          else
+            InfoRowWidget(
+              label: StockConfig.customStockCurrency,
+              value: _currency,
+            ),
           if (widget.defaultPrice > 0) ...[
             const SizedBox(height: 8),
             InfoRowWidget(
               label: StockConfig.searchRealtimePrice,
-              value: CurrencyUtil.formatRate(widget.defaultPrice),
+              value:
+                  '${CurrencyUtil.formatRate(widget.defaultPrice)} $_currency',
             ),
           ],
         ],
@@ -946,6 +977,11 @@ class _AddStockConfirmDialogState extends State<_AddStockConfirmDialog> {
       return;
     }
 
-    Navigator.pop(context, {'price': price, 'shares': shares, 'fee': fee});
+    Navigator.pop(context, {
+      'price': price,
+      'shares': shares,
+      'fee': fee,
+      'currency': _currency,
+    });
   }
 }

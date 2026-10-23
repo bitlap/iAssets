@@ -41,7 +41,7 @@ void main() {
       '深A': ('000001', '0', 'CNY'),
       'JPX': ('7203', '176', 'JPY'),
       'KRX': ('005930', '177', 'KRW'),
-      'LSE': ('HSBA', '155', 'GBP'),
+      'LSE': ('HSBA', '155', 'GBp'),
       'OTCBB': ('NSRGY', '153', 'USD'),
     }.entries) {
       testWidgets('search and add ${entry.key} in $language at 320px', (
@@ -95,6 +95,12 @@ void main() {
             );
             await tester.pumpAndSettle();
             expect(find.text(code), findsOneWidget);
+            expect(
+              find.text(
+                entry.key == 'LSE' ? '1000.0000 GBp' : '10.0000 $currency',
+              ),
+              findsOneWidget,
+            );
             final resultLabel = tester.widget<Text>(
               find.text(MarketUtil.marketLabel(entry.key)).last,
             );
@@ -128,10 +134,10 @@ void main() {
               ),
             );
             expect(marketInfo.valueColor, StockStyle.marketColor(entry.key));
-            if (entry.key == 'LSE') expect(find.text('GBP'), findsOneWidget);
+            expect(find.text(currency), findsOneWidget);
             expect(
               tester.widget<TextField>(inputs.at(1)).controller!.text,
-              '10.0000',
+              entry.key == 'LSE' ? '1000.0000' : '10.0000',
             );
             // The search input remains behind the confirmation dialog.
             await tester.enterText(inputs.at(1), '10');
@@ -142,7 +148,7 @@ void main() {
             expect(added!.marketType, entry.key);
             expect(added!.currency, currency);
             expect(added!.secid, '$exchange.$code');
-            expect(added!.totalValue, 20);
+            expect(added!.totalValue, entry.key == 'LSE' ? 2000 : 20);
             expect(trade!.amount, 10);
             expect(trade!.shares, 2);
             expect(tester.takeException(), isNull);

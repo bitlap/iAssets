@@ -47,7 +47,7 @@ void main() {
   test(
     'real metadata preserves identifiers, daily changes and native currencies',
     () async {
-      final prices = [3105.0, 215500.0, 13.518, 104.0];
+      final prices = [3105.0, 215500.0, 1351.8, 104.0];
       final previous = [3084.0, 214500.0, 1366.6, 101.01];
       final nativePrices = [3105.0, 215500.0, 1351.8, 104.0];
       var requests = 0;
@@ -60,6 +60,7 @@ void main() {
               quote.changePercent,
               closeTo((nativePrices[i] / previous[i] - 1) * 100, 1e-9),
             );
+            expect(quote.currency, ['JPY', 'KRW', 'GBp', 'USD'][i]);
             expect(quote.code, stocks[i].code);
             expect(quote.market, stocks[i].market);
             expect(quote.name, stocks[i].name);
@@ -219,7 +220,7 @@ void main() {
           }
           final first = await service.getStockQuotesBatch(stocks);
           expect(first.keys, containsAll(stocks.map((s) => s.secid)));
-          expect(first['155.HSBA']!.currentPrice, closeTo(13.518, 1e-9));
+          expect(first['155.HSBA']!.currentPrice, closeTo(1351.8, 1e-9));
           expect(domesticRequests, 0);
           expect(yahooRequests, 4);
           expect(CircuitBreaker().isInCooldown, isTrue);
