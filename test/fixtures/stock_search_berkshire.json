@@ -1,0 +1,27 @@
+{
+  "QuotationCodeTable": {
+    "Data": [
+      {
+        "Code": "BRK_B",
+        "Name": "伯克希尔哈撒韦-B",
+        "PinYin": "BKXEHSWB",
+        "ID": "BRK_B7",
+        "JYS": "NYSE",
+        "Classify": "UsStock",
+        "MarketType": "7",
+        "SecurityTypeName": "美股",
+        "SecurityType": "7",
+        "MktNum": "106",
+        "TypeUS": "1",
+        "QuoteID": "106.BRK_B",
+        "UnifiedCode": "BRK_B",
+        "InnerCode": "36059190680983"
+      }
+    ],
+    "Status": 0,
+    "Message": "成功",
+    "TotalCount": 1,
+    "BizCode": "",
+    "BizMsg": ""
+  }
+}

@@ -92,7 +92,7 @@ void main() {
     expect(result.single.code, 'REMOTE');
     expect(result.single.secid, '105.REMOTE');
     expect(result.single.name, 'REMOTE company');
-    expect(result.single.market, '美股');
+    expect(result.single.market, 'NASDAQ');
     expect(StockDataManager.buildSearchResults([]), isEmpty);
   });
   test(

@@ -7,12 +7,14 @@ class InfoRowWidget extends StatelessWidget {
   final String label;
   final String value;
   final double labelWidth;
+  final Color? valueColor;
 
   const InfoRowWidget({
     super.key,
     required this.label,
     required this.value,
     this.labelWidth = 70,
+    this.valueColor,
   });
 
   @override
@@ -27,7 +29,9 @@ class InfoRowWidget extends StatelessWidget {
         Expanded(
           child: Text(
             value,
-            style: TextStyles.bodySmall.copyWith(color: AppColors.textPrimary),
+            style: TextStyles.bodySmall.copyWith(
+              color: valueColor ?? AppColors.textPrimary,
+            ),
           ),
         ),
       ],

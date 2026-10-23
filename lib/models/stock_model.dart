@@ -13,7 +13,7 @@ class StockModel {
   final double profitLossAmount; // 股票自身币种盈亏
   final bool isPositive;
   final String? logoUrl; // Logo URL
-  final String marketType; // 市场类型：美股、港股
+  final String marketType; // 接口原始市场名称，展示时本地化，筛选时精确匹配
   final double changePercent; // 日涨跌幅（%）
   final String? _currency; // 股票币种
   String get currency =>
@@ -31,12 +31,15 @@ class StockModel {
     required this.profitLossAmount,
     required this.isPositive,
     this.logoUrl,
-    this.marketType = MarketUtil.searchMarketUS,
+    String marketType = MarketUtil.searchMarketUS,
     this.changePercent = 0.0,
     String? currency,
     required this.secid,
     this.isCustom = false,
-  }) : _currency = currency;
+  }) : marketType = isCustom
+           ? marketType
+           : MarketUtil.marketFromProvider(marketType, secid: secid),
+       _currency = currency;
 
   /// 复制并修改
   StockModel copyWith({

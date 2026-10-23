@@ -38,7 +38,7 @@ class EastMoneyQuoteService {
       final client = Client();
       final uri = Uri.parse(
         '$_batchBaseUrl?secids=$secids'
-        '&fields=f12,f1,f2,f3',
+        '&fields=f12,f13,f1,f2,f3',
       );
 
       final response = await client
@@ -52,13 +52,14 @@ class EastMoneyQuoteService {
         final rawData = body?['data'];
         final diffList = (rawData is Map ? rawData['diff'] : rawData) as List?;
         if (diffList != null) {
-          final stockByCode = <String, StockSearchResult>{
-            for (final s in stocks) s.code: s,
+          final stockBySecid = <String, StockSearchResult>{
+            for (final s in stocks) s.secid: s,
           };
           for (final item in diffList) {
             if (item is! Map<String, dynamic>) continue;
             final code = item['f12']?.toString() ?? '';
-            final stock = stockByCode[code];
+            final secid = '${item['f13']}.$code';
+            final stock = stockBySecid[secid];
             if (stock == null) continue;
 
             final quote = _parseItem(item, stock);
@@ -90,14 +91,16 @@ class EastMoneyQuoteService {
     if (stock == null) return null;
     var decimals = _parseInt(item['f1']).toInt();
     var rawPrice = _parseInt(item['f2']);
-    final price = decimals > 0 ? rawPrice / _pow10(decimals) : rawPrice;
+    var price = decimals > 0 ? rawPrice / _pow10(decimals) : rawPrice;
+    // 东方财富伦敦市场以便士报价，持仓和收益统一使用 GBP。
+    if (MarketUtil.isUKMarket(stock.market)) price /= 100;
     if (price == 0) return null;
 
     final changePercent = _parseDouble(item['f3']) / 100;
 
     final market = stock.market;
 
-    final logoUrl = market == MarketUtil.searchMarketUS
+    final logoUrl = MarketUtil.isUSMarket(market)
         ? 'https://logos.stocktwits-cdn.com/${stock.code.toUpperCase()}.png?w=64'
         : null;
 

@@ -13,7 +13,12 @@ void main() {
       String? value;
       await tester.pumpWidget(
         MaterialApp(
-          theme: AppTheme.data(brightness),
+          theme: AppTheme.data(brightness).copyWith(
+            textTheme: AppTheme.data(brightness).textTheme.apply(
+              fontFamily: 'ReviewFont',
+              fontFamilyFallback: ['ReviewCJK'],
+            ),
+          ),
           home: Scaffold(
             body: StatefulBuilder(
               builder: (context, setState) => Column(
@@ -35,6 +40,14 @@ void main() {
         ),
       );
       final field = find.byType(DropdownButtonFormField<String>);
+      final button = tester.widget<DropdownButton<String>>(
+        find.descendant(
+          of: field,
+          matching: find.byType(DropdownButton<String>),
+        ),
+      );
+      expect(button.style!.fontFamily, 'ReviewFont');
+      expect(button.style!.fontFamilyFallback, ['ReviewCJK']);
       FocusNode focus() => tester
           .widget<DropdownButton<String>>(
             find.descendant(

@@ -69,14 +69,11 @@ void main() {
       TradingDayUtil.tradingDayKey(utc),
     );
   });
-  test('A-share exchanges all map to CNY and match the A-share filter', () {
-    for (final market in MarketUtil.cnMarkets) {
+  test('domestic markets map to CNY and filter by exact provider name', () {
+    for (final market in ['沪A', '深A', '基金', '债券', '指数', '三板']) {
       expect(MarketUtil.isChineseMarket(market), isTrue);
       expect(MarketUtil.currencyForMarket(market), 'CNY');
-      expect(
-        MarketUtil.matchesFilter(MarketUtil.searchMarketCN, market),
-        isTrue,
-      );
+      expect(MarketUtil.matchesFilter(market, market), isTrue);
       expect(MarketUtil.supportMarket(market), isTrue);
     }
     expect(

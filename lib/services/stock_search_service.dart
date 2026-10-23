@@ -66,7 +66,15 @@ class StockSearchService {
       if (response.statusCode == 200) {
         _breaker.onSuccess();
         final data = json.decode(response.body);
-        final results = _parseSearchResults(data);
+        var results = _parseSearchResults(data);
+        // 东方财富以 BRK_B 表示类别股，界面和腾讯使用 BRK.B。
+        // 先保留原始搜索，避免影响其他市场中本来就含点号的代码。
+        if (results.isEmpty &&
+            RegExp(
+              r'^[A-Za-z][A-Za-z0-9]*\.[A-Za-z0-9]+$',
+            ).hasMatch(keyword.trim())) {
+          results = await searchStocks(keyword.trim().replaceAll('.', '_'));
+        }
         _searchCacheTime[keyword] = DateTime.now();
         _searchCacheValue[keyword] = results;
         debugPrint(
@@ -90,7 +98,7 @@ class StockSearchService {
 
   List<StockSearchResult> _parseSearchResults(Map<String, dynamic> data) {
     final results = <StockSearchResult>[];
-    final seenCodes = <String>{};
+    final seenSecids = <String>{};
     final quoteList = data['QuotationCodeTable']?['Data'];
     if (quoteList == null) return results;
 
@@ -100,9 +108,13 @@ class StockSearchService {
       final name = item['Name']?.toString() ?? '';
       final secid = item['QuoteID']?.toString() ?? '';
 
-      if (seenCodes.contains(code)) continue;
+      if (seenSecids.contains(secid)) continue;
 
-      final securityType = item['SecurityTypeName']?.toString() ?? '';
+      final securityType = MarketUtil.marketFromProvider(
+        item['SecurityTypeName']?.toString() ?? '',
+        exchange: item['JYS']?.toString() ?? '',
+        secid: secid,
+      );
       if (!MarketUtil.supportMarket(securityType)) {
         debugPrint(
           '[${DateTime.now().toString().substring(11, 19)}][搜索] ===> 不支持的股票市场: $securityType',
@@ -110,6 +122,7 @@ class StockSearchService {
         continue;
       }
       if (secid.isNotEmpty && code.isNotEmpty) {
+        seenSecids.add(secid);
         results.add(
           StockSearchResult(
             code: code,
