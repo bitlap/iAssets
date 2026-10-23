@@ -10,6 +10,7 @@ Stocks & Dividends
 • Follow today's P&L and profit charts, and review your trading history
 • Add custom stocks to track other investments
 • Quotes from Eastmoney, Tencent and Yahoo Finance; some market quotes may be delayed
+• Stock search shows prices and currency codes, with more display currencies supported
 
 Crypto Assets
 • Connect regular Binance accounts or lead trader accounts to view spot balances, futures positions and estimated asset values

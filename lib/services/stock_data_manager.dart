@@ -5,7 +5,6 @@ import '../../models/calculator_models.dart';
 import '../../services/stock_quote_service.dart';
 import '../../services/exchange_rate_service.dart';
 import '../../services/icloud_storage.dart';
-import '../../utils/market_util.dart';
 import '../../utils/stock_calculator.dart';
 
 class StockDataManager {
@@ -37,10 +36,16 @@ class StockDataManager {
       final secid = stock.secid;
       final quote = quotes[secid];
       if (quote != null) {
+        // 新持仓使用原报价币种；旧持仓保留已记录的成本和派息币种。
+        final rate = ExchangeRateService().cachedConversionRate(
+          quote.currency,
+          stock.currency,
+        );
+        if (rate == null) continue;
         final index = result.indexWhere((s) => s.symbol == stock.symbol);
         if (index != -1) {
           result[index] = stock.copyWith(
-            currentPrice: quote.currentPrice,
+            currentPrice: quote.currentPrice * rate,
             changePercent: quote.changePercent,
           );
           result[index] = recalculateStock(
@@ -92,6 +97,13 @@ class StockDataManager {
     if (stocks.isEmpty) return stocks;
     final quotes = await fetchQuotes(quoteService, stocks);
     if (quotes.isEmpty) return stocks;
+    if (stocks.any(
+      (stock) =>
+          quotes[stock.secid] != null &&
+          quotes[stock.secid]!.currency != stock.currency,
+    )) {
+      await ExchangeRateService().fetchRates();
+    }
     final updated = applyQuotes(stocks, quotes, operationRecords);
     await IcloudStorage.saveStocks(updated, operationRecords, dividendRecords);
     return updated;

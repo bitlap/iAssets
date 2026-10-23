@@ -121,7 +121,7 @@ const Map<String, String> stringsZh = {
   'licenseDescWorkmanager': '后台定时任务调度',
   'dataSourceDescEastMoney': '股票搜索 / 代码查询',
   'dataSourceDescTencent': '实时股价 / 涨跌幅',
-  'dataSourceDescYahoo': '日股、韩股、伦敦及场外市场备用行情（可能延迟）',
+  'dataSourceDescYahoo': '伦交所行情／日股、韩股及场外备用行情（可能延迟）',
   'dataSourceDescStockLogos': '股票公司图标；北交所支持公司官网备用来源',
   'dataSourceDescExchangeRate': '实时汇率数据',
   'dataSourceNameEastMoney': '东方财富 API',

@@ -12,7 +12,7 @@ class TencentQuoteService {
   factory TencentQuoteService() => _instance;
   TencentQuoteService._internal();
 
-  final CircuitBreaker _breaker = CircuitBreaker();
+  final CircuitBreaker _breaker = CircuitBreaker.tencent;
   static const String _baseUrl = 'https://qt.gtimg.cn/q=';
 
   Future<StockQuote?> fetchQuote(StockSearchResult stock) async {
@@ -26,19 +26,17 @@ class TencentQuoteService {
     final prefix = MarketUtil.tencentPrefix(stock.market, stock.secid);
     if (prefix == null) return null;
 
+    final client = Client();
     try {
       final symbol = '$prefix${stock.code}';
 
-      final client = Client();
       final uri = Uri.parse('$_baseUrl$symbol');
 
       final response = await client
           .get(uri)
           .timeout(Duration(seconds: AppConfig.httpTimeoutSec));
-      client.close();
-      _breaker.onSuccess();
-
       if (response.statusCode == 200) {
+        _breaker.onSuccess();
         final quote = _parseQuote(response.body, stock);
         if (quote != null) {
           debugPrint(
@@ -47,6 +45,9 @@ class TencentQuoteService {
         }
         return quote;
       }
+      if (response.statusCode == 429 || response.statusCode >= 500) {
+        _breaker.onFailure();
+      }
       return null;
     } catch (e) {
       debugPrint(
@@ -54,6 +55,8 @@ class TencentQuoteService {
       );
       _breaker.onFailure();
       return null;
+    } finally {
+      client.close();
     }
   }
 
@@ -68,7 +71,7 @@ class TencentQuoteService {
       if (parts.length < 5) return null;
 
       final currentPrice = double.tryParse(parts[3]) ?? 0.0;
-      if (currentPrice == 0.0) return null;
+      if (!currentPrice.isFinite || currentPrice <= 0) return null;
 
       double changePercent = 0.0;
       if (parts.length > 32) {

@@ -95,6 +95,7 @@ void main() {
             );
             await tester.pumpAndSettle();
             expect(find.text(code), findsOneWidget);
+            expect(find.text('10.0000 $currency'), findsOneWidget);
             final resultLabel = tester.widget<Text>(
               find.text(MarketUtil.marketLabel(entry.key)).last,
             );
@@ -128,6 +129,7 @@ void main() {
               ),
             );
             expect(marketInfo.valueColor, StockStyle.marketColor(entry.key));
+            expect(find.text(currency), findsOneWidget);
             expect(
               tester.widget<TextField>(inputs.at(1)).controller!.text,
               '10.0000',
@@ -147,6 +149,25 @@ void main() {
             expect(tester.takeException(), isNull);
           },
           () => MockClient((request) async {
+            if (request.url.host == 'query1.finance.yahoo.com') {
+              return http.Response(
+                jsonEncode({
+                  'chart': {
+                    'result': [
+                      {
+                        'meta': {
+                          'symbol': request.url.pathSegments.last,
+                          'currency': 'GBp',
+                          'regularMarketPrice': 1000,
+                          'chartPreviousClose': 1000,
+                        },
+                      },
+                    ],
+                  },
+                }),
+                200,
+              );
+            }
             if (request.url.host == 'qt.gtimg.cn') {
               expect([
                 '沪A',

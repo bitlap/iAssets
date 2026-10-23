@@ -31,6 +31,17 @@ class ExchangeRateService {
     'CHF',
     'KRW',
     'SGD',
+    'SEK',
+    'NOK',
+    'DKK',
+    'PLN',
+    'CZK',
+    'HUF',
+    'NZD',
+    'ZAR',
+    'ILS',
+    'MXN',
+    'TRY',
   };
 
   /// 默认汇率（实时汇率取不到时的回退值）
@@ -47,11 +58,25 @@ class ExchangeRateService {
     'CHF': 0.88,
     'KRW': 1320.0,
     'SGD': 1.34,
+    'SEK': 9.910213,
+    'NOK': 9.343987,
+    'DKK': 6.66782,
+    'PLN': 3.899348,
+    'CZK': 21.634943,
+    'HUF': 326.19222,
+    'NZD': 1.759591,
+    'ZAR': 16.495348,
+    'ILS': 3.110654,
+    'MXN': 18.733975,
+    'TRY': 49.680228,
+    'GBp': 79.0,
+    'GBX': 79.0,
   };
 
   /// 汇率缓存
   Map<String, double>? _cachedRates;
   DateTime? _lastFetchTime;
+  Future<Map<String, double>?>? _pendingFetch;
   static const Duration _cacheTTL = Duration(
     minutes: AppConfig.exchangeRateCacheTTLMin,
   );
@@ -180,6 +205,9 @@ class ExchangeRateService {
     for (final c in supportedCurrencies) {
       if (_cachedRates!.containsKey(c)) merged[c] = _cachedRates![c]!;
     }
+    // 仅兼容此前以便士保存的记录，不将这些单位列入货币选择。
+    merged['GBp'] = merged['GBP']! * 100;
+    merged['GBX'] = merged['GBP']! * 100;
     return merged;
   }
 
@@ -191,7 +219,55 @@ class ExchangeRateService {
 
   /// 获取实时汇率，返回各币种对 USD 的汇率
   /// 1 USD = X 目标货币
-  Future<Map<String, double>?> fetchRates() async {
+  Future<Map<String, double>?> fetchRates() {
+    return _pendingFetch ??= _fetchRates().whenComplete(
+      () => _pendingFetch = null,
+    );
+  }
+
+  /// 只使用接口或其缓存中的汇率，不能把缺失币种当作 1:1 换算。
+  Future<double?> conversionRate(String from, String to) async {
+    if (from == to) return 1;
+    final rates = await fetchRates();
+    return _conversionRate(rates, from, to);
+  }
+
+  /// 用于同步更新旧持仓；没有真实汇率就保留原价格，避免重解释历史成本。
+  double? cachedConversionRate(String from, String to) {
+    if (from == to) return 1;
+    _cachedRates ??= _loadFromFileSync();
+    return _conversionRate(_cachedRates, from, to);
+  }
+
+  static double? _conversionRate(
+    Map<String, double>? rates,
+    String from,
+    String to,
+  ) {
+    // GBP 与 GBp/GBX 之间是单位关系，不依赖网络汇率。
+    String base(String code) => code == 'GBp' || code == 'GBX' ? 'GBP' : code;
+    double units(String code) => code == 'GBp' || code == 'GBX' ? 100 : 1;
+    if (base(from) == base(to)) return units(to) / units(from);
+    double? unitRate(String code) {
+      final value = rates?[base(code)];
+      return value == null ? null : value * units(code);
+    }
+
+    final source = unitRate(from);
+    final target = unitRate(to);
+    if (source == null ||
+        target == null ||
+        !source.isFinite ||
+        !target.isFinite ||
+        source <= 0 ||
+        target <= 0) {
+      return null;
+    }
+    final rate = target / source;
+    return rate.isFinite && rate > 0 ? rate : null;
+  }
+
+  Future<Map<String, double>?> _fetchRates() async {
     // 内存缓存有效，直接返回
     if (hasValidCache) {
       debugPrint(
@@ -206,7 +282,7 @@ class ExchangeRateService {
     // 熔断中，返回已有缓存（内存或文件恢复）
     if (_isInCooldown) {
       debugPrint(
-        '[${DateTime.now().toString().substring(11, 19)}][汇率] ===> 冷却期中，跳过请求 (剩余${cooldownRemainingSeconds}秒)',
+        '[${DateTime.now().toString().substring(11, 19)}][汇率] ===> 冷却期中，跳过请求 (剩余$cooldownRemainingSeconds秒)',
       );
       return _cachedRates;
     }

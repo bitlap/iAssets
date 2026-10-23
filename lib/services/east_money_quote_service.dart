@@ -14,7 +14,7 @@ class EastMoneyQuoteService {
   factory EastMoneyQuoteService() => _instance;
   EastMoneyQuoteService._internal();
 
-  final CircuitBreaker _breaker = CircuitBreaker();
+  final CircuitBreaker _breaker = CircuitBreaker.eastMoney;
   static const String _batchBaseUrl =
       'https://push2.eastmoney.com/api/qt/ulist.np/get';
 
@@ -22,6 +22,9 @@ class EastMoneyQuoteService {
     List<StockSearchResult> stocks,
     void Function(String secid, StockQuote quote) onQuote,
   ) async {
+    stocks = stocks
+        .where((stock) => !MarketUtil.isUKMarket(stock.market))
+        .toList();
     if (stocks.isEmpty) return;
     if (_breaker.isInCooldown) {
       debugPrint(
@@ -34,9 +37,9 @@ class EastMoneyQuoteService {
       '[${DateTime.now().toString().substring(11, 19)}][东方财富] ===> 批量查询: ${stocks.length}只',
     );
 
+    final client = Client();
     try {
       final secids = stocks.map((s) => s.secid).join(',');
-      final client = Client();
       final uri = Uri.parse(
         '$_batchBaseUrl?secids=$secids'
         '&fields=f12,f13,f1,f2,f3',
@@ -45,11 +48,9 @@ class EastMoneyQuoteService {
       final response = await client
           .get(uri)
           .timeout(Duration(seconds: AppConfig.httpTimeoutSec));
-      client.close();
-      _breaker.onSuccess();
-
       if (response.statusCode == 200) {
         final body = json.decode(response.body) as Map<String, dynamic>?;
+        _breaker.onSuccess();
         final rawData = body?['data'];
         final diffList = (rawData is Map ? rawData['diff'] : rawData) as List?;
         if (diffList != null) {
@@ -71,12 +72,16 @@ class EastMoneyQuoteService {
             );
           }
         }
+      } else if (response.statusCode == 429 || response.statusCode >= 500) {
+        _breaker.onFailure();
       }
     } catch (e) {
       debugPrint(
         '[${DateTime.now().toString().substring(11, 19)}][东方财富] ===> 批量失败: $e',
       );
       _breaker.onFailure();
+    } finally {
+      client.close();
     }
   }
 
@@ -93,9 +98,7 @@ class EastMoneyQuoteService {
     var decimals = _parseInt(item['f1']).toInt();
     var rawPrice = _parseInt(item['f2']);
     var price = decimals > 0 ? rawPrice / _pow10(decimals) : rawPrice;
-    // 东方财富伦敦市场以便士报价，持仓和收益统一使用 GBP。
-    if (MarketUtil.isUKMarket(stock.market)) price /= 100;
-    if (price == 0) return null;
+    if (!price.isFinite || price <= 0) return null;
 
     final changePercent = _parseDouble(item['f3']) / 100;
 

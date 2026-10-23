@@ -1,0 +1,65 @@
+{
+  "chart": {
+    "result": [
+      {
+        "meta": {
+          "currency": "CHF",
+          "symbol": "0HCX.L",
+          "exchangeName": "LSE",
+          "fullExchangeName": "LSE",
+          "instrumentType": "ETF",
+          "firstTradeDate": 1792047600,
+          "regularMarketTime": 1792056485,
+          "hasPrePostMarketData": false,
+          "gmtoffset": 3600,
+          "timezone": "BST",
+          "exchangeTimezoneName": "Europe/London",
+          "regularMarketPrice": 24.565,
+          "regularMarketChangePercent": -0.9456,
+          "fulldayPrice": 24.565,
+          "fulldayChange": -0.2345,
+          "fulldayChangePercent": -0.9456,
+          "fiftyTwoWeekHigh": 24.565,
+          "fiftyTwoWeekLow": 24.565,
+          "regularMarketDayHigh": 24.565,
+          "regularMarketDayLow": 24.565,
+          "regularMarketVolume": 610,
+          "longName": "UBS Factor MSCI EMU Quality Screened UCITS ETF hCHF acc",
+          "shortName": "UBS ETF-FACTOR MSCI EMU QUALITY",
+          "chartPreviousClose": 24.7995,
+          "priceHint": 2,
+          "currentTradingPeriod": {
+            "pre": {
+              "timezone": "BST",
+              "start": 1792736100,
+              "end": 1792738800,
+              "gmtoffset": 3600
+            },
+            "regular": {
+              "timezone": "BST",
+              "start": 1792738800,
+              "end": 1792769400,
+              "gmtoffset": 3600
+            },
+            "post": {
+              "timezone": "BST",
+              "start": 1792769400,
+              "end": 1792772100,
+              "gmtoffset": 3600
+            }
+          },
+          "dataGranularity": "1d",
+          "range": "1d",
+          "validRanges": [
+            "1d",
+            "5d",
+            "1mo",
+            "ytd",
+            "max"
+          ]
+        }
+      }
+    ],
+    "error": null
+  }
+}

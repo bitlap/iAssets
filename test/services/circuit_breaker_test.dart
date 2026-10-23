@@ -6,6 +6,16 @@ void main() {
   final breaker = CircuitBreaker();
   setUp(breaker.onSuccess);
   tearDown(breaker.onSuccess);
+  test('independent breakers do not share failures or resets', () {
+    final other = CircuitBreaker();
+    for (var i = 0; i < AppConfig.failureThreshold; i++) {
+      breaker.onFailure();
+    }
+    expect(breaker.isInCooldown, isTrue);
+    expect(other.isInCooldown, isFalse);
+    other.onSuccess();
+    expect(breaker.isInCooldown, isTrue);
+  });
   test('only consecutive failures at threshold trigger cooldown', () {
     expect(breaker.isInCooldown, isFalse);
     expect(breaker.cooldownRemainingSeconds, 0);

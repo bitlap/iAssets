@@ -1,3 +1,4 @@
+import '../support/source_breakers.dart';
 import 'dart:convert';
 import 'dart:io';
 
@@ -41,8 +42,8 @@ void main() {
   String fixture(String symbol) =>
       File('test/fixtures/global_quotes/$symbol.json').readAsStringSync();
   http.Response response(String symbol) => http.Response(fixture(symbol), 200);
-  setUp(() => CircuitBreaker().onSuccess());
-  tearDown(() => CircuitBreaker().onSuccess());
+  setUp(resetSourceBreakers);
+  tearDown(resetSourceBreakers);
 
   test(
     'real metadata preserves identifiers, daily changes and native currencies',
@@ -60,6 +61,7 @@ void main() {
               quote.changePercent,
               closeTo((nativePrices[i] / previous[i] - 1) * 100, 1e-9),
             );
+            expect(quote.currency, ['JPY', 'KRW', 'GBP', 'USD'][i]);
             expect(quote.code, stocks[i].code);
             expect(quote.market, stocks[i].market);
             expect(quote.name, stocks[i].name);
@@ -215,17 +217,17 @@ void main() {
           final service = StockQuoteService();
           // Enter domestic cooldown: the independent fallback must still run.
           for (var i = 0; i < 3; i++) {
-            CircuitBreaker().onFailure();
+            CircuitBreaker.eastMoney.onFailure();
           }
           final first = await service.getStockQuotesBatch(stocks);
           expect(first.keys, containsAll(stocks.map((s) => s.secid)));
           expect(first['155.HSBA']!.currentPrice, closeTo(13.518, 1e-9));
           expect(domesticRequests, 0);
           expect(yahooRequests, 4);
-          expect(CircuitBreaker().isInCooldown, isTrue);
+          expect(CircuitBreaker.eastMoney.isInCooldown, isTrue);
           await service.getStockQuotesBatch(stocks);
           expect(yahooRequests, 4);
-          CircuitBreaker().onSuccess();
+          CircuitBreaker.eastMoney.onSuccess();
           // Distinct secid avoids the singleton cache, and forces EastMoney failure.
           final other = StockSearchResult(
             code: '7203',

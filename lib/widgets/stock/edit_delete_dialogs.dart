@@ -5,6 +5,7 @@ import '../../utils/currency_util.dart';
 import '../../utils/stock_calculator.dart';
 import '../../services/settings_service.dart';
 import '../../services/stock_quote_service.dart';
+import '../../services/exchange_rate_service.dart';
 import '../../utils/center_toast.dart';
 import '../../config/app_config.dart';
 import '../common/app_colors.dart';
@@ -100,7 +101,6 @@ class _EditStockDialogState extends State<EditStockDialog> {
   Future<void> _fetchRealtimePrice() async {
     final secid = widget.stock.secid;
     if (secid == null || secid.isEmpty) return;
-    if (_quoteService.cooldownRemainingSeconds > 0) return;
     setState(() => _isLoadingPrice = true);
     try {
       final stock = StockSearchResult(
@@ -113,7 +113,14 @@ class _EditStockDialogState extends State<EditStockDialog> {
       if (!mounted) return;
       final quote = quotes[secid];
       if (quote != null && quote.currentPrice > 0) {
-        _priceController.text = CurrencyUtil.formatRate(quote.currentPrice);
+        final rates = ExchangeRateService();
+        final rate =
+            rates.cachedConversionRate(quote.currency, widget.stock.currency) ??
+            await rates.conversionRate(quote.currency, widget.stock.currency);
+        if (!mounted || rate == null) return;
+        _priceController.text = CurrencyUtil.formatRate(
+          quote.currentPrice * rate,
+        );
       }
     } catch (_) {
     } finally {
