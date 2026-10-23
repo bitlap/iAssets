@@ -85,6 +85,12 @@ List<OpenSourceLib> get dataSources => [
     SettingsConfig.dataSourceDescYahoo,
   ),
   OpenSourceLib(
+    'Financial Modeling Prep / Stocktwits',
+    'FMP / Stocktwits',
+    '\u2014',
+    SettingsConfig.dataSourceDescStockLogos,
+  ),
+  OpenSourceLib(
     'ExchangeRate-API',
     'exchangerate-api.com',
     '\u2014',

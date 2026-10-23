@@ -5,6 +5,7 @@ Keep stocks, crypto, savings and other investments together. See how your assets
 Stocks & Dividends
 • Search by name or symbol across US, Hong Kong, Shanghai, Shenzhen, Beijing, Japanese, Korean, UK and over-the-counter markets
 • Filter search results, holdings and dividends by individual exchange or market, with clear color labels
+• Recognize your holdings more easily with company logos across more markets
 • Record buys, sells, dividends and fees, with automatic calculations for cost, P&L and after-tax dividends
 • Follow today's P&L and profit charts, and review your trading history
 • Add custom stocks to track other investments

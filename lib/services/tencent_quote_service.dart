@@ -4,6 +4,7 @@ import 'package:http/http.dart';
 import '../config/app_config.dart';
 import '../models/stock_search_models.dart';
 import '../utils/market_util.dart';
+import '../utils/stock_logo_urls.dart';
 import 'circuit_breaker.dart';
 
 class TencentQuoteService {
@@ -74,9 +75,11 @@ class TencentQuoteService {
         changePercent = double.tryParse(parts[32]) ?? 0.0;
       }
 
-      final logoUrl = MarketUtil.isUSMarket(stock.market)
-          ? 'https://logos.stocktwits-cdn.com/${stock.code.toUpperCase()}.png?w=64'
-          : null;
+      final logoUrl = StockLogoUrls.forStock(
+        stock.code,
+        stock.market,
+        secid: stock.secid,
+      ).firstOrNull;
 
       return StockQuote(
         code: stock.code,

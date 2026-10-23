@@ -158,7 +158,8 @@ void main() {
               ], contains(entry.key));
               return http.Response('v_test="1~company~$code~10~0";', 200);
             }
-            if (request.url.host == 'logos.stocktwits-cdn.com') {
+            if (request.url.host == 'logos.stocktwits-cdn.com' ||
+                request.url.host == 'images.financialmodelingprep.com') {
               return http.Response('', 404);
             }
             final Object response;

@@ -9,6 +9,7 @@ import '../../services/stock_quote_service.dart';
 import '../../utils/center_toast.dart';
 import '../../utils/currency_util.dart';
 import '../../utils/logo_cacher.dart';
+import '../../utils/stock_logo_urls.dart';
 import '../../utils/market_util.dart';
 import '../../config/app_config.dart';
 import '../common/app_colors.dart';
@@ -562,13 +563,18 @@ class _SearchStockDialogState extends State<SearchStockDialog> {
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(8),
                 child: () {
-                  final logoUrl = StockQuoteService.getLogoUrl(
+                  final urls = StockLogoUrls.forStock(
                     stock.code,
                     stock.market,
+                    secid: stock.secid,
                   );
-                  if (logoUrl != null) {
-                    return FutureBuilder<ImageProvider>(
-                      future: LogoCacher.getLogo(stock.code, logoUrl),
+                  if (urls.isNotEmpty) {
+                    return FutureBuilder<ImageProvider?>(
+                      future: LogoCacher.getLogo(
+                        StockLogoUrls.cacheKey(stock.code, stock.market),
+                        urls.first,
+                        fallbackUrls: urls.skip(1).toList(),
+                      ),
                       builder: (_, snapshot) {
                         if (snapshot.connectionState == ConnectionState.done) {
                           if (snapshot.hasData) {
