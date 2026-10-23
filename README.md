@@ -1,195 +1,90 @@
-# iAssets — 看清资产，轻松记录
-
 <p align="center">
-  <img src="ios/Runner/Assets.xcassets/AppIcon.appiconset/icon_1024.png" width="128" height="128" alt="iAssets Logo">
+  <img src="ios/Runner/Assets.xcassets/AppIcon.appiconset/icon_1024.png" width="96" height="96" alt="iAssets 图标">
 </p>
 
-一款使用 Flutter 开发的个人资产管理 iOS APP，采用 Material 3 设计，支持跟随系统、浅色和深色主题，以及多币种换算、iCloud 同步、后台收益快照等能力。
+<h1 align="center">iAssets</h1>
 
-已在 [App Store](https://apps.apple.com/cn/app/iassets/id6790114856) 上线。无内购无广告，使用公开 API，不保证严格实时。
+<p align="center">
+  个人资产管理，让每一笔投资清晰可见。<br>
+  在一个 App 中查看股票、数字币、存款与理财。
+</p>
 
-## 页面与模块
+<p align="center">
+  <a href="https://github.com/bitlap/iAssets/actions/workflows/flutter-ci.yml"><img src="https://github.com/bitlap/iAssets/actions/workflows/flutter-ci.yml/badge.svg" alt="Flutter CI"></a>
+  <a href="https://flutter.dev"><img src="https://img.shields.io/badge/Flutter-02569B?logo=flutter&logoColor=white" alt="Built with Flutter"></a>
+  <img src="https://img.shields.io/badge/Platform-iOS-000000?logo=apple&logoColor=white" alt="Platform: iOS">
+  <a href="LICENSE"><img src="https://img.shields.io/badge/License-BSD--3--Clause-blue.svg" alt="License: BSD 3-Clause"></a>
+</p>
 
-### 首页（股票管理）
+<p align="center">
+  <a href="https://apps.apple.com/cn/app/iassets/id6790114856">App Store 下载</a> ·
+  <a href="changelog/1.6.0.md">更新日志</a> ·
+  <a href="https://github.com/bitlap/iAssets/issues">反馈问题</a>
+</p>
 
-**顶部概况卡**
-- 展示总资产、持仓市值、总成本、总盈亏、已实现盈亏、税后总股息
-- 点击货币标签切换多币种展示（CNY / USD / HKD 等），汇率实时换算
-- 展开后可查看今日盈亏迷你曲线（红涨绿跌，虚线零轴），点击区域展开全尺寸收益曲线
-- **右上角**：股息全局概览按钮（`Icons.payments_outlined`）和设置按钮
+## 简介
 
-**持仓列表**
-- 每行展示 Logo、公司名/代码、市值、持仓数量、盈亏金额与百分比
-- 点击展开详情：总成本、均价、最高/最低买入价、买入/卖出次数
-- 持仓卡片支持加仓、减仓、平仓、派息、删除操作
+iAssets 是一款使用 Flutter 构建的开源 iOS 个人资产管理应用。记录投资、追踪收益、查看资产分布，帮助你了解自己的财务状况。
 
-**搜索与建仓**
-- 支持纳斯达克、纽交所、美交所、港交所、沪A、深A、京A、基金、债券、指数、三板、日本交易所、韩国交易所、伦交所、场外交易板按代码或名称搜索
-- 市场筛选（全部/纳斯达克/纽交所/美交所/港交所/沪A/深A/京A/基金/债券/指数/三板/日本交易所/韩国交易所/伦交所/场外交易板）
-- 添加时自动创建首笔买入记录，自动带入默认手续费
-- 支持自定义股票，手动录入公司名称、股票数量、当前价格和本地币种
-- 自定义股票图片可从系统相册或本地文件选择，并持久化展示
+无广告、无社区、无内购。支持简体中文、繁體中文和 English，以及浅色、深色和跟随系统主题。
 
-**收益曲线**
-- 标题行始终可见，下方固定展示今日盈亏迷你曲线
-- 点击展开全尺寸曲线，支持今天/7天/30天/180天/360天粒度切换
-- 前台 60 秒定时刷新、切后台和后台任务均记录收益快照，历史最多保留一年
+## 核心功能
 
-**排序与刷新**
-- 列表头支持按盈亏、持仓市值、代码排序
-- 每 60 秒自动刷新行情，下拉可手动刷新，表头显示最近更新时间
+| 功能 | 你可以做什么 |
+| --- | --- |
+| 股票持仓 | 搜索并添加股票，记录买卖、手续费和派息，查看成本、盈亏与持仓详情 |
+| 股息与收益 | 汇总税后股息，按市场筛选，查看今日盈亏与不同时间范围的收益曲线 |
+| 数字币资产 | 连接币安账户，查看现货、合约及带单资产，并计入总资产 |
+| 资产总览 | 分类管理现金、存款、理财和公积金，查看资产分布，支持折叠与拖拽排序 |
+| 多币种换算 | 切换显示币种，统一查看不同市场和账户的资产估值 |
+| 数据同步 | 通过 iCloud 同步股票、手动资产、记录和设置 |
 
-### 全局股息概览
+股票搜索覆盖美股、港股、沪深京、日本、韩国、英国及场外市场，也支持基金、债券、指数和三板。搜索、持仓与股息可按具体交易所或市场筛选，使用一致的名称和颜色标识；也可手动添加自定义股票。
 
-从首页右上角股息按钮进入，查看所有股票的派息汇总：
-- 按市场筛选（全部/纳斯达克/纽交所/美交所/港交所/沪A/深A/京A/基金/债券/指数/三板/日本交易所/韩国交易所/伦交所/场外交易板）
-- 展示总派息金额、税前/税后对比
-- 每条记录包含：派息日期、每股金额、持仓股数、税率、税后总额
-- 左滑可删除，删除后自动重算资产数据
+数字币目前仅支持币安普通账户及现货、合约带单账户，跟单组合暂不支持。仅提供资产查看，不提供交易或转账。详细范围见[数字币说明](docs/crypto-sync.md)。
 
-### 数字币
+## 数据与隐私
 
-- 暂时仅支持币安只读同步连接，添加前测试账户及权限，防止同一账户重复计入。
-- 现货/币种余额展示数量、可用/冻结数量、当前参考价和估值；合约展示方向、数量、标记价格、浮盈及杠杆。
-- 独立总资产卡片，数字币估值同步加入资产页面顶部卡片；点击总资产旁的问号可查看资产分布。
-- 支持普通账户、现货带单与合约带单；跟单账户暂无公开资产接口，暂不支持添加，详见 [账户覆盖说明](docs/crypto-sync.md)。
-- 凭证仅存本机 Keychain；余额与持仓不落盘缓存，也不参与 iCloud 同步。当前会话在刷新失败时保留上次成功结果，重启后重新查询。前台每 5 分钟自动刷新，下拉立即刷新。
-- 不支持持仓编辑或交易，不读取现货成本或保存历史成交。
-- 数字币顶部卡片固定按合约、现货、带单显示分类金额；标题下显示最近更新时间，范围与注意事项仅在添加连接时提示。
+- 股票与手动资产保存在本地，支持离线查看和记录，并可通过 iCloud 同步。
+- 数字币连接信息仅保存在本机 Keychain；余额与持仓仅在当前会话中保留，不参与 iCloud 同步。
+- 股票搜索与行情来自东方财富、腾讯；汇率及数字币估值使用公开数据和交易所查询结果。
+- 行情与估值可能存在延迟，仅供个人资产记录与参考。
 
-### 资产管理
+## 本地运行
 
-- **总览卡片**：总资产、股票市值、数字币估值、存款理财；点击问号查看资产分布
-- **多类型管理**：现金、活期存款、定期存款、理财/基金、公积金
-- **分组折叠**：资产按分类分组，每个分类可独立折叠/展开，状态持久化
-- **拖拽排序**：分类标题和同分类内资产均可拖拽调整顺序；跨分类拖拽拦截提示
-- **定期存款**：按本金、年利率、期限自动计算总值
-- **理财/基金**：按持有份额和单位净值计算当前价值
-
-### 设置
-
-- **主题**：跟随系统 / 浅色 / 深色切换，默认跟随系统
-- **语言**：跟随系统 / 简体中文 / 繁體中文 / English
-- **涨跌配色**：默认红涨绿跌，可切换为绿涨红跌
-- **本地货币**：CNY / CNH / USD / HKD / EUR / JPY / GBP / AUD / CAD / CHF / KRW / SGD 切换
-- **iCloud 同步**：自动同步设置、股票、记录、资产和收益快照
-- **排序偏好**：默认排序字段、排序方向
-- **平仓保留**：平仓后是否在列表中保留该股票
-- **默认手续费**：按比例或固定金额配置，建仓/加减仓时自动填入
-- **计算公式**：各指标（总资产、总成本、盈亏等）计算方式说明
-- **意见反馈、开源软件说明、版本信息**
-
-### 记录管理
-
-每只股票的「操作」和「派息」记录通过底部弹窗管理（从持仓卡片点击进入）。
-
-**操作记录**
-- 显示每笔操作：描述、股数、单价 × 股数、总金额、更新时间
-- 支持编辑（修改价格和股数）和左滑删除
-- 修改后自动重算持仓数据
-
-**派息记录**
-- 显示每笔派息：派息代码、总金额、计算公式、派息日期、更新时间
-- 支持编辑（修改日期、每股金额、股数、税率）和左滑删除
-- 修改后自动重算资产数据
-
-## 技术栈
-
-| 类别   | 技术                                    |
-|------|---------------------------------------|
-| 框架   | Flutter 3.44.4（CI） / Dart SDK ^3.12.2 |
-| UI   | Material 3 浅色 / 深色主题                |
-| 设计系统 | 统一 AppColors / TextStyles 常量体系       |
-| 本地化  | flutter_localizations、intl            |
-| 网络   | http                                  |
-| 本地存储 | 文件系统（JSON）、Keychain                    |
-| 路径访问 | path_provider                         |
-| 云同步  | iCloud（CloudKit / CloudDocuments）     |
-| 后台任务 | workmanager                           |
-| 版本信息 | package_info_plus                     |
-| 系统调用 | url_launcher                          |
-| 数据源  | 东方财富搜索、腾讯行情、东方财富行情补充、ExchangeRate-API、Binance、Coinbase |
-
-## 快速开始
+需要 macOS、Xcode、CocoaPods，以及 Flutter 3.44.4（与 CI 一致，Dart SDK 要求见 [pubspec.yaml](pubspec.yaml)）。
 
 ```bash
-# 克隆
-git clone https://github.com/bitlap/assets
-cd assets
-
-# 依赖环境
-# - Flutter 3.44.4 stable
-# - Xcode / CocoaPods
-# - iOS 14.0+
-
-# 配置 Apple Developer Team ID（用于真机调试和签名）
-cp ios/Config.example.xcconfig ios/Config.xcconfig
-# 编辑 ios/Config.xcconfig，填入你的 DEVELOPMENT_TEAM
-#
-# 如果你需要使用自己的签名 / 包名 / iCloud 配置，还要同步修改：
-# - Bundle Identifier（当前默认 org.bitlap.assets）
-# - iCloud Container / kvstore 标识（当前默认 iCloud.org.bitlap.assets）
-
-# 安装依赖
+git clone https://github.com/bitlap/iAssets.git
+cd iAssets
 flutter pub get
 
-# 运行（iOS 模拟器）
+# 复制签名配置，填入自己的 Apple Developer Team ID
+cp ios/Config.example.xcconfig ios/Config.xcconfig
+
+# 启动 iOS 模拟器并运行
 open -a Simulator
 flutter run
-
-# 真机调试 / 签名检查
-open ios/Runner.xcworkspace
-flutter devices            # 查看设备 ID
-flutter run -d <device_id>
-
-# 代码分析
-flutter analyze
-
-# 单元测试
-flutter test
-
-# 格式化
-dart format .
 ```
 
-## 贡献
+在 `ios/Config.xcconfig` 中填写 `DEVELOPMENT_TEAM`。如需使用自己的应用标识与 iCloud 配置，请打开 `ios/Runner.xcworkspace`，同步调整签名、Bundle Identifier 和 iCloud 容器。
 
-欢迎提交 Issue 和 Pull Request。
+构建与上传说明见 [iOS 发布指南](scripts/README.md)。
 
-### 开发准则
+## 参与贡献
 
-- 保持 `flutter analyze --fatal-infos` 无错误
-- 提交前运行 `dart format .`
-- 新增 UI 优先使用 `AppColors` 和 `TextStyles` 常量，避免硬编码颜色和样式
-- PR 标题用中文简述改动，描述中英文均可
+欢迎通过 [Issues](https://github.com/bitlap/iAssets/issues) 报告问题、提出建议，或提交 Pull Request。
 
-### PR 流程
+提交前请运行以下检查，在 PR 中说明改动和验证结果；界面调整请附截图。
 
-1. Fork 并创建特性分支
-2. 确保 `flutter analyze` 通过
-3. 提交 PR，描述改了什么和为什么
-4. 维护者 review 后合并
+```bash
+dart format --output=none --set-exit-if-changed lib test
+flutter analyze --no-pub
+flutter test --no-pub
+```
 
-## 配置
+涉及界面的改动请沿用现有样式，并兼顾简体中文、繁体中文、英文和深浅主题。
 
-| 配置项       | 值                                               | 说明                         |
-|-----------|-------------------------------------------------|----------------------------|
-| 行情刷新间隔    | 60 秒                                            | 前台定时刷新行情                   |
-| 首次刷新延迟    | 3 秒                                             | 启动后延迟刷新，避免冷启动阻塞            |
-| 行情缓存      | 15 分钟                                           | 股票行情缓存有效期                  |
-| 数字币刷新间隔   | 5 分钟                                            | 仅前台自动刷新；下拉可立即刷新            |
-| 数字币资产缓存   | 不落盘                                            | 当前会话内存保留上次成功结果；重启后重新查询     |
-| 数字币连接凭证   | 本机 Keychain                                     | 不参与 iCloud 同步或备份           |
-| 搜索缓存      | 5 分钟                                            | 搜索结果缓存有效期                  |
-| 汇率缓存      | 24 小时                                           | 汇率缓存有效期                    |
-| 搜索防抖      | 1000 ms                                         | 输入停止后延迟搜索                  |
-| API 熔断    | 连续 3 次失败，冷却 5 分钟                                | 搜索、行情、汇率请求共用保护策略           |
-| HTTP 超时   | 15 秒                                            | 单次请求超时上限                   |
-| 后台快照间隔    | 10 分钟                                           | WorkManager 定时记录收益快照       |
-| 支持币种      | CNY、CNH、USD、HKD、EUR、JPY、GBP、AUD、CAD、CHF、KRW、SGD | 当前代码实际支持                   |
-| 数据源       | 东方财富搜索、腾讯行情、东方财富行情补充、ExchangeRate-API、Binance、Coinbase | 当前代码实际使用                   |
-| iOS 最低版本  | 15.0                                            | 当前 Xcode 工程配置              |
-| Bundle ID | `org.bitlap.assets`                             | 当前工程默认值，克隆后可按需修改           |
-| Team ID   | `ios/Config.xcconfig`                           | 通过 `DEVELOPMENT_TEAM` 配置签名 |
-| iCloud 容器 | `iCloud.org.bitlap.assets`                      | 若修改包名需同步调整                 |
-| 后台任务标识    | `profit-snapshot`                               | 已注册到 iOS BGTaskScheduler   |
+## 许可证
+
+本项目采用 [BSD 3-Clause License](LICENSE)。
