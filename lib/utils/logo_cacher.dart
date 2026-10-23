@@ -6,8 +6,6 @@ import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
 
 import '../config/app_config.dart';
-import '../services/beijing_stock_logo_service.dart';
-import 'market_util.dart';
 import 'stock_logo_urls.dart';
 
 /// Logo 本地缓存：并发请求共享下载结果，缺失或损坏时交给界面显示文字占位。
@@ -46,9 +44,6 @@ class LogoCacher {
       StockLogoUrls.cacheKey(code, market),
       urls.first,
       fallbackUrls: urls.skip(1).toList(),
-      fallbackLoader: market == MarketUtil.exchangeBJ
-          ? () => BeijingStockLogoService().findLogos(code)
-          : null,
     );
   }
 
@@ -57,7 +52,6 @@ class LogoCacher {
     String key,
     String logoUrl, {
     List<String> fallbackUrls = const [],
-    Future<List<String>> Function()? fallbackLoader,
   }) async {
     await ensureInit();
     key = key.toUpperCase();
@@ -69,10 +63,7 @@ class LogoCacher {
     }
     final pending = _downloading[key];
     if (pending != null) return pending;
-    final download = _downloadToCache(key, [
-      logoUrl,
-      ...fallbackUrls,
-    ], fallbackLoader);
+    final download = _downloadToCache(key, [logoUrl, ...fallbackUrls]);
     _downloading[key] = download;
     try {
       return await download;
@@ -99,48 +90,36 @@ class LogoCacher {
   static Future<ImageProvider?> _downloadToCache(
     String key,
     List<String> urls,
-    Future<List<String>> Function()? fallbackLoader,
   ) async {
-    for (var attempt = 0; attempt < 2; attempt++) {
-      for (final url in urls.toSet()) {
-        try {
-          final uri = Uri.parse(url);
-          final response = await http
-              .get(
-                uri,
-                headers: {
-                  'User-Agent': 'Mozilla/5.0',
-                  'Referer': '${uri.origin}/',
-                },
-              )
-              .timeout(const Duration(seconds: AppConfig.httpTimeoutSec));
-          if (response.statusCode != 200 || response.bodyBytes.isEmpty) {
-            continue;
-          }
-          // CDN 的错误页有时也返回 200，必须成功解码才能写入持久缓存。
-          final codec = await ui.instantiateImageCodec(response.bodyBytes);
-          try {
-            final frame = await codec.getNextFrame();
-            frame.image.dispose();
-          } finally {
-            codec.dispose();
-          }
-          final target = File(_filePath(key));
-          await target.writeAsBytes(response.bodyBytes, flush: true);
-          _failedAt.remove(key);
-          return FileImage(target);
-        } catch (e) {
-          debugPrint('[Logo] ===> 下载失败 $key: $e');
+    for (final url in urls.toSet()) {
+      try {
+        final uri = Uri.parse(url);
+        final response = await http
+            .get(
+              uri,
+              headers: {
+                'User-Agent': 'Mozilla/5.0',
+                'Referer': '${uri.origin}/',
+              },
+            )
+            .timeout(const Duration(seconds: AppConfig.httpTimeoutSec));
+        if (response.statusCode != 200 || response.bodyBytes.isEmpty) {
+          continue;
         }
-      }
-      if (attempt == 0 && fallbackLoader != null) {
+        // CDN 的错误页有时也返回 200，必须成功解码才能写入持久缓存。
+        final codec = await ui.instantiateImageCodec(response.bodyBytes);
         try {
-          urls = await fallbackLoader();
-        } catch (_) {
-          break;
+          final frame = await codec.getNextFrame();
+          frame.image.dispose();
+        } finally {
+          codec.dispose();
         }
-      } else {
-        break;
+        final target = File(_filePath(key));
+        await target.writeAsBytes(response.bodyBytes, flush: true);
+        _failedAt.remove(key);
+        return FileImage(target);
+      } catch (e) {
+        debugPrint('[Logo] ===> 下载失败 $key: $e');
       }
     }
     _failedAt[key] = DateTime.now();
