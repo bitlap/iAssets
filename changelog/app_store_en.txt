@@ -8,6 +8,7 @@ Stocks & Dividends
 • Record buys, sells, dividends and fees, with automatic calculations for cost, P&L and after-tax dividends
 • Follow today's P&L and profit charts, and review your trading history
 • Add custom stocks to track other investments
+• Quotes from Eastmoney, Tencent and Yahoo Finance; some market quotes may be delayed
 
 Crypto Assets
 • Connect regular Binance accounts or lead trader accounts to view spot balances, futures positions and estimated asset values
