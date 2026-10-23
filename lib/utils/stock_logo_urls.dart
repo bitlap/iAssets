@@ -12,6 +12,10 @@ class StockLogoUrls {
     final symbol = code.trim().toUpperCase();
     if (!RegExp(r'^[A-Z0-9][A-Z0-9.\-]*$').hasMatch(symbol)) return [];
     final exchange = MarketUtil.marketFromProvider(market, secid: secid);
+    if (_hasKnownCompanyPhoto(symbol, exchange)) {
+      // 图标源已知返回办公楼照片；缺少可信 Logo 时交给界面显示文字。
+      return [];
+    }
     String image(String ticker) =>
         'https://images.financialmodelingprep.com/symbol/$ticker.png';
     if (MarketUtil.isUSMarket(exchange)) {
@@ -46,5 +50,22 @@ class StockLogoUrls {
     }
   }
 
-  static String cacheKey(String code, String market) => '$market:$code';
+  static bool _hasKnownCompanyPhoto(String symbol, String exchange) =>
+      ((exchange == MarketUtil.exchangeSH ||
+              exchange == MarketUtil.searchMarketCN) &&
+          symbol == '600036') ||
+      (exchange == MarketUtil.exchangeHK &&
+          RegExp(r'^0?3968$').hasMatch(symbol));
+
+  static String cacheKey(String code, String market) {
+    final symbol = code.trim().toUpperCase();
+    final exchange = MarketUtil.marketFromProvider(market);
+    // 绕过已知照片和此前从官网获取的缓存，不影响用户自选图标。
+    final suffix =
+        _hasKnownCompanyPhoto(symbol, exchange) ||
+            exchange == MarketUtil.exchangeBJ
+        ? ':provider-v2'
+        : '';
+    return '$market:$code$suffix';
+  }
 }

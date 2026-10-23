@@ -31,6 +31,39 @@ void main() {
   tearDownAll(() => directory.deleteSync(recursive: true));
 
   test(
+    'known CMB photos and old website images stay out of automatic logos',
+    () async {
+      for (final row in [
+        ('600036', '沪A'),
+        ('600036', 'A股'),
+        ('03968', 'HK'),
+        ('3968', '港股'),
+      ]) {
+        final oldKey = '${row.$2}:${row.$1}';
+        await LogoCacher.cacheLocalImageBytes(oldKey, png);
+        await LogoCacher.cacheLocalImageBytes('$oldKey:official-v1', png);
+        final key = StockLogoUrls.cacheKey(row.$1, row.$2);
+        expect(key, isNot(oldKey));
+        expect(key, isNot('$oldKey:official-v1'));
+        expect(LogoCacher.syncCached(key), isNull);
+        expect(StockLogoUrls.forStock(row.$1, row.$2), isEmpty);
+        var requests = 0;
+        await http.runWithClient(
+          () async {
+            expect(await LogoCacher.getStockLogo(row.$1, row.$2), isNull);
+            expect(requests, 0);
+          },
+          () => MockClient((_) async {
+            requests++;
+            return http.Response.bytes(png, 200);
+          }),
+        );
+      }
+      expect(StockLogoUrls.cacheKey('600519', '沪A'), '沪A:600519');
+    },
+  );
+
+  test(
     'global tickers preserve exchange, leading zeroes and share classes',
     () {
       for (final row in [
@@ -290,49 +323,24 @@ void main() {
     expect(tester.takeException(), isNull);
   });
   test(
-    'Beijing image misses fall back through a verified company website and cache the logo',
+    'Beijing image misses use text instead of fetching company websites',
     () async {
-      final hosts = <String>[];
+      const oldKey = '京A:920002';
+      await LogoCacher.cacheLocalImageBytes(oldKey, png);
+      final key = StockLogoUrls.cacheKey('920002', '京A');
+      expect(key, isNot(oldKey));
+      expect(LogoCacher.syncCached(key), isNull);
+      var requests = 0;
       await http.runWithClient(
         () async {
-          final image = await LogoCacher.getStockLogo('920002', '京A');
-          expect(image, isA<FileImage>());
-          expect(hosts, [
-            'images.financialmodelingprep.com',
-            'emweb.securities.eastmoney.com',
-            'www.example.com',
-            'www.example.com',
-          ]);
-          expect(
-            await LogoCacher.getStockLogo('920002', '京A'),
-            isA<FileImage>(),
-          );
-          expect(hosts, hasLength(4));
+          expect(await LogoCacher.getStockLogo('920002', '京A'), isNull);
+          expect(await LogoCacher.getStockLogo('920002', '京A'), isNull);
+          expect(requests, 1);
         },
         () => MockClient((request) async {
-          hosts.add(request.url.host);
-          if (request.url.host == 'images.financialmodelingprep.com') {
-            return http.Response('', 404);
-          }
-          if (request.url.host == 'emweb.securities.eastmoney.com') {
-            return http.Response(
-              jsonEncode({
-                'jbzl': [
-                  {
-                    'SECUCODE': '920002.BJ',
-                    'SECURITY_CODE': '920002',
-                    'ORG_WEB': 'www.example.com',
-                  },
-                ],
-              }),
-              200,
-            );
-          }
-          if (request.url.path.endsWith('.png')) {
-            expect(request.headers['Referer'], 'https://www.example.com/');
-            return http.Response.bytes(png, 200);
-          }
-          return http.Response('<img src="/company-logo.png">', 200);
+          requests++;
+          expect(request.url.host, 'images.financialmodelingprep.com');
+          return http.Response('', 404);
         }),
       );
     },
