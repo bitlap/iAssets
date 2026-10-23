@@ -183,7 +183,7 @@ class StockCard extends StatelessWidget {
     if (cached != null) {
       return Image(
         image: cached,
-        fit: BoxFit.cover,
+        fit: stock.isCustom ? BoxFit.cover : BoxFit.contain,
         errorBuilder: (_, __, ___) => _buildFallbackChar(fallbackChar),
       );
     }
@@ -194,10 +194,10 @@ class StockCard extends StatelessWidget {
       secid: stock.secid,
     );
     if (urls.isEmpty) return _buildFallbackChar(fallbackChar);
-    final logoFuture = LogoCacher.getLogo(
-      key,
-      urls.first,
-      fallbackUrls: urls.skip(1).toList(),
+    final logoFuture = LogoCacher.getStockLogo(
+      stock.symbol,
+      stock.marketType,
+      secid: stock.secid,
     );
     return FutureBuilder<ImageProvider?>(
       future: logoFuture,
@@ -206,7 +206,7 @@ class StockCard extends StatelessWidget {
           if (snapshot.hasData) {
             return Image(
               image: snapshot.data!,
-              fit: BoxFit.cover,
+              fit: BoxFit.contain,
               errorBuilder: (_, __, ___) => _buildFallbackChar(fallbackChar),
             );
           }

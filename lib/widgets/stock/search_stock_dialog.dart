@@ -570,10 +570,10 @@ class _SearchStockDialogState extends State<SearchStockDialog> {
                   );
                   if (urls.isNotEmpty) {
                     return FutureBuilder<ImageProvider?>(
-                      future: LogoCacher.getLogo(
-                        StockLogoUrls.cacheKey(stock.code, stock.market),
-                        urls.first,
-                        fallbackUrls: urls.skip(1).toList(),
+                      future: LogoCacher.getStockLogo(
+                        stock.code,
+                        stock.market,
+                        secid: stock.secid,
                       ),
                       builder: (_, snapshot) {
                         if (snapshot.connectionState == ConnectionState.done) {
@@ -582,7 +582,7 @@ class _SearchStockDialogState extends State<SearchStockDialog> {
                               image: snapshot.data!,
                               width: 36,
                               height: 36,
-                              fit: BoxFit.cover,
+                              fit: BoxFit.contain,
                               errorBuilder: (_, __, ___) =>
                                   _buildLogoFallback(stock),
                             );

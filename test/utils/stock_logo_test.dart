@@ -289,4 +289,52 @@ void main() {
     expect((images[1].image as FileImage).file.path, isNot(legacy.file.path));
     expect(tester.takeException(), isNull);
   });
+  test(
+    'Beijing image misses fall back through a verified company website and cache the logo',
+    () async {
+      final hosts = <String>[];
+      await http.runWithClient(
+        () async {
+          final image = await LogoCacher.getStockLogo('920002', '京A');
+          expect(image, isA<FileImage>());
+          expect(hosts, [
+            'images.financialmodelingprep.com',
+            'emweb.securities.eastmoney.com',
+            'www.example.com',
+            'www.example.com',
+          ]);
+          expect(
+            await LogoCacher.getStockLogo('920002', '京A'),
+            isA<FileImage>(),
+          );
+          expect(hosts, hasLength(4));
+        },
+        () => MockClient((request) async {
+          hosts.add(request.url.host);
+          if (request.url.host == 'images.financialmodelingprep.com') {
+            return http.Response('', 404);
+          }
+          if (request.url.host == 'emweb.securities.eastmoney.com') {
+            return http.Response(
+              jsonEncode({
+                'jbzl': [
+                  {
+                    'SECUCODE': '920002.BJ',
+                    'SECURITY_CODE': '920002',
+                    'ORG_WEB': 'www.example.com',
+                  },
+                ],
+              }),
+              200,
+            );
+          }
+          if (request.url.path.endsWith('.png')) {
+            expect(request.headers['Referer'], 'https://www.example.com/');
+            return http.Response.bytes(png, 200);
+          }
+          return http.Response('<img src="/company-logo.png">', 200);
+        }),
+      );
+    },
+  );
 }
