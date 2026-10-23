@@ -1,10 +1,10 @@
+import '../support/source_breakers.dart';
 import 'dart:convert';
 import 'dart:io';
 
 import 'package:assets/models/stock_search_models.dart';
 import 'package:assets/models/stock_model.dart';
 import 'package:assets/services/stock_data_manager.dart';
-import 'package:assets/services/circuit_breaker.dart';
 import 'package:assets/services/exchange_rate_service.dart';
 import 'package:assets/services/stock_quote_service.dart';
 import 'package:assets/services/yahoo_quote_service.dart';
@@ -20,8 +20,8 @@ void main() {
   late Directory directory;
   setUpAll(() async => directory = await initializeTestStorage());
   tearDownAll(() => directory.deleteSync(recursive: true));
-  setUp(() => CircuitBreaker().onSuccess());
-  tearDown(() => CircuitBreaker().onSuccess());
+  setUp(resetSourceBreakers);
+  tearDown(resetSourceBreakers);
 
   StockSearchResult stock(String code) => StockSearchResult(
     code: code,

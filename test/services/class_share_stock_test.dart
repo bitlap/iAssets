@@ -1,8 +1,8 @@
+import '../support/source_breakers.dart';
 import 'dart:convert';
 import 'dart:io';
 
 import 'package:assets/models/stock_search_models.dart';
-import 'package:assets/services/circuit_breaker.dart';
 import 'package:assets/services/stock_quote_service.dart';
 import 'package:assets/services/stock_search_service.dart';
 import 'package:assets/services/tencent_quote_service.dart';
@@ -17,8 +17,8 @@ void main() {
   ).readAsStringSync();
   String tencentFixture(String share) =>
       File('test/fixtures/tencent_berkshire_$share.txt').readAsStringSync();
-  setUp(() => CircuitBreaker().onSuccess());
-  tearDown(() => CircuitBreaker().onSuccess());
+  setUp(resetSourceBreakers);
+  tearDown(resetSourceBreakers);
 
   test(
     'BRK.B searches the provider spelling and queries Tencent with a dot',

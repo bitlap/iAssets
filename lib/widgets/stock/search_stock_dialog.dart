@@ -172,15 +172,6 @@ class _SearchStockDialogState extends State<SearchStockDialog> {
     // 先尝试从缓存获取行情，没有则实时获取
     StockQuote? quote = _quoteCache[stock.secid];
     if (quote == null) {
-      // 检查冷却状态
-      final cooldownSecs = _searchService.cooldownRemainingSeconds;
-      if (cooldownSecs > 0) {
-        CenterToast.warning(
-          context,
-          StockConfig.searchRateLimit.replaceAll('{secs}', '$cooldownSecs'),
-        );
-        return;
-      }
       setState(() => _loadingQuotes.add(stock.secid));
       final quotes = await _quoteService.getStockQuotesBatch([stock]);
       if (!mounted) return;

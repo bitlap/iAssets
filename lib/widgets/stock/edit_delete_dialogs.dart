@@ -100,7 +100,6 @@ class _EditStockDialogState extends State<EditStockDialog> {
   Future<void> _fetchRealtimePrice() async {
     final secid = widget.stock.secid;
     if (secid == null || secid.isEmpty) return;
-    if (_quoteService.cooldownRemainingSeconds > 0) return;
     setState(() => _isLoadingPrice = true);
     try {
       final stock = StockSearchResult(

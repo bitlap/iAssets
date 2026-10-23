@@ -4,7 +4,6 @@ import '../config/app_config.dart';
 import '../models/stock_search_models.dart';
 import '../utils/stock_logo_urls.dart';
 import '../utils/market_util.dart';
-import 'circuit_breaker.dart';
 import 'tencent_quote_service.dart';
 import 'east_money_quote_service.dart';
 import 'yahoo_quote_service.dart';
@@ -19,12 +18,10 @@ class StockQuoteService {
   final YahooQuoteService _yahoo = YahooQuoteService();
 
   final Map<String, DateTime> _cacheTime = {};
-  final Map<String, StockQuote?> _cacheValue = {};
+  final Map<String, StockQuote> _cacheValue = {};
   static const Duration _cacheTTL = Duration(
     minutes: AppConfig.quoteCacheTTLMin,
   );
-
-  int get cooldownRemainingSeconds => CircuitBreaker().cooldownRemainingSeconds;
 
   Future<Map<String, StockQuote?>> getStockQuotesBatch(
     List<StockSearchResult> stocks,
@@ -39,7 +36,9 @@ class StockQuoteService {
       seenSecids.add(stock.secid);
       final cachedTime = _cacheTime[stock.secid];
       final cachedValue = _cacheValue[stock.secid];
-      if (cachedTime != null && now.difference(cachedTime) < _cacheTTL) {
+      if (cachedValue != null &&
+          cachedTime != null &&
+          now.difference(cachedTime) < _cacheTTL) {
         result[stock.secid] = cachedValue;
       } else {
         needFetch.add(stock);
@@ -69,14 +68,14 @@ class StockQuoteService {
     final eastMoneyStocks = tencentFailed
         .where((stock) => !MarketUtil.isUKMarket(stock.market))
         .toList();
-    if (eastMoneyStocks.isNotEmpty && !CircuitBreaker().isInCooldown) {
+    if (eastMoneyStocks.isNotEmpty) {
       await _eastMoney.fetchBatch(eastMoneyStocks, (secid, quote) {
         _setCache(secid, quote);
         result[secid] = quote;
       });
     }
 
-    // 备用源独立于国内数据源的熔断，避免东方财富连接失败后一起被跳过。
+    // 各数据源自行判断冷却，不阻断其他来源的回退。
     await Future.wait(
       needFetch
           .where(
@@ -93,17 +92,7 @@ class StockQuoteService {
           }),
     );
 
-    // 国内数据源的空结果保持缓存；冷却期间不把跳过的请求当作空结果。
-    // 全球备用源短暂失败时允许下次刷新重试。
-    for (final stock in needFetch) {
-      if (!result.containsKey(stock.secid) &&
-          !_yahoo.supports(stock.market) &&
-          !CircuitBreaker().isInCooldown) {
-        _cacheTime[stock.secid] = DateTime.now();
-        _cacheValue[stock.secid] = null;
-      }
-    }
-
+    // 只缓存有效报价；无行情、请求失败或处于冷却期，下次刷新仍可重试。
     return result;
   }
 
@@ -121,7 +110,7 @@ class StockQuoteService {
     return urls.isEmpty ? null : urls.first;
   }
 
-  void _setCache(String secid, StockQuote? quote) {
+  void _setCache(String secid, StockQuote quote) {
     _cacheTime[secid] = DateTime.now();
     _cacheValue[secid] = quote;
   }

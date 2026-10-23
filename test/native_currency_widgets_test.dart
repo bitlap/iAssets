@@ -1,3 +1,5 @@
+import 'support/source_breakers.dart';
+import 'package:assets/services/circuit_breaker.dart';
 import 'dart:convert';
 import 'dart:io';
 
@@ -25,7 +27,11 @@ void main() {
     await SettingsService.getDefaultFeeType();
   });
   tearDownAll(() => storage.deleteSync(recursive: true));
-  tearDown(() => L10n.applyLanguage(L10n.langZh));
+  setUp(resetSourceBreakers);
+  tearDown(() {
+    resetSourceBreakers();
+    L10n.applyLanguage(L10n.langZh);
+  });
 
   for (final language in [L10n.langZh, L10n.langZhHant, L10n.langEn]) {
     for (final row in [
@@ -77,6 +83,11 @@ void main() {
                 find.text('${row.$3.toStringAsFixed(4)} ${row.$2}'),
                 findsOneWidget,
               );
+            }
+            if (row.$3 == 0) {
+              for (var i = 0; i < AppConfig.failureThreshold; i++) {
+                CircuitBreaker.stockSearch.onFailure();
+              }
             }
             await tester.tap(find.text(row.$1));
             await tester.pumpAndSettle();

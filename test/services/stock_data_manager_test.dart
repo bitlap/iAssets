@@ -21,8 +21,6 @@ class StubQuoteService implements StockQuoteService {
   }
 
   @override
-  int get cooldownRemainingSeconds => 0;
-  @override
   StockQuote? getCachedQuote(String secid) => quotes[secid];
 }
 

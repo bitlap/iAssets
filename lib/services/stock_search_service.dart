@@ -12,7 +12,7 @@ class StockSearchService {
   factory StockSearchService() => _instance;
   StockSearchService._internal();
 
-  final CircuitBreaker _breaker = CircuitBreaker();
+  final CircuitBreaker _breaker = CircuitBreaker.stockSearch;
   static const String _searchBaseUrl =
       'https://searchapi.eastmoney.com/api/suggest/get';
   static const String _searchToken = 'D43BF722C8E33BDC906FB84D85E326E8';
@@ -64,8 +64,8 @@ class StockSearchService {
       client = null;
 
       if (response.statusCode == 200) {
-        _breaker.onSuccess();
         final data = json.decode(response.body);
+        _breaker.onSuccess();
         var results = _parseSearchResults(data);
         // 东方财富以 BRK_B 表示类别股，界面和腾讯使用 BRK.B。
         // 先保留原始搜索，避免影响其他市场中本来就含点号的代码。
@@ -85,6 +85,9 @@ class StockSearchService {
       debugPrint(
         '[${DateTime.now().toString().substring(11, 19)}][搜索] ===> HTTP ${response.statusCode}',
       );
+      if (response.statusCode == 429 || response.statusCode >= 500) {
+        _breaker.onFailure();
+      }
       return [];
     } catch (e) {
       client?.close();

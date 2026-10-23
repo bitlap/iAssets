@@ -1,3 +1,4 @@
+import '../support/source_breakers.dart';
 import 'dart:convert';
 import 'dart:io';
 
@@ -16,9 +17,9 @@ void main() {
   final fixture = File(
     'test/fixtures/stock_search_global.json',
   ).readAsStringSync();
-  final breaker = CircuitBreaker();
-  setUp(breaker.onSuccess);
-  tearDown(breaker.onSuccess);
+  final breaker = CircuitBreaker.tencent;
+  setUp(resetSourceBreakers);
+  tearDown(resetSourceBreakers);
 
   test('search preserves global markets and deduplicates by secid', () async {
     final data = jsonDecode(fixture) as Map<String, dynamic>;
