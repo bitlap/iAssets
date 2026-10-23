@@ -4,6 +4,16 @@ import 'market_util.dart';
 class StockLogoUrls {
   StockLogoUrls._();
 
+  /// 风险警示前缀不属于公司名称，仅用于生成缺失 Logo 时的文字图标。
+  static String fallbackText(String name, String code) {
+    final companyName = name.trim().replaceFirst(
+      RegExp(r'^[*＊]?ST\s*(?=[\u3400-\u9FFF])', caseSensitive: false),
+      '',
+    );
+    final text = companyName.isNotEmpty ? companyName : code.trim();
+    return text.isEmpty ? '?' : String.fromCharCode(text.runes.first);
+  }
+
   static List<String> forStock(
     String code,
     String market, {

@@ -18,6 +18,7 @@ import '../common/app_number_field.dart';
 import '../common/info_row_widget.dart';
 import '../common/dialog_utils.dart';
 import '../common/app_ui.dart';
+import '../common/form_sheet.dart';
 import 'stock_style.dart';
 
 /// 股票搜索弹窗 - 支持按名称/代码搜索多个市场
@@ -244,7 +245,7 @@ class _SearchStockDialogState extends State<SearchStockDialog> {
       duration: const Duration(milliseconds: 180),
       padding: EdgeInsets.only(bottom: bottomInset),
       child: FractionallySizedBox(
-        heightFactor: 0.92,
+        heightFactor: AppFormSheet.heightFactor,
         child: Container(
           decoration: BoxDecoration(
             color: AppColors.surface,
@@ -741,7 +742,7 @@ class _SearchStockDialogState extends State<SearchStockDialog> {
   }
 
   Widget _buildLogoFallback(StockSearchResult stock) {
-    final firstChar = stock.name.isNotEmpty ? stock.name[0] : stock.code[0];
+    final firstChar = StockLogoUrls.fallbackText(stock.name, stock.code);
     return Container(
       color: AppColors.surfaceElevated,
       child: Center(child: Text(firstChar, style: TextStyles.bodyRegular)),

@@ -12,7 +12,6 @@ class RecordsDialog extends StatefulWidget {
   final StockModel stock;
   final List<OperationRecord> operationRecords;
   final List<DividendRecord> dividendRecords;
-  final ScrollController scrollController;
   final void Function(String symbol, int index)? onDeleteOperationRecord;
   final void Function(String symbol, int index, OperationRecord updated)?
   onEditOperationRecord;
@@ -23,7 +22,6 @@ class RecordsDialog extends StatefulWidget {
   const RecordsDialog({
     super.key,
     required this.stock,
-    required this.scrollController,
     this.operationRecords = const [],
     this.dividendRecords = const [],
     this.onDeleteOperationRecord,
@@ -70,174 +68,177 @@ class _RecordsDialogState extends State<RecordsDialog>
           right: BorderSide(color: AppColors.border, width: 0.5),
         ),
       ),
-      child: Column(
-        children: [
-          // 拖拽手柄
-          Padding(
-            padding: const EdgeInsets.only(top: 12, bottom: 4),
-            child: Container(
-              width: 36,
-              height: 4,
-              decoration: BoxDecoration(
-                color: AppColors.grey600,
-                borderRadius: BorderRadius.circular(2),
+      child: SafeArea(
+        top: false,
+        child: Column(
+          children: [
+            // 拖拽手柄
+            Padding(
+              padding: const EdgeInsets.only(top: 12, bottom: 4),
+              child: Container(
+                width: 36,
+                height: 4,
+                decoration: BoxDecoration(
+                  color: AppColors.grey600,
+                  borderRadius: BorderRadius.circular(2),
+                ),
               ),
             ),
-          ),
-          // 标题
-          Padding(
-            padding: const EdgeInsets.fromLTRB(16, 16, 16, 12),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Expanded(
-                  child: Row(
-                    children: [
-                      Flexible(
-                        child: Text(
-                          widget.stock.companyName,
+            // 标题
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16, 16, 16, 12),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Expanded(
+                    child: Row(
+                      children: [
+                        Flexible(
+                          child: Text(
+                            widget.stock.companyName,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyles.dialogTitle,
+                          ),
+                        ),
+                        const SizedBox(width: 6),
+                        Text(
+                          widget.stock.symbol,
                           maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyles.dialogTitle,
-                        ),
-                      ),
-                      const SizedBox(width: 6),
-                      Text(
-                        widget.stock.symbol,
-                        maxLines: 1,
-                        style: TextStyles.dialogTitle.copyWith(
-                          color: AppColors.textSecondary,
-                          fontSize: 15,
-                        ),
-                      ),
-                      const SizedBox(width: 8),
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 8,
-                          vertical: 2,
-                        ),
-                        decoration: BoxDecoration(
-                          color: Colors.blue.withValues(alpha: 0.15),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: Text(
-                          StockConfig.stockRecord,
-                          style: TextStyles.body13.copyWith(
-                            fontSize: 12,
-                            color: AppColors.accent,
+                          style: TextStyles.dialogTitle.copyWith(
+                            color: AppColors.textSecondary,
+                            fontSize: 15,
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(width: 8),
-                GestureDetector(
-                  onTap: () => Navigator.pop(context),
-                  child: Container(
-                    width: 28,
-                    height: 28,
-                    decoration: BoxDecoration(
-                      color: AppColors.surface,
-                      shape: BoxShape.circle,
-                      border: Border.all(color: AppColors.border, width: 0.5),
-                    ),
-                    child: Icon(Icons.close, color: AppColors.grey, size: 14),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Container(
-              decoration: BoxDecoration(
-                color: AppColors.surface,
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: TabBar(
-                controller: _tabController,
-                indicator: BoxDecoration(
-                  color: AppColors.blueAccent,
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                indicatorSize: TabBarIndicatorSize.tab,
-                labelColor: Colors.white,
-                unselectedLabelColor: AppColors.grey,
-                labelStyle: TextStyles.body13.copyWith(
-                  fontWeight: FontWeight.w600,
-                ),
-                unselectedLabelStyle: TextStyles.body13.copyWith(
-                  fontWeight: FontWeight.w400,
-                ),
-                dividerColor: Colors.transparent,
-                splashBorderRadius: BorderRadius.circular(10),
-                tabs: [
-                  Tab(
-                    height: 36,
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(StockConfig.recordsOpTab),
-                        const SizedBox(width: 3),
-                        GestureDetector(
-                          onTap: _showOpDeleteHint,
-                          child: Icon(
-                            Icons.help_outline,
-                            size: 14,
-                            color: _selectedTab == 0
-                                ? Colors.white
-                                : AppColors.blueAccent,
+                        const SizedBox(width: 8),
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 8,
+                            vertical: 2,
+                          ),
+                          decoration: BoxDecoration(
+                            color: Colors.blue.withValues(alpha: 0.15),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Text(
+                            StockConfig.stockRecord,
+                            style: TextStyles.body13.copyWith(
+                              fontSize: 12,
+                              color: AppColors.accent,
+                            ),
                           ),
                         ),
                       ],
                     ),
                   ),
-                  Tab(
-                    height: 36,
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(StockConfig.recordsDivTab),
-                        const SizedBox(width: 3),
-                        GestureDetector(
-                          onTap: _showDivDeleteHint,
-                          child: Icon(
-                            Icons.help_outline,
-                            size: 14,
-                            color: _selectedTab == 1
-                                ? Colors.white
-                                : AppColors.blueAccent,
-                          ),
-                        ),
-                      ],
+                  const SizedBox(width: 8),
+                  GestureDetector(
+                    onTap: () => Navigator.pop(context),
+                    child: Container(
+                      width: 28,
+                      height: 28,
+                      decoration: BoxDecoration(
+                        color: AppColors.surface,
+                        shape: BoxShape.circle,
+                        border: Border.all(color: AppColors.border, width: 0.5),
+                      ),
+                      child: Icon(Icons.close, color: AppColors.grey, size: 14),
                     ),
                   ),
                 ],
               ),
             ),
-          ),
-          const SizedBox(height: 8),
-          Expanded(
-            child: TabBarView(
-              controller: _tabController,
-              children: [
-                OperationRecordsTab(
-                  stock: widget.stock,
-                  operationRecords: widget.operationRecords,
-                  onDeleteRecord: widget.onDeleteOperationRecord,
-                  onEditRecord: widget.onEditOperationRecord,
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: AppColors.surface,
+                  borderRadius: BorderRadius.circular(10),
                 ),
-                DividendRecordsTab(
-                  stock: widget.stock,
-                  dividendRecords: widget.dividendRecords,
-                  onDeleteRecord: widget.onDeleteDividendRecord,
-                  onEditRecord: widget.onEditDividendRecord,
+                child: TabBar(
+                  controller: _tabController,
+                  indicator: BoxDecoration(
+                    color: AppColors.blueAccent,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  indicatorSize: TabBarIndicatorSize.tab,
+                  labelColor: Colors.white,
+                  unselectedLabelColor: AppColors.grey,
+                  labelStyle: TextStyles.body13.copyWith(
+                    fontWeight: FontWeight.w600,
+                  ),
+                  unselectedLabelStyle: TextStyles.body13.copyWith(
+                    fontWeight: FontWeight.w400,
+                  ),
+                  dividerColor: Colors.transparent,
+                  splashBorderRadius: BorderRadius.circular(10),
+                  tabs: [
+                    Tab(
+                      height: 36,
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(StockConfig.recordsOpTab),
+                          const SizedBox(width: 3),
+                          GestureDetector(
+                            onTap: _showOpDeleteHint,
+                            child: Icon(
+                              Icons.help_outline,
+                              size: 14,
+                              color: _selectedTab == 0
+                                  ? Colors.white
+                                  : AppColors.blueAccent,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Tab(
+                      height: 36,
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(StockConfig.recordsDivTab),
+                          const SizedBox(width: 3),
+                          GestureDetector(
+                            onTap: _showDivDeleteHint,
+                            child: Icon(
+                              Icons.help_outline,
+                              size: 14,
+                              color: _selectedTab == 1
+                                  ? Colors.white
+                                  : AppColors.blueAccent,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
-              ],
+              ),
             ),
-          ),
-        ],
+            const SizedBox(height: 8),
+            Expanded(
+              child: TabBarView(
+                controller: _tabController,
+                children: [
+                  OperationRecordsTab(
+                    stock: widget.stock,
+                    operationRecords: widget.operationRecords,
+                    onDeleteRecord: widget.onDeleteOperationRecord,
+                    onEditRecord: widget.onEditOperationRecord,
+                  ),
+                  DividendRecordsTab(
+                    stock: widget.stock,
+                    dividendRecords: widget.dividendRecords,
+                    onDeleteRecord: widget.onDeleteDividendRecord,
+                    onEditRecord: widget.onEditDividendRecord,
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
