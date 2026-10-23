@@ -28,6 +28,78 @@ iAssets 是一款使用 Flutter 构建的开源 iOS 个人资产管理应用。�
 
 无广告、无社区、无内购。支持简体中文、繁體中文和 English，以及浅色、深色和跟随系统主题。
 
+## 界面预览
+
+以下截图来自 iOS 模拟器，使用系统字体和演示数据。点击图片可查看原图。
+
+<details open>
+<summary>简体中文 · 浅色（白色）</summary>
+
+| 股票持仓 | 股票搜索 | 股息概览 |
+| --- | --- | --- |
+| [<img src="docs/images/zh-light-stocks.png" width="220" alt="简体中文 · 浅色（白色） · 股票持仓">](docs/images/zh-light-stocks.png) | [<img src="docs/images/zh-light-search.png" width="220" alt="简体中文 · 浅色（白色） · 股票搜索">](docs/images/zh-light-search.png) | [<img src="docs/images/zh-light-dividends.png" width="220" alt="简体中文 · 浅色（白色） · 股息概览">](docs/images/zh-light-dividends.png) |
+
+| 数字币总览 | 现货余额 | 合约持仓 |
+| --- | --- | --- |
+| [<img src="docs/images/zh-light-crypto.png" width="220" alt="简体中文 · 浅色（白色） · 数字币总览">](docs/images/zh-light-crypto.png) | [<img src="docs/images/zh-light-crypto-spot.png" width="220" alt="简体中文 · 浅色（白色） · 现货余额">](docs/images/zh-light-crypto-spot.png) | [<img src="docs/images/zh-light-crypto-futures.png" width="220" alt="简体中文 · 浅色（白色） · 合约持仓">](docs/images/zh-light-crypto-futures.png) |
+
+| 资产总览 | 设置 |
+| --- | --- |
+| [<img src="docs/images/zh-light-assets.png" width="220" alt="简体中文 · 浅色（白色） · 资产总览">](docs/images/zh-light-assets.png) | [<img src="docs/images/zh-light-settings.png" width="220" alt="简体中文 · 浅色（白色） · 设置">](docs/images/zh-light-settings.png) |
+
+</details>
+
+<details>
+<summary>简体中文 · 深色</summary>
+
+| 股票持仓 | 股票搜索 | 股息概览 |
+| --- | --- | --- |
+| [<img src="docs/images/zh-dark-stocks.png" width="220" alt="简体中文 · 深色 · 股票持仓">](docs/images/zh-dark-stocks.png) | [<img src="docs/images/zh-dark-search.png" width="220" alt="简体中文 · 深色 · 股票搜索">](docs/images/zh-dark-search.png) | [<img src="docs/images/zh-dark-dividends.png" width="220" alt="简体中文 · 深色 · 股息概览">](docs/images/zh-dark-dividends.png) |
+
+| 数字币总览 | 现货余额 | 合约持仓 |
+| --- | --- | --- |
+| [<img src="docs/images/zh-dark-crypto.png" width="220" alt="简体中文 · 深色 · 数字币总览">](docs/images/zh-dark-crypto.png) | [<img src="docs/images/zh-dark-crypto-spot.png" width="220" alt="简体中文 · 深色 · 现货余额">](docs/images/zh-dark-crypto-spot.png) | [<img src="docs/images/zh-dark-crypto-futures.png" width="220" alt="简体中文 · 深色 · 合约持仓">](docs/images/zh-dark-crypto-futures.png) |
+
+| 资产总览 | 设置 |
+| --- | --- |
+| [<img src="docs/images/zh-dark-assets.png" width="220" alt="简体中文 · 深色 · 资产总览">](docs/images/zh-dark-assets.png) | [<img src="docs/images/zh-dark-settings.png" width="220" alt="简体中文 · 深色 · 设置">](docs/images/zh-dark-settings.png) |
+
+</details>
+
+<details>
+<summary>English · Light</summary>
+
+| 股票持仓 | 股票搜索 | 股息概览 |
+| --- | --- | --- |
+| [<img src="docs/images/en-light-stocks.png" width="220" alt="English · Light · 股票持仓">](docs/images/en-light-stocks.png) | [<img src="docs/images/en-light-search.png" width="220" alt="English · Light · 股票搜索">](docs/images/en-light-search.png) | [<img src="docs/images/en-light-dividends.png" width="220" alt="English · Light · 股息概览">](docs/images/en-light-dividends.png) |
+
+| 数字币总览 | 现货余额 | 合约持仓 |
+| --- | --- | --- |
+| [<img src="docs/images/en-light-crypto.png" width="220" alt="English · Light · 数字币总览">](docs/images/en-light-crypto.png) | [<img src="docs/images/en-light-crypto-spot.png" width="220" alt="English · Light · 现货余额">](docs/images/en-light-crypto-spot.png) | [<img src="docs/images/en-light-crypto-futures.png" width="220" alt="English · Light · 合约持仓">](docs/images/en-light-crypto-futures.png) |
+
+| 资产总览 | 设置 |
+| --- | --- |
+| [<img src="docs/images/en-light-assets.png" width="220" alt="English · Light · 资产总览">](docs/images/en-light-assets.png) | [<img src="docs/images/en-light-settings.png" width="220" alt="English · Light · 设置">](docs/images/en-light-settings.png) |
+
+</details>
+
+<details>
+<summary>English · Dark</summary>
+
+| 股票持仓 | 股票搜索 | 股息概览 |
+| --- | --- | --- |
+| [<img src="docs/images/en-dark-stocks.png" width="220" alt="English · Dark · 股票持仓">](docs/images/en-dark-stocks.png) | [<img src="docs/images/en-dark-search.png" width="220" alt="English · Dark · 股票搜索">](docs/images/en-dark-search.png) | [<img src="docs/images/en-dark-dividends.png" width="220" alt="English · Dark · 股息概览">](docs/images/en-dark-dividends.png) |
+
+| 数字币总览 | 现货余额 | 合约持仓 |
+| --- | --- | --- |
+| [<img src="docs/images/en-dark-crypto.png" width="220" alt="English · Dark · 数字币总览">](docs/images/en-dark-crypto.png) | [<img src="docs/images/en-dark-crypto-spot.png" width="220" alt="English · Dark · 现货余额">](docs/images/en-dark-crypto-spot.png) | [<img src="docs/images/en-dark-crypto-futures.png" width="220" alt="English · Dark · 合约持仓">](docs/images/en-dark-crypto-futures.png) |
+
+| 资产总览 | 设置 |
+| --- | --- |
+| [<img src="docs/images/en-dark-assets.png" width="220" alt="English · Dark · 资产总览">](docs/images/en-dark-assets.png) | [<img src="docs/images/en-dark-settings.png" width="220" alt="English · Dark · 设置">](docs/images/en-dark-settings.png) |
+
+</details>
+
 ## 核心功能
 
 | 功能 | 你可以做什么 |
