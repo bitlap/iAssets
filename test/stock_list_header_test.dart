@@ -3,7 +3,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:assets/l10n/l10n.dart';
 import 'package:assets/config/stock_config.dart';
 import 'package:assets/utils/market_util.dart';
-import 'package:assets/widgets/common/app_filter_dropdown.dart';
+import 'package:assets/widgets/common/app_ui.dart';
+import 'package:assets/widgets/stock/stock_style.dart';
 import 'package:assets/widgets/stock/stock_list_header.dart';
 import 'package:assets/widgets/stock/stock_card.dart';
 import 'package:assets/models/stock_model.dart';
@@ -11,7 +12,7 @@ import 'package:assets/models/stock_model.dart';
 void main() {
   for (final language in [L10n.langZh, L10n.langEn, L10n.langZhHant]) {
     testWidgets(
-      'market dropdown selects and resets on a narrow screen in $language',
+      'horizontal market pills select and reset on a narrow screen in $language',
       (tester) async {
         tester.view.physicalSize = const Size(320, 800);
         tester.view.devicePixelRatio = 1;
@@ -37,16 +38,24 @@ void main() {
           ),
         );
         expect(tester.takeException(), isNull);
-        final dropdown = find.byType(AppFilterDropdown<String>);
-        final dropdownRect = tester.getRect(dropdown);
-        expect(dropdownRect.width, 288);
+        final filters = find.descendant(
+          of: find.byType(StockListHeader),
+          matching: find.byType(ListView),
+        );
+        final filtersRect = tester.getRect(filters);
+        expect(filtersRect.width, 288);
+        expect(filtersRect.height, 32);
+        expect(
+          tester.widget<ListView>(filters).scrollDirection,
+          Axis.horizontal,
+        );
         expect(
           tester.getRect(find.text(StockConfig.stockMarketTitle)).bottom,
-          lessThan(dropdownRect.top),
+          lessThan(filtersRect.top),
         );
         expect(
           tester.getRect(find.text(StockConfig.homeHoldingHeader)).top,
-          greaterThan(dropdownRect.bottom),
+          greaterThan(filtersRect.bottom),
         );
         for (final target in [
           MarketUtil.exchangeNASDAQ,
@@ -66,20 +75,32 @@ void main() {
           MarketUtil.exchangeOTCBB,
           MarketUtil.customMarket,
         ]) {
-          await tester.tap(dropdown);
-          await tester.pumpAndSettle();
           final option = find.text(MarketUtil.marketLabel(target));
           await tester.scrollUntilVisible(
             option,
             100,
             scrollable: find.byType(Scrollable).last,
           );
+          await tester.pumpAndSettle();
+          final pill = tester.widget<FilterPill>(
+            find.widgetWithText(FilterPill, MarketUtil.marketLabel(target)),
+          );
+          expect(pill.color, StockStyle.marketColor(target));
           await tester.tap(option.last);
           await tester.pumpAndSettle();
           expect(market, target);
+          expect(
+            tester
+                .widget<FilterPill>(
+                  find.widgetWithText(
+                    FilterPill,
+                    MarketUtil.marketLabel(target),
+                  ),
+                )
+                .selected,
+            isTrue,
+          );
         }
-        await tester.tap(dropdown);
-        await tester.pumpAndSettle();
         final allOption = find.text(
           MarketUtil.marketLabel(MarketUtil.searchAll),
         );
@@ -88,6 +109,7 @@ void main() {
           -100,
           scrollable: find.byType(Scrollable).last,
         );
+        await tester.pumpAndSettle();
         await tester.tap(allOption.last);
         await tester.pumpAndSettle();
         expect(market, isNull);

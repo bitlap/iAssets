@@ -6,7 +6,6 @@ import 'package:assets/l10n/l10n.dart';
 import 'package:assets/models/stock_model.dart';
 import 'package:assets/services/settings_service.dart';
 import 'package:assets/utils/market_util.dart';
-import 'package:assets/widgets/common/app_filter_dropdown.dart';
 import 'package:assets/widgets/common/app_ui.dart';
 import 'package:assets/widgets/common/info_row_widget.dart';
 import 'package:assets/widgets/dividend/dividend_filter_row.dart';
@@ -263,18 +262,28 @@ void main() {
             ),
           ),
         );
-        final dropdown = tester.widget<AppFilterDropdown<String>>(
-          find.byType(AppFilterDropdown<String>),
+        final header = find.byType(StockListHeader);
+        final headerScroll = find.descendant(
+          of: header,
+          matching: find.byType(Scrollable),
         );
-        expect(dropdown.items.map((item) => item.value), [
-          null,
-          ...MarketUtil.holdingMarkets,
-        ]);
-        for (final item in dropdown.items.where((item) => item.value != null)) {
-          expect(
-            (item.child as Text).style!.color,
-            StockStyle.marketColor(item.value),
+        for (final market in MarketUtil.holdingMarkets) {
+          final option = find.descendant(
+            of: header,
+            matching: find.text(MarketUtil.marketLabel(market)),
           );
+          await tester.scrollUntilVisible(
+            option,
+            120,
+            scrollable: headerScroll,
+          );
+          await tester.pumpAndSettle();
+          final pill = tester.widget<FilterPill>(
+            find.ancestor(of: option, matching: find.byType(FilterPill)),
+          );
+          expect(pill.color, StockStyle.marketColor(market));
+          await tester.tap(option);
+          expect(selected, market);
         }
         final row = find.byType(DividendFilterRow);
         for (final market in ['JPX', 'KRX', 'LSE', 'OTCBB']) {
