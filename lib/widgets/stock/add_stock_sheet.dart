@@ -5,7 +5,7 @@ import 'package:image_picker/image_picker.dart';
 
 import '../common/app_colors.dart';
 import '../../config/app_config.dart';
-import '../../services/exchange_rate_service.dart';
+import '../common/currency_selector.dart';
 import '../../utils/center_toast.dart';
 import '../common/app_number_field.dart';
 import '../common/app_ui.dart';
@@ -280,31 +280,54 @@ class _CustomStockSheetState extends State<_CustomStockSheet> {
     return AppFormSheet(
       title: StockConfig.addCustomStock,
       onClose: () => Navigator.pop(context),
-      action: TextButton(onPressed: _submit, child: Text(AppConfig.btnAdd)),
-      child: SingleChildScrollView(
-        padding: const EdgeInsets.fromLTRB(20, 20, 20, 24),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _buildImagePicker(),
-            const SizedBox(height: 20),
-            _buildIdentityFields(),
-            const SizedBox(height: 16),
-            AppNumberField(
-              controller: _sharesController,
-              label: StockConfig.customStockShares,
-              hintText: StockConfig.customStockSharesHint,
+      closeButtonOnRight: true,
+      child: Column(
+        children: [
+          Expanded(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.fromLTRB(20, 20, 20, 24),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _buildImagePicker(),
+                  const SizedBox(height: 20),
+                  _buildIdentityFields(),
+                  const SizedBox(height: 16),
+                  AppNumberField(
+                    controller: _sharesController,
+                    label: StockConfig.customStockShares,
+                    hintText: StockConfig.customStockSharesHint,
+                  ),
+                  const SizedBox(height: 16),
+                  _buildPriceField(),
+                ],
+              ),
             ),
-            const SizedBox(height: 16),
-            AppNumberField(
-              controller: _priceController,
-              label: StockConfig.customStockPrice,
-              hintText: StockConfig.customStockPriceHint,
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(20, 12, 20, 20),
+            child: SizedBox(
+              width: double.infinity,
+              height: 48,
+              child: FilledButton(
+                onPressed: _submit,
+                style: FilledButton.styleFrom(
+                  backgroundColor: AppColors.accent,
+                  foregroundColor: AppColors.onAccent,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+                child: Text(
+                  AppConfig.btnAdd,
+                  style: TextStyles.bodyMedium.copyWith(
+                    color: AppColors.onAccent,
+                  ),
+                ),
+              ),
             ),
-            const SizedBox(height: 16),
-            _buildCurrencyField(),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -426,38 +449,26 @@ class _CustomStockSheetState extends State<_CustomStockSheet> {
     );
   }
 
-  Widget _buildCurrencyField() {
+  Widget _buildPriceField() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(StockConfig.customStockCurrency, style: TextStyles.body13Bold),
+        Text(StockConfig.customStockPrice, style: TextStyles.body13Bold),
         const SizedBox(height: 8),
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 12),
-          decoration: BoxDecoration(
-            color: AppColors.surface,
-            borderRadius: BorderRadius.circular(12),
-            border: Border.all(color: AppColors.border),
-          ),
-          child: DropdownButtonHideUnderline(
-            child: DropdownButton<String>(
-              value: _currency,
-              isExpanded: true,
-              dropdownColor: AppColors.surfaceElevated,
-              style: TextStyles.inputText,
-              items: ExchangeRateService.supportedCurrencies
-                  .map(
-                    (currency) => DropdownMenuItem(
-                      value: currency,
-                      child: Text(currency),
-                    ),
-                  )
-                  .toList(),
-              onChanged: (value) {
-                if (value != null) setState(() => _currency = value);
-              },
+        Row(
+          children: [
+            Expanded(
+              child: AppNumberField(
+                controller: _priceController,
+                hintText: StockConfig.customStockPriceHint,
+              ),
             ),
-          ),
+            const SizedBox(width: 8),
+            CompactCurrencySelector(
+              currency: _currency,
+              onChanged: (value) => setState(() => _currency = value),
+            ),
+          ],
         ),
       ],
     );
