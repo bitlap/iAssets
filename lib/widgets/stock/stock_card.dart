@@ -142,9 +142,10 @@ class StockCard extends StatelessWidget {
   }
 
   Widget _buildLogo() {
-    final fallbackChar = stock.companyName.isNotEmpty
-        ? stock.companyName[0]
-        : stock.symbol[0];
+    final fallbackChar = StockLogoUrls.fallbackText(
+      stock.companyName,
+      stock.symbol,
+    );
     return Container(
       width: StockColumns.logoWidth,
       height: 40,

@@ -10,6 +10,7 @@
 </p>
 
 <p align="center">
+  <a href="https://github.com/bitlap/iAssets/releases/latest"><img src="https://img.shields.io/github/v/release/bitlap/iAssets" alt="最新 Release"></a>
   <a href="https://github.com/bitlap/iAssets/actions/workflows/flutter-ci.yml"><img src="https://github.com/bitlap/iAssets/actions/workflows/flutter-ci.yml/badge.svg" alt="Flutter CI"></a>
   <a href="https://flutter.dev"><img src="https://img.shields.io/badge/Flutter-02569B?logo=flutter&logoColor=white" alt="Built with Flutter"></a>
   <img src="https://img.shields.io/badge/Platform-iOS-000000?logo=apple&logoColor=white" alt="Platform: iOS">
@@ -17,7 +18,10 @@
 </p>
 
 <p align="center">
-  <a href="https://apps.apple.com/cn/app/iassets/id6790114856">App Store 下载</a> ·
+  <a href="https://apps.apple.com/cn/app/iassets/id6790114856"><img src="https://tools.applemediaservices.com/api/badges/download-on-the-app-store/black/zh-cn?size=250x83" height="40" alt="在 App Store 下载"></a>
+</p>
+
+<p align="center">
   <a href="changelog/1.6.0.md">更新日志</a> ·
   <a href="https://github.com/bitlap/iAssets/issues">反馈问题</a>
 </p>

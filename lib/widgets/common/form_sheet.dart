@@ -4,6 +4,8 @@ import 'app_ui.dart';
 
 /// 股票与账户表单共用的底部弹窗，处理键盘、安全区域与固定标题。
 class AppFormSheet extends StatelessWidget {
+  static const heightFactor = .9;
+
   final String title;
   final Widget child;
   final VoidCallback? onClose;
@@ -25,7 +27,7 @@ class AppFormSheet extends StatelessWidget {
     duration: const Duration(milliseconds: 180),
     padding: EdgeInsets.only(bottom: MediaQuery.viewInsetsOf(context).bottom),
     child: FractionallySizedBox(
-      heightFactor: .9,
+      heightFactor: heightFactor,
       child: Material(
         color: backgroundColor ?? AppColors.surface,
         borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),

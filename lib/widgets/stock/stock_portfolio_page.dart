@@ -15,6 +15,7 @@ import '../../services/settings_service.dart';
 import '../../services/stock_data_manager.dart';
 import '../common/empty_state_widget.dart';
 import '../common/app_ui.dart';
+import '../common/form_sheet.dart';
 import 'stock_card.dart';
 import 'stock_list_header.dart';
 import '../records/records_dialog.dart';
@@ -470,22 +471,15 @@ class StockPortfolioPageState extends State<StockPortfolioPage>
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      useSafeArea: false,
+      useSafeArea: true,
       backgroundColor: Colors.transparent,
       barrierColor: Colors.black54,
-      constraints: BoxConstraints(
-        maxWidth: MediaQuery.of(context).size.width,
-        maxHeight: MediaQuery.of(context).size.height * 0.95,
-      ),
-      builder: (_) => DraggableScrollableSheet(
-        initialChildSize: 0.95,
-        minChildSize: 0.5,
-        maxChildSize: 0.95,
-        builder: (_, scrollController) => RecordsDialog(
+      builder: (_) => FractionallySizedBox(
+        heightFactor: AppFormSheet.heightFactor,
+        child: RecordsDialog(
           stock: stock,
           operationRecords: records,
           dividendRecords: divRecords,
-          scrollController: scrollController,
           onDeleteOperationRecord: (symbol, index) {
             setState(() {
               final list = _operationRecords[symbol];
