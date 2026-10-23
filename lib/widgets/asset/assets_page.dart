@@ -547,7 +547,7 @@ class AssetsPageState extends State<AssetsPage> {
           margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
           decoration: BoxDecoration(
             color: AppColors.danger.withValues(alpha: 0.2),
-            borderRadius: BorderRadius.circular(14),
+            borderRadius: BorderRadius.circular(18),
             border: Border.all(color: AppColors.danger.withValues(alpha: 0.4)),
           ),
           alignment: Alignment.centerRight,
@@ -576,109 +576,70 @@ class AssetsPageState extends State<AssetsPage> {
   }
 
   Widget _buildAssetCard(AssetBase asset, int index) {
-    return switch (asset) {
-      CashAccount c => _buildCashCard(c, index),
-      TimeDeposit t => _buildTimeDepositCard(t, index),
-      WealthProduct w => _buildWealthProductCard(w, index),
-      CurrentAccount c => _buildCurrentCard(c, index),
-      ProvidentFundAccount p => _buildProvidentFundCard(p, index),
-    };
-  }
-
-  Widget _buildCashCard(CashAccount cash, int index) {
-    final sym = CurrencyUtil.getSymbol(cash.currency);
-    return AssetCardFrame(
-      leading: ReorderableDragStartListener(
-        index: index,
-        child: Container(
-          width: 28,
-          height: 50,
-          alignment: Alignment.center,
-          child: Icon(
-            Icons.drag_indicator,
-            size: 20,
-            color: AppColors.iconMuted,
-          ),
-        ),
-      ),
-      icon: Icons.payments,
-      iconColor: AssetStyle.cash,
-      name: cash.name.isNotEmpty
-          ? cash.name
-          : AssetConfig.defaultNameCash.replaceAll('{currency}', cash.currency),
-      createdAt: cash.createdAt,
-      updatedAt: cash.updatedAt,
-      trailing: Align(
-        alignment: Alignment.centerRight,
-        child: Text(
-          '$sym${CurrencyUtil.formatCompact(cash.balance)}',
-          style: TextStyles.sectionTitle,
-        ),
-      ),
-      onTap: () => _onEditCash(cash),
-      onLongPress: () {},
-    );
-  }
-
-  Widget _buildTimeDepositCard(TimeDeposit td, int index) {
-    final remaining = td.endDate.difference(DateTime.now());
-    final daysLeft = remaining.inDays > 0 ? remaining.inDays : 0;
-    return AssetCardFrame(
-      leading: ReorderableDragStartListener(
-        index: index,
-        child: Container(
-          width: 28,
-          height: 50,
-          alignment: Alignment.center,
-          child: Icon(
-            Icons.drag_indicator,
-            size: 20,
-            color: AppColors.iconMuted,
-          ),
-        ),
-      ),
-      icon: Icons.savings,
-      iconColor: AssetStyle.deposit,
-      name: td.name.isNotEmpty ? td.name : AssetConfig.defaultNameTD,
-      createdAt: td.createdAt,
-      updatedAt: td.updatedAt,
-      trailing: Align(
-        alignment: Alignment.centerRight,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              '${CurrencyUtil.getSymbol(td.currency)}${CurrencyUtil.formatCompact(td.totalValue)}',
-              style: TextStyles.sectionTitle,
-            ),
-            const SizedBox(height: 2),
-            Text(
-              daysLeft > 0
-                  ? AssetConfig.daysRemaining.replaceAll('{days}', '$daysLeft')
-                  : AssetConfig.expired,
-              style: TextStyles.caption.copyWith(
-                color: daysLeft > 0
-                    ? AppColors.textSecondary
-                    : AssetStyle.deposit,
+    final (icon, name, value, onTap) = switch (asset) {
+      CashAccount cash => (
+        Icons.payments,
+        cash.name.isNotEmpty
+            ? cash.name
+            : AssetConfig.defaultNameCash.replaceAll(
+                '{currency}',
+                cash.currency,
               ),
-            ),
-          ],
-        ),
+        cash.balance,
+        () => _onEditCash(cash),
       ),
-      onTap: () => _onEditTD(td),
-      onLongPress: () {},
-    );
-  }
-
-  Widget _buildWealthProductCard(WealthProduct wp, int index) {
+      TimeDeposit td => (
+        Icons.savings,
+        td.name.isNotEmpty ? td.name : AssetConfig.defaultNameTD,
+        td.totalValue,
+        () => _onEditTD(td),
+      ),
+      WealthProduct wp => (
+        Icons.monetization_on,
+        wp.name.isNotEmpty ? wp.name : AssetConfig.defaultNameWP,
+        wp.totalValue,
+        () => _onEditWP(wp),
+      ),
+      CurrentAccount account => (
+        Icons.account_balance,
+        account.name.isNotEmpty
+            ? account.name
+            : AssetConfig.defaultNameCurrent.replaceAll(
+                '{currency}',
+                account.currency,
+              ),
+        account.balance,
+        () => _onEditCurrent(account),
+      ),
+      ProvidentFundAccount account => (
+        Icons.home_work,
+        account.name.isNotEmpty
+            ? account.name
+            : AssetConfig.defaultNameProvidentFund.replaceAll(
+                '{currency}',
+                account.currency,
+              ),
+        account.balance,
+        () => _onEditProvidentFund(account),
+      ),
+    };
+    String? detail;
+    Color? detailColor;
+    if (asset is TimeDeposit) {
+      final daysLeft = asset.endDate.difference(DateTime.now()).inDays;
+      detail = daysLeft > 0
+          ? AssetConfig.daysRemaining.replaceAll('{days}', '$daysLeft')
+          : AssetConfig.expired;
+      if (daysLeft <= 0) detailColor = AssetStyle.deposit;
+    } else if (asset is WealthProduct) {
+      detail = '${AssetConfig.fieldNav} ${CurrencyUtil.formatRate(asset.nav)}';
+    }
     return AssetCardFrame(
       leading: ReorderableDragStartListener(
         index: index,
-        child: Container(
+        child: SizedBox(
           width: 28,
           height: 50,
-          alignment: Alignment.center,
           child: Icon(
             Icons.drag_indicator,
             size: 20,
@@ -686,96 +647,19 @@ class AssetsPageState extends State<AssetsPage> {
           ),
         ),
       ),
-      icon: Icons.monetization_on,
-      iconColor: AssetStyle.wealth,
-      name: wp.name.isNotEmpty ? wp.name : AssetConfig.defaultNameWP,
-      createdAt: wp.createdAt,
-      updatedAt: wp.updatedAt,
-      trailing: Align(
-        alignment: Alignment.centerRight,
-        child: Text(
-          '${CurrencyUtil.getSymbol(wp.currency)}${CurrencyUtil.formatCompact(wp.totalValue)}',
-          style: TextStyles.sectionTitle,
-        ),
-      ),
-      onTap: () => _onEditWP(wp),
-      onLongPress: () {},
-    );
-  }
-
-  Widget _buildCurrentCard(CurrentAccount account, int index) {
-    final sym = CurrencyUtil.getSymbol(account.currency);
-    return AssetCardFrame(
-      leading: ReorderableDragStartListener(
-        index: index,
-        child: Container(
-          width: 28,
-          height: 50,
-          alignment: Alignment.center,
-          child: Icon(
-            Icons.drag_indicator,
-            size: 20,
-            color: AppColors.iconMuted,
-          ),
-        ),
-      ),
-      icon: Icons.account_balance,
-      iconColor: AssetStyle.current,
-      name: account.name.isNotEmpty
-          ? account.name
-          : AssetConfig.defaultNameCurrent.replaceAll(
-              '{currency}',
-              account.currency,
-            ),
-      createdAt: account.createdAt,
-      updatedAt: account.updatedAt,
-      trailing: Align(
-        alignment: Alignment.centerRight,
-        child: Text(
-          '$sym${CurrencyUtil.formatCompact(account.balance)}',
-          style: TextStyles.sectionTitle,
-        ),
-      ),
-      onTap: () => _onEditCurrent(account),
-      onLongPress: () {},
-    );
-  }
-
-  Widget _buildProvidentFundCard(ProvidentFundAccount account, int index) {
-    final sym = CurrencyUtil.getSymbol(account.currency);
-    return AssetCardFrame(
-      leading: ReorderableDragStartListener(
-        index: index,
-        child: Container(
-          width: 28,
-          height: 50,
-          alignment: Alignment.center,
-          child: Icon(
-            Icons.drag_indicator,
-            size: 20,
-            color: AppColors.iconMuted,
-          ),
-        ),
-      ),
-      icon: Icons.home_work,
-      iconColor: AssetStyle.provident,
-      name: account.name.isNotEmpty
-          ? account.name
-          : AssetConfig.defaultNameProvidentFund.replaceAll(
-              '{currency}',
-              account.currency,
-            ),
-      createdAt: account.createdAt,
-      updatedAt: account.updatedAt,
-      trailing: Align(
-        alignment: Alignment.centerRight,
-        child: Text(
-          '$sym${CurrencyUtil.formatCompact(account.balance)}',
-          style: TextStyles.sectionTitle,
-        ),
-      ),
-      onTap: () => _onEditProvidentFund(account),
-      onLongPress: () {},
+      icon: icon,
+      name: name,
+      colorSeed: asset.name.trim().isNotEmpty
+          ? asset.name
+          : '${asset.type.name}:${asset.currency}',
+      currency: asset.currency,
+      amount:
+          '${CurrencyUtil.getSymbol(asset.currency)}${CurrencyUtil.formatCompact(value)}',
+      detail: detail,
+      detailColor: detailColor,
+      createdAt: asset.createdAt,
+      updatedAt: asset.updatedAt,
+      onTap: onTap,
     );
   }
 

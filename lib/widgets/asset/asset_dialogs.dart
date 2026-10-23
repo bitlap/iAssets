@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../models/asset_account.dart';
 import '../../utils/currency_util.dart';
-import '../../services/exchange_rate_service.dart';
+import '../common/currency_selector.dart';
 import '../../utils/center_toast.dart';
 import '../../config/app_config.dart';
 import '../common/app_colors.dart';
@@ -734,81 +734,7 @@ Widget _currencySelector(
   BuildContext context,
   String selected,
   ValueChanged<String> onChanged,
-) {
-  final currencies = ExchangeRateService.supportedCurrencies.toList();
-  return Builder(
-    builder: (btnCtx) {
-      return GestureDetector(
-        onTap: () async {
-          final RenderBox button = btnCtx.findRenderObject() as RenderBox;
-          final overlay =
-              Overlay.of(context).context.findRenderObject() as RenderBox;
-          final result = await showMenu<String>(
-            context: context,
-            position: RelativeRect.fromRect(
-              button.localToGlobal(Offset.zero, ancestor: overlay) &
-                  button.size,
-              Offset.zero & overlay.size,
-            ),
-            color: AppColors.surface,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10),
-              side: BorderSide(color: AppColors.border),
-            ),
-            constraints: const BoxConstraints(maxHeight: 300),
-            items: currencies.map((c) {
-              final isSel = c == selected;
-              return PopupMenuItem<String>(
-                value: c,
-                height: 36,
-                child: Row(
-                  children: [
-                    SizedBox(
-                      width: 16,
-                      child: isSel
-                          ? Icon(
-                              Icons.check,
-                              color: AppColors.textPrimary,
-                              size: 16,
-                            )
-                          : null,
-                    ),
-                    const SizedBox(width: 8),
-                    Text(
-                      c,
-                      style: TextStyles.subtitle.copyWith(
-                        fontWeight: isSel ? FontWeight.w600 : FontWeight.normal,
-                      ),
-                    ),
-                  ],
-                ),
-              );
-            }).toList(),
-          );
-          if (result != null) onChanged(result);
-        },
-        child: Container(
-          height: 48,
-          padding: const EdgeInsets.symmetric(horizontal: 8),
-          alignment: Alignment.center,
-          decoration: BoxDecoration(
-            color: AppColors.surface,
-            borderRadius: BorderRadius.circular(12),
-            border: Border.all(color: AppColors.border),
-          ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(selected, style: TextStyles.subtitleRegular),
-              const SizedBox(width: 4),
-              Icon(Icons.expand_more, color: AppColors.textSecondary, size: 20),
-            ],
-          ),
-        ),
-      );
-    },
-  );
-}
+) => CompactCurrencySelector(currency: selected, onChanged: onChanged);
 
 Widget _dateButton(DateTime date, VoidCallback onTap) {
   return GestureDetector(

@@ -186,3 +186,97 @@ class CurrencySelectorButton extends StatelessWidget {
     ),
   );
 }
+
+/// 表单共用的紧凑货币选择器，与资产添加弹窗保持一致。
+class CompactCurrencySelector extends StatelessWidget {
+  final String currency;
+  final ValueChanged<String> onChanged;
+
+  const CompactCurrencySelector({
+    super.key,
+    required this.currency,
+    required this.onChanged,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final currencies = ExchangeRateService.supportedCurrencies.toList();
+    return Builder(
+      builder: (btnCtx) {
+        return GestureDetector(
+          onTap: () async {
+            final RenderBox button = btnCtx.findRenderObject() as RenderBox;
+            final overlay =
+                Overlay.of(context).context.findRenderObject() as RenderBox;
+            final result = await showMenu<String>(
+              context: context,
+              position: RelativeRect.fromRect(
+                button.localToGlobal(Offset.zero, ancestor: overlay) &
+                    button.size,
+                Offset.zero & overlay.size,
+              ),
+              color: AppColors.surface,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+                side: BorderSide(color: AppColors.border),
+              ),
+              constraints: const BoxConstraints(maxHeight: 300),
+              items: currencies.map((c) {
+                final isSel = c == currency;
+                return PopupMenuItem<String>(
+                  value: c,
+                  height: 36,
+                  child: Row(
+                    children: [
+                      SizedBox(
+                        width: 16,
+                        child: isSel
+                            ? Icon(
+                                Icons.check,
+                                color: AppColors.textPrimary,
+                                size: 16,
+                              )
+                            : null,
+                      ),
+                      const SizedBox(width: 8),
+                      Text(
+                        c,
+                        style: TextStyles.subtitle.copyWith(
+                          fontWeight: isSel
+                              ? FontWeight.w600
+                              : FontWeight.normal,
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              }).toList(),
+            );
+            if (result != null) onChanged(result);
+          },
+          child: Container(
+            height: 48,
+            padding: const EdgeInsets.symmetric(horizontal: 8),
+            decoration: BoxDecoration(
+              color: AppColors.surface,
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: AppColors.border),
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(currency, style: TextStyles.subtitleRegular),
+                const SizedBox(width: 4),
+                Icon(
+                  Icons.expand_more,
+                  color: AppColors.textSecondary,
+                  size: 20,
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+}

@@ -6,6 +6,7 @@ import 'package:assets/l10n/l10n.dart';
 import 'package:assets/widgets/common/app_colors.dart';
 import 'package:assets/widgets/common/app_theme.dart';
 import 'package:assets/config/stock_config.dart';
+import 'package:assets/config/app_config.dart' show AppConfig;
 import 'package:assets/config/asset_config.dart';
 import 'package:assets/widgets/common/currency_selector.dart';
 import 'package:assets/widgets/common/form_sheet.dart';
@@ -686,11 +687,46 @@ void main() {
         expect(find.byType(AppFormSheet), findsOneWidget);
         expect(
           tester.getCenter(find.byIcon(Icons.close)).dx,
-          lessThan(tester.getCenter(find.text(StockConfig.addCustomStock)).dx),
+          greaterThan(
+            tester.getCenter(find.text(StockConfig.addCustomStock)).dx,
+          ),
         );
+        final submit = find.widgetWithText(FilledButton, AppConfig.btnAdd);
+        expect(submit, findsOneWidget);
+        await tester.ensureVisible(find.byType(CompactCurrencySelector));
+        await tester.pumpAndSettle();
+        expect(
+          tester.getRect(submit).top,
+          greaterThan(
+            tester.getRect(find.byType(CompactCurrencySelector)).bottom,
+          ),
+        );
+        expect(
+          tester.getSize(find.byType(CompactCurrencySelector)).width,
+          lessThan(120),
+        );
+        final priceInput = find.byWidgetPredicate(
+          (widget) =>
+              widget is TextField &&
+              widget.decoration?.hintText == StockConfig.customStockPriceHint,
+        );
+        expect(
+          tester.getCenter(find.byType(CompactCurrencySelector)).dy,
+          closeTo(tester.getCenter(priceInput).dy, 1),
+        );
+        expect(
+          tester.getRect(find.byType(CompactCurrencySelector)).left,
+          greaterThan(tester.getRect(priceInput).right),
+        );
+        await tester.tap(find.byType(CompactCurrencySelector));
+        await tester.pumpAndSettle();
+        await tester.tap(find.text('EUR'));
+        await tester.pumpAndSettle();
+        expect(find.text('EUR'), findsOneWidget);
         tester.view.viewInsets = const FakeViewPadding(bottom: 240);
         await tester.pumpAndSettle();
         expect(tester.takeException(), isNull);
+        expect(tester.getRect(submit).bottom, lessThanOrEqualTo(500));
         await tester.tap(find.byIcon(Icons.close));
         tester.view.resetViewInsets();
         await tester.pumpAndSettle();
