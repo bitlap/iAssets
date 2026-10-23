@@ -79,6 +79,12 @@ List<OpenSourceLib> get dataSources => [
     SettingsConfig.dataSourceDescTencent,
   ),
   OpenSourceLib(
+    'Yahoo Finance',
+    'Yahoo',
+    '\u2014',
+    SettingsConfig.dataSourceDescYahoo,
+  ),
+  OpenSourceLib(
     'ExchangeRate-API',
     'exchangerate-api.com',
     '\u2014',

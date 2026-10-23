@@ -1,0 +1,71 @@
+{
+  "chart": {
+    "result": [
+      {
+        "meta": {
+          "currency": "KRW",
+          "symbol": "005930.KS",
+          "exchangeName": "KSC",
+          "fullExchangeName": "KSE",
+          "instrumentType": "EQUITY",
+          "firstTradeDate": 946944000,
+          "regularMarketTime": 1792737004,
+          "hasPrePostMarketData": false,
+          "gmtoffset": 32400,
+          "timezone": "KST",
+          "exchangeTimezoneName": "Asia/Seoul",
+          "regularMarketPrice": 215500.0,
+          "regularMarketChangePercent": 0.466,
+          "fulldayPrice": 215500.0,
+          "fulldayChange": 1000.0,
+          "fulldayChangePercent": 0.466,
+          "fiftyTwoWeekHigh": 374500.0,
+          "fiftyTwoWeekLow": 94500.0,
+          "regularMarketDayHigh": 215500.0,
+          "regularMarketDayLow": 203500.0,
+          "regularMarketVolume": 17088832,
+          "longName": "Samsung Electronics Co., Ltd.",
+          "shortName": "SamsungElec",
+          "chartPreviousClose": 214500.0,
+          "priceHint": 2,
+          "currentTradingPeriod": {
+            "pre": {
+              "timezone": "KST",
+              "start": 1792708200,
+              "end": 1792713600,
+              "gmtoffset": 32400
+            },
+            "regular": {
+              "timezone": "KST",
+              "start": 1792713600,
+              "end": 1792735200,
+              "gmtoffset": 32400
+            },
+            "post": {
+              "timezone": "KST",
+              "start": 1792735200,
+              "end": 1792746000,
+              "gmtoffset": 32400
+            }
+          },
+          "dataGranularity": "1d",
+          "range": "1d",
+          "validRanges": [
+            "1d",
+            "5d",
+            "1mo",
+            "3mo",
+            "6mo",
+            "1y",
+            "2y",
+            "5y",
+            "10y",
+            "ytd",
+            "max"
+          ]
+        }
+      }
+    ],
+    "error": null
+  }
+}

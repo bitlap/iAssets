@@ -6,6 +6,7 @@ import '../utils/market_util.dart';
 import 'circuit_breaker.dart';
 import 'tencent_quote_service.dart';
 import 'east_money_quote_service.dart';
+import 'yahoo_quote_service.dart';
 
 class StockQuoteService {
   static final StockQuoteService _instance = StockQuoteService._internal();
@@ -14,6 +15,7 @@ class StockQuoteService {
 
   final TencentQuoteService _tencent = TencentQuoteService();
   final EastMoneyQuoteService _eastMoney = EastMoneyQuoteService();
+  final YahooQuoteService _yahoo = YahooQuoteService();
 
   final Map<String, DateTime> _cacheTime = {};
   final Map<String, StockQuote?> _cacheValue = {};
@@ -48,13 +50,6 @@ class StockQuoteService {
     );
 
     if (needFetch.isEmpty) return result;
-    if (CircuitBreaker().isInCooldown) {
-      debugPrint(
-        '[${DateTime.now().toString().substring(11, 19)}][行情] ===> 冷却中，跳过',
-      );
-      return result;
-    }
-
     // 腾讯逐个查
     final tencentFailed = <StockSearchResult>[];
     for (final stock in needFetch) {
@@ -75,9 +70,29 @@ class StockQuoteService {
       });
     }
 
-    // 未返回的也缓存，避免重复请求不存在的股票
+    // 备用源独立于国内数据源的熔断，避免东方财富连接失败后一起被跳过。
+    await Future.wait(
+      needFetch
+          .where(
+            (stock) =>
+                !result.containsKey(stock.secid) &&
+                _yahoo.supports(stock.market),
+          )
+          .map((stock) async {
+            final quote = await _yahoo.fetchQuote(stock);
+            if (quote != null) {
+              _setCache(stock.secid, quote);
+              result[stock.secid] = quote;
+            }
+          }),
+    );
+
+    // 国内数据源的空结果保持缓存；冷却期间不把跳过的请求当作空结果。
+    // 全球备用源短暂失败时允许下次刷新重试。
     for (final stock in needFetch) {
-      if (!result.containsKey(stock.secid)) {
+      if (!result.containsKey(stock.secid) &&
+          !_yahoo.supports(stock.market) &&
+          !CircuitBreaker().isInCooldown) {
         _cacheTime[stock.secid] = DateTime.now();
         _cacheValue[stock.secid] = null;
       }

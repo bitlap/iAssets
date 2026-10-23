@@ -1,0 +1,71 @@
+{
+  "chart": {
+    "result": [
+      {
+        "meta": {
+          "currency": "USD",
+          "symbol": "NSRGY",
+          "exchangeName": "OID",
+          "fullExchangeName": "OTC Markets OTCID",
+          "instrumentType": "EQUITY",
+          "firstTradeDate": 847895400,
+          "regularMarketTime": 1792699190,
+          "hasPrePostMarketData": false,
+          "gmtoffset": -14400,
+          "timezone": "EDT",
+          "exchangeTimezoneName": "America/New_York",
+          "regularMarketPrice": 104.0,
+          "regularMarketChangePercent": 2.96,
+          "fulldayPrice": 104.0,
+          "fulldayChange": 2.99,
+          "fulldayChangePercent": 2.96,
+          "fiftyTwoWeekHigh": 109.59,
+          "fiftyTwoWeekLow": 89.5,
+          "regularMarketDayHigh": 104.0,
+          "regularMarketDayLow": 102.06,
+          "regularMarketVolume": 81285,
+          "longName": "Nestlé S.A.",
+          "shortName": "Nestle S.A.",
+          "chartPreviousClose": 101.01,
+          "priceHint": 2,
+          "currentTradingPeriod": {
+            "pre": {
+              "timezone": "EDT",
+              "end": 1792762200,
+              "start": 1792742400,
+              "gmtoffset": -14400
+            },
+            "regular": {
+              "timezone": "EDT",
+              "end": 1792785600,
+              "start": 1792762200,
+              "gmtoffset": -14400
+            },
+            "post": {
+              "timezone": "EDT",
+              "end": 1792800000,
+              "start": 1792785600,
+              "gmtoffset": -14400
+            }
+          },
+          "dataGranularity": "1d",
+          "range": "1d",
+          "validRanges": [
+            "1d",
+            "5d",
+            "1mo",
+            "3mo",
+            "6mo",
+            "1y",
+            "2y",
+            "5y",
+            "10y",
+            "ytd",
+            "max"
+          ]
+        }
+      }
+    ],
+    "error": null
+  }
+}

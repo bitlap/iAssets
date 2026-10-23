@@ -127,6 +127,8 @@ const Map<String, String> stringsEn = {
   'licenseDescWorkmanager': 'Background task scheduling',
   'dataSourceDescEastMoney': 'Stock search / code lookup',
   'dataSourceDescTencent': 'Real-time quotes / change',
+  'dataSourceDescYahoo':
+      'Backup quotes for Japan, Korea, London and OTC (may be delayed)',
   'dataSourceDescExchangeRate': 'Real-time exchange rates',
   'dataSourceNameEastMoney': 'Eastmoney API',
   'dataSourceAuthorEastMoney': 'Eastmoney',
