@@ -34,7 +34,7 @@ iAssets 是一款使用 Flutter 构建的开源 iOS 个人资产管理应用。�
 
 ## 界面预览
 
-以下截图来自 iOS 模拟器，使用系统字体和演示数据。点击图片可查看原图。
+以下预览使用演示数据。资产卡片及自定义股票预览按当前界面生成，使用 SF／苹方字体；其余截图来自 iOS 模拟器。点击图片可查看原图。
 
 <details open>
 <summary>简体中文 · 浅色（白色）</summary>
@@ -49,7 +49,7 @@ iAssets 是一款使用 Flutter 构建的开源 iOS 个人资产管理应用。�
 
 | 资产总览 | 设置 |
 | --- | --- |
-| [<img src="docs/images/zh-light-assets.png" width="220" alt="简体中文 · 浅色（白色） · 资产总览">](docs/images/zh-light-assets.png) | [<img src="docs/images/zh-light-settings.png" width="220" alt="简体中文 · 浅色（白色） · 设置">](docs/images/zh-light-settings.png) |
+| [<img src="docs/images/current-zh-assets-light.png" width="220" alt="简体中文 · 浅色（白色） · 资产总览">](docs/images/current-zh-assets-light.png) | [<img src="docs/images/zh-light-settings.png" width="220" alt="简体中文 · 浅色（白色） · 设置">](docs/images/zh-light-settings.png) |
 
 </details>
 
@@ -66,7 +66,7 @@ iAssets 是一款使用 Flutter 构建的开源 iOS 个人资产管理应用。�
 
 | 资产总览 | 设置 |
 | --- | --- |
-| [<img src="docs/images/zh-dark-assets.png" width="220" alt="简体中文 · 深色 · 资产总览">](docs/images/zh-dark-assets.png) | [<img src="docs/images/zh-dark-settings.png" width="220" alt="简体中文 · 深色 · 设置">](docs/images/zh-dark-settings.png) |
+| [<img src="docs/images/current-zh-assets-dark.png" width="220" alt="简体中文 · 深色 · 资产总览">](docs/images/current-zh-assets-dark.png) | [<img src="docs/images/zh-dark-settings.png" width="220" alt="简体中文 · 深色 · 设置">](docs/images/zh-dark-settings.png) |
 
 </details>
 
@@ -83,7 +83,7 @@ iAssets 是一款使用 Flutter 构建的开源 iOS 个人资产管理应用。�
 
 | 资产总览 | 设置 |
 | --- | --- |
-| [<img src="docs/images/en-light-assets.png" width="220" alt="English · Light · 资产总览">](docs/images/en-light-assets.png) | [<img src="docs/images/en-light-settings.png" width="220" alt="English · Light · 设置">](docs/images/en-light-settings.png) |
+| [<img src="docs/images/current-en-assets-light.png" width="220" alt="English · Light · 资产总览">](docs/images/current-en-assets-light.png) | [<img src="docs/images/en-light-settings.png" width="220" alt="English · Light · 设置">](docs/images/en-light-settings.png) |
 
 </details>
 
@@ -100,7 +100,16 @@ iAssets 是一款使用 Flutter 构建的开源 iOS 个人资产管理应用。�
 
 | 资产总览 | 设置 |
 | --- | --- |
-| [<img src="docs/images/en-dark-assets.png" width="220" alt="English · Dark · 资产总览">](docs/images/en-dark-assets.png) | [<img src="docs/images/en-dark-settings.png" width="220" alt="English · Dark · 设置">](docs/images/en-dark-settings.png) |
+| [<img src="docs/images/current-en-assets-dark.png" width="220" alt="English · Dark · 资产总览">](docs/images/current-en-assets-dark.png) | [<img src="docs/images/en-dark-settings.png" width="220" alt="English · Dark · 设置">](docs/images/en-dark-settings.png) |
+
+</details>
+
+<details>
+<summary>自定义股票 · 中文与 English · 深浅主题</summary>
+
+| 中文 · 浅色 | 中文 · 深色 | English · Light | English · Dark |
+| --- | --- | --- | --- |
+| [<img src="docs/images/current-zh-custom-stock-light.png" width="200" alt="自定义股票 · zh · light">](docs/images/current-zh-custom-stock-light.png) | [<img src="docs/images/current-zh-custom-stock-dark.png" width="200" alt="自定义股票 · zh · dark">](docs/images/current-zh-custom-stock-dark.png) | [<img src="docs/images/current-en-custom-stock-light.png" width="200" alt="自定义股票 · en · light">](docs/images/current-en-custom-stock-light.png) | [<img src="docs/images/current-en-custom-stock-dark.png" width="200" alt="自定义股票 · en · dark">](docs/images/current-en-custom-stock-dark.png) |
 
 </details>
 
@@ -111,11 +120,13 @@ iAssets 是一款使用 Flutter 构建的开源 iOS 个人资产管理应用。�
 | 股票持仓 | 搜索并添加股票，记录买卖、手续费和派息，查看成本、盈亏与持仓详情 |
 | 股息与收益 | 汇总税后股息，按市场筛选，查看今日盈亏与不同时间范围的收益曲线 |
 | 数字币资产 | 连接币安账户，查看现货、合约及带单资产，并计入总资产 |
-| 资产总览 | 分类管理现金、存款、理财和公积金，查看资产分布，支持折叠与拖拽排序 |
+| 资产总览 | 以彩色卡片分类管理现金、存款、理财和公积金，查看资产分布，支持折叠与拖拽排序 |
 | 多币种换算 | 切换显示币种，统一查看不同市场和账户的资产估值 |
 | 数据同步 | 通过 iCloud 同步股票、手动资产、记录和设置 |
 
-股票搜索覆盖美股、港股、沪深京、日本、韩国、英国及场外市场，也支持基金、债券、指数和三板。搜索、持仓与股息可按具体交易所或市场筛选，使用一致的名称和颜色标识；也可手动添加自定义股票。
+股票搜索覆盖美股、港股、沪深京、日本、韩国、英国及场外市场，也支持基金、债券、指数和三板。搜索、持仓与股息可按具体交易所或市场筛选，使用一致的名称和颜色标识；也可手动添加自定义股票，价格旁可直接选择货币，底部按钮完成添加。
+
+资产卡片按名称保持固定配色，适配深浅主题；创建时间靠左、更新时间靠右，查看记录更清晰。
 
 数字币目前仅支持币安普通账户及现货、合约带单账户，跟单组合暂不支持。仅提供资产查看，不提供交易或转账。详细范围见[数字币说明](docs/crypto-sync.md)。
 

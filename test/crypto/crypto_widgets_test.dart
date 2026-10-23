@@ -691,7 +691,7 @@ void main() {
             tester.getCenter(find.text(StockConfig.addCustomStock)).dx,
           ),
         );
-        final submit = find.widgetWithText(FilledButton, AppConfig.btnAdd);
+        final submit = find.widgetWithText(GestureDetector, AppConfig.btnAdd);
         expect(submit, findsOneWidget);
         await tester.ensureVisible(find.byType(CompactCurrencySelector));
         await tester.pumpAndSettle();

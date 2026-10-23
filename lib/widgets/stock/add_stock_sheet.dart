@@ -6,6 +6,7 @@ import 'package:image_picker/image_picker.dart';
 import '../common/app_colors.dart';
 import '../../config/app_config.dart';
 import '../common/currency_selector.dart';
+import '../common/dialog_utils.dart';
 import '../../utils/center_toast.dart';
 import '../common/app_number_field.dart';
 import '../common/app_ui.dart';
@@ -309,20 +310,11 @@ class _CustomStockSheetState extends State<_CustomStockSheet> {
             child: SizedBox(
               width: double.infinity,
               height: 48,
-              child: FilledButton(
-                onPressed: _submit,
-                style: FilledButton.styleFrom(
-                  backgroundColor: AppColors.accent,
-                  foregroundColor: AppColors.onAccent,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-                child: Text(
-                  AppConfig.btnAdd,
-                  style: TextStyles.bodyMedium.copyWith(
-                    color: AppColors.onAccent,
-                  ),
+              child: confirmButton(
+                onTap: _submit,
+                text: AppConfig.btnAdd,
+                gradient: const LinearGradient(
+                  colors: [AppColors.blueDark, AppColors.blueAccent],
                 ),
               ),
             ),

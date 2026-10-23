@@ -47,7 +47,7 @@ OKX、Bybit 适配代码暂保留供后续开发，产品入口和同步服务�
 
 ## 共用界面组件
 
-股票、资产、数字币顶部共用 `SummaryCardFrame` 与 `CurrencySelectorButton`，货币浮层继续使用 `CurrencySelector`。股票自定义表单与数字币添加表单共用 `AppFormSheet` 和圆角输入框样式；数字币测试/添加使用现有 `cancelButton` / `confirmButton`（支持禁用状态），移除连接复用 `ConfirmDeleteDialog`，空状态复用 `EmptyStateWidget`。颜色均使用 `AppColors` 语义颜色，支持深色、浅色及主题切换。
+股票、资产、数字币顶部共用 `SummaryCardFrame` 与 `CurrencySelectorButton`，货币浮层继续使用 `CurrencySelector`。股票自定义表单与数字币添加表单共用 `AppFormSheet` 和圆角输入框样式；自定义股票的货币选择器与资产添加表单共用紧凑样式，放在价格右侧，底部添加按钮与编辑确认按钮保持相同渐变样式。数字币测试/添加使用现有 `cancelButton` / `confirmButton`（支持禁用状态），移除连接复用 `ConfirmDeleteDialog`，空状态复用 `EmptyStateWidget`。颜色均使用 `AppColors` 语义颜色，支持深色、浅色及主题切换。
 
 ## 验证
 
