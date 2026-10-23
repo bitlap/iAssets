@@ -4,7 +4,6 @@ import '../../config/app_config.dart';
 import '../common/app_ui.dart';
 import '../common/sort_indicator.dart';
 import '../../utils/market_util.dart';
-import '../common/app_filter_dropdown.dart';
 import 'stock_columns.dart';
 import 'stock_style.dart';
 
@@ -28,6 +27,7 @@ class StockListHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final markets = <String?>[null, ...MarketUtil.holdingMarkets];
     return Padding(
       padding: const EdgeInsets.fromLTRB(16, 2, 16, 2),
       child: Column(
@@ -36,28 +36,29 @@ class StockListHeader extends StatelessWidget {
         children: [
           Text(StockConfig.stockMarketTitle, style: TextStyles.bodyMedium),
           const SizedBox(height: 8),
-          AppFilterDropdown<String>(
-            value: filterMarket,
-            items: [
-              for (final market in <String?>[
-                null,
-                ...MarketUtil.holdingMarkets,
-              ])
-                DropdownMenuItem(
-                  value: market,
-                  child: Text(
-                    MarketUtil.marketLabel(market ?? MarketUtil.searchAll),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      color: market == null
+          SizedBox(
+            height: 32,
+            child: ListView(
+              scrollDirection: Axis.horizontal,
+              children: [
+                for (var i = 0; i < markets.length; i++)
+                  Padding(
+                    padding: EdgeInsets.only(
+                      right: i < markets.length - 1 ? 8 : 0,
+                    ),
+                    child: FilterPill(
+                      label: MarketUtil.marketLabel(
+                        markets[i] ?? MarketUtil.searchAll,
+                      ),
+                      selected: filterMarket == markets[i],
+                      color: markets[i] == null
                           ? null
-                          : StockStyle.marketColor(market),
+                          : StockStyle.marketColor(markets[i]),
+                      onTap: () => onMarketChanged(markets[i]),
                     ),
                   ),
-                ),
-            ],
-            onChanged: onMarketChanged,
+              ],
+            ),
           ),
           const SizedBox(height: 8),
           Padding(
