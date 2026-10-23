@@ -12,6 +12,7 @@ import 'package:assets/services/serde/converters.dart';
 import 'package:assets/widgets/common/currency_selector.dart';
 import 'package:assets/widgets/common/info_row_widget.dart';
 import 'package:assets/widgets/stock/search_stock_dialog.dart';
+import 'package:assets/widgets/stock/edit_delete_dialogs.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
@@ -212,5 +213,110 @@ void main() {
       expect(ExchangeRateService.supportedCurrencies, isNot(contains('GBX')));
       expect(tester.takeException(), isNull);
     });
+  }
+  for (final availableFx in [false, true]) {
+    testWidgets(
+      'record input preserves legacy GBP units with FX available=$availableFx',
+      (tester) async {
+        for (var i = 0; i < AppConfig.failureThreshold; i++) {
+          CircuitBreaker.eastMoney.onFailure();
+          CircuitBreaker.stockSearch.onFailure();
+        }
+        final code = availableFx ? 'LEGACYCHF1' : 'LEGACYCHF0';
+        final holding = StockModel(
+          symbol: code,
+          companyName: 'Legacy London',
+          currentPrice: 10,
+          shares: 1,
+          totalValue: 10,
+          profitLossPercent: 0,
+          profitLossAmount: 0,
+          isPositive: true,
+          marketType: 'LSE',
+          currency: 'GBP',
+          secid: '155.$code',
+        );
+        OperationRecord? savedRecord;
+        var yahooRequests = 0;
+        await http.runWithClient(
+          () async {
+            if (availableFx) {
+              await tester.runAsync(() async {
+                await ExchangeRateService().fetchRates();
+              });
+            }
+            await tester.pumpWidget(
+              MaterialApp(
+                home: Scaffold(
+                  body: Builder(
+                    builder: (context) => TextButton(
+                      onPressed: () => showDialog<void>(
+                        context: context,
+                        builder: (_) => EditStockDialog(
+                          stock: holding,
+                          isAdd: true,
+                          onSave: (_, record, _) => savedRecord = record,
+                        ),
+                      ),
+                      child: const Text('Record'),
+                    ),
+                  ),
+                ),
+              ),
+            );
+            await tester.tap(find.text('Record'));
+            await tester.pumpAndSettle();
+            final fields = find.byType(TextField);
+            final expected = availableFx
+                ? (24.565 / .9 * .8).toStringAsFixed(4)
+                : '10.0000';
+            expect(
+              tester.widget<TextField>(fields.first).controller!.text,
+              expected,
+            );
+            expect(yahooRequests, 1);
+            expect(CircuitBreaker.eastMoney.isInCooldown, isTrue);
+            expect(CircuitBreaker.stockSearch.isInCooldown, isTrue);
+            await tester.enterText(fields.at(1), '1');
+            await tester.tap(find.text(AppConfig.btnConfirmBuy));
+            await tester.pumpAndSettle();
+            expect(savedRecord!.amount, double.parse(expected));
+            expect(holding.currency, 'GBP');
+            expect(tester.takeException(), isNull);
+          },
+          () => MockClient((request) async {
+            if (request.url.host == 'query1.finance.yahoo.com') {
+              yahooRequests++;
+              return http.Response(
+                jsonEncode({
+                  'chart': {
+                    'result': [
+                      {
+                        'meta': {
+                          'symbol': '$code.L',
+                          'currency': 'CHF',
+                          'regularMarketPrice': 24.565,
+                          'chartPreviousClose': 24,
+                        },
+                      },
+                    ],
+                  },
+                }),
+                200,
+              );
+            }
+            expect(request.url.host, 'open.er-api.com');
+            return availableFx
+                ? http.Response(
+                    jsonEncode({
+                      'rates': {'USD': 1, 'GBP': .8, 'CHF': .9},
+                    }),
+                    200,
+                  )
+                : http.Response('', 503);
+          }),
+        );
+      },
+    );
   }
 }
