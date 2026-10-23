@@ -1,4 +1,4 @@
-# iAssets — 个人投资管家
+# iAssets — 看清资产，轻松记录
 
 <p align="center">
   <img src="ios/Runner/Assets.xcassets/AppIcon.appiconset/icon_1024.png" width="128" height="128" alt="iAssets Logo">
