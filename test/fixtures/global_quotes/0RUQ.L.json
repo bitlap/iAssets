@@ -1,0 +1,62 @@
+{
+  "chart": {
+    "result": [
+      {
+        "meta": {
+          "currency": "SEK",
+          "symbol": "0RUQ.L",
+          "exchangeName": "LSE",
+          "fullExchangeName": "LSE",
+          "instrumentType": "EQUITY",
+          "firstTradeDate": null,
+          "regularMarketTime": 1792421528,
+          "hasPrePostMarketData": false,
+          "gmtoffset": 3600,
+          "timezone": "BST",
+          "exchangeTimezoneName": "Europe/London",
+          "regularMarketPrice": 0.16,
+          "regularMarketChangePercent": 9.589,
+          "fulldayPrice": 0.16,
+          "fulldayChange": 0.014,
+          "fulldayChangePercent": 9.589,
+          "fiftyTwoWeekHigh": 0.169,
+          "fiftyTwoWeekLow": 0.16,
+          "regularMarketDayHigh": 0.169,
+          "regularMarketDayLow": 0.16,
+          "regularMarketVolume": 619,
+          "longName": "INQ Group AB (publ)",
+          "shortName": "INQ GROUP AB INQ GROUP ORD SHS",
+          "chartPreviousClose": 0.146,
+          "priceHint": 4,
+          "currentTradingPeriod": {
+            "pre": {
+              "timezone": "BST",
+              "start": 1792736100,
+              "end": 1792738800,
+              "gmtoffset": 3600
+            },
+            "regular": {
+              "timezone": "BST",
+              "start": 1792738800,
+              "end": 1792769400,
+              "gmtoffset": 3600
+            },
+            "post": {
+              "timezone": "BST",
+              "start": 1792769400,
+              "end": 1792772100,
+              "gmtoffset": 3600
+            }
+          },
+          "dataGranularity": "1d",
+          "range": "1d",
+          "validRanges": [
+            "1d",
+            "5d"
+          ]
+        }
+      }
+    ],
+    "error": null
+  }
+}

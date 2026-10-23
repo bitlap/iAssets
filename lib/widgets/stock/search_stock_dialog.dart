@@ -540,6 +540,12 @@ class _SearchStockDialogState extends State<SearchStockDialog> {
     final changePercent = quote?.changePercent ?? 0.0;
     final isPositive = changePercent >= 0;
     final priceColor = isPositive ? AppColors.rise : AppColors.fall;
+    final priceLabel = quote == null
+        ? ''
+        : CurrencyUtil.formatCompact(
+            quote.currentPrice,
+            formatBase: CurrencyUtil.formatRate,
+          );
 
     return InkWell(
       onTap: isExisting ? null : () => _addStock(stock),
@@ -668,10 +674,9 @@ class _SearchStockDialogState extends State<SearchStockDialog> {
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
                           Text(
-                            CurrencyUtil.formatCompact(
-                              quote.currentPrice,
-                              formatBase: CurrencyUtil.formatRate,
-                            ),
+                            MarketUtil.isUKMarket(stock.market)
+                                ? '£$priceLabel'
+                                : priceLabel,
                             style: TextStyles.subtitle.copyWith(
                               fontWeight: FontWeight.w500,
                             ),
@@ -911,6 +916,10 @@ class _AddStockConfirmDialogState extends State<_AddStockConfirmDialog> {
             value: MarketUtil.marketLabel(widget.market),
             valueColor: StockStyle.marketColor(widget.market),
           ),
+          if (MarketUtil.isUKMarket(widget.market)) ...[
+            const SizedBox(height: 8),
+            InfoRowWidget(label: StockConfig.customStockCurrency, value: 'GBP'),
+          ],
           if (widget.defaultPrice > 0) ...[
             const SizedBox(height: 8),
             InfoRowWidget(

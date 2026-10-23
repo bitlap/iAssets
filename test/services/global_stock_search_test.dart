@@ -212,7 +212,7 @@ void main() {
   });
 
   test(
-    'batch quotes match exchange and code and normalize UK pence to GBP',
+    'batch quotes match exchange and code without guessing London currency',
     () async {
       final result = <String, StockQuote>{};
       await http.runWithClient(
@@ -229,27 +229,35 @@ void main() {
           );
           expect(
             request.url.queryParameters['secids']!.split(','),
-            stocks.map((s) => s.secid),
+            stocks
+                .where((s) => !MarketUtil.isUKMarket(s.market))
+                .map((s) => s.secid),
           );
           return quoteResponse();
         }),
       );
-      expect(result.keys, containsAll(stocks.map((s) => s.secid)));
+      expect(
+        result.keys,
+        containsAll(
+          stocks
+              .where((s) => !MarketUtil.isUKMarket(s.market))
+              .map((s) => s.secid),
+        ),
+      );
       expect(result['176.7203']!.currentPrice, 3084);
       expect(result['177.005930']!.currentPrice, 214500);
-      expect(result['155.HSBA']!.currentPrice, closeTo(13.684, 1e-9));
+      expect(result['155.HSBA'], isNull);
       expect(result['153.NSRGY']!.currentPrice, 102.83);
       expect(result['106.AZN']!.currentPrice, 172.585);
-      expect(result['155.AZN']!.currentPrice, 129.26);
+      expect(result['155.AZN'], isNull);
       expect(result['106.AZN']!.market, 'NYSE');
-      expect(result['155.AZN']!.market, 'LSE');
       expect(result['176.7203']!.changePercent, -.32);
       expect(result['153.NSRGY']!.changePercent, 1.93);
     },
   );
 
   test(
-    'quote service routes new markets to EastMoney and caches by secid',
+    'quote service routes London to currency-aware quotes and caches by secid',
     () async {
       var requests = 0;
       final newMarkets = stocks
@@ -262,11 +270,37 @@ void main() {
           expect(result.keys, containsAll(newMarkets.map((s) => s.secid)));
           expect(service.getCachedQuote('155.AZN')!.currentPrice, 129.26);
           await service.getStockQuotesBatch(newMarkets);
-          expect(requests, 1);
+          expect(requests, 3);
         },
         () => MockClient((request) async {
           requests++;
+          if (request.url.host == 'query1.finance.yahoo.com') {
+            final symbol = request.url.pathSegments.last;
+            return http.Response(
+              jsonEncode({
+                'chart': {
+                  'result': [
+                    {
+                      'meta': {
+                        'symbol': symbol,
+                        'currency': 'GBP',
+                        'regularMarketPrice': symbol == 'AZN.L'
+                            ? 129.26
+                            : 13.684,
+                        'chartPreviousClose': 130,
+                      },
+                    },
+                  ],
+                },
+              }),
+              200,
+            );
+          }
           expect(request.url.host, 'push2.eastmoney.com');
+          expect(
+            request.url.queryParameters['secids'],
+            isNot(contains('155.')),
+          );
           return quoteResponse();
         }),
       );

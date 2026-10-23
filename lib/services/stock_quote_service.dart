@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import '../config/app_config.dart';
 import '../models/stock_search_models.dart';
 import '../utils/stock_logo_urls.dart';
+import '../utils/market_util.dart';
 import 'circuit_breaker.dart';
 import 'tencent_quote_service.dart';
 import 'east_money_quote_service.dart';
@@ -63,8 +64,13 @@ class StockQuoteService {
     }
 
     // 腾讯未查到的，批量查东方财富
-    if (tencentFailed.isNotEmpty && !CircuitBreaker().isInCooldown) {
-      await _eastMoney.fetchBatch(tencentFailed, (secid, quote) {
+    // 伦敦证券可能以 CHF、SEK、USD 等报价；该批量接口不含可靠币种，
+    // 交由带币种信息的备用源，不能一律按便士除以 100。
+    final eastMoneyStocks = tencentFailed
+        .where((stock) => !MarketUtil.isUKMarket(stock.market))
+        .toList();
+    if (eastMoneyStocks.isNotEmpty && !CircuitBreaker().isInCooldown) {
+      await _eastMoney.fetchBatch(eastMoneyStocks, (secid, quote) {
         _setCache(secid, quote);
         result[secid] = quote;
       });

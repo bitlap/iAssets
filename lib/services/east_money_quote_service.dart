@@ -22,6 +22,9 @@ class EastMoneyQuoteService {
     List<StockSearchResult> stocks,
     void Function(String secid, StockQuote quote) onQuote,
   ) async {
+    stocks = stocks
+        .where((stock) => !MarketUtil.isUKMarket(stock.market))
+        .toList();
     if (stocks.isEmpty) return;
     if (_breaker.isInCooldown) {
       debugPrint(
@@ -93,8 +96,6 @@ class EastMoneyQuoteService {
     var decimals = _parseInt(item['f1']).toInt();
     var rawPrice = _parseInt(item['f2']);
     var price = decimals > 0 ? rawPrice / _pow10(decimals) : rawPrice;
-    // 东方财富伦敦市场以便士报价，持仓和收益统一使用 GBP。
-    if (MarketUtil.isUKMarket(stock.market)) price /= 100;
     if (price == 0) return null;
 
     final changePercent = _parseDouble(item['f3']) / 100;

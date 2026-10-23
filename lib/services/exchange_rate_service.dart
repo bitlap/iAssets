@@ -52,6 +52,7 @@ class ExchangeRateService {
   /// 汇率缓存
   Map<String, double>? _cachedRates;
   DateTime? _lastFetchTime;
+  Future<Map<String, double>?>? _pendingFetch;
   static const Duration _cacheTTL = Duration(
     minutes: AppConfig.exchangeRateCacheTTLMin,
   );
@@ -191,7 +192,31 @@ class ExchangeRateService {
 
   /// 获取实时汇率，返回各币种对 USD 的汇率
   /// 1 USD = X 目标货币
-  Future<Map<String, double>?> fetchRates() async {
+  Future<Map<String, double>?> fetchRates() {
+    return _pendingFetch ??= _fetchRates().whenComplete(
+      () => _pendingFetch = null,
+    );
+  }
+
+  /// 只使用接口或其缓存中的汇率，不能把缺失币种当作 1:1 换算。
+  Future<double?> conversionRate(String from, String to) async {
+    if (from == to) return 1;
+    final rates = await fetchRates();
+    final source = rates?[from];
+    final target = rates?[to];
+    if (source == null ||
+        target == null ||
+        !source.isFinite ||
+        !target.isFinite ||
+        source <= 0 ||
+        target <= 0) {
+      return null;
+    }
+    final rate = target / source;
+    return rate.isFinite && rate > 0 ? rate : null;
+  }
+
+  Future<Map<String, double>?> _fetchRates() async {
     // 内存缓存有效，直接返回
     if (hasValidCache) {
       debugPrint(
@@ -206,7 +231,7 @@ class ExchangeRateService {
     // 熔断中，返回已有缓存（内存或文件恢复）
     if (_isInCooldown) {
       debugPrint(
-        '[${DateTime.now().toString().substring(11, 19)}][汇率] ===> 冷却期中，跳过请求 (剩余${cooldownRemainingSeconds}秒)',
+        '[${DateTime.now().toString().substring(11, 19)}][汇率] ===> 冷却期中，跳过请求 (剩余$cooldownRemainingSeconds秒)',
       );
       return _cachedRates;
     }

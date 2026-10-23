@@ -1,0 +1,71 @@
+{
+  "chart": {
+    "result": [
+      {
+        "meta": {
+          "currency": "GBp",
+          "symbol": "UQLT.L",
+          "exchangeName": "LSE",
+          "fullExchangeName": "LSE",
+          "instrumentType": "ETF",
+          "firstTradeDate": 1454313600,
+          "regularMarketTime": 1792673731,
+          "hasPrePostMarketData": false,
+          "gmtoffset": 3600,
+          "timezone": "BST",
+          "exchangeTimezoneName": "Europe/London",
+          "regularMarketPrice": 4031.5,
+          "regularMarketChangePercent": -0.494,
+          "fulldayPrice": 4031.5,
+          "fulldayChange": -20.0,
+          "fulldayChangePercent": -0.494,
+          "fiftyTwoWeekHigh": 4087.96,
+          "fiftyTwoWeekLow": 0.0,
+          "regularMarketDayHigh": 0.0,
+          "regularMarketDayLow": 0.0,
+          "regularMarketVolume": 201,
+          "longName": "UBS Factor MSCI USA Quality Screened UCITS ETF hGBP dis",
+          "shortName": "UBS (IRL) ETF PLC UBS MSCI USA ",
+          "chartPreviousClose": 4051.5,
+          "priceHint": 2,
+          "currentTradingPeriod": {
+            "pre": {
+              "timezone": "BST",
+              "start": 1792736100,
+              "end": 1792738800,
+              "gmtoffset": 3600
+            },
+            "regular": {
+              "timezone": "BST",
+              "start": 1792738800,
+              "end": 1792769400,
+              "gmtoffset": 3600
+            },
+            "post": {
+              "timezone": "BST",
+              "start": 1792769400,
+              "end": 1792772100,
+              "gmtoffset": 3600
+            }
+          },
+          "dataGranularity": "1d",
+          "range": "1d",
+          "validRanges": [
+            "1d",
+            "5d",
+            "1mo",
+            "3mo",
+            "6mo",
+            "1y",
+            "2y",
+            "5y",
+            "10y",
+            "ytd",
+            "max"
+          ]
+        }
+      }
+    ],
+    "error": null
+  }
+}

@@ -7,8 +7,9 @@ import '../config/app_config.dart';
 import '../models/stock_search_models.dart';
 import '../utils/market_util.dart';
 import '../utils/stock_logo_urls.dart';
+import 'exchange_rate_service.dart';
 
-/// 东方财富不可用时，为日、韩、伦敦和场外股票提供备用报价。
+/// 为伦敦证券提供带币种的报价，并作为日、韩和场外市场的备用源。
 class YahooQuoteService {
   bool supports(String market) => const {
     MarketUtil.exchangeJPX,
@@ -68,8 +69,13 @@ class YahooQuoteService {
         final currency = meta['currency'];
         final expectedCurrency = MarketUtil.currencyForMarket(stock.market);
         final inPence = currency == 'GBp' || currency == 'GBX';
+        final foreignLondonCurrency =
+            MarketUtil.isUKMarket(stock.market) &&
+            currency is String &&
+            RegExp(r'^[A-Z]{3}$').hasMatch(currency);
         if (currency != expectedCurrency &&
-            !(expectedCurrency == 'GBP' && inPence)) {
+            !(expectedCurrency == 'GBP' && inPence) &&
+            !foreignLondonCurrency) {
           continue;
         }
         final price = (meta['regularMarketPrice'] as num?)?.toDouble();
@@ -86,6 +92,16 @@ class YahooQuoteService {
             previous <= 0) {
           continue;
         }
+        var holdingPrice = inPence ? price / 100 : price;
+        if (currency != expectedCurrency && !inPence) {
+          final rate = await ExchangeRateService().conversionRate(
+            currency as String,
+            expectedCurrency,
+          );
+          if (rate == null) continue;
+          holdingPrice *= rate;
+        }
+        if (!holdingPrice.isFinite || holdingPrice <= 0) continue;
         return StockQuote(
           code: stock.code,
           name: stock.name,
@@ -95,7 +111,7 @@ class YahooQuoteService {
             stock.market,
             secid: stock.secid,
           ).firstOrNull,
-          currentPrice: inPence ? price / 100 : price,
+          currentPrice: holdingPrice,
           changePercent: (price / previous - 1) * 100,
         );
       }
