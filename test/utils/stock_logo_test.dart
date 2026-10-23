@@ -31,6 +31,46 @@ void main() {
   tearDownAll(() => directory.deleteSync(recursive: true));
 
   test(
+    'CMB A/H shares use the official logo and bypass cached building photos',
+    () async {
+      const officialUrl = 'https://wwwcdn.cmbimg.cn/Images/logo.png';
+      for (final row in [
+        ('600036', '沪A'),
+        ('600036', 'A股'),
+        ('03968', 'HK'),
+        ('3968', '港股'),
+      ]) {
+        final oldKey = '${row.$2}:${row.$1}';
+        await LogoCacher.cacheLocalImageBytes(oldKey, png);
+        expect(StockLogoUrls.forStock(row.$1, row.$2), [officialUrl]);
+        final key = StockLogoUrls.cacheKey(row.$1, row.$2);
+        expect(key, isNot(oldKey));
+        var requests = 0;
+        await http.runWithClient(
+          () async {
+            final image =
+                await LogoCacher.getStockLogo(row.$1, row.$2) as FileImage;
+            expect(
+              image.file.path,
+              isNot((LogoCacher.syncCached(oldKey) as FileImage).file.path),
+            );
+            expect(image.file.readAsBytesSync(), png);
+            await LogoCacher.getStockLogo(row.$1, row.$2);
+            expect(requests, 1);
+          },
+          () => MockClient((request) async {
+            requests++;
+            expect(request.url.toString(), officialUrl);
+            return http.Response.bytes(png, 200);
+          }),
+        );
+      }
+      expect(StockLogoUrls.cacheKey('600519', '沪A'), '沪A:600519');
+      expect(StockLogoUrls.forStock('600036', '基金'), isEmpty);
+    },
+  );
+
+  test(
     'global tickers preserve exchange, leading zeroes and share classes',
     () {
       for (final row in [

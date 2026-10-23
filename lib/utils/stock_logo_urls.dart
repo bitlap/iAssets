@@ -12,6 +12,10 @@ class StockLogoUrls {
     final symbol = code.trim().toUpperCase();
     if (!RegExp(r'^[A-Z0-9][A-Z0-9.\-]*$').hasMatch(symbol)) return [];
     final exchange = MarketUtil.marketFromProvider(market, secid: secid);
+    if (_usesCmbOfficialLogo(symbol, exchange)) {
+      // 第三方的 A/H 股图片均为办公楼照片，使用官网明确标识的 Logo。
+      return ['https://wwwcdn.cmbimg.cn/Images/logo.png'];
+    }
     String image(String ticker) =>
         'https://images.financialmodelingprep.com/symbol/$ticker.png';
     if (MarketUtil.isUSMarket(exchange)) {
@@ -46,5 +50,18 @@ class StockLogoUrls {
     }
   }
 
-  static String cacheKey(String code, String market) => '$market:$code';
+  static bool _usesCmbOfficialLogo(String symbol, String exchange) =>
+      ((exchange == MarketUtil.exchangeSH ||
+              exchange == MarketUtil.searchMarketCN) &&
+          symbol == '600036') ||
+      (exchange == MarketUtil.exchangeHK &&
+          RegExp(r'^0?3968$').hasMatch(symbol));
+
+  static String cacheKey(String code, String market) {
+    final symbol = code.trim().toUpperCase();
+    final exchange = MarketUtil.marketFromProvider(market);
+    // 定向更新缓存版本，避免已安装版本继续读取旧的办公楼照片。
+    final suffix = _usesCmbOfficialLogo(symbol, exchange) ? ':official-v1' : '';
+    return '$market:$code$suffix';
+  }
 }
