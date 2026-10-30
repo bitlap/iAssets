@@ -5,6 +5,7 @@ import 'package:path_provider/path_provider.dart';
 import '../config/app_config.dart';
 import 'icloud_storage.dart';
 import 'settings_service.dart';
+import 'pro_service.dart';
 import '../services/serde/converters.dart';
 
 /// 备份服务 - 将所有数据合并为单一 JSON 进行导入/导出
@@ -15,6 +16,7 @@ class BackupService {
 
   /// 导出所有数据为统一 JSON Map
   static Future<Map<String, dynamic>> exportAll() async {
+    ProService.instance.requirePro();
     final (stocks, operationRecords, dividendRecords) =
         await IcloudStorage.loadStocks();
     final settings = await SettingsService.getAll();
@@ -34,10 +36,12 @@ class BackupService {
 
   /// 将数据导出为 JSON 并写入指定路径
   static Future<bool> exportToFile(String path) async {
+    ProService.instance.requirePro();
     try {
       final data = await exportAll();
       final jsonStr = const JsonEncoder.withIndent('  ').convert(data);
       final file = File(path);
+      ProService.instance.requirePro();
       await file.writeAsString(jsonStr);
       debugPrint('[Backup] ===> 导出成功: $path');
       return true;
@@ -49,6 +53,7 @@ class BackupService {
 
   /// 从 JSON 数据导入所有内容（先备份当前数据）
   static Future<bool> importAll(Map<String, dynamic> data) async {
+    ProService.instance.requirePro();
     try {
       final version = data['version'] as int?;
       if (version == null || version > _backupVersion) {
@@ -58,6 +63,7 @@ class BackupService {
 
       // 备份当前数据到 .bak
       await _backupCurrent();
+      ProService.instance.requirePro();
 
       // 导入股票
       if (data['stocks'] != null) {
@@ -122,6 +128,7 @@ class BackupService {
       final jsonStr = jsonEncode(data);
       final dir = await getApplicationDocumentsDirectory();
       final file = File('${dir.path}/backup.bak');
+      ProService.instance.requirePro();
       await file.writeAsString(jsonStr);
     } catch (e) {
       debugPrint('[Backup] ===> 备份当前数据失败: $e');
@@ -153,6 +160,7 @@ class BackupService {
 
   /// 从 .bak 文件回滚到上次导入前的数据
   static Future<bool> rollbackFromBackup() async {
+    ProService.instance.requirePro();
     try {
       final dir = await getApplicationDocumentsDirectory();
       final file = File('${dir.path}/backup.bak');

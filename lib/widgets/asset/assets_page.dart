@@ -16,6 +16,8 @@ import 'asset_card.dart';
 import 'asset_header.dart';
 import 'asset_dialogs.dart';
 import 'asset_style.dart';
+import '../../services/pro_service.dart';
+import '../pro/pro_page.dart';
 
 class AssetsPage extends StatefulWidget {
   final double stockTotalValue;
@@ -114,8 +116,20 @@ class AssetsPageState extends State<AssetsPage> {
     await AssetDataManager.saveAssets(_assets);
   }
 
-  Future<void> _addAsset(AssetBase asset) async {
-    if (!mounted) return;
+  bool _canAddAsset(AssetType type) {
+    if (_isLoading) return false;
+    if (ProService.instance.access.canAddAsset(_assets, type)) return true;
+    showProPage(
+      context,
+      reason: _assets.any((a) => a.type == type)
+          ? ProReason.assetRecordLimit
+          : ProReason.assetTypeLimit,
+    );
+    return false;
+  }
+
+  Future<bool> _addAsset(AssetBase asset) async {
+    if (!mounted || !_canAddAsset(asset.type)) return false;
     setState(() {
       _assets.add(asset);
       if (!_sectionOrder.contains(asset.type)) {
@@ -126,6 +140,7 @@ class AssetsPageState extends State<AssetsPage> {
     try {
       await _save();
     } catch (_) {}
+    return true;
   }
 
   Future<void> _updateAsset(String id, AssetBase asset) async {
@@ -356,14 +371,14 @@ class AssetsPageState extends State<AssetsPage> {
 
   void _openDialog<T extends AssetBase>(
     Future<T?> dialog, {
-    Future<void> Function(T)? onAdd,
+    Future<bool> Function(T)? onAdd,
     Future<void> Function(T)? onUpdate,
   }) async {
     final result = await dialog;
     if (result != null && mounted) {
-      if (onAdd != null) await onAdd(result);
+      if (onAdd != null && !await onAdd(result)) return;
       if (onUpdate != null) await onUpdate(result);
-      CenterToast.success(context, AssetConfig.toastSaved);
+      if (mounted) CenterToast.success(context, AssetConfig.toastSaved);
     }
   }
 
@@ -665,6 +680,7 @@ class AssetsPageState extends State<AssetsPage> {
 
   /// 由底部 + 号按钮调用
   void onAddAsset(AssetType type) {
+    if (!_canAddAsset(type)) return;
     switch (type) {
       case AssetType.cash:
         _onAddCash();

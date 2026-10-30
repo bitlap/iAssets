@@ -583,4 +583,87 @@ const Map<String, String> stringsEn = {
       "Lead portfolio queries and permission checks completed. Ready to add.",
   "cryptoSpotLeadNoContracts":
       "Spot lead portfolios have no Futures positions. View holdings under Spot / coin balances.",
+  "proView": "View Pro",
+  "proActive": "Pro unlocked",
+  "proFree": "Free",
+  "proLegacy": "Thank you! Your existing account has lifetime Pro.",
+  "proLifetimeActive": "Lifetime Pro unlocked",
+  "proSubscriptionActive": "Pro subscription active",
+  "proFeatures":
+      "Pro: unlimited stocks and assets, cryptocurrency accounts, import/export, and custom stocks.",
+  "proFreeLimits":
+      "Free: up to 3 stocks and 3 asset types, with up to 3 records per type. Existing data is kept when a subscription expires.",
+  "proMonthly": "Monthly · auto-renews every month",
+  "proYearly": "Annual · auto-renews every year",
+  "proLifetime": "Lifetime · one-time purchase",
+  "proUnavailable": "Unavailable",
+  "proRestore": "Restore purchases / verify existing ownership",
+  "proManage": "Manage subscriptions",
+  "proTerms": "Terms of use",
+  "proPrivacy": "Privacy policy",
+  "proRenewalTerms":
+      "Monthly and annual plans renew automatically unless canceled at least 24 hours before the current period ends. Manage or cancel in your App Store account settings. Lifetime is a one-time purchase with no renewal.",
+  "proLifetimeWarning":
+      "A lifetime purchase does not automatically cancel an existing subscription. Cancel it in Manage Subscriptions to avoid further charges.",
+  "proNotConfigured":
+      "Pro purchases are not available yet. Please try again later.",
+  "proLegacyUnverified":
+      "Existing ownership could not be confirmed, so purchases are temporarily disabled. Connect and restore purchases.",
+  "proVerificationError":
+      "Unable to verify access. Connect and restore purchases. Your data is kept.",
+  "proPurchaseError": "Purchase could not be completed. Please try again.",
+  "proPurchaseSuccess": "Pro is unlocked",
+  "proPending":
+      "Purchase is awaiting approval. Access updates automatically after approval.",
+  "proNoPurchases": "No Pro access was found to restore.",
+  "proLinkError": "Unable to open the link. Please try again.",
+  "proReasonStocks":
+      "You have reached the 3-stock limit. Unlock Pro to add more.",
+  "proReasonAssetTypes":
+      "You have reached the 3-asset-type limit. Pro unlocks every asset type.",
+  "proReasonAssetRecords":
+      "This asset type has reached 3 records. Unlock Pro for unlimited records.",
+  "proReasonCrypto":
+      "Cryptocurrency accounts require Pro. Upgrade to connect and view your exchange accounts.",
+  "proReasonBackup":
+      "Import and export require Pro. Back up and move your asset data with ease.",
+  "proReasonCustom":
+      "Custom stocks require Pro. Manually track more of your holdings.",
+  "proCryptoTitle": "Your crypto, in one place",
+  "proCryptoDescription":
+      "Connect your exchange accounts with iAssets Pro.\nSee balances, spot assets and futures positions.\nView-only access. No trading.",
+  "proLegacyHint":
+      "Existing users receive lifetime Pro at no charge. Tap Restore to verify.",
+  "proRestoreShort": "Restore",
+  "proHeroTitle": "More assets.\nA clearer picture.",
+  "proHeroSubtitle":
+      "From stocks to crypto, tracking to backups.\nUnlock the tools for your full financial picture.",
+  "proBenefitsHeading": "Everything for your portfolio",
+  "proBenefitUnlimited": "Unlimited assets",
+  "proBenefitUnlimitedDetail":
+      "More stocks, every asset type, unlimited records",
+  "proBenefitCrypto": "Crypto accounts",
+  "proBenefitCryptoDetail":
+      "View exchange balances and positions with read-only sync",
+  "proBenefitBackup": "Import & export",
+  "proBenefitBackupDetail": "Back up, move and restore your asset records",
+  "proBenefitCustom": "Custom stocks",
+  "proBenefitCustomDetail": "Add your own names, holdings and prices",
+  "proChoosePlan": "Choose your plan",
+  "proSameBenefits": "The same complete Pro features with every plan",
+  "proMonthlyName": "Monthly",
+  "proYearlyName": "Annual",
+  "proLifetimeName": "Lifetime",
+  "proMonthlyDetail": "Renews monthly. Cancel anytime.",
+  "proYearlyDetail": "Renews yearly. Built for the long term.",
+  "proLifetimeDetail": "One payment. Lifetime access. No renewal.",
+  "proRecommended": "Recommended",
+  "proMonthlyBilling": "{price} per month · Auto-renewing",
+  "proYearlyBilling": "{price} per year · Auto-renewing",
+  "proLifetimeBilling": "{price} once · No automatic renewal",
+  "proContinue": "Continue with Pro",
+  "proAllUnlocked": "All Pro features are unlocked",
+  "proUnlockLifetime": "Unlock lifetime Pro",
+  "proSubscribe": "Unlock iAssets Pro",
+  "proUpgradeLifetime": "Switch to lifetime access",
 };

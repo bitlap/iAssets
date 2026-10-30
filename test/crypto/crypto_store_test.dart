@@ -1,3 +1,5 @@
+import 'package:assets/services/pro_service.dart';
+import '../support/pro_fixtures.dart';
 import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/services.dart';
@@ -100,7 +102,62 @@ void main() {
   late MemoryPersistence persistence;
   late FakeReader reader;
   late CryptoStore store;
-  setUp(() {
+  test(
+    'free crypto neither loads credentials nor makes exchange requests',
+    () async {
+      final persistence = MemoryPersistence();
+      final reader = FakeReader(sample(DateTime.now()));
+      final locked = CryptoStore(
+        reader: reader,
+        persistence: persistence,
+        canAccess: () => false,
+      );
+      await locked.refresh();
+      expect(locked.initialized, isFalse);
+      expect(reader.calls, 0);
+      await expectLater(
+        locked.test(connection()),
+        throwsA(isA<ProRequiredException>()),
+      );
+      expect(reader.calls, 0);
+      locked.dispose();
+    },
+  );
+
+  test(
+    'expiry during crypto request discards its result and blocks save',
+    () async {
+      var allowed = true;
+      final persistence = MemoryPersistence();
+      final reader = FakeReader(sample(DateTime.now()));
+      final guarded = CryptoStore(
+        reader: reader,
+        persistence: persistence,
+        canAccess: () => allowed,
+      );
+      final tested = await guarded.test(connection());
+      await guarded.add(tested);
+      reader.snapshot = sample(DateTime.now(), equity: '9999');
+      reader.gate = Completer<void>();
+      final refresh = guarded.refresh();
+      while (reader.calls < 2) {
+        await Future<void>.delayed(Duration.zero);
+      }
+      allowed = false;
+      reader.gate!.complete();
+      await refresh;
+      expect(guarded.totalUsd.toString(), '1050');
+      await expectLater(
+        guarded.add(tested),
+        throwsA(isA<ProRequiredException>()),
+      );
+      expect(guarded.connections.length, 1);
+      guarded.dispose();
+    },
+  );
+
+  setUp(() async {
+    await setTestPro();
     clock = DateTime.utc(2026, 10, 17, 12);
     persistence = MemoryPersistence();
     reader = FakeReader(sample(clock));

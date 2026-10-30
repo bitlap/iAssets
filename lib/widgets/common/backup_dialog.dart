@@ -8,6 +8,7 @@ import '../common/app_ui.dart';
 import '../common/confirm_delete_dialog.dart';
 import '../common/file_browser_dialog.dart';
 import '../../services/backup_service.dart';
+import '../pro/pro_page.dart';
 
 class BackupDialog extends StatefulWidget {
   final VoidCallback? onDataChanged;
@@ -116,8 +117,9 @@ class _BackupDialogState extends State<BackupDialog> {
   }
 
   Future<void> _handleExport() async {
+    if (!await ensurePro(context, reason: ProReason.backup) || !mounted) return;
     final parentCtx = widget.rootContext;
-    if (parentCtx == null || !mounted) return;
+    if (parentCtx == null || !parentCtx.mounted || !mounted) return;
 
     final now = DateTime.now();
     final defaultName =
@@ -137,7 +139,14 @@ class _BackupDialogState extends State<BackupDialog> {
     if (mounted) Navigator.pop(context);
     if (targetPath == null) return;
 
-    final ok = await BackupService.exportToFile(targetPath);
+    if (!parentCtx.mounted) return;
+    bool ok;
+    try {
+      ok = await BackupService.exportToFile(targetPath);
+    } catch (_) {
+      ok = false;
+    }
+    if (!parentCtx.mounted) return;
     if (ok) {
       // ignore: use_build_context_synchronously
       CenterToast.success(parentCtx, StockConfig.backupExportSuccess);
@@ -148,8 +157,9 @@ class _BackupDialogState extends State<BackupDialog> {
   }
 
   Future<void> _handleImport() async {
+    if (!await ensurePro(context, reason: ProReason.backup) || !mounted) return;
     final parentCtx = widget.rootContext;
-    if (parentCtx == null || !mounted) return;
+    if (parentCtx == null || !parentCtx.mounted || !mounted) return;
 
     // 文件浏览器展示在备份弹窗上方，关闭备份弹窗在其返回后进行
     final selectedPath = await FileBrowserDialog.show(
@@ -200,8 +210,9 @@ class _BackupDialogState extends State<BackupDialog> {
   }
 
   Future<void> _handleRollback() async {
+    if (!await ensurePro(context, reason: ProReason.backup) || !mounted) return;
     final parentCtx = widget.rootContext;
-    if (parentCtx == null || !mounted) return;
+    if (parentCtx == null || !parentCtx.mounted || !mounted) return;
     final confirmed = await ConfirmDeleteDialog.show(
       context,
       title: StockConfig.backupRollback,
