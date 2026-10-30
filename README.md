@@ -18,7 +18,7 @@
 </p>
 
 <p align="center">
-  <a href="https://apps.apple.com/app/iassets/id6790114856"><img src="https://tools.applemediaservices.com/api/badges/download-on-the-app-store/black/en?size=250x83" height="40" alt="在 App Store 下载"></a>
+  <a href="https://apps.apple.com/us/app/iassets/id6790114856"><img src="https://tools.applemediaservices.com/api/badges/download-on-the-app-store/black/en?size=250x83" height="40" alt="在 App Store 下载"></a>
 </p>
 
 <p align="center">
