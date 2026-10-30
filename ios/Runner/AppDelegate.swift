@@ -166,7 +166,7 @@ enum ProEntitlementPolicy {
 /// StoreKit owns and verifies entitlements. Nothing in an imported backup can
 /// grant Pro, and an existing installation/data file isn't proof of ownership.
 @MainActor
-private final class ProStore {
+final class ProStore {
   static let shared = ProStore()
   private let monthly = ProEntitlementPolicy.monthly
   private let yearly = ProEntitlementPolicy.yearly

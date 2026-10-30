@@ -9,6 +9,7 @@
 | 购买页交互 | `test/pro_purchase_page_test.dart` | 默认年付、选择月付/买断后实际商品 ID、商品缺失与身份未验证时禁用付款、订阅转买断确认与取消 |
 | 界面与功能限制 | `test/pro_page_test.dart`、`test/pro_limits_widget_test.dart`、`test/crypto/` | 三语言深浅主题、受限入口、免费状态不查询交易所、同步过程中失去权益 |
 | iOS 原生判定 | `ios/RunnerTests/RunnerTests.swift` | 老用户严格分界、生产/沙盒与 Bundle ID、商品 ID/类型匹配、撤销/升级、订阅与宽限期截止时间、永久权益优先级 |
+| Xcode 本地 StoreKit | `ios/RunnerTests/ProStoreKitTests.swift`、`ios/RunnerTests/Pro.storekit` | 通过原生 `ProStore` 加载真实 StoreKit 测试商品，验证购买、恢复、重复购买、退款、续订、到期与 Ask to Buy |
 
 StoreKit 适配器先检查 `VerificationResult.verified`，再将事实交给 `ProEntitlementPolicy`。原生测试直接覆盖生产代码使用的判定规则，不构造或伪造 Apple 签名交易。Flutter 测试模拟平台通道，验证购买结果字符串本身不能解锁权益，必须在后续权益快照中确认。
 
@@ -30,12 +31,36 @@ xcodebuild test \
   -workspace ios/Runner.xcworkspace \
   -scheme Runner \
   -destination 'platform=iOS Simulator,name=iPhone 17 Pro' \
-  -only-testing:RunnerTests \
+  -only-testing:RunnerTests/RunnerTests \
   -parallel-testing-enabled NO \
   CODE_SIGNING_ALLOWED=NO
 ```
 
-将模拟器名称替换为本机列表中的可用设备。CI 的 `iOS Pro Entitlement Tests` 作业会选择可用 iPhone 模拟器，执行原生测试并保存 `.xcresult`。
+将模拟器名称替换为本机列表中的可用设备。CI 的 `iOS Pro Entitlement Tests` 作业会选择可用 iPhone 模拟器，执行不依赖商店服务的原生权益规则测试并保存 `.xcresult`。
+
+运行 `xcodebuild` 前需要执行上面的 `flutter build ... --config-only`。仅执行 `flutter pub get` 和 `pod install` 不足以同步生成的 Swift Package 最低系统版本；开启 Swift Package Manager 的干净构建可能因此仍声明 iOS 13，与插件要求冲突。
+
+## Xcode 本地 StoreKit 与 Apple 沙盒
+
+`Pro.storekit` 仅加入测试 Target 的资源，不打包到正式 App。测试通过 `SKTestSession` 使用本地商品与模拟交易，无需登录 Apple 账户、不连接 App Store 交易服务器，也不产生真实扣款。配置中的美元价格只用于模拟器测试，不设置或同步 App Store Connect 的价格。
+
+本地交易测试使用独立的 `ProStoreKit` scheme 与测试计划。可以在 Xcode 选择该 scheme 执行 Test，或运行：
+
+```bash
+xcodebuild test \
+  -workspace ios/Runner.xcworkspace \
+  -scheme ProStoreKit \
+  -destination 'platform=iOS Simulator,name=iPhone 16 Pro,OS=18.1' \
+  -only-testing:RunnerTests/ProStoreKitTests \
+  -parallel-testing-enabled NO \
+  -test-timeouts-enabled YES \
+  -default-test-execution-time-allowance 60 \
+  CODE_SIGNING_ALLOWED=YES CODE_SIGN_IDENTITY=-
+```
+
+以上使用模拟器临时签名，不需要分发证书。设备名称和系统版本需替换为本机已安装的运行时。部分 iOS 26.5 运行时存在命令行无法加载 StoreKit 配置的已知问题，表现为 `SKInternalErrorDomain Code=3`；请选用兼容运行时或已修复该问题的 Xcode/运行时组合，参见 [Apple 开发者论坛](https://developer.apple.com/forums/thread/826971)。测试商品加载失败会直接报告失败，不能把它当作交易用例通过。
+
+这层测试使用生产原生适配器与 StoreKit 的本地交易环境，比 Flutter 平台通道模拟更接近实际运行，但仍不能验证商店商品是否可售、真实 Apple 账户恢复或生产老用户凭据。Apple 真实沙盒需要先在 App Store Connect 创建商品和沙盒测试账户，再按下节验收。
 
 ## App Store 沙盒验收
 

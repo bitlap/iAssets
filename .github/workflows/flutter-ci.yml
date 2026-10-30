@@ -86,7 +86,7 @@ jobs:
             -workspace ios/Runner.xcworkspace \
             -scheme Runner \
             -destination "platform=iOS Simulator,id=$simulator_id" \
-            -only-testing:RunnerTests \
+            -only-testing:RunnerTests/RunnerTests \
             -parallel-testing-enabled NO \
             -resultBundlePath build/pro-native-tests.xcresult \
             CODE_SIGNING_ALLOWED=NO
