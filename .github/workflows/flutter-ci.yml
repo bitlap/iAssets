@@ -55,3 +55,47 @@ jobs:
 
       - name: Check iOS release script syntax
         run: bash -n scripts/release_ios.sh
+
+  ios-pro-tests:
+    name: iOS Pro Entitlement Tests
+    runs-on: macos-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.44.4'
+          channel: 'stable'
+          cache: true
+
+      - name: Prepare simulator build
+        run: |
+          cp ios/Config.example.xcconfig ios/Config.xcconfig
+          flutter pub get
+          cd ios
+          pod install
+
+      - name: Run native Pro tests
+        shell: bash
+        run: |
+          simulator_id="$(xcrun simctl list devices available -j | python3 -c 'import json,sys; devices=json.load(sys.stdin)["devices"]; print(next(d["udid"] for group in devices.values() for d in group if d["name"].startswith("iPhone")))')"
+          xcodebuild test \
+            -workspace ios/Runner.xcworkspace \
+            -scheme Runner \
+            -destination "platform=iOS Simulator,id=$simulator_id" \
+            -only-testing:RunnerTests \
+            -parallel-testing-enabled NO \
+            -resultBundlePath build/pro-native-tests.xcresult \
+            CODE_SIGNING_ALLOWED=NO
+
+      - name: Upload native test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pro-native-test-results
+          path: build/pro-native-tests.xcresult
+          if-no-files-found: ignore

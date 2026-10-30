@@ -127,15 +127,51 @@ private enum CryptoStorage {
   }
 }
 
+/// Pure eligibility rules shared by the StoreKit adapter and native unit tests.
+/// VerificationResult must be checked by the caller before passing any facts in.
+enum ProEntitlementPolicy {
+  static let monthly = "org.bitlap.assets.pro.monthly"
+  static let yearly = "org.bitlap.assets.pro.yearly"
+  static let lifetime = "org.bitlap.assets.pro.lifetime"
+  static let ids: Set<String> = [monthly, yearly, lifetime]
+
+  static func grantsLegacy(bundleID: String, expectedBundleID: String?,
+                           environment: AppStore.Environment, originalPurchaseDate: Date,
+                           cutoff: Date?) -> Bool {
+    guard let cutoff, bundleID == expectedBundleID, environment == .production else { return false }
+    return originalPurchaseDate < cutoff
+  }
+
+  static func grantsLifetime(productID: String, productType: Product.ProductType,
+                             revoked: Bool, upgraded: Bool) -> Bool {
+    productID == lifetime && productType == .nonConsumable && !revoked && !upgraded
+  }
+
+  static func subscriptionExpiry(productID: String, productType: Product.ProductType,
+                                 revoked: Bool, upgraded: Bool, expiration: Date?,
+                                 now: Date) -> Date? {
+    guard productID == monthly || productID == yearly,
+          productType == .autoRenewable, !revoked, !upgraded,
+          let expiration, expiration > now else { return nil }
+    return expiration
+  }
+
+  static func kind(legacy: Bool, lifetime: Bool, expiry: Date?, now: Date) -> String {
+    if legacy { return "legacy" }
+    if lifetime { return "lifetime" }
+    return expiry.map { $0 > now } == true ? "subscription" : "free"
+  }
+}
+
 /// StoreKit owns and verifies entitlements. Nothing in an imported backup can
 /// grant Pro, and an existing installation/data file isn't proof of ownership.
 @MainActor
 private final class ProStore {
   static let shared = ProStore()
-  private let monthly = "org.bitlap.assets.pro.monthly"
-  private let yearly = "org.bitlap.assets.pro.yearly"
-  private let lifetime = "org.bitlap.assets.pro.lifetime"
-  private var ids: Set<String> { [monthly, yearly, lifetime] }
+  private let monthly = ProEntitlementPolicy.monthly
+  private let yearly = ProEntitlementPolicy.yearly
+  private let lifetime = ProEntitlementPolicy.lifetime
+  private var ids: Set<String> { ProEntitlementPolicy.ids }
   private var products: [Product] = []
   private var cutoff: Date?
   private var observer: Task<Void, Never>?
@@ -214,6 +250,7 @@ private final class ProStore {
   private func status() async -> [String: Any] {
     var kind = "free"
     var expiry: Date?
+    let now = Date()
     var legacyVerified = false
     if #available(iOS 16.0, *), let cutoff {
       if let verification = try? await AppTransaction.shared,
@@ -221,7 +258,10 @@ private final class ProStore {
          app.bundleID == Bundle.main.bundleIdentifier {
         legacyVerified = true
         // Sandbox acquisition dates are synthetic and must never grant legacy Pro.
-        if app.environment == .production && app.originalPurchaseDate < cutoff {
+        if ProEntitlementPolicy.grantsLegacy(
+          bundleID: app.bundleID, expectedBundleID: Bundle.main.bundleIdentifier,
+          environment: app.environment, originalPurchaseDate: app.originalPurchaseDate,
+          cutoff: cutoff) {
           kind = "legacy"
         }
       }
@@ -231,10 +271,14 @@ private final class ProStore {
       guard case .verified(let transaction) = verification,
             ids.contains(transaction.productID), transaction.revocationDate == nil,
             !transaction.isUpgraded else { continue }
-      if transaction.productID == lifetime && transaction.productType == .nonConsumable {
+      if ProEntitlementPolicy.grantsLifetime(
+        productID: transaction.productID, productType: transaction.productType,
+        revoked: transaction.revocationDate != nil, upgraded: transaction.isUpgraded) {
         ownsLifetime = true
-      } else if transaction.productType == .autoRenewable,
-                let date = transaction.expirationDate, date > Date() {
+      } else if let date = ProEntitlementPolicy.subscriptionExpiry(
+        productID: transaction.productID, productType: transaction.productType,
+        revoked: transaction.revocationDate != nil, upgraded: transaction.isUpgraded,
+        expiration: transaction.expirationDate, now: now) {
         expiry = max(expiry ?? date, date)
       }
     }
@@ -249,13 +293,15 @@ private final class ProStore {
               ids.contains(transaction.productID), transaction.revocationDate == nil,
               !transaction.isUpgraded,
               case .verified(let renewal) = state.renewalInfo,
-              let date = renewal.gracePeriodExpirationDate, date > Date() else { continue }
+              let date = ProEntitlementPolicy.subscriptionExpiry(
+                productID: transaction.productID, productType: transaction.productType,
+                revoked: transaction.revocationDate != nil, upgraded: transaction.isUpgraded,
+                expiration: renewal.gracePeriodExpirationDate, now: now) else { continue }
         expiry = max(expiry ?? date, date)
       }
     }
-    if kind != "legacy" {
-      kind = ownsLifetime ? "lifetime" : (expiry != nil ? "subscription" : "free")
-    }
+    kind = ProEntitlementPolicy.kind(legacy: kind == "legacy", lifetime: ownsLifetime,
+                                     expiry: expiry, now: now)
     var value: [String: Any] = [
       "kind": kind, "legacyVerified": legacyVerified,
       "products": products.map { ["id": $0.id, "price": $0.displayPrice] }
