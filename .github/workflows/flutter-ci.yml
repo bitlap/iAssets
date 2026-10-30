@@ -75,9 +75,8 @@ jobs:
       - name: Prepare simulator build
         run: |
           cp ios/Config.example.xcconfig ios/Config.xcconfig
-          flutter pub get
-          cd ios
-          pod install
+          # Align generated Swift packages with Runner's iOS 16 deployment target.
+          flutter build ios --simulator --debug --config-only --no-codesign
 
       - name: Run native Pro tests
         shell: bash

@@ -24,9 +24,7 @@ dart analyze lib/services/pro_service.dart lib/widgets/pro/pro_page.dart \
 原生测试需要 macOS、完整 Xcode、CocoaPods 和已安装的 iOS 模拟器运行时。未准备本机配置时先复制 `ios/Config.example.xcconfig` 为 `ios/Config.xcconfig`，已有配置无需覆盖。
 
 ```bash
-cd ios
-pod install
-cd ..
+flutter build ios --simulator --debug --config-only --no-codesign
 xcrun simctl list devices available
 xcodebuild test \
   -workspace ios/Runner.xcworkspace \
