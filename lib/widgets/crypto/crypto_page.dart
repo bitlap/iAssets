@@ -16,6 +16,8 @@ import '../common/form_sheet.dart';
 import 'add_exchange_sheet.dart';
 import 'crypto_text.dart';
 import 'crypto_style.dart';
+import '../../services/pro_service.dart';
+import '../pro/pro_page.dart';
 
 class CryptoPage extends StatefulWidget {
   final CryptoStore store;
@@ -39,7 +41,11 @@ class CryptoPageState extends State<CryptoPage>
   bool _hideSmall = false;
   @override
   bool get wantKeepAlive => true;
-  Future<void> addConnection() => showAddExchangeSheet(context, widget.store);
+  Future<void> addConnection() async {
+    if (!await ensurePro(context, reason: ProReason.crypto) || !mounted) return;
+    await showAddExchangeSheet(context, widget.store);
+  }
+
   String _summaryMoney(Decimal? usd, {bool showSymbol = true}) => usd == null
       ? L10n.t('cryptoUnknown')
       : '${showSymbol ? CurrencyUtil.getSymbol(widget.currency) : ''}${CurrencyUtil.formatCompact(CurrencyUtil.convertCurrency(usd.toDouble(), 'USD', widget.currency))}';
@@ -89,9 +95,11 @@ class CryptoPageState extends State<CryptoPage>
     return ListenableBuilder(
       listenable: Listenable.merge([
         widget.store,
+        ProService.instance,
         AppColors.marketColorNotifier,
       ]),
       builder: (context, _) {
+        if (!ProService.instance.isPro) return const ProGate();
         final connections = widget.store.connections;
         final selected = connections
             .where((c) => _connection == null || c.id == _connection)

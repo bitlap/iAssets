@@ -1,3 +1,4 @@
+import '../support/pro_fixtures.dart';
 import 'dart:convert';
 import 'dart:io';
 import 'package:assets/models/asset_account.dart';
@@ -14,6 +15,7 @@ void main() {
   setUpAll(() async => dir = await initializeTestStorage());
   tearDownAll(() => dir.deleteSync(recursive: true));
   setUp(() async {
+    await setTestPro();
     for (final file in dir.listSync()) {
       file.deleteSync(recursive: true);
     }

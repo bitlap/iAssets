@@ -13,8 +13,10 @@ Required environment variables:
   ASC_KEY_PATH       Absolute path to the .p8 private key (kept outside the repo)
   ASC_KEY_ID         App Store Connect API key ID
   ASC_ISSUER_ID      App Store Connect issuer ID
+  PRO_LEGACY_CUTOFF  Frozen first monetized release time (UTC ISO 8601, ending Z)
 
 Optional environment variables:
+  PRO_PRIVACY_URL    Public HTTPS privacy policy URL; defaults to bitlap.org
   APPLE_TEAM_ID      Signing team; defaults to ios/Config.xcconfig
   BUILD_NAME         App version; defaults to pubspec.yaml
   BUILD_NUMBER       Build number; defaults to pubspec.yaml suffix or 1
@@ -37,7 +39,7 @@ esac
 project_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 load_config() {
   local name index
-  local names=(ASC_KEY_PATH ASC_KEY_ID ASC_ISSUER_ID APPLE_TEAM_ID BUILD_NAME BUILD_NUMBER RELEASE_OUTPUT_DIR)
+  local names=(ASC_KEY_PATH ASC_KEY_ID ASC_ISSUER_ID APPLE_TEAM_ID BUILD_NAME BUILD_NUMBER RELEASE_OUTPUT_DIR PRO_LEGACY_CUTOFF PRO_PRIVACY_URL)
   local saved_names=() saved_values=()
   for name in "${names[@]}"; do
     if [[ ${!name+x} ]]; then
@@ -57,13 +59,26 @@ load_config() {
   done
 }
 load_config
+export PRO_PRIVACY_URL="${PRO_PRIVACY_URL:-https://bitlap.org/iAssets-privacy/}"
 [[ "$(uname -s)" == Darwin ]] || fail 'An iOS release requires macOS and Xcode.'
 for tool in flutter xcodebuild python3; do
   command -v "$tool" >/dev/null 2>&1 || fail "Required command is unavailable: $tool"
 done
-for name in ASC_KEY_PATH ASC_KEY_ID ASC_ISSUER_ID; do
+for name in ASC_KEY_PATH ASC_KEY_ID ASC_ISSUER_ID PRO_LEGACY_CUTOFF PRO_PRIVACY_URL; do
   [[ -n "${!name:-}" ]] || fail "Set $name before running this script."
 done
+python3 - <<'PY'
+import datetime, os, urllib.parse
+cutoff = os.environ['PRO_LEGACY_CUTOFF']
+try:
+    datetime.datetime.fromisoformat(cutoff.replace('Z', '+00:00'))
+    assert cutoff.endswith('Z') and 'T' in cutoff
+except (ValueError, AssertionError):
+    raise SystemExit('PRO_LEGACY_CUTOFF must be a UTC ISO 8601 timestamp ending Z.')
+url = urllib.parse.urlparse(os.environ['PRO_PRIVACY_URL'])
+if url.scheme != 'https' or not url.hostname:
+    raise SystemExit('PRO_PRIVACY_URL must be a public HTTPS URL.')
+PY
 [[ "$ASC_KEY_PATH" = /* ]] || fail 'ASC_KEY_PATH must be an absolute path.'
 [[ -r "$ASC_KEY_PATH" && -f "$ASC_KEY_PATH" ]] || fail 'ASC_KEY_PATH must point to a readable .p8 file.'
 [[ "$ASC_KEY_ID" =~ ^[A-Za-z0-9]+$ ]] || fail 'ASC_KEY_ID must contain only letters and digits.'
@@ -89,7 +104,7 @@ PY
 read -r pubspec_version pubspec_build signing_team <<< "$metadata"
 build_name="${BUILD_NAME:-$pubspec_version}"
 build_number="${BUILD_NUMBER:-$pubspec_build}"
-[[ "$build_name" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]] || fail 'BUILD_NAME must have the form 1.6.0.'
+[[ "$build_name" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]] || fail 'BUILD_NAME must have the form 2.0.0.'
 [[ "$build_number" =~ ^[0-9]+(\.[0-9]+){0,2}$ ]] || fail 'BUILD_NUMBER must have one to three numeric components.'
 [[ "$signing_team" =~ ^[A-Za-z0-9]{10}$ && "$signing_team" != YOUR_TEAM_ID ]] || fail 'Set APPLE_TEAM_ID or DEVELOPMENT_TEAM in ios/Config.xcconfig.'
 
@@ -133,7 +148,9 @@ printf 'Release: %s (%s), team %s\nOutput: %s\n' "$build_name" "$build_number" "
 # Flutter prepares plugins, CocoaPods and generated build settings. The actual
 # archive and both exports explicitly authenticate with the API key.
 run_step configure flutter build ios --release --config-only \
-  "--build-name=$build_name" "--build-number=$build_number"
+  "--build-name=$build_name" "--build-number=$build_number" \
+  "--dart-define=PRO_LEGACY_CUTOFF=$PRO_LEGACY_CUTOFF" \
+  "--dart-define=PRO_PRIVACY_URL=$PRO_PRIVACY_URL"
 run_step archive xcodebuild -workspace ios/Runner.xcworkspace -scheme Runner \
   -configuration Release -destination 'generic/platform=iOS' \
   -archivePath "$archive_path" "${auth_args[@]}" \

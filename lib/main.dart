@@ -10,6 +10,7 @@ import 'widgets/common/app_theme.dart';
 import 'widgets/common/floating_bottom_bar.dart';
 import 'l10n/l10n.dart';
 import 'services/settings_service.dart';
+import 'services/pro_service.dart';
 import 'services/crypto/crypto_store.dart';
 import 'services/exchange_rate_service.dart';
 import 'utils/currency_util.dart';
@@ -51,6 +52,7 @@ void main() async {
     existingWorkPolicy: ExistingPeriodicWorkPolicy.keep,
   );
 
+  unawaited(ProService.instance.initialize());
   runApp(const MyApp());
 }
 
@@ -144,13 +146,20 @@ class _AppShellState extends State<_AppShell> with WidgetsBindingObserver {
     _loadDefaultCurrency();
     WidgetsBinding.instance.addObserver(this);
     _crypto.addListener(_refreshHeader);
+    ProService.instance.addListener(_onProChanged);
     unawaited(_refreshCrypto());
     _cryptoTimer = Timer.periodic(const Duration(minutes: 5), (_) {
       if (_foreground) unawaited(_refreshCrypto());
     });
   }
 
+  void _onProChanged() {
+    _refreshHeader();
+    if (ProService.instance.isPro) unawaited(_refreshCrypto());
+  }
+
   Future<void> _refreshCrypto() async {
+    if (!ProService.instance.isPro) return;
     await _crypto.refresh();
     await ExchangeRateService().fetchRates();
     _refreshHeader();
@@ -159,7 +168,10 @@ class _AppShellState extends State<_AppShell> with WidgetsBindingObserver {
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     _foreground = state == AppLifecycleState.resumed;
-    if (_foreground) unawaited(_refreshCrypto());
+    if (_foreground) {
+      unawaited(ProService.instance.refresh());
+      unawaited(_refreshCrypto());
+    }
   }
 
   Future<void> _loadDefaultCurrency() async {
@@ -233,6 +245,7 @@ class _AppShellState extends State<_AppShell> with WidgetsBindingObserver {
     WidgetsBinding.instance.removeObserver(this);
     _cryptoTimer?.cancel();
     _crypto.removeListener(_refreshHeader);
+    ProService.instance.removeListener(_onProChanged);
     _pageController.dispose();
     super.dispose();
   }
@@ -297,13 +310,21 @@ class _AppShellState extends State<_AppShell> with WidgetsBindingObserver {
                               key: _assetKey,
                               stockTotalValue: _stockTotalValue,
                               cryptoTotalValue: CurrencyUtil.convertCurrency(
-                                _crypto.totalUsd.toDouble(),
+                                ProService.instance.isPro
+                                    ? _crypto.totalUsd.toDouble()
+                                    : 0,
                                 'USD',
                                 _selectedCurrency,
                               ),
-                              cryptoIncomplete: _crypto.incomplete,
-                              cryptoUpdatedAt: _crypto.oldestUpdate,
-                              onRefreshCrypto: () => _refreshCrypto(),
+                              cryptoIncomplete:
+                                  ProService.instance.isPro &&
+                                  _crypto.incomplete,
+                              cryptoUpdatedAt: ProService.instance.isPro
+                                  ? _crypto.oldestUpdate
+                                  : null,
+                              onRefreshCrypto: ProService.instance.isPro
+                                  ? () => _refreshCrypto()
+                                  : null,
                               currency: _selectedCurrency,
                               onHeaderChanged: _refreshHeader,
                               onCurrencyChanged: _changeCurrency,

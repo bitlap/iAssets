@@ -1,0 +1,24 @@
+{
+  "configurations": [
+    {
+      "id": "605E5222-E40A-41E0-B79B-939CCFAE390A",
+      "name": "Local StoreKit",
+      "options": {}
+    }
+  ],
+  "defaultOptions": {
+    "storeKitConfigurationFile": {
+      "identifier": "container:RunnerTests/Pro.storekit"
+    }
+  },
+  "testTargets": [
+    {
+      "target": {
+        "containerPath": "container:Runner.xcodeproj",
+        "identifier": "331C8080294A63A400263BE5",
+        "name": "RunnerTests"
+      }
+    }
+  ],
+  "version": 1
+}

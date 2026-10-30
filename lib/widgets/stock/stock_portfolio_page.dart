@@ -26,6 +26,8 @@ import 'stock_header_card.dart';
 import '../dividend/global_dividend_page.dart';
 import '../common/backup_dialog.dart';
 import '../settings_page.dart';
+import '../../services/pro_service.dart';
+import '../pro/pro_page.dart';
 
 /// 股票持仓主页 - 仅负责状态管理和页面组装
 class StockPortfolioPage extends StatefulWidget {
@@ -48,6 +50,7 @@ class StockPortfolioPageState extends State<StockPortfolioPage>
     with WidgetsBindingObserver, AutomaticKeepAliveClientMixin {
   // 状态
   List<StockModel> stocks = [];
+  bool _stocksLoaded = false;
   String selectedCurrency = AppConfig.defaultCurrency;
   String? _expandedStockSymbol;
   // 每只股票的操作记录
@@ -142,6 +145,7 @@ class StockPortfolioPageState extends State<StockPortfolioPage>
     if (!mounted) return;
     setState(() {
       stocks = data.$1;
+      _stocksLoaded = true;
       _operationRecords
         ..clear()
         ..addAll(data.$2);
@@ -285,6 +289,7 @@ class StockPortfolioPageState extends State<StockPortfolioPage>
     }
     setState(() {
       stocks = data.$1;
+      _stocksLoaded = true;
       _operationRecords
         ..clear()
         ..addAll(data.$2);
@@ -405,11 +410,18 @@ class StockPortfolioPageState extends State<StockPortfolioPage>
     }
   }
 
+  bool _canUseStock(StockModel stock) {
+    if (!stock.isCustom || ProService.instance.isPro) return true;
+    unawaited(showProPage(context, reason: ProReason.customStock));
+    return false;
+  }
+
   void _onEditStock(
     StockModel updatedStock,
     OperationRecord? record,
     bool isClosed,
   ) {
+    if (!_canUseStock(updatedStock)) return;
     setState(() {
       if (isClosed) {
         // 平仓后保留股票记录，只清持仓数量，保留已实现盈亏
@@ -466,6 +478,10 @@ class StockPortfolioPageState extends State<StockPortfolioPage>
   }
 
   void _showRecordsDialog(StockModel stock) {
+    if (stock.isCustom && !ProService.instance.isPro) {
+      unawaited(showProPage(context, reason: ProReason.customStock));
+      return;
+    }
     final records = _operationRecords[stock.symbol] ?? [];
     final divRecords = _dividendRecords[stock.symbol] ?? [];
     showModalBottomSheet(
@@ -481,6 +497,7 @@ class StockPortfolioPageState extends State<StockPortfolioPage>
           operationRecords: records,
           dividendRecords: divRecords,
           onDeleteOperationRecord: (symbol, index) {
+            if (!_canUseStock(stock)) return;
             setState(() {
               final list = _operationRecords[symbol];
               if (list != null && index < list.length) {
@@ -513,6 +530,7 @@ class StockPortfolioPageState extends State<StockPortfolioPage>
             _markDirty();
           },
           onEditOperationRecord: (symbol, index, updated) {
+            if (!_canUseStock(stock)) return;
             setState(() {
               final list = _operationRecords[symbol];
               if (list != null && index < list.length) {
@@ -529,6 +547,7 @@ class StockPortfolioPageState extends State<StockPortfolioPage>
             _markDirty();
           },
           onDeleteDividendRecord: (symbol, index) {
+            if (!_canUseStock(stock)) return;
             setState(() {
               final list = _dividendRecords[symbol];
               if (list != null && index < list.length) {
@@ -538,6 +557,7 @@ class StockPortfolioPageState extends State<StockPortfolioPage>
             _markDirty();
           },
           onEditDividendRecord: (symbol, index, updated) {
+            if (!_canUseStock(stock)) return;
             setState(() {
               final list = _dividendRecords[symbol];
               if (list != null && index < list.length) {
@@ -552,6 +572,10 @@ class StockPortfolioPageState extends State<StockPortfolioPage>
   }
 
   void _showMoreOptions(StockModel stock) {
+    if (stock.isCustom && !ProService.instance.isPro) {
+      unawaited(showProPage(context, reason: ProReason.customStock));
+      return;
+    }
     showDialog(
       context: context,
       builder: (_) => MoreOptionsDialog(
@@ -565,11 +589,16 @@ class StockPortfolioPageState extends State<StockPortfolioPage>
   }
 
   void _showDividendDialog(StockModel stock) {
+    if (stock.isCustom && !ProService.instance.isPro) {
+      unawaited(showProPage(context, reason: ProReason.customStock));
+      return;
+    }
     showDialog(
       context: context,
       builder: (_) => DividendDialog(
         stock: stock,
         onConfirm: (date, amountPerShare, taxRate) {
+          if (!_canUseStock(stock)) return;
           setState(() {
             final record = DividendRecord(
               date: date,
@@ -590,6 +619,10 @@ class StockPortfolioPageState extends State<StockPortfolioPage>
   }
 
   void _showEditDialog(StockModel stock, {required bool isAdd}) {
+    if (stock.isCustom && !ProService.instance.isPro) {
+      unawaited(showProPage(context, reason: ProReason.customStock));
+      return;
+    }
     final records = _operationRecords[stock.symbol] ?? [];
     showDialog(
       context: context,
@@ -612,7 +645,15 @@ class StockPortfolioPageState extends State<StockPortfolioPage>
     );
   }
 
+  bool _canAddStock() {
+    if (!_stocksLoaded) return false;
+    if (ProService.instance.access.canAddStock(stocks.length)) return true;
+    unawaited(showProPage(context, reason: ProReason.stockLimit));
+    return false;
+  }
+
   Future<void> showAddStockMenu() async {
+    if (!_canAddStock()) return;
     _collapseExpandedStock();
     final method = await showAddStockMethodSheet(context);
     if (!mounted || method == null) return;
@@ -625,6 +666,9 @@ class StockPortfolioPageState extends State<StockPortfolioPage>
   }
 
   Future<void> _showCustomStockSheet() async {
+    if (!await ensurePro(context, reason: ProReason.customStock) || !mounted) {
+      return;
+    }
     final draft = await showCustomStockSheet(
       context,
       initialCurrency: selectedCurrency,
@@ -635,6 +679,11 @@ class StockPortfolioPageState extends State<StockPortfolioPage>
   }
 
   Future<void> _addCustomStock(CustomStockDraft draft) async {
+    if (!await ensurePro(context, reason: ProReason.customStock) ||
+        !mounted ||
+        !_canAddStock()) {
+      return;
+    }
     final id = draft.stockCode.trim().toUpperCase();
     final hasConflict = stocks.any(
       (stock) => stock.symbol.trim().toUpperCase() == id,
@@ -655,7 +704,7 @@ class StockPortfolioPageState extends State<StockPortfolioPage>
         }
       }
     }
-    if (!mounted) return;
+    if (!mounted || !ProService.instance.isPro || !_canAddStock()) return;
 
     final stock = StockModel(
       symbol: id,
@@ -688,6 +737,7 @@ class StockPortfolioPageState extends State<StockPortfolioPage>
   }
 
   void showSearchStockDialog() {
+    if (!_canAddStock()) return;
     _collapseExpandedStock();
     final existingSymbols = stocks.map((s) => s.symbol).toSet();
     showModalBottomSheet(
@@ -697,6 +747,7 @@ class StockPortfolioPageState extends State<StockPortfolioPage>
       backgroundColor: Colors.transparent,
       builder: (_) => SearchStockDialog(
         existingSymbols: existingSymbols,
+        canAddStock: _canAddStock,
         onStockAdded: (newStock, buyRecord) {
           setState(() {
             stocks.add(newStock);
@@ -775,7 +826,8 @@ class StockPortfolioPageState extends State<StockPortfolioPage>
   }
 
   /// 打开数据备份弹窗
-  void _showBackupDialog() {
+  Future<void> _showBackupDialog() async {
+    if (!await ensurePro(context, reason: ProReason.backup) || !mounted) return;
     _collapseExpandedStock();
     showDialog(
       context: context,
