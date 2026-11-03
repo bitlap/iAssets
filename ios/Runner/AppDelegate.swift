@@ -252,11 +252,13 @@ final class ProStore {
     var expiry: Date?
     let now = Date()
     var legacyVerified = false
+    var appTransactionEnvironment = "unknown"
     if #available(iOS 16.0, *), let cutoff {
       if let verification = try? await AppTransaction.shared,
          case .verified(let app) = verification,
          app.bundleID == Bundle.main.bundleIdentifier {
         legacyVerified = true
+        appTransactionEnvironment = app.environment == .production ? "production" : "testing"
         // Sandbox acquisition dates are synthetic and must never grant legacy Pro.
         if ProEntitlementPolicy.grantsLegacy(
           bundleID: app.bundleID, expectedBundleID: Bundle.main.bundleIdentifier,
@@ -304,6 +306,7 @@ final class ProStore {
                                      expiry: expiry, now: now)
     var value: [String: Any] = [
       "kind": kind, "legacyVerified": legacyVerified,
+      "appTransactionEnvironment": appTransactionEnvironment,
       "products": products.map { ["id": $0.id, "price": $0.displayPrice] }
     ]
     if let expiry { value["expiresAt"] = ISO8601DateFormatter().string(from: expiry) }

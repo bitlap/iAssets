@@ -137,7 +137,11 @@ class _ProPageState extends State<ProPage> {
     if (!mounted) return;
     _message(
       service.error ??
-          (service.isPro ? 'proPurchaseSuccess' : 'proNoPurchases'),
+          (service.isPro
+              ? 'proPurchaseSuccess'
+              : service.isStoreTesting
+              ? 'proNoPurchasesTesting'
+              : 'proNoPurchases'),
     );
   }
 
@@ -302,7 +306,11 @@ class _ProPageState extends State<ProPage> {
           const SizedBox(height: 12),
           if (!_permanent)
             Text(
-              L10n.t('proLegacyHint'),
+              L10n.t(
+                service.isStoreTesting
+                    ? 'proLegacyTestingHint'
+                    : 'proLegacyHint',
+              ),
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 12,

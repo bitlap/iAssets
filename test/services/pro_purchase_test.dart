@@ -152,6 +152,18 @@ void main() {
     },
   );
 
+  test(
+    'StoreKit testing environment does not imply legacy ownership',
+    () async {
+      status['appTransactionEnvironment'] = 'testing';
+      await service.refresh();
+      expect(service.isStoreTesting, isTrue);
+      expect(service.isPro, isFalse);
+      await service.restore();
+      expect(service.isPro, isFalse);
+    },
+  );
+
   test('native purchase exception releases lock and permits retry', () async {
     intercept = (call) async {
       if (call.method == 'status') return status;

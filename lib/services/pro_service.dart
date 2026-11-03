@@ -58,6 +58,7 @@ class ProService extends ChangeNotifier {
   bool loading = true;
   bool busy = false;
   bool legacyVerified = false;
+  String appTransactionEnvironment = 'unknown';
   String? error;
   List<ProProduct> products = const [];
 
@@ -68,6 +69,7 @@ class ProService extends ChangeNotifier {
       (_kind == 'subscription' && (_expiresAt?.isAfter(_now()) ?? false));
   String get kind => isPro ? _kind : 'free';
   bool get hasSubscription => _expiresAt?.isAfter(_now()) ?? false;
+  bool get isStoreTesting => appTransactionEnvironment == 'testing';
   ProAccess get access => ProAccess(isPro: isPro);
   bool get canPurchase =>
       configured &&
@@ -107,6 +109,8 @@ class ProService extends ChangeNotifier {
       _kind = value['kind'] as String? ?? 'free';
       _expiresAt = DateTime.tryParse(value['expiresAt'] as String? ?? '');
       legacyVerified = value['legacyVerified'] == true;
+      appTransactionEnvironment =
+          value['appTransactionEnvironment'] as String? ?? 'unknown';
       products = [
         for (final raw in value['products'] as List? ?? const [])
           if (raw is Map &&

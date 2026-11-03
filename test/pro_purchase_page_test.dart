@@ -109,6 +109,23 @@ void main() {
     },
   );
 
+  testWidgets(
+    'TestFlight restore explains why paid-app ownership is unavailable',
+    (tester) async {
+      status['appTransactionEnvironment'] = 'testing';
+      await open(tester);
+    await tester.scrollUntilVisible(
+      find.text(L10n.t('proLegacyTestingHint')),
+      250,
+    );
+      expect(find.text(L10n.t('proLegacyTestingHint')), findsOneWidget);
+      await tester.tap(find.text(L10n.t('proRestoreShort')).first);
+      await tester.pumpAndSettle();
+      expect(find.text(L10n.t('proNoPurchasesTesting')), findsOneWidget);
+      expect(service.isPro, isFalse);
+    },
+  );
+
   for (final confirm in [false, true]) {
     testWidgets('subscription to lifetime requires confirmation: $confirm', (
       tester,

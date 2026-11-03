@@ -616,6 +616,8 @@ const Map<String, String> stringsEn = {
   "proPending":
       "Purchase is awaiting approval. Access updates automatically after approval.",
   "proNoPurchases": "No Pro access was found to restore.",
+  "proNoPurchasesTesting":
+      "No test purchase was found. TestFlight cannot verify an earlier paid App Store download. The public release will check your Apple purchase history for existing-owner access.",
   "proLinkError": "Unable to open the link. Please try again.",
   "proReasonStocks":
       "You have reached the 3-stock limit. Unlock Pro to add more.",
@@ -634,6 +636,8 @@ const Map<String, String> stringsEn = {
       "Connect your exchange accounts with iAssets Pro.\nSee balances, spot assets and futures positions.\nView-only access. No trading.",
   "proLegacyHint":
       "Existing users receive lifetime Pro at no charge. Tap Restore to verify.",
+  "proLegacyTestingHint":
+      "TestFlight cannot verify an earlier paid App Store download. Restore here only recovers Pro test purchases. The public release will verify existing-owner access automatically.",
   "proRestoreShort": "Restore",
   "proHeroTitle": "More assets.\nA clearer picture.",
   "proHeroSubtitle":

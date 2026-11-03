@@ -66,6 +66,7 @@ final class ProStoreKitTests: XCTestCase {
       XCTAssertTrue(products.allSatisfy { !($0["price"] ?? "").isEmpty })
       XCTAssertEqual(value["kind"] as? String, "free")
       XCTAssertEqual(value["legacyVerified"] as? Bool, true)
+      XCTAssertEqual(value["appTransactionEnvironment"] as? String, "testing")
     }
   }
 

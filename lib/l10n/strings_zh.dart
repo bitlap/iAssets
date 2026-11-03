@@ -569,6 +569,8 @@ const Map<String, String> stringsZh = {
   "proPurchaseSuccess": "Pro 权益已解锁",
   "proPending": "购买正在等待批准，批准后会自动更新权益。",
   "proNoPurchases": "未找到可恢复的 Pro 权益。",
+  "proNoPurchasesTesting":
+      "未找到可恢复的测试购买。TestFlight 无法验证旧版 App 的正式购买记录；正式版上线后会根据 Apple 购买记录确认老用户权益。",
   "proLinkError": "无法打开链接，请稍后重试。",
   "proReasonStocks": "已达到免费版 3 只股票上限，升级 Pro 即可继续添加。",
   "proReasonAssetTypes": "已达到免费版 3 种资产类型上限，Pro 支持全部资产类型。",
@@ -580,6 +582,8 @@ const Map<String, String> stringsZh = {
   "proCryptoDescription":
       "升级 iAssets Pro，连接交易所账户，\n集中查看余额、现货与合约持仓。\n仅查询展示，不提供交易操作。",
   "proLegacyHint": "老用户可免费获赠永久 Pro，点击「恢复购买」验证。",
+  "proLegacyTestingHint":
+      "TestFlight 无法验证旧版 App 的正式购买记录。此处「恢复购买」仅恢复测试环境中的 Pro 内购；正式版上线后会自动验证老用户权益。",
   "proRestoreShort": "恢复购买",
   "proHeroTitle": "更多资产，\n更清晰的全貌。",
   "proHeroSubtitle": "从股票到数字币，从记录到备份。\n解锁完整工具，专注你的财富积累。",
