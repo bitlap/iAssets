@@ -1,6 +1,8 @@
 import 'dart:io';
 
 import 'package:assets/config/app_config.dart';
+import 'package:assets/models/asset_account.dart';
+import 'package:assets/utils/asset_calculator.dart';
 import 'package:assets/utils/stock_calculator.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -175,7 +177,7 @@ void main() {
         );
         expect(result.totalMarketValue, 120);
         expect(result.totalSellAmount, 110);
-        expect(result.totalAssets, 230);
+        expect(result.totalAssets, 120);
         expect(result.totalCost, 100);
         expect(result.totalRealizedPL, 10);
         expect(result.totalProfit, 30);
@@ -183,6 +185,66 @@ void main() {
         expect(result.totalAfterTaxDividends, 18);
       },
     );
+
+    test(
+      'partial sale changes holdings without treating proceeds as stock assets',
+      () {
+        final records = [
+          trade(price: 10, shares: 10),
+          trade(type: StockConfig.opSellType, price: 15, shares: 4),
+        ];
+        final holding = StockCalculator.recalculateFromRecords(
+          stock(price: 15),
+          records,
+        );
+        final summary = StockCalculator.calculateAssetSummary(
+          [holding],
+          {'TEST': records},
+          {},
+          'USD',
+        );
+
+        expect(summary.totalMarketValue, 90);
+        expect(summary.totalSellAmount, 60);
+        expect(summary.totalAssets, 90);
+        expect(summary.totalProfit, 50);
+        expect(
+          AssetCalculator.calculateTotalAssets(
+            [CashAccount(id: 'sale-cash', balance: 60)],
+            summary.totalAssets,
+            'USD',
+          ),
+          150,
+        );
+      },
+    );
+
+    test('reinvested sale proceeds are counted only in current holdings', () {
+      final records = [
+        trade(price: 10, shares: 10),
+        trade(type: StockConfig.opSellType, price: 15, shares: 4),
+        trade(price: 20, shares: 3),
+      ];
+      final holding = StockCalculator.recalculateFromRecords(
+        stock(price: 20),
+        records,
+      );
+      final summary = StockCalculator.calculateAssetSummary(
+        [holding],
+        {'TEST': records},
+        {},
+        'USD',
+      );
+
+      expect(summary.totalMarketValue, 180);
+      expect(summary.totalSellAmount, 60);
+      expect(summary.totalAssets, 180);
+      expect(summary.totalProfit, 80);
+      expect(
+        AssetCalculator.calculateTotalAssets([], summary.totalAssets, 'USD'),
+        180,
+      );
+    });
 
     test('missing histories produce finite totals', () {
       final result = StockCalculator.calculateAssetSummary(

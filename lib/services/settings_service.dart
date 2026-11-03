@@ -5,8 +5,8 @@ import 'package:path_provider/path_provider.dart';
 
 /// 设置服务 - 文件 JSON 存储，与股票/资产同样的持久化方式
 class SettingsService {
+  static const String _retiredKeepStockKey = 'keep_stock_after_close';
   static const String keyDefaultCurrency = 'default_currency';
-  static const String keyKeepStockAfterClose = 'keep_stock_after_close';
   static const String keySortColumn = 'sort_column';
   static const String keySortAscending = 'sort_ascending';
   static const String keySyncSettings = 'sync_settings';
@@ -51,6 +51,10 @@ class SettingsService {
     if (await file.exists()) {
       try {
         _cache = jsonDecode(await file.readAsString()) as Map<String, dynamic>;
+        if (_cache!.containsKey(_retiredKeepStockKey)) {
+          _cache!.remove(_retiredKeepStockKey);
+          await _save();
+        }
         return _cache!;
       } catch (e) {
         debugPrint('[SettingsService] ===> 读取设置失败: $e');
@@ -87,19 +91,6 @@ class SettingsService {
   static Future<void> setDefaultCurrency(String currency) async {
     final settings = await _load();
     settings[keyDefaultCurrency] = currency;
-    await _save();
-  }
-
-  /// 读取平仓后是否保留持仓股票，默认 true
-  static Future<bool> getKeepStockAfterClose() async {
-    final settings = await _load();
-    return settings[keyKeepStockAfterClose] as bool? ?? true;
-  }
-
-  /// 保存平仓后是否保留持仓股票
-  static Future<void> setKeepStockAfterClose(bool value) async {
-    final settings = await _load();
-    settings[keyKeepStockAfterClose] = value;
     await _save();
   }
 
@@ -268,6 +259,7 @@ class SettingsService {
   static Future<void> applyAll(Map<String, dynamic> data) async {
     final settings = await _load();
     settings.addAll(data);
+    settings.remove(_retiredKeepStockKey);
     await _save();
   }
 }

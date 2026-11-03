@@ -53,9 +53,9 @@ Pro 权益、老用户升级规则及验证说明见 [Pro 使用与开发说明]
 | --- | --- | --- |
 | [<img src="docs/images/iphone-17-pro/zh-light-crypto.png" width="220" alt="iPhone 17 Pro · 简体中文 · 浅色 · 数字币总览">](docs/images/iphone-17-pro/zh-light-crypto.png) | [<img src="docs/images/iphone-17-pro/zh-light-crypto-spot.png" width="220" alt="iPhone 17 Pro · 简体中文 · 浅色 · 现货余额">](docs/images/iphone-17-pro/zh-light-crypto-spot.png) | [<img src="docs/images/iphone-17-pro/zh-light-crypto-futures.png" width="220" alt="iPhone 17 Pro · 简体中文 · 浅色 · 合约持仓">](docs/images/iphone-17-pro/zh-light-crypto-futures.png) |
 
-| 资产总览 | 设置 | 自定义股票 |
-| --- | --- | --- |
-| [<img src="docs/images/iphone-17-pro/zh-light-assets.png" width="220" alt="iPhone 17 Pro · 简体中文 · 浅色 · 资产总览">](docs/images/iphone-17-pro/zh-light-assets.png) | [<img src="docs/images/iphone-17-pro/zh-light-settings.png" width="220" alt="iPhone 17 Pro · 简体中文 · 浅色 · 设置">](docs/images/iphone-17-pro/zh-light-settings.png) | [<img src="docs/images/iphone-17-pro/zh-light-custom-stock.png" width="220" alt="iPhone 17 Pro · 简体中文 · 浅色 · 自定义股票">](docs/images/iphone-17-pro/zh-light-custom-stock.png) |
+| 资产总览 | 自定义股票 |
+| --- | --- |
+| [<img src="docs/images/iphone-17-pro/zh-light-assets.png" width="220" alt="iPhone 17 Pro · 简体中文 · 浅色 · 资产总览">](docs/images/iphone-17-pro/zh-light-assets.png) | [<img src="docs/images/iphone-17-pro/zh-light-custom-stock.png" width="220" alt="iPhone 17 Pro · 简体中文 · 浅色 · 自定义股票">](docs/images/iphone-17-pro/zh-light-custom-stock.png) |
 
 </details>
 
@@ -70,9 +70,9 @@ Pro 权益、老用户升级规则及验证说明见 [Pro 使用与开发说明]
 | --- | --- | --- |
 | [<img src="docs/images/iphone-17-pro/zh-dark-crypto.png" width="220" alt="iPhone 17 Pro · 简体中文 · 深色 · 数字币总览">](docs/images/iphone-17-pro/zh-dark-crypto.png) | [<img src="docs/images/iphone-17-pro/zh-dark-crypto-spot.png" width="220" alt="iPhone 17 Pro · 简体中文 · 深色 · 现货余额">](docs/images/iphone-17-pro/zh-dark-crypto-spot.png) | [<img src="docs/images/iphone-17-pro/zh-dark-crypto-futures.png" width="220" alt="iPhone 17 Pro · 简体中文 · 深色 · 合约持仓">](docs/images/iphone-17-pro/zh-dark-crypto-futures.png) |
 
-| 资产总览 | 设置 | 自定义股票 |
-| --- | --- | --- |
-| [<img src="docs/images/iphone-17-pro/zh-dark-assets.png" width="220" alt="iPhone 17 Pro · 简体中文 · 深色 · 资产总览">](docs/images/iphone-17-pro/zh-dark-assets.png) | [<img src="docs/images/iphone-17-pro/zh-dark-settings.png" width="220" alt="iPhone 17 Pro · 简体中文 · 深色 · 设置">](docs/images/iphone-17-pro/zh-dark-settings.png) | [<img src="docs/images/iphone-17-pro/zh-dark-custom-stock.png" width="220" alt="iPhone 17 Pro · 简体中文 · 深色 · 自定义股票">](docs/images/iphone-17-pro/zh-dark-custom-stock.png) |
+| 资产总览 | 自定义股票 |
+| --- | --- |
+| [<img src="docs/images/iphone-17-pro/zh-dark-assets.png" width="220" alt="iPhone 17 Pro · 简体中文 · 深色 · 资产总览">](docs/images/iphone-17-pro/zh-dark-assets.png) | [<img src="docs/images/iphone-17-pro/zh-dark-custom-stock.png" width="220" alt="iPhone 17 Pro · 简体中文 · 深色 · 自定义股票">](docs/images/iphone-17-pro/zh-dark-custom-stock.png) |
 
 </details>
 
@@ -87,9 +87,9 @@ Pro 权益、老用户升级规则及验证说明见 [Pro 使用与开发说明]
 | --- | --- | --- |
 | [<img src="docs/images/iphone-17-pro/en-light-crypto.png" width="220" alt="iPhone 17 Pro · English · Light · 数字币总览">](docs/images/iphone-17-pro/en-light-crypto.png) | [<img src="docs/images/iphone-17-pro/en-light-crypto-spot.png" width="220" alt="iPhone 17 Pro · English · Light · 现货余额">](docs/images/iphone-17-pro/en-light-crypto-spot.png) | [<img src="docs/images/iphone-17-pro/en-light-crypto-futures.png" width="220" alt="iPhone 17 Pro · English · Light · 合约持仓">](docs/images/iphone-17-pro/en-light-crypto-futures.png) |
 
-| 资产总览 | 设置 | 自定义股票 |
-| --- | --- | --- |
-| [<img src="docs/images/iphone-17-pro/en-light-assets.png" width="220" alt="iPhone 17 Pro · English · Light · 资产总览">](docs/images/iphone-17-pro/en-light-assets.png) | [<img src="docs/images/iphone-17-pro/en-light-settings.png" width="220" alt="iPhone 17 Pro · English · Light · 设置">](docs/images/iphone-17-pro/en-light-settings.png) | [<img src="docs/images/iphone-17-pro/en-light-custom-stock.png" width="220" alt="iPhone 17 Pro · English · Light · 自定义股票">](docs/images/iphone-17-pro/en-light-custom-stock.png) |
+| 资产总览 | 自定义股票 |
+| --- | --- |
+| [<img src="docs/images/iphone-17-pro/en-light-assets.png" width="220" alt="iPhone 17 Pro · English · Light · 资产总览">](docs/images/iphone-17-pro/en-light-assets.png) | [<img src="docs/images/iphone-17-pro/en-light-custom-stock.png" width="220" alt="iPhone 17 Pro · English · Light · 自定义股票">](docs/images/iphone-17-pro/en-light-custom-stock.png) |
 
 </details>
 
@@ -104,9 +104,9 @@ Pro 权益、老用户升级规则及验证说明见 [Pro 使用与开发说明]
 | --- | --- | --- |
 | [<img src="docs/images/iphone-17-pro/en-dark-crypto.png" width="220" alt="iPhone 17 Pro · English · Dark · 数字币总览">](docs/images/iphone-17-pro/en-dark-crypto.png) | [<img src="docs/images/iphone-17-pro/en-dark-crypto-spot.png" width="220" alt="iPhone 17 Pro · English · Dark · 现货余额">](docs/images/iphone-17-pro/en-dark-crypto-spot.png) | [<img src="docs/images/iphone-17-pro/en-dark-crypto-futures.png" width="220" alt="iPhone 17 Pro · English · Dark · 合约持仓">](docs/images/iphone-17-pro/en-dark-crypto-futures.png) |
 
-| 资产总览 | 设置 | 自定义股票 |
-| --- | --- | --- |
-| [<img src="docs/images/iphone-17-pro/en-dark-assets.png" width="220" alt="iPhone 17 Pro · English · Dark · 资产总览">](docs/images/iphone-17-pro/en-dark-assets.png) | [<img src="docs/images/iphone-17-pro/en-dark-settings.png" width="220" alt="iPhone 17 Pro · English · Dark · 设置">](docs/images/iphone-17-pro/en-dark-settings.png) | [<img src="docs/images/iphone-17-pro/en-dark-custom-stock.png" width="220" alt="iPhone 17 Pro · English · Dark · 自定义股票">](docs/images/iphone-17-pro/en-dark-custom-stock.png) |
+| 资产总览 | 自定义股票 |
+| --- | --- |
+| [<img src="docs/images/iphone-17-pro/en-dark-assets.png" width="220" alt="iPhone 17 Pro · English · Dark · 资产总览">](docs/images/iphone-17-pro/en-dark-assets.png) | [<img src="docs/images/iphone-17-pro/en-dark-custom-stock.png" width="220" alt="iPhone 17 Pro · English · Dark · 自定义股票">](docs/images/iphone-17-pro/en-dark-custom-stock.png) |
 
 </details>
 
@@ -123,9 +123,9 @@ Pro 权益、老用户升级规则及验证说明见 [Pro 使用与开发说明]
 | --- | --- | --- |
 | [<img src="docs/images/ipad-air-13/zh-light-crypto.png" width="220" alt="iPad Air 13 英寸 · 简体中文 · 浅色 · 数字币总览">](docs/images/ipad-air-13/zh-light-crypto.png) | [<img src="docs/images/ipad-air-13/zh-light-crypto-spot.png" width="220" alt="iPad Air 13 英寸 · 简体中文 · 浅色 · 现货余额">](docs/images/ipad-air-13/zh-light-crypto-spot.png) | [<img src="docs/images/ipad-air-13/zh-light-crypto-futures.png" width="220" alt="iPad Air 13 英寸 · 简体中文 · 浅色 · 合约持仓">](docs/images/ipad-air-13/zh-light-crypto-futures.png) |
 
-| 资产总览 | 设置 | 自定义股票 |
-| --- | --- | --- |
-| [<img src="docs/images/ipad-air-13/zh-light-assets.png" width="220" alt="iPad Air 13 英寸 · 简体中文 · 浅色 · 资产总览">](docs/images/ipad-air-13/zh-light-assets.png) | [<img src="docs/images/ipad-air-13/zh-light-settings.png" width="220" alt="iPad Air 13 英寸 · 简体中文 · 浅色 · 设置">](docs/images/ipad-air-13/zh-light-settings.png) | [<img src="docs/images/ipad-air-13/zh-light-custom-stock.png" width="220" alt="iPad Air 13 英寸 · 简体中文 · 浅色 · 自定义股票">](docs/images/ipad-air-13/zh-light-custom-stock.png) |
+| 资产总览 | 自定义股票 |
+| --- | --- |
+| [<img src="docs/images/ipad-air-13/zh-light-assets.png" width="220" alt="iPad Air 13 英寸 · 简体中文 · 浅色 · 资产总览">](docs/images/ipad-air-13/zh-light-assets.png) | [<img src="docs/images/ipad-air-13/zh-light-custom-stock.png" width="220" alt="iPad Air 13 英寸 · 简体中文 · 浅色 · 自定义股票">](docs/images/ipad-air-13/zh-light-custom-stock.png) |
 
 </details>
 
@@ -140,9 +140,9 @@ Pro 权益、老用户升级规则及验证说明见 [Pro 使用与开发说明]
 | --- | --- | --- |
 | [<img src="docs/images/ipad-air-13/zh-dark-crypto.png" width="220" alt="iPad Air 13 英寸 · 简体中文 · 深色 · 数字币总览">](docs/images/ipad-air-13/zh-dark-crypto.png) | [<img src="docs/images/ipad-air-13/zh-dark-crypto-spot.png" width="220" alt="iPad Air 13 英寸 · 简体中文 · 深色 · 现货余额">](docs/images/ipad-air-13/zh-dark-crypto-spot.png) | [<img src="docs/images/ipad-air-13/zh-dark-crypto-futures.png" width="220" alt="iPad Air 13 英寸 · 简体中文 · 深色 · 合约持仓">](docs/images/ipad-air-13/zh-dark-crypto-futures.png) |
 
-| 资产总览 | 设置 | 自定义股票 |
-| --- | --- | --- |
-| [<img src="docs/images/ipad-air-13/zh-dark-assets.png" width="220" alt="iPad Air 13 英寸 · 简体中文 · 深色 · 资产总览">](docs/images/ipad-air-13/zh-dark-assets.png) | [<img src="docs/images/ipad-air-13/zh-dark-settings.png" width="220" alt="iPad Air 13 英寸 · 简体中文 · 深色 · 设置">](docs/images/ipad-air-13/zh-dark-settings.png) | [<img src="docs/images/ipad-air-13/zh-dark-custom-stock.png" width="220" alt="iPad Air 13 英寸 · 简体中文 · 深色 · 自定义股票">](docs/images/ipad-air-13/zh-dark-custom-stock.png) |
+| 资产总览 | 自定义股票 |
+| --- | --- |
+| [<img src="docs/images/ipad-air-13/zh-dark-assets.png" width="220" alt="iPad Air 13 英寸 · 简体中文 · 深色 · 资产总览">](docs/images/ipad-air-13/zh-dark-assets.png) | [<img src="docs/images/ipad-air-13/zh-dark-custom-stock.png" width="220" alt="iPad Air 13 英寸 · 简体中文 · 深色 · 自定义股票">](docs/images/ipad-air-13/zh-dark-custom-stock.png) |
 
 </details>
 
@@ -157,9 +157,9 @@ Pro 权益、老用户升级规则及验证说明见 [Pro 使用与开发说明]
 | --- | --- | --- |
 | [<img src="docs/images/ipad-air-13/en-light-crypto.png" width="220" alt="iPad Air 13 英寸 · English · Light · 数字币总览">](docs/images/ipad-air-13/en-light-crypto.png) | [<img src="docs/images/ipad-air-13/en-light-crypto-spot.png" width="220" alt="iPad Air 13 英寸 · English · Light · 现货余额">](docs/images/ipad-air-13/en-light-crypto-spot.png) | [<img src="docs/images/ipad-air-13/en-light-crypto-futures.png" width="220" alt="iPad Air 13 英寸 · English · Light · 合约持仓">](docs/images/ipad-air-13/en-light-crypto-futures.png) |
 
-| 资产总览 | 设置 | 自定义股票 |
-| --- | --- | --- |
-| [<img src="docs/images/ipad-air-13/en-light-assets.png" width="220" alt="iPad Air 13 英寸 · English · Light · 资产总览">](docs/images/ipad-air-13/en-light-assets.png) | [<img src="docs/images/ipad-air-13/en-light-settings.png" width="220" alt="iPad Air 13 英寸 · English · Light · 设置">](docs/images/ipad-air-13/en-light-settings.png) | [<img src="docs/images/ipad-air-13/en-light-custom-stock.png" width="220" alt="iPad Air 13 英寸 · English · Light · 自定义股票">](docs/images/ipad-air-13/en-light-custom-stock.png) |
+| 资产总览 | 自定义股票 |
+| --- | --- |
+| [<img src="docs/images/ipad-air-13/en-light-assets.png" width="220" alt="iPad Air 13 英寸 · English · Light · 资产总览">](docs/images/ipad-air-13/en-light-assets.png) | [<img src="docs/images/ipad-air-13/en-light-custom-stock.png" width="220" alt="iPad Air 13 英寸 · English · Light · 自定义股票">](docs/images/ipad-air-13/en-light-custom-stock.png) |
 
 </details>
 
@@ -174,9 +174,9 @@ Pro 权益、老用户升级规则及验证说明见 [Pro 使用与开发说明]
 | --- | --- | --- |
 | [<img src="docs/images/ipad-air-13/en-dark-crypto.png" width="220" alt="iPad Air 13 英寸 · English · Dark · 数字币总览">](docs/images/ipad-air-13/en-dark-crypto.png) | [<img src="docs/images/ipad-air-13/en-dark-crypto-spot.png" width="220" alt="iPad Air 13 英寸 · English · Dark · 现货余额">](docs/images/ipad-air-13/en-dark-crypto-spot.png) | [<img src="docs/images/ipad-air-13/en-dark-crypto-futures.png" width="220" alt="iPad Air 13 英寸 · English · Dark · 合约持仓">](docs/images/ipad-air-13/en-dark-crypto-futures.png) |
 
-| 资产总览 | 设置 | 自定义股票 |
-| --- | --- | --- |
-| [<img src="docs/images/ipad-air-13/en-dark-assets.png" width="220" alt="iPad Air 13 英寸 · English · Dark · 资产总览">](docs/images/ipad-air-13/en-dark-assets.png) | [<img src="docs/images/ipad-air-13/en-dark-settings.png" width="220" alt="iPad Air 13 英寸 · English · Dark · 设置">](docs/images/ipad-air-13/en-dark-settings.png) | [<img src="docs/images/ipad-air-13/en-dark-custom-stock.png" width="220" alt="iPad Air 13 英寸 · English · Dark · 自定义股票">](docs/images/ipad-air-13/en-dark-custom-stock.png) |
+| 资产总览 | 自定义股票 |
+| --- | --- |
+| [<img src="docs/images/ipad-air-13/en-dark-assets.png" width="220" alt="iPad Air 13 英寸 · English · Dark · 资产总览">](docs/images/ipad-air-13/en-dark-assets.png) | [<img src="docs/images/ipad-air-13/en-dark-custom-stock.png" width="220" alt="iPad Air 13 英寸 · English · Dark · 自定义股票">](docs/images/ipad-air-13/en-dark-custom-stock.png) |
 
 </details>
 
@@ -190,6 +190,12 @@ Pro 权益、老用户升级规则及验证说明见 [Pro 使用与开发说明]
 | 资产总览 | 以彩色卡片分类管理现金、存款、理财和公积金，查看资产分布，支持折叠与拖拽排序 |
 | 多币种换算 | 切换显示币种，统一查看不同市场和账户的资产估值 |
 | 数据同步 | 通过 iCloud 同步股票、手动资产、记录和设置 |
+
+股票全部卖出时会提示确认；确认平仓后，从持仓列表移除该股票及其买卖、派息记录。升级前已保存的平仓记录不会自动删除。部分卖出的记录仍随持仓保留。
+
+股票页和资产总览中的股票估值只计算当前持仓市值（每股现价 × 持股数，再按显示币种换算）。累计卖出净额属于历史交易流水，不再计入股票资产；卖出所得现金若仍持有，可在资产页单独记录。这样部分卖出、再投资或记录现金时不会重复计入卖出金额。
+
+例如（不计手续费）以每股 10 美元买入 10 股，再以每股 15 美元卖出 4 股，余下 6 股的现价仍为 15 美元：股票资产为 90 美元，累计卖出净额为 60 美元。若这 60 美元现金仍在手中并单独记入资产页，资产总额为 150 美元；若已用来再投资，则不应重复记作现金。
 
 股票搜索覆盖美股、港股、沪深京、日本、韩国、英国及场外市场，也支持基金、债券、指数和三板。搜索、持仓与股息可按具体交易所或市场筛选，使用一致的名称和颜色标识；也可手动添加自定义股票，价格旁可直接选择货币，底部按钮完成添加。
 

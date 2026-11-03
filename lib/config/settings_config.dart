@@ -22,7 +22,6 @@ class SettingsConfig {
   static String get sectionOther => L10n.t('sectionOther');
 
   // 股票设置 文案
-  static String get keepStockLabel => L10n.t('keepStockLabel');
   static String get syncSettingsLabel => L10n.t('syncSettingsLabel');
   static String get syncItemSettings => L10n.t('syncItemSettings');
   static String get syncItemStocks => L10n.t('syncItemStocks');
@@ -31,10 +30,6 @@ class SettingsConfig {
   static String get syncHelpStocksDesc => L10n.t('syncHelpStocksDesc');
   static String get syncHelpRecordsDesc => L10n.t('syncHelpRecordsDesc');
   static String get syncPrivacyNote => L10n.t('syncPrivacyNote');
-  static String get keepStockOnLabel => L10n.t('keepStockOnLabel');
-  static String get keepStockOnDesc => L10n.t('keepStockOnDesc');
-  static String get keepStockOffLabel => L10n.t('keepStockOffLabel');
-  static String get keepStockOffDesc => L10n.t('keepStockOffDesc');
   static String get sortLabel => L10n.t('sortLabel');
   static String get sortByProfit => L10n.t('sortByProfit');
   static String get sortByHoldings => L10n.t('sortByHoldings');

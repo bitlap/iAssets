@@ -100,7 +100,7 @@ class _EditStockDialogState extends State<EditStockDialog> {
 
   Future<void> _fetchRealtimePrice() async {
     final secid = widget.stock.secid;
-    if (secid == null || secid.isEmpty) return;
+    if (secid.isEmpty) return;
     setState(() => _isLoadingPrice = true);
     try {
       final stock = StockSearchResult(
@@ -214,7 +214,7 @@ class _EditStockDialogState extends State<EditStockDialog> {
     );
   }
 
-  void _onConfirm() {
+  Future<void> _onConfirm() async {
     final diffShares = double.tryParse(_sharesController.text);
     final newPrice = double.tryParse(_priceController.text);
     if (diffShares == null ||
@@ -237,6 +237,16 @@ class _EditStockDialogState extends State<EditStockDialog> {
         : oldShares - diffShares;
     final bool isClosePosition =
         !widget.isAdd && (diffShares - oldShares).abs() < 1e-9;
+    if (isClosePosition) {
+      final confirmed = await ConfirmDeleteDialog.show(
+        context,
+        title: StockConfig.opClosePosition,
+        content: StockConfig.closeRemovesData,
+        icon: Icons.sell_outlined,
+        confirmText: StockConfig.opClosePosition,
+      );
+      if (!mounted || !confirmed) return;
+    }
     final double avgBuyPrice = _avgBuyPrice;
     final double profitLoss = avgBuyPrice > 0
         ? (newPrice - avgBuyPrice) * newShares

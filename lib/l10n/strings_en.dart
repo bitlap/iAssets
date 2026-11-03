@@ -61,7 +61,6 @@ const Map<String, String> stringsEn = {
   'sectionStock': 'Stock Settings',
   'sectionSync': 'Data Sync',
   'sectionOther': 'Other',
-  'keepStockLabel': 'Keep positions after closing',
   'syncSettingsLabel': 'iCloud Sync',
   'syncItemSettings': 'Settings',
   'syncItemStocks': 'Positions',
@@ -72,12 +71,6 @@ const Map<String, String> stringsEn = {
   'syncHelpRecordsDesc': 'Opening, adding, dividend and other records',
   'syncPrivacyNote':
       'If sync is off, data is stored only on this device and cannot be used across Apple devices (for your privacy, this app never stores any user data)',
-  'keepStockOnLabel': 'When enabled',
-  'keepStockOnDesc':
-      'Closing keeps the stock in the list with 0 shares and market value; realized profit and history are retained',
-  'keepStockOffLabel': 'When disabled',
-  'keepStockOffDesc':
-      'Closing removes the stock and all its data (except the profit curve), same as deleting the stock and records directly',
   'sortLabel': 'Default Sort',
   'sortByProfit': 'By Profit',
   'sortByHoldings': 'By Position',
@@ -148,17 +141,23 @@ const Map<String, String> stringsEn = {
   'assetExchangeRate': 'Rate',
   'assetSelectCurrency': 'Select Currency',
   'assetTotalCostHelp': 'Current price per share × shares held',
-  'assetTotalRealizedPL': 'Realized P&L',
-  'assetTotalProfitHelp': 'Unrealized P&L + realized P&L',
-  'assetTotalAssetsHelp': 'Market value + total closed amount',
-  'assetTotalDividendsHelp': 'After-tax total dividends / total assets',
-  'assetTotalSellAmount': 'Total Closed Amount',
-  'assetCostDetailLabel': 'Total Cost',
-  'assetFloatProfitLabel': 'Unrealized P&L',
+  'assetTotalRealizedPL': 'Closed-position P&L',
+  'assetTotalProfitHelp':
+      'Total P&L = current market value + net sale proceeds − total purchase cost (including fees). The return percentage uses total purchase cost as its denominator.',
+  'assetTotalAssetsHelp':
+      'Stock assets equal the market value of current holdings. Net sale proceeds are historical transactions, not current assets. If you still hold the cash, record it on the Assets page.',
+  'assetOverallAssetsHelp':
+      'Total assets equal current stock holdings, crypto value, and manually tracked assets, all converted to the selected currency. Net sale proceeds are not added separately; record any cash you still hold on the Assets page.',
+  'assetTotalDividendsHelp':
+      'Cumulative after-tax dividends / current stock market value; shows 0% when there are no holdings',
+  'assetTotalSellAmount': 'Net Sale Proceeds',
+  'assetCostDetailLabel': 'Net Capital Invested',
+  'assetFloatProfitLabel': 'P&L on Open Stocks',
   'assetAfterTaxDividendsLabel': 'After-tax Dividends',
   'assetDividendRateLabel': 'Dividend Yield',
   'assetPositionRatioLabel': 'Asset Allocation',
-  'assetPositionRatioHelp': 'Market value / total assets',
+  'assetPositionRatioHelp':
+      'Each asset category value / total assets; stocks include current holdings only',
 
   // Market filter
   'marketAll': 'All',
@@ -219,6 +218,8 @@ const Map<String, String> stringsEn = {
   'opSell': 'Sell',
   'opAddPosition': 'Add',
   'opReducePosition': 'Reduce',
+  'closeRemovesData':
+      'Closing will delete this stock and its trade and dividend records. This cannot be undone. Other previously saved closed positions are unaffected.',
   'opClosePosition': 'Close',
   'opOpenPosition': 'Open',
   'opDeleteStock': 'Delete Stock',
