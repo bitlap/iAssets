@@ -212,8 +212,6 @@ class _StockHeaderCardState extends State<StockHeaderCard> {
         ),
         const SizedBox(height: 4),
         _buildTotalMarketText(),
-        const SizedBox(height: 1),
-        _buildTotalMarketPercent(),
       ],
     );
   }
@@ -233,12 +231,17 @@ class _StockHeaderCardState extends State<StockHeaderCard> {
   }
 
   void _showTotalAssetsHelpDialog() {
-    final sellText = '${CurrencyUtil.formatCompact(widget.totalSellAmount)}';
+    final sellText = CurrencyUtil.formatCompact(widget.totalSellAmount);
     _helpDialogFrame(
       title: StockConfig.assetTotalAssets,
       icon: Icons.account_balance_wallet,
       iconColor: AppColors.warning,
       children: [
+        Text(
+          StockConfig.assetTotalAssetsHelp,
+          style: TextStyles.body13.copyWith(color: AppColors.textSecondary),
+        ),
+        const SizedBox(height: 8),
         _helpLine(
           StockConfig.assetTotalSellAmount,
           sellText,
@@ -249,7 +252,7 @@ class _StockHeaderCardState extends State<StockHeaderCard> {
   }
 
   void _showTotalCostHelpDialog() {
-    final costText = '${CurrencyUtil.formatCompact(widget.totalCost)}';
+    final costText = CurrencyUtil.formatCompact(widget.totalCost);
     final floatPL = widget.totalMarketValue - widget.totalCost;
     final floatText = ProfitUtil.amount(floatPL);
     _helpDialogFrame(
@@ -329,18 +332,8 @@ class _StockHeaderCardState extends State<StockHeaderCard> {
 
   Widget _buildTotalMarketText() {
     return Text(
-      '${CurrencyUtil.formatCompact(widget.totalMarketValue)}',
+      CurrencyUtil.formatCompact(widget.totalMarketValue),
       style: TextStyles.valueMedium,
-    );
-  }
-
-  Widget _buildTotalMarketPercent() {
-    final percent = widget.totalAssets > 0
-        ? (widget.totalMarketValue / widget.totalAssets * 100)
-        : 0.0;
-    return Text(
-      '${percent.toStringAsFixed(2)}%',
-      style: TextStyles.caption.copyWith(fontWeight: FontWeight.w500),
     );
   }
 
@@ -394,14 +387,20 @@ class _StockHeaderCardState extends State<StockHeaderCard> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(
-          label,
-          style: TextStyles.body13.copyWith(color: AppColors.textSecondary),
+        Flexible(
+          child: Text(
+            label,
+            style: TextStyles.body13.copyWith(color: AppColors.textSecondary),
+          ),
         ),
-        Text(
-          value,
-          style: TextStyles.valueMedium.copyWith(
-            color: valueColor ?? AppColors.textPrimary,
+        const SizedBox(width: 8),
+        Flexible(
+          child: Text(
+            value,
+            textAlign: TextAlign.right,
+            style: TextStyles.valueMedium.copyWith(
+              color: valueColor ?? AppColors.textPrimary,
+            ),
           ),
         ),
       ],
@@ -442,7 +441,7 @@ class _StockHeaderCardState extends State<StockHeaderCard> {
 
   Widget _buildDividendText() {
     return Text(
-      '${CurrencyUtil.formatCompact(widget.totalAfterTaxDividends)}',
+      CurrencyUtil.formatCompact(widget.totalAfterTaxDividends),
       style: TextStyles.valueMedium,
     );
   }

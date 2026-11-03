@@ -25,7 +25,6 @@ class SettingsPage extends StatefulWidget {
   final ValueChanged<String> onSortChanged;
   final ValueChanged<bool> onSortDirectionChanged;
   final VoidCallback? onSyncToggled;
-  final ValueChanged<bool>? onKeepStockChanged;
   final VoidCallback? onSettingsChanged;
 
   const SettingsPage({
@@ -35,7 +34,6 @@ class SettingsPage extends StatefulWidget {
     required this.onSortChanged,
     required this.onSortDirectionChanged,
     this.onSyncToggled,
-    this.onKeepStockChanged,
     this.onSettingsChanged,
   });
 
@@ -47,7 +45,6 @@ class _SettingsPageState extends State<SettingsPage> {
   late String _selectedCurrency;
   bool _isCurrencyExpanded = false;
   bool _isSortExpanded = false;
-  bool _keepStockAfterClose = true;
   String _selectedSortColumn = 'holdings';
   bool _isSortAscending = false;
   bool _syncSettings = true;
@@ -91,7 +88,6 @@ class _SettingsPageState extends State<SettingsPage> {
   }
 
   void _loadSettings() async {
-    final keepStock = await SettingsService.getKeepStockAfterClose();
     final sortColumn = await SettingsService.getSortColumn();
     final sortAscending = await SettingsService.getSortAscending();
     final syncSettings = await SettingsService.getSyncSettings();
@@ -102,7 +98,6 @@ class _SettingsPageState extends State<SettingsPage> {
     final redUpGreenDown = await SettingsService.getRedUpGreenDown();
     if (mounted) {
       setState(() {
-        _keepStockAfterClose = keepStock;
         _selectedSortColumn = sortColumn;
         _isSortAscending = sortAscending;
         _syncSettings = syncSettings;
@@ -129,59 +124,6 @@ class _SettingsPageState extends State<SettingsPage> {
     setState(() => _isSortAscending = newAscending);
     widget.onSortDirectionChanged(newAscending);
     widget.onSettingsChanged?.call();
-  }
-
-  void _onKeepStockChanged(bool value) {
-    showDialog(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        backgroundColor: AppColors.surface,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              value
-                  ? SettingsConfig.keepStockOnLabel
-                  : SettingsConfig.keepStockOffLabel,
-              style: TextStyles.sectionTitle,
-            ),
-            const SizedBox(height: 8),
-            Text(
-              value
-                  ? SettingsConfig.keepStockOnDesc
-                  : SettingsConfig.keepStockOffDesc,
-              style: TextStyles.body13.copyWith(
-                color: AppColors.grey400,
-                height: 1.4,
-              ),
-            ),
-          ],
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(ctx),
-            child: Text(
-              AppConfig.btnCancel,
-              style: TextStyles.body13.copyWith(color: AppColors.grey),
-            ),
-          ),
-          TextButton(
-            onPressed: () {
-              Navigator.pop(ctx);
-              setState(() => _keepStockAfterClose = value);
-              widget.onKeepStockChanged?.call(value);
-              widget.onSettingsChanged?.call();
-            },
-            child: Text(
-              AppConfig.btnClose,
-              style: TextStyles.body13.copyWith(color: AppColors.accent),
-            ),
-          ),
-        ],
-      ),
-    );
   }
 
   void _onCurrencySelected(String currency) {
@@ -545,13 +487,7 @@ class _SettingsPageState extends State<SettingsPage> {
         borderRadius: BorderRadius.circular(14),
         clipBehavior: Clip.antiAlias,
         child: Column(
-          children: [
-            _buildKeepStockTile(),
-            _buildGroupDivider(),
-            _buildFeeTile(),
-            _buildGroupDivider(),
-            _buildSortTile(),
-          ],
+          children: [_buildFeeTile(), _buildGroupDivider(), _buildSortTile()],
         ),
       ),
     );
@@ -703,87 +639,10 @@ class _SettingsPageState extends State<SettingsPage> {
     );
   }
 
-  void _showKeepStockHint() {
-    showHelpDialog(
-      context,
-      title: SettingsConfig.keepStockLabel,
-      icon: Icons.info_outline,
-      iconColor: Colors.orange,
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          HintRow(
-            color: Colors.greenAccent,
-            label: SettingsConfig.keepStockOnLabel,
-            desc: SettingsConfig.keepStockOnDesc,
-          ),
-          const SizedBox(height: 12),
-          HintRow(
-            color: Colors.redAccent,
-            label: SettingsConfig.keepStockOffLabel,
-            desc: SettingsConfig.keepStockOffDesc,
-          ),
-        ],
-      ),
-    );
-  }
-
   Widget _buildGroupDivider() {
     return Padding(
       padding: const EdgeInsets.only(left: 48),
       child: Divider(height: 1, color: AppColors.border, thickness: 0.5),
-    );
-  }
-
-  Widget _buildKeepStockTile() {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(14, 10, 8, 10),
-      child: Row(
-        children: [
-          Container(
-            width: 32,
-            height: 32,
-            decoration: BoxDecoration(
-              color: Colors.orange.withValues(alpha: 0.15),
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: Icon(Icons.swap_horiz, size: 18, color: Colors.orange),
-          ),
-          const SizedBox(width: 10),
-          Expanded(
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Flexible(
-                  child: Text(
-                    SettingsConfig.keepStockLabel,
-                    style: TextStyles.bodyMedium,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ),
-                const SizedBox(width: 4),
-                GestureDetector(
-                  onTap: _showKeepStockHint,
-                  child: Icon(
-                    Icons.help_outline,
-                    size: 16,
-                    color: Colors.orange,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Switch(
-            value: _keepStockAfterClose,
-            onChanged: _onKeepStockChanged,
-            activeTrackColor: AppColors.accent.withValues(alpha: 0.6),
-            activeThumbColor: AppColors.accent,
-            inactiveThumbColor: AppColors.switchInactiveThumb,
-            inactiveTrackColor: AppColors.switchInactiveTrack,
-          ),
-        ],
-      ),
     );
   }
 
@@ -1113,7 +972,7 @@ class _SettingsPageState extends State<SettingsPage> {
   static List<_FormulaItem> get _formulas => [
     _FormulaItem(
       StockConfig.assetTotalAssets,
-      StockConfig.assetTotalAssetsHelp,
+      StockConfig.assetOverallAssetsHelp,
     ),
     _FormulaItem(StockConfig.assetTotalCost, StockConfig.assetTotalCostHelp),
     _FormulaItem(

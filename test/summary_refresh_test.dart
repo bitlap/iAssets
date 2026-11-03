@@ -82,6 +82,64 @@ void main() {
     });
   }
   for (final language in [L10n.langZh, L10n.langEn, L10n.langZhHant]) {
+    testWidgets('asset formulas fit a narrow screen in $language', (
+      tester,
+    ) async {
+      tester.view.physicalSize = const Size(320, 900);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.resetPhysicalSize);
+      addTearDown(tester.view.resetDevicePixelRatio);
+      L10n.applyLanguage(language);
+
+      Widget page(Widget child) => MaterialApp(
+        theme: AppTheme.data(Brightness.light),
+        home: Scaffold(body: SingleChildScrollView(child: child)),
+      );
+      await tester.pumpWidget(
+        page(
+          StockHeaderCard(
+            selectedCurrency: 'USD',
+            totalAssets: 90,
+            totalMarketValue: 90,
+            totalCost: 40,
+            totalProfit: 50,
+            totalRealizedPL: 0,
+            totalProfitPercent: 50,
+            todayProfit: 0,
+            todayProfitPercent: 0,
+            totalAfterTaxDividends: 0,
+            totalSellAmount: 60,
+            onCurrencyChanged: (_) {},
+          ),
+        ),
+      );
+      await tester.tap(find.byIcon(Icons.help_outline).first);
+      await tester.pumpAndSettle();
+      expect(find.text(StockConfig.assetTotalAssetsHelp), findsOneWidget);
+      expect(find.text(StockConfig.assetTotalSellAmount), findsOneWidget);
+      expect(tester.takeException(), isNull);
+
+      Navigator.of(
+        tester.element(find.text(StockConfig.assetTotalAssetsHelp)),
+      ).pop();
+      await tester.pumpAndSettle();
+      await tester.pumpWidget(
+        page(
+          AssetHeader(
+            totalAssets: 150,
+            stockTotalValue: 90,
+            currency: 'USD',
+            onCurrencyTap: () {},
+            totalsByType: const {},
+          ),
+        ),
+      );
+      await tester.tap(find.byIcon(Icons.help_outline).first);
+      await tester.pumpAndSettle();
+      expect(find.text(StockConfig.assetOverallAssetsHelp), findsOneWidget);
+      expect(tester.takeException(), isNull);
+    });
+
     testWidgets(
       'daily performance does not shift the asset total in $language',
       (tester) async {

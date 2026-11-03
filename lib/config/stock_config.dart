@@ -16,6 +16,7 @@ class StockConfig {
   static String get assetTotalRealizedPL => L10n.t('assetTotalRealizedPL');
   static String get assetTotalProfitHelp => L10n.t('assetTotalProfitHelp');
   static String get assetTotalAssetsHelp => L10n.t('assetTotalAssetsHelp');
+  static String get assetOverallAssetsHelp => L10n.t('assetOverallAssetsHelp');
   static String get assetTotalDividendsHelp =>
       L10n.t('assetTotalDividendsHelp');
   static String get assetTotalSellAmount => L10n.t('assetTotalSellAmount');
@@ -73,6 +74,7 @@ class StockConfig {
   static String get opDividend => L10n.t('opDividend');
   static String get opMoreActions => L10n.t('opMoreActions');
   static String get opConfirmDelete => L10n.t('opConfirmDelete');
+  static String get closeRemovesData => L10n.t('closeRemovesData');
 
   // 编辑对话框 文案
   static String get editPriceHint => L10n.t('editPriceHint');

@@ -114,10 +114,10 @@ void main() {
     (tester) async {
       status['appTransactionEnvironment'] = 'testing';
       await open(tester);
-    await tester.scrollUntilVisible(
-      find.text(L10n.t('proLegacyTestingHint')),
-      250,
-    );
+      await tester.scrollUntilVisible(
+        find.text(L10n.t('proLegacyTestingHint')),
+        250,
+      );
       expect(find.text(L10n.t('proLegacyTestingHint')), findsOneWidget);
       await tester.tap(find.text(L10n.t('proRestoreShort')).first);
       await tester.pumpAndSettle();

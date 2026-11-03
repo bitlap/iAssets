@@ -68,9 +68,6 @@ class StockPortfolioPageState extends State<StockPortfolioPage>
   /// 今日盈亏基线（存于 defaultCurrency 的总盈亏）
   double _todayBaseline = 0;
 
-  /// 平仓后是否保留持仓股票（若选择删除，则清空数据，效果等同直接删除股票）
-  bool _keepStockAfterClose = false;
-
   // 排序状态
   String _sortColumn = 'holdings'; // 'name', 'holdings', 'profit'
   bool _sortAscending = false;
@@ -98,7 +95,6 @@ class StockPortfolioPageState extends State<StockPortfolioPage>
     WidgetsBinding.instance.addObserver(this);
     StockDataManager.loadSettings().then((_) {
       _loadSavedCurrency();
-      _loadKeepStockSetting();
       _loadSortSettings();
     });
     _syncStockData();
@@ -119,12 +115,6 @@ class StockPortfolioPageState extends State<StockPortfolioPage>
     if (saved != null && mounted) {
       setState(() => selectedCurrency = saved);
     }
-  }
-
-  /// 加载平仓后是否保留持仓股票的设置
-  Future<void> _loadKeepStockSetting() async {
-    final keep = await SettingsService.getKeepStockAfterClose();
-    if (mounted) setState(() => _keepStockAfterClose = keep);
   }
 
   /// 加载排序设置
@@ -424,18 +414,15 @@ class StockPortfolioPageState extends State<StockPortfolioPage>
     if (!_canUseStock(updatedStock)) return;
     setState(() {
       if (isClosed) {
-        // 平仓后保留股票记录，只清持仓数量，保留已实现盈亏
-        final index = stocks.indexWhere((s) => s.symbol == updatedStock.symbol);
-        if (index == -1) {
-          stocks.add(updatedStock.copyWith(shares: 0, totalValue: 0));
-        }
+        // 平仓后移除该股票及其关联记录，不再将历史卖出额计入资产。
+        _removeStockData(updatedStock.symbol);
       } else {
         // 加仓或减仓：更新股票
         final index = stocks.indexWhere((s) => s.symbol == updatedStock.symbol);
         if (index != -1) stocks[index] = updatedStock;
       }
       // 添加操作记录
-      if (record != null) {
+      if (record != null && !isClosed) {
         _operationRecords.putIfAbsent(updatedStock.symbol, () => []);
         _operationRecords[updatedStock.symbol]!.insert(0, record);
         final i = stocks.indexWhere((s) => s.symbol == updatedStock.symbol);
@@ -469,12 +456,17 @@ class StockPortfolioPageState extends State<StockPortfolioPage>
 
   void _onDeleteStock(StockModel stock) {
     setState(() {
-      stocks.remove(stock);
-      _operationRecords.remove(stock.symbol);
-      _dividendRecords.remove(stock.symbol);
+      _removeStockData(stock.symbol);
     });
     _markDirty();
     CenterToast.success(context, StockConfig.resultDeleteSuccess);
+  }
+
+  void _removeStockData(String symbol) {
+    stocks.removeWhere((stock) => stock.symbol == symbol);
+    _operationRecords.remove(symbol);
+    _dividendRecords.remove(symbol);
+    if (_expandedStockSymbol == symbol) _expandedStockSymbol = null;
   }
 
   void _showRecordsDialog(StockModel stock) {
@@ -504,19 +496,7 @@ class StockPortfolioPageState extends State<StockPortfolioPage>
                 list.removeAt(index);
               }
               if (list == null || list.isEmpty) {
-                if (_keepStockAfterClose) {
-                  final i = stocks.indexWhere((s) => s.symbol == symbol);
-                  if (i != -1) {
-                    stocks[i] = StockDataManager.recalculateStock(
-                      stocks[i],
-                      null,
-                    );
-                  }
-                } else {
-                  stocks.removeWhere((s) => s.symbol == symbol);
-                  _operationRecords.remove(symbol);
-                  _dividendRecords.remove(symbol);
-                }
+                _removeStockData(symbol);
               } else {
                 final i = stocks.indexWhere((s) => s.symbol == symbol);
                 if (i != -1) {
@@ -793,12 +773,6 @@ class StockPortfolioPageState extends State<StockPortfolioPage>
     _markDirty();
   }
 
-  /// 设置页面平仓保留变更回调
-  void _onKeepStockChanged(bool value) {
-    SettingsService.setKeepStockAfterClose(value);
-    _markDirty();
-  }
-
   /// 同步开关被切换
   Future<void> _onSyncToggled() async {
     if (stocks.isNotEmpty) {
@@ -854,14 +828,12 @@ class StockPortfolioPageState extends State<StockPortfolioPage>
           onSortChanged: _onSortChanged,
           onSortDirectionChanged: _onSortDirectionChanged,
           onSyncToggled: _onSyncToggled,
-          onKeepStockChanged: _onKeepStockChanged,
           onSettingsChanged: () => StockDataManager.saveSettings(),
         ),
       ),
     ).then((_) {
       // 从设置页返回后重新加载设置
       if (mounted) {
-        _loadKeepStockSetting();
         _loadSortSettings();
       }
     });

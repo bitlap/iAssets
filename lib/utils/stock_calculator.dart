@@ -78,8 +78,8 @@ class StockCalculator {
     String targetCurrency = AppConfig.defaultCurrency,
   ]) {
     double totalMarketValue = 0.0;
-    double unrealizedPL = 0.0;
-    double realizedPL = 0.0;
+    double openPositionPL = 0.0;
+    double closedPositionPL = 0.0;
     double totalBuyAmount = 0.0;
     double totalSellAmount = 0.0;
     double totalCost = 0.0;
@@ -98,14 +98,14 @@ class StockCalculator {
           stock.currency,
           targetCurrency,
         );
-        unrealizedPL += pl;
+        openPositionPL += pl;
       } else {
         final pl = CurrencyUtil.convertCurrency(
           stock.profitLossAmount,
           stock.currency,
           targetCurrency,
         );
-        realizedPL += pl;
+        closedPositionPL += pl;
       }
 
       final records = operationRecords[stock.symbol] ?? [];
@@ -129,11 +129,11 @@ class StockCalculator {
       }
     }
 
-    // 总盈亏 = 持仓浮盈 + 已实现盈亏
-    final totalProfit = unrealizedPL + realizedPL;
+    // 未平仓股票的盈亏已包含部分卖出的收益；另加历史已平仓股票的盈亏。
+    final totalProfit = openPositionPL + closedPositionPL;
 
-    // 总资产 = 当前持仓市值 + 累计卖出金额
-    final totalAssets = totalMarketValue + totalSellAmount;
+    // 股票当前资产只包含仍持有的股票。累计卖出是历史流水，所得现金由资产页单独记录。
+    final totalAssets = totalMarketValue;
 
     // 总股息
     final totalAfterTaxDividends = stocks.fold(0.0, (sum, stock) {
@@ -160,7 +160,7 @@ class StockCalculator {
       totalMarketValue: totalMarketValue,
       totalCost: totalCost,
       totalProfit: totalProfit,
-      totalRealizedPL: realizedPL,
+      totalRealizedPL: closedPositionPL,
       totalProfitPercent: totalProfitPercent,
       totalSellAmount: totalSellAmount,
       totalAfterTaxDividends: totalAfterTaxDividends,

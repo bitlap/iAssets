@@ -7,6 +7,8 @@ Stocks & Dividends
 • Filter search results, holdings and dividends by individual exchange or market, with clear color labels
 • Recognize your holdings more easily with company logos across more markets
 • Record buys, sells, dividends and fees, with automatic calculations for cost, P&L and after-tax dividends
+• Stock assets reflect current holdings only; net sale proceeds remain a separate transaction statistic
+• Fully selling a position removes the stock and related records; existing closed-position history is not deleted automatically
 • Follow today's P&L and profit charts, and review your trading history
 • Add custom stocks with a currency picker beside the price and an easy-to-reach button below
 • Quotes from Eastmoney, Tencent and Yahoo Finance; some market quotes may be delayed
@@ -26,4 +28,4 @@ Made for Everyday Use
 • Sync stocks, manually managed assets and settings with iCloud; view and record stocks and manual assets offline
 • Crypto connection details stay on your device; crypto balances and positions are not synced to iCloud
 • Choose Simplified Chinese, Traditional Chinese or English, light or dark themes, and your preferred gain/loss colors
-• No ads, no social feed and no in-app purchases — just personal asset management
+• No ads or social feed; basic features are free, with subscription and lifetime Pro options
