@@ -68,6 +68,12 @@ void main() {
       expect((await IcloudStorage.loadTodayBaseline())!.$2, 100);
     },
   );
+  test('missing FX does not persist a profit snapshot or baseline', () async {
+    await IcloudStorage.recordProfitIfNeeded(100, 'GBP');
+    await IcloudStorage.recordProfitIfNeeded(double.nan, 'USD');
+    expect(await IcloudStorage.loadIntradayProfitHistory(), isEmpty);
+    expect(await IcloudStorage.loadTodayBaseline(), isNull);
+  });
   test('same value after ten minutes creates a new snapshot', () async {
     await IcloudStorage.saveIntradayProfitHistory([
       ProfitSnapshot(

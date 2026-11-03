@@ -439,7 +439,7 @@ class _StockHeaderCardState extends State<StockHeaderCard> {
         ? (widget.totalAfterTaxDividends / widget.totalAssets * 100)
         : 0.0;
     return Text(
-      '${percent.toStringAsFixed(2)}%',
+      percent.isFinite ? '${percent.toStringAsFixed(2)}%' : '—',
       style: TextStyles.caption.copyWith(fontWeight: FontWeight.w500),
     );
   }
