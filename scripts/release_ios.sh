@@ -4,7 +4,7 @@ set -euo pipefail
 
 usage() {
   cat <<'HELP'
-Usage: ./scripts/release_ios.sh [--dry-run]
+Usage: ./scripts/release_ios.sh [--dry-run] [--internal-testflight]
 
 Defaults are loaded from scripts/release_ios.env when present.
 Environment variables supplied by the caller override file values.
@@ -24,18 +24,22 @@ Optional environment variables:
 
 Xcode manages the uploaded build number to avoid conflicts. --dry-run validates
 configuration and prints the commands without building or uploading.
+--internal-testflight marks the uploaded build as internal-TestFlight-only;
+Apple will not allow it to be distributed externally or on the App Store.
 HELP
 }
 
 fail() { printf 'Error: %s\n' "$*" >&2; exit 1; }
 dry_run=false
-case "${1:-}" in
-  '') ;;
-  --dry-run) dry_run=true ;;
-  -h|--help) usage; exit 0 ;;
-  *) usage >&2; exit 2 ;;
-esac
-[[ $# -le 1 ]] || fail 'Only --dry-run or --help is supported.'
+internal_testflight=false
+for option in "$@"; do
+  case "$option" in
+    --dry-run) dry_run=true ;;
+    --internal-testflight) internal_testflight=true ;;
+    -h|--help) usage; exit 0 ;;
+    *) usage >&2; exit 2 ;;
+  esac
+done
 project_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 load_config() {
   local name index
@@ -114,13 +118,15 @@ output_dir="${RELEASE_OUTPUT_DIR:-$project_dir/build/ios/releases/$(date +%Y%m%d
 mkdir -p "$(dirname "$output_dir")"
 mkdir "$output_dir" || fail 'RELEASE_OUTPUT_DIR already exists; choose a new directory.'
 archive_path="$output_dir/Runner.xcarchive"
-python3 - "$output_dir" "$signing_team" <<'PY'
+python3 - "$output_dir" "$signing_team" "$internal_testflight" <<'PY'
 import pathlib, plistlib, sys
-root, team = pathlib.Path(sys.argv[1]), sys.argv[2]
+root, team, internal_only = pathlib.Path(sys.argv[1]), sys.argv[2], sys.argv[3] == 'true'
 for destination in ('export', 'upload'):
     options = {'method': 'app-store-connect', 'destination': destination,
                'signingStyle': 'automatic', 'teamID': team,
                'uploadSymbols': True, 'manageAppVersionAndBuildNumber': True}
+    if destination == 'upload' and internal_only:
+        options['testFlightInternalTestingOnly'] = True
     (root / f'{destination}.plist').write_bytes(plistlib.dumps(options))
 PY
 
@@ -145,6 +151,9 @@ run_step() {
 }
 
 printf 'Release: %s (%s), team %s\nOutput: %s\n' "$build_name" "$build_number" "$signing_team" "$output_dir"
+if "$internal_testflight"; then
+  printf 'Distribution: TestFlight internal testing only\n'
+fi
 # Flutter prepares plugins, CocoaPods and generated build settings. The actual
 # archive and both exports explicitly authenticate with the API key.
 run_step configure flutter build ios --release --config-only \

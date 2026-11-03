@@ -20,9 +20,9 @@ void main() {
       'kind': 'free',
       'legacyVerified': true,
       'products': [
-        {'id': ProService.monthly, 'price': r'US$1.49'},
-        {'id': ProService.yearly, 'price': r'US$14.99'},
-        {'id': ProService.lifetime, 'price': r'US$44.99'},
+        {'id': ProService.monthly, 'price': r'US$1.99'},
+        {'id': ProService.yearly, 'price': r'US$19.99'},
+        {'id': ProService.lifetime, 'price': r'US$39.99'},
       ],
     };
     TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
@@ -57,7 +57,7 @@ void main() {
       matching: find.byType(SafeArea),
     );
     expect(
-      find.descendant(of: bar, matching: find.textContaining(r'US$14.99')),
+      find.descendant(of: bar, matching: find.textContaining(r'US$19.99')),
       findsOneWidget,
     );
     await tester.tap(purchaseButton);
@@ -85,7 +85,7 @@ void main() {
     tester,
   ) async {
     status['products'] = [
-      {'id': ProService.monthly, 'price': r'US$1.49'},
+      {'id': ProService.monthly, 'price': r'US$1.99'},
     ];
     await open(tester);
     expect(tester.widget<FilledButton>(purchaseButton).onPressed, isNull);

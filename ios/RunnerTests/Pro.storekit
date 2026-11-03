@@ -3,7 +3,7 @@
   "nonRenewingSubscriptions": [],
   "products": [
     {
-      "displayPrice": "44.99",
+      "displayPrice": "39.99",
       "familyShareable": false,
       "internalID": "1000003",
       "localizations": [
@@ -33,7 +33,7 @@
       "name": "iAssets Pro",
       "subscriptions": [
         {
-          "displayPrice": "1.49",
+          "displayPrice": "1.99",
           "familyShareable": false,
           "internalID": "1000001",
           "localizations": [
@@ -43,7 +43,7 @@
               "locale": "en_US"
             }
           ],
-          "productID": "org.bitlap.assets.pro.monthly",
+          "productID": "org.bitlap.assets.pro.subscription.monthly",
           "referenceName": "Pro Monthly",
           "type": "RecurringSubscription",
           "adHocOffers": [],
@@ -55,7 +55,7 @@
           "winBackOffers": []
         },
         {
-          "displayPrice": "14.99",
+          "displayPrice": "19.99",
           "familyShareable": false,
           "internalID": "1000002",
           "localizations": [
@@ -65,7 +65,7 @@
               "locale": "en_US"
             }
           ],
-          "productID": "org.bitlap.assets.pro.yearly",
+          "productID": "org.bitlap.assets.pro.subscription.yearly",
           "referenceName": "Pro Yearly",
           "type": "RecurringSubscription",
           "adHocOffers": [],

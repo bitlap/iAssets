@@ -22,7 +22,7 @@ void main() {
       'kind': 'free',
       'legacyVerified': true,
       'products': <Object>[
-        {'id': ProService.monthly, 'price': r'US$1.49'},
+        {'id': ProService.monthly, 'price': r'US$1.99'},
         {'id': ProService.yearly, 'price': '€12,99'},
         {'id': ProService.lifetime, 'price': r'HK$ 328.00'},
       ],
@@ -243,7 +243,7 @@ void main() {
       await service.refresh();
       expect(service.products.map((p) => p.id), ProService.productIds);
       expect(service.products.map((p) => p.price), [
-        r'US$1.49',
+        r'US$1.99',
         '€12,99',
         r'HK$ 328.00',
       ]);

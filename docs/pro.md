@@ -26,11 +26,11 @@
 
 ## 商品与价格
 
-| 方案 | Product ID | App Store 类型 | 人民币参考定价 |
+| 方案 | Product ID | App Store 类型 | 美国区参考价格（USD） |
 | --- | --- | --- | --- |
-| 月付 | `org.bitlap.assets.pro.monthly` | 自动续期订阅，1 个月 | ¥10 |
-| 年付 | `org.bitlap.assets.pro.yearly` | 自动续期订阅，1 年 | ¥99 |
-| 买断 | `org.bitlap.assets.pro.lifetime` | 非消耗型内购 | ¥299 |
+| 月付 | `org.bitlap.assets.pro.subscription.monthly` | 自动续期订阅，1 个月 | $1.99 |
+| 年付 | `org.bitlap.assets.pro.subscription.yearly` | 自动续期订阅，1 年 | $19.99 |
+| 买断 | `org.bitlap.assets.pro.lifetime` | 非消耗型内购 | $39.99 |
 
 三个方案权益相同。月付和年付配置在同一订阅组、同一等级；价格需要在 App Store Connect 中设置，应用直接显示 Apple 返回的当地价格。参考定价不表示在中国大陆发行，实际价格以当地商店可选价格点为准。
 

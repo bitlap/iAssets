@@ -32,8 +32,8 @@ class ProProduct {
 class ProService extends ChangeNotifier {
   static final instance = ProService();
   static const channel = MethodChannel('org.bitlap.assets/pro');
-  static const monthly = 'org.bitlap.assets.pro.monthly';
-  static const yearly = 'org.bitlap.assets.pro.yearly';
+  static const monthly = 'org.bitlap.assets.pro.subscription.monthly';
+  static const yearly = 'org.bitlap.assets.pro.subscription.yearly';
   static const lifetime = 'org.bitlap.assets.pro.lifetime';
   static const productIds = [monthly, yearly, lifetime];
   // Freeze this UTC timestamp at the first monetized release. Never move it.

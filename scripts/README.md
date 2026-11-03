@@ -13,6 +13,9 @@ cp scripts/release_ios.env.example scripts/release_ios.env
 
 # 一键编译、签名、导出 IPA 并上传 App Store Connect
 ./scripts/release_ios.sh
+
+# 仅上传 TestFlight 内部测试构建，不能用于外部测试或 App Store 正式发布
+./scripts/release_ios.sh --internal-testflight
 ```
 
 脚本自动读取同目录的 `release_ios.env`，无需手动 `source`。外部环境变量优先于文件配置，例如：
@@ -25,17 +28,19 @@ BUILD_NUMBER=2 ./scripts/release_ios.sh
 
 归档、IPA、导出配置及各阶段日志保存在 `build/ios/releases/` 的独立目录；可用 `RELEASE_OUTPUT_DIR` 指定一个尚不存在的目录。任何阶段失败立即停止，上传成功后仍需等待 Apple 处理，不会自动提交审核或发布。
 
+`--internal-testflight` 使用 Xcode 的内部测试专用标记。此类构建不能转为外部测试或正式上架；正式版必须以最终固定的 `PRO_LEGACY_CUTOFF` 重新构建并上传。内测时可通过环境变量临时覆盖该值，不要把测试分界时间写入正式发布配置。
+
 ## Pro 发布配置
 
 免费版最多 3 只股票、3 种资产类型，每种类型最多 3 条记录；数字币、导入导出（含备份回滚）和自定义股票需要 Pro。Pro 订阅到期不会删除或截断已有数据，超额记录仍可查看、编辑和删除；已有自定义股票保留展示，相关操作需要恢复 Pro。
 
 在 App Store Connect 为现有 App 创建以下商品，首次内购与新版本一起提交审核。代码只读取 Apple 返回的当地价格，不会创建商品或设置商店价格：
 
-| Product ID | 类型 | 人民币参考定价 |
+| Product ID | 类型 | 美国区参考价格（USD） |
 | --- | --- | --- |
-| `org.bitlap.assets.pro.monthly` | 自动续期，一个月 | ¥10 |
-| `org.bitlap.assets.pro.yearly` | 自动续期，一年 | ¥99 |
-| `org.bitlap.assets.pro.lifetime` | 非消耗型，一次性买断 | ¥299 |
+| `org.bitlap.assets.pro.subscription.monthly` | 自动续期，一个月 | $1.99 |
+| `org.bitlap.assets.pro.subscription.yearly` | 自动续期，一年 | $19.99 |
+| `org.bitlap.assets.pro.lifetime` | 非消耗型，一次性买断 | $39.99 |
 
 月付和年付放在同一个订阅组、同一等级，权益相同。商品类型、订阅周期、可选价格点和发行地区需在商店中确认。上表为定价意向，各地区实际价格以 App Store Connect 可选价格点及 Apple 返回的本地价格为准。App 只在中国大陆以外的地区上架；加入内购不会解除中国区的法律下架限制，也不能假定中国区老用户可以更新或购买。
 

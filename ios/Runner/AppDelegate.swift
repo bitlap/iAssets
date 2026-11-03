@@ -130,8 +130,8 @@ private enum CryptoStorage {
 /// Pure eligibility rules shared by the StoreKit adapter and native unit tests.
 /// VerificationResult must be checked by the caller before passing any facts in.
 enum ProEntitlementPolicy {
-  static let monthly = "org.bitlap.assets.pro.monthly"
-  static let yearly = "org.bitlap.assets.pro.yearly"
+  static let monthly = "org.bitlap.assets.pro.subscription.monthly"
+  static let yearly = "org.bitlap.assets.pro.subscription.yearly"
   static let lifetime = "org.bitlap.assets.pro.lifetime"
   static let ids: Set<String> = [monthly, yearly, lifetime]
 
