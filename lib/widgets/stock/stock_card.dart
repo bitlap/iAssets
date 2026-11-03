@@ -291,7 +291,6 @@ class StockCard extends StatelessWidget {
 
   Widget _buildProfitLoss() {
     final profitColor = ProfitUtil.colorOf(stock.profitLossAmount);
-    final sign = ProfitUtil.signOf(stock.profitLossAmount);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.end,
       mainAxisSize: MainAxisSize.min,
@@ -301,7 +300,7 @@ class StockCard extends StatelessWidget {
           fit: BoxFit.scaleDown,
           alignment: Alignment.centerRight,
           child: Text(
-            '$sign${CurrencyUtil.formatCompact(stock.profitLossAmount.abs())}',
+            ProfitUtil.amount(stock.profitLossAmount),
             style: TextStyles.smallBold.copyWith(color: profitColor),
           ),
         ),
@@ -309,7 +308,7 @@ class StockCard extends StatelessWidget {
           fit: BoxFit.scaleDown,
           alignment: Alignment.centerRight,
           child: Text(
-            '$sign${stock.profitLossPercent.abs().toStringAsFixed(2)}%',
+            ProfitUtil.percent(stock.profitLossPercent),
             style: TextStyles.smallBold.copyWith(color: profitColor),
           ),
         ),

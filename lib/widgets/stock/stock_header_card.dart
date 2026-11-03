@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../config/app_config.dart';
+import '../../l10n/l10n.dart';
 import '../common/app_colors.dart';
 import '../../utils/currency_util.dart';
 import '../../utils/profit_util.dart';
@@ -7,6 +8,7 @@ import '../common/profit_chart.dart';
 import '../common/dialog_utils.dart';
 import '../common/currency_selector.dart';
 import '../common/app_ui.dart';
+import '../common/exchange_rate_notice.dart';
 import 'stock_style.dart';
 
 class StockHeaderCard extends StatefulWidget {
@@ -91,9 +93,12 @@ class _StockHeaderCardState extends State<StockHeaderCard> {
           const SizedBox(height: 4),
           // 总金额（已经是目标币种，直接格式化）
           Text(
-            '${CurrencyUtil.getSymbol(widget.selectedCurrency)}${CurrencyUtil.formatCompact(widget.totalAssets)}',
+            widget.totalAssets.isFinite
+                ? '${CurrencyUtil.getSymbol(widget.selectedCurrency)}${CurrencyUtil.formatCompact(widget.totalAssets)}'
+                : L10n.t('exchangeRateCannotValue'),
             style: TextStyles.amountLarge,
           ),
+          ExchangeRateNotice(incomplete: !widget.totalAssets.isFinite),
           const SizedBox(height: 8),
           // 总成本、总盈亏和总股息
           IntrinsicHeight(

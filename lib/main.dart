@@ -34,7 +34,7 @@ void main() async {
   L10n.applyLanguage(preferredLanguage);
   AppTheme.apply(await SettingsService.getThemeMode());
   AppColors.applyMarketColorPreference(
-    await SettingsService.getRedUpGreenDown(),
+    await SettingsService.getRedUpGreenDown(deviceLocale: L10n.deviceLocale),
   );
 
   await Workmanager().initialize(callbackDispatcher);
@@ -79,6 +79,13 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   @override
   void didChangePlatformBrightness() {
     setState(() {});
+  }
+
+  @override
+  void didChangeLocales(List<Locale>? locales) {
+    if (locales == null || locales.isEmpty) return;
+    L10n.deviceLocale = locales.first;
+    if (L10n.followSystem) L10n.applyLanguage(L10n.langSystem);
   }
 
   @override
@@ -146,6 +153,7 @@ class _AppShellState extends State<_AppShell> with WidgetsBindingObserver {
     _loadDefaultCurrency();
     WidgetsBinding.instance.addObserver(this);
     _crypto.addListener(_refreshHeader);
+    ExchangeRateService().addListener(_refreshHeader);
     ProService.instance.addListener(_onProChanged);
     unawaited(_refreshCrypto());
     _cryptoTimer = Timer.periodic(const Duration(minutes: 5), (_) {
@@ -245,6 +253,7 @@ class _AppShellState extends State<_AppShell> with WidgetsBindingObserver {
     WidgetsBinding.instance.removeObserver(this);
     _cryptoTimer?.cancel();
     _crypto.removeListener(_refreshHeader);
+    ExchangeRateService().removeListener(_refreshHeader);
     ProService.instance.removeListener(_onProChanged);
     _pageController.dispose();
     super.dispose();

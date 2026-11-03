@@ -26,8 +26,8 @@ class CurrencyUtil {
   }
 
   /// 格式化价格显示（统一4位小数）
-  static String formatRate(double rate) {
-    return rate.toStringAsFixed(4);
+  static String formatRate(double? rate) {
+    return rate == null || !rate.isFinite ? '—' : rate.toStringAsFixed(4);
   }
 
   /// 紧凑格式化（简体中文超 100 万显示“万/亿”，其他语言用 K/M/B 缩写）
@@ -35,6 +35,7 @@ class CurrencyUtil {
     double value, {
     String Function(double)? formatBase,
   }) {
+    if (!value.isFinite) return '—';
     final fmt = formatBase ?? (v) => v.toStringAsFixed(2);
     final fmtAbbr = formatBase ?? _fmtAbbr;
     if (L10n.currentLang == L10n.langZh) {
@@ -80,10 +81,21 @@ class CurrencyUtil {
     String fromCurrency,
     String toCurrency,
   ) {
-    final rates = ExchangeRateService().effectiveRates;
-    final fromRate = rates[fromCurrency] ?? 1.0;
-    final toRate = rates[toCurrency] ?? 1.0;
-    final amountInUSD = amount / fromRate;
-    return amountInUSD * toRate;
+    return tryConvertCurrency(amount, fromCurrency, toCurrency) ?? double.nan;
+  }
+
+  /// 无真实汇率时返回 null，让估值页面明确标记无法估值。
+  static double? tryConvertCurrency(
+    double amount,
+    String fromCurrency,
+    String toCurrency,
+  ) {
+    if (!amount.isFinite) return null;
+    if (amount == 0) return 0;
+    final rate = ExchangeRateService().cachedConversionRate(
+      fromCurrency,
+      toCurrency,
+    );
+    return rate == null ? null : amount * rate;
   }
 }

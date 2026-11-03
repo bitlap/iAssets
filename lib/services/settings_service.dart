@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:ui' show Locale, PlatformDispatcher;
 import 'package:flutter/foundation.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -237,10 +238,29 @@ class SettingsService {
     await _save();
   }
 
-  /// 读取涨跌配色偏好，默认红涨绿跌。
-  static Future<bool> getRedUpGreenDown() async {
+  /// 首次启动按地区初始化；已有用户选择始终优先。
+  static Future<bool> getRedUpGreenDown({Locale? deviceLocale}) async {
     final settings = await _load();
-    return settings[keyRedUpGreenDown] as bool? ?? true;
+    final saved = settings[keyRedUpGreenDown] as bool?;
+    if (saved != null) return saved;
+    final initial = defaultRedUpGreenDown(
+      deviceLocale ?? PlatformDispatcher.instance.locale,
+    );
+    settings[keyRedUpGreenDown] = initial;
+    await _save();
+    return initial;
+  }
+
+  /// 大中华区、日本和韩国使用红涨；其他地区（包括英语市场）使用绿涨。
+  static bool defaultRedUpGreenDown(Locale locale) {
+    const redUpRegions = {'CN', 'HK', 'MO', 'TW', 'JP', 'KR'};
+    final region = locale.countryCode?.toUpperCase();
+    if (region != null && region.isNotEmpty) {
+      return redUpRegions.contains(region);
+    }
+    return locale.languageCode == 'zh' ||
+        locale.languageCode == 'ja' ||
+        locale.languageCode == 'ko';
   }
 
   /// 保存涨跌配色偏好。

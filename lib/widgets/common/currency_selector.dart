@@ -83,7 +83,7 @@ class CurrencySelector {
                         ) {
                           final isSelected = currency == selectedCurrency;
                           final rate =
-                              ExchangeRateService().effectiveRates[currency]!;
+                              ExchangeRateService().effectiveRates[currency];
                           final symbol = CurrencyUtil.getSymbol(currency);
                           return InkWell(
                             onTap: () {

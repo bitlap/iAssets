@@ -6,6 +6,7 @@ import '../common/app_colors.dart';
 import '../common/app_ui.dart';
 import '../common/currency_selector.dart';
 import '../common/dialog_utils.dart';
+import '../common/exchange_rate_notice.dart';
 import '../../l10n/l10n.dart';
 import 'asset_style.dart';
 
@@ -61,8 +62,13 @@ class AssetHeader extends StatelessWidget {
           ),
           const SizedBox(height: 4),
           Text(
-            '${CurrencyUtil.getSymbol(currency)}${CurrencyUtil.formatCompact(totalAssets)}',
+            totalAssets.isFinite
+                ? '${CurrencyUtil.getSymbol(currency)}${CurrencyUtil.formatCompact(totalAssets)}'
+                : L10n.t('exchangeRateCannotValue'),
             style: TextStyles.amountLarge,
+          ),
+          ExchangeRateNotice(
+            incomplete: !totalAssets.isFinite || cryptoIncomplete,
           ),
           const SizedBox(height: 8),
           Row(
@@ -212,6 +218,7 @@ class AssetHeader extends StatelessWidget {
   }
 
   String _formatRatio(double value) {
+    if (!totalAssets.isFinite || !value.isFinite) return '—';
     if (totalAssets <= 0) return '0.0%';
     return '${(value / totalAssets * 100).toStringAsFixed(1)}%';
   }

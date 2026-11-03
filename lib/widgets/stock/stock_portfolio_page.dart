@@ -358,7 +358,7 @@ class StockPortfolioPageState extends State<StockPortfolioPage>
   }
 
   double get exchangeRate =>
-      _exchangeRateService.effectiveRates[selectedCurrency] ?? 1.0;
+      _exchangeRateService.effectiveRates[selectedCurrency] ?? double.nan;
   List<StockModel> get _filteredStocks => _filterMarket == null
       ? stocks
       : stocks
