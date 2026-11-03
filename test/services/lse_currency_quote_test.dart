@@ -137,7 +137,8 @@ void main() {
         'TRY',
       ]) {
         expect(ExchangeRateService.supportedCurrencies, contains(code));
-        expect(ExchangeRateService().effectiveRates[code], greaterThan(0));
+        // A supported currency without a fetched rate must remain unavailable.
+        expect(ExchangeRateService().effectiveRates[code], isNull);
       }
       expect(ExchangeRateService.supportedCurrencies, isNot(contains('GBp')));
       expect(ExchangeRateService.supportedCurrencies, isNot(contains('GBX')));

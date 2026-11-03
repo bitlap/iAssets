@@ -13,6 +13,7 @@ import '../common/currency_selector.dart';
 import '../common/confirm_delete_dialog.dart';
 import '../common/empty_state_widget.dart';
 import '../common/form_sheet.dart';
+import '../common/exchange_rate_notice.dart';
 import 'add_exchange_sheet.dart';
 import 'crypto_text.dart';
 import 'crypto_style.dart';
@@ -46,9 +47,16 @@ class CryptoPageState extends State<CryptoPage>
     await showAddExchangeSheet(context, widget.store);
   }
 
-  String _summaryMoney(Decimal? usd, {bool showSymbol = true}) => usd == null
-      ? L10n.t('cryptoUnknown')
-      : '${showSymbol ? CurrencyUtil.getSymbol(widget.currency) : ''}${CurrencyUtil.formatCompact(CurrencyUtil.convertCurrency(usd.toDouble(), 'USD', widget.currency))}';
+  String _summaryMoney(Decimal? usd, {bool showSymbol = true}) {
+    if (usd == null) return L10n.t('cryptoUnknown');
+    final amount = CurrencyUtil.tryConvertCurrency(
+      usd.toDouble(),
+      'USD',
+      widget.currency,
+    );
+    if (amount == null) return L10n.t('exchangeRateCannotValue');
+    return '${showSymbol ? CurrencyUtil.getSymbol(widget.currency) : ''}${CurrencyUtil.formatCompact(amount)}';
+  }
 
   Decimal? _categoryAmount(CryptoWalletKind kind) {
     final store = widget.store;
@@ -80,12 +88,12 @@ class CryptoPageState extends State<CryptoPage>
     if (usd == null) return L10n.t('cryptoUnknown');
     // Rates are quoted per USD. Keep the amount in Decimal through conversion
     // and display, including values smaller than a cent.
-    final rate = widget.currency == 'USD'
-        ? Decimal.one
-        : Decimal.parse(
-            (ExchangeRateService().effectiveRates[widget.currency] ?? 1)
-                .toString(),
-          );
+    final rawRate = ExchangeRateService().cachedConversionRate(
+      'USD',
+      widget.currency,
+    );
+    if (rawRate == null) return L10n.t('exchangeRateCannotValue');
+    final rate = Decimal.parse(rawRate.toString());
     return '${CurrencyUtil.getSymbol(widget.currency)}${_decimal(usd * rate)}';
   }
 
@@ -97,6 +105,7 @@ class CryptoPageState extends State<CryptoPage>
         widget.store,
         ProService.instance,
         AppColors.marketColorNotifier,
+        ExchangeRateService(),
       ]),
       builder: (context, _) {
         if (!ProService.instance.isPro) return const ProGate();
@@ -151,6 +160,17 @@ class CryptoPageState extends State<CryptoPage>
                             : total,
                       ),
                       style: TextStyles.amountLarge,
+                    ),
+                    ExchangeRateNotice(
+                      incomplete:
+                          widget.store.incomplete ||
+                          (snapshots.isNotEmpty &&
+                              CurrencyUtil.tryConvertCurrency(
+                                    total.toDouble(),
+                                    'USD',
+                                    widget.currency,
+                                  ) ==
+                                  null),
                     ),
                     const SizedBox(height: 8),
                     Row(

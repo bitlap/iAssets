@@ -55,27 +55,29 @@ class L10n {
     Locale('zh', 'HK'),
   ];
 
-  /// 查找文案：按当前语言从字符串表读取，缺省回退到简体中文
+  /// 查找文案：英文界面缺失键时优先回退英文，避免显示简体中文。
   static String t(String key) {
     final table = switch (currentLang) {
       langEn => stringsEn,
       langZhHant => stringsZhHant,
       _ => stringsZh,
     };
-    return table[key] ?? stringsZh[key] ?? key;
+    return table[key] ?? stringsEn[key] ?? stringsZh[key] ?? key;
   }
 
   /// 根据设备系统语言解析生效语言代码
   static String resolveSystemLang(Locale deviceLocale) {
     if (deviceLocale.languageCode == 'en') return langEn;
     if (deviceLocale.languageCode == 'zh') {
+      if (deviceLocale.scriptCode == 'Hant') return langZhHant;
+      if (deviceLocale.scriptCode == 'Hans') return langZh;
       final country = deviceLocale.countryCode;
       if (country == 'TW' || country == 'HK' || country == 'MO') {
         return langZhHant;
       }
       return langZh;
     }
-    return langZh;
+    return langEn;
   }
 
   /// 将语言代码解析为生效的 Locale

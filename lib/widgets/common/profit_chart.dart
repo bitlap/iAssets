@@ -189,7 +189,9 @@ class _ProfitChartWidgetState extends State<ProfitChartWidget> {
   }
 
   Widget _buildMiniChart() {
-    final data = _intradaySnapshots;
+    final data = _intradaySnapshots
+        .where((snapshot) => snapshot.totalProfit.isFinite)
+        .toList();
     if (data.length < 2) {
       return Container(
         height: 50,
@@ -256,7 +258,9 @@ class _ProfitChartWidgetState extends State<ProfitChartWidget> {
   }
 
   Widget _buildChart() {
-    final data = _snapshots;
+    final data = _snapshots
+        .where((snapshot) => snapshot.totalProfit.isFinite)
+        .toList();
     if (data.isEmpty) {
       return Container(
         height: 200,
@@ -294,7 +298,11 @@ class _ProfitChartWidgetState extends State<ProfitChartWidget> {
                       snapshots: data,
                       isPositive: data.last.totalProfit >= 0,
                       color: ProfitUtil.colorOf(data.last.totalProfit),
-                      selectedIndex: _selectedIndex,
+                      selectedIndex:
+                          _selectedIndex != null &&
+                              _selectedIndex! < data.length
+                          ? _selectedIndex
+                          : null,
                       selectedRange: _selectedRange,
                     ),
                   ),

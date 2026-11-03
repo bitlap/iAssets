@@ -1,4 +1,6 @@
 import '../support/pro_fixtures.dart';
+import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
@@ -15,21 +17,31 @@ import 'package:assets/widgets/common/app_ui.dart';
 import 'package:assets/widgets/stock/add_stock_sheet.dart';
 import 'package:assets/models/crypto/crypto_models.dart';
 import 'package:assets/services/crypto/crypto_store.dart';
+import 'package:assets/services/exchange_rate_service.dart';
 import 'package:assets/widgets/crypto/crypto_page.dart';
 import 'package:assets/widgets/crypto/crypto_text.dart';
 import 'package:assets/widgets/crypto/add_exchange_sheet.dart';
 import 'package:assets/widgets/asset/asset_header.dart';
 import 'crypto_store_test.dart' as fixtures;
+import 'package:http/http.dart' as http;
+import 'package:http/testing.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
+  late Directory testDirectory;
+  setUpAll(
+    () => testDirectory = Directory.systemTemp.createTempSync(
+      'iassets-crypto-widgets-',
+    ),
+  );
+  tearDownAll(() => testDirectory.deleteSync(recursive: true));
   setUp(() async {
     await setTestPro();
     AppColors.applyBrightness(Brightness.light);
     TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
         .setMockMethodCallHandler(
           const MethodChannel('plugins.flutter.io/path_provider'),
-          (call) async => '/tmp/iassets-tests',
+          (call) async => testDirectory.path,
         );
   });
   testWidgets(
@@ -40,6 +52,20 @@ void main() {
       addTearDown(tester.view.resetPhysicalSize);
       addTearDown(tester.view.resetDevicePixelRatio);
       L10n.applyLanguage(L10n.langZh);
+      await tester.runAsync(
+        () => http.runWithClient(
+          () => ExchangeRateService().fetchRates(),
+          () => MockClient(
+            (_) async => http.Response(
+              jsonEncode({
+                'result': 'success',
+                'rates': {'USD': 1, 'CNY': 6.77},
+              }),
+              200,
+            ),
+          ),
+        ),
+      );
       final time = DateTime.utc(2026, 10, 17);
       final store = CryptoStore(
         reader: fixtures.FakeReader(

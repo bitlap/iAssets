@@ -23,9 +23,11 @@ Asset Overview
 • Organize cash, deposits, wealth products and provident fund with colorful cards and consistent colors for each name
 • See creation and update times clearly, with collapsible groups and drag-to-reorder
 • View stocks, crypto and other assets together, with support for multiple display currencies
+• See FX rate status and data dates; missing rates mark totals incomplete while original-currency assets remain visible
 
 Made for Everyday Use
 • Sync stocks, manually managed assets and settings with iCloud; view and record stocks and manual assets offline
 • Crypto connection details stay on your device; crypto balances and positions are not synced to iCloud
 • Choose Simplified Chinese, Traditional Chinese or English, light or dark themes, and your preferred gain/loss colors
+• Other system languages default to English; gain/loss colors start with regional defaults and remain customizable
 • No ads or social feed; basic features are free, with subscription and lifetime Pro options

@@ -326,6 +326,7 @@ class IcloudStorage {
     double totalProfit,
     String sourceCurrency,
   ) async {
+    if (!totalProfit.isFinite) return;
     final now = DateTime.now();
     final dayKey = TradingDayUtil.tradingDayKey(now);
 
@@ -335,6 +336,7 @@ class IcloudStorage {
       sourceCurrency,
       AppConfig.defaultCurrency,
     );
+    if (!profitInDefaultCurrency.isFinite) return;
 
     var daily = await loadDailyProfitHistory(
       targetCurrency: AppConfig.defaultCurrency,
