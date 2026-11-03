@@ -6,6 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import '../../models/crypto/crypto_models.dart';
 import 'exchange_client.dart';
+import '../pro_service.dart';
 
 abstract interface class CryptoPersistence {
   Future<String?> readConnections();
@@ -43,13 +44,16 @@ class CryptoStore extends ChangeNotifier {
   final ExchangeReader reader;
   final CryptoPersistence persistence;
   final DateTime Function() now;
+  final bool Function() canAccess;
   CryptoStore({
     ExchangeReader? reader,
     CryptoPersistence? persistence,
     DateTime Function()? clock,
+    bool Function()? canAccess,
   }) : reader = reader ?? ExchangeClient(),
        persistence = persistence ?? DeviceCryptoPersistence(),
-       now = clock ?? DateTime.now;
+       now = clock ?? DateTime.now,
+       canAccess = canAccess ?? (() => ProService.instance.isPro);
 
   List<ExchangeConnection> _connections = [];
   final Map<String, CryptoSnapshot> _snapshots = {};
@@ -130,11 +134,14 @@ class CryptoStore extends ChangeNotifier {
   }
 
   Future<TestedConnection> test(ExchangeConnection c) async {
+    if (!canAccess()) throw const ProRequiredException();
     await initialize();
+    if (!canAccess()) throw const ProRequiredException();
     if (!initialized) throw const CryptoSyncException('storage');
     _requireSupported(c);
     _checkDuplicateCredentials(c);
     final s = await reader.read(c);
+    if (!canAccess()) throw const ProRequiredException();
     if (s.accountId.isEmpty) throw const CryptoSyncException('response');
     final identified = c.identified(s.accountId, s.accountReferences);
     _checkDuplicate(identified);
@@ -173,6 +180,7 @@ class CryptoStore extends ChangeNotifier {
   }
 
   Future<void> add(TestedConnection tested) async {
+    if (!canAccess()) throw const ProRequiredException();
     if (!initialized ||
         now().difference(tested.testedAt) >= const Duration(minutes: 5) ||
         now().isBefore(tested.testedAt) ||
@@ -180,6 +188,7 @@ class CryptoStore extends ChangeNotifier {
       throw const CryptoSyncException('retest');
     }
     await _serialize(() async {
+      if (!canAccess()) throw const ProRequiredException();
       _checkDuplicate(tested.connection);
       final next = [..._connections, tested.connection];
       await persistence.writeConnections(
@@ -216,8 +225,9 @@ class CryptoStore extends ChangeNotifier {
   }
 
   Future<void> _refresh() async {
+    if (!canAccess()) return;
     await initialize();
-    if (!initialized) return;
+    if (!initialized || !canAccess()) return;
     final targets = List<ExchangeConnection>.of(_connections);
     if (targets.isEmpty) {
       notifyListeners();
@@ -228,9 +238,11 @@ class CryptoStore extends ChangeNotifier {
     try {
       // Sequential per-account calls avoid bursting exchange rate limits.
       for (final c in targets) {
+        if (!canAccess()) break;
         try {
           _requireSupported(c);
           final s = await reader.read(c);
+          if (!canAccess()) break;
           if (s.accountId != c.accountId) {
             throw const CryptoSyncException('accountChanged');
           }

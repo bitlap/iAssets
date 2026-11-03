@@ -18,11 +18,11 @@
 </p>
 
 <p align="center">
-  <a href="https://apps.apple.com/en/app/iassets/id6790114856"><img src="https://tools.applemediaservices.com/api/badges/download-on-the-app-store/black/en?size=250x83" height="40" alt="在 App Store 下载"></a>
+  <a href="https://apps.apple.com/us/app/iassets/id6790114856"><img src="https://tools.applemediaservices.com/api/badges/download-on-the-app-store/black/en?size=250x83" height="40" alt="在 App Store 下载"></a>
 </p>
 
 <p align="center">
-  <a href="changelog/1.6.0.md">更新日志</a> ·
+  <a href="changelog/2.0.0.md">更新日志</a> ·
   <a href="https://github.com/bitlap/iAssets/issues">反馈问题</a>
 </p>
 
@@ -30,7 +30,11 @@
 
 iAssets 是一款使用 Flutter 构建的开源 iOS 个人资产管理应用。记录投资、追踪收益、查看资产分布，帮助你了解自己的财务状况。
 
-无广告、无社区、无内购。支持简体中文、繁體中文和 English，以及浅色、深色和跟随系统主题。
+App 只在中国大陆以外的地区上架。
+
+无广告、无社区。免费版支持最多 3 只股票、3 种资产类型及每种类型 3 条记录；Pro 解锁不限数量、数字币、导入导出和自定义股票，提供月付、年付和一次性买断，老用户经验证后获赠永久 Pro。商店商品与发布配置见 [Pro 发布配置](scripts/README.md#pro-发布配置)。支持简体中文、繁體中文和 English，以及浅色、深色和跟随系统主题。
+
+Pro 权益、老用户升级规则及验证说明见 [Pro 使用与开发说明](docs/pro.md)。
 
 ## 界面预览
 
@@ -182,7 +186,7 @@ iAssets 是一款使用 Flutter 构建的开源 iOS 个人资产管理应用。�
 | --- | --- |
 | 股票持仓 | 搜索并添加股票，记录买卖、手续费和派息，查看成本、盈亏与持仓详情 |
 | 股息与收益 | 汇总税后股息，按市场筛选，查看今日盈亏与不同时间范围的收益曲线 |
-| 数字币资产 | 连接币安账户，查看现货、合约及带单资产，并计入总资产 |
+| 数字币资产（Pro） | 连接币安账户，查看现货、合约及带单资产，并计入总资产 |
 | 资产总览 | 以彩色卡片分类管理现金、存款、理财和公积金，查看资产分布，支持折叠与拖拽排序 |
 | 多币种换算 | 切换显示币种，统一查看不同市场和账户的资产估值 |
 | 数据同步 | 通过 iCloud 同步股票、手动资产、记录和设置 |
@@ -205,7 +209,7 @@ iAssets 是一款使用 Flutter 构建的开源 iOS 个人资产管理应用。�
 
 ## 本地运行
 
-需要 macOS、Xcode、CocoaPods，以及 Flutter 3.44.4（与 CI 一致，Dart SDK 要求见 [pubspec.yaml](pubspec.yaml)）。
+最低支持 iOS 16。开发需要 macOS、Xcode、CocoaPods，以及 Flutter 3.44.4（与 CI 一致，Dart SDK 要求见 [pubspec.yaml](pubspec.yaml)）。
 
 ```bash
 git clone https://github.com/bitlap/iAssets.git

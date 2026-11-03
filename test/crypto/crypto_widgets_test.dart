@@ -1,3 +1,4 @@
+import '../support/pro_fixtures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
@@ -22,7 +23,8 @@ import 'crypto_store_test.dart' as fixtures;
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
-  setUp(() {
+  setUp(() async {
+    await setTestPro();
     AppColors.applyBrightness(Brightness.light);
     TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
         .setMockMethodCallHandler(

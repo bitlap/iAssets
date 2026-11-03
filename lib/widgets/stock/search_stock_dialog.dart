@@ -28,11 +28,13 @@ class SearchStockDialog extends StatefulWidget {
 
   /// 当前已持有的股票代码列表，用于去重
   final Set<String> existingSymbols;
+  final bool Function()? canAddStock;
 
   const SearchStockDialog({
     super.key,
     required this.onStockAdded,
     this.existingSymbols = const {},
+    this.canAddStock,
   });
 
   @override
@@ -233,6 +235,7 @@ class _SearchStockDialogState extends State<SearchStockDialog> {
       fee: fee,
     );
 
+    if (widget.canAddStock?.call() == false) return;
     widget.onStockAdded(stockModel, buyRecord);
     if (!mounted) return;
     Navigator.of(context).pop();

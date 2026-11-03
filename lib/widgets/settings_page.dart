@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../l10n/l10n.dart';
+import '../services/pro_service.dart';
+import 'pro/pro_page.dart';
 import '../utils/currency_util.dart';
 import '../services/exchange_rate_service.dart';
 import '../utils/center_toast.dart';
@@ -237,6 +239,28 @@ class _SettingsPageState extends State<SettingsPage> {
       body: ListView(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
         children: [
+          ListenableBuilder(
+            listenable: ProService.instance,
+            builder: (context, _) => ListTile(
+              leading: Icon(
+                Icons.workspace_premium_outlined,
+                color: AppColors.accent,
+              ),
+              title: const Text('iAssets Pro'),
+              subtitle: Text(
+                L10n.t(
+                  ProService.instance.kind == 'legacy'
+                      ? 'proLegacy'
+                      : ProService.instance.isPro
+                      ? 'proActive'
+                      : 'proFree',
+                ),
+              ),
+              trailing: const Icon(Icons.chevron_right),
+              onTap: () => showProPage(context),
+            ),
+          ),
+          const SizedBox(height: 24),
           _buildSectionHeader(Icons.tune, SettingsConfig.sectionGeneral),
           const SizedBox(height: 8),
           _buildGeneralSettingsGroup(),
