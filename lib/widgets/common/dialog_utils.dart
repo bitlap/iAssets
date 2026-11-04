@@ -205,9 +205,12 @@ class InfoDialog extends StatelessWidget {
           const SizedBox(height: 16),
           content,
           const SizedBox(height: 20),
-          cancelButton(
+          confirmButton(
             onTap: () => Navigator.pop(context),
             text: closeText ?? AppConfig.btnClose,
+            gradient: const LinearGradient(
+              colors: [AppColors.blueDark, AppColors.blueAccent],
+            ),
           ),
         ],
       ),

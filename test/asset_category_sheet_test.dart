@@ -56,12 +56,16 @@ void main() {
   });
 
   testWidgets(
-    'US templates open by default and CN provident fund stays optional',
+    'region menu opens below and shows only the selected region templates',
     (tester) async {
       final previousLocale = L10n.deviceLocale;
       L10n.deviceLocale = const Locale('en', 'US');
       L10n.applyLanguage(L10n.langEn);
+      tester.view.physicalSize = const Size(320, 568);
+      tester.view.devicePixelRatio = 1;
       addTearDown(() {
+        tester.view.resetPhysicalSize();
+        tester.view.resetDevicePixelRatio();
         L10n.deviceLocale = previousLocale;
         L10n.applyLanguage(L10n.langZh);
       });
@@ -95,14 +99,44 @@ void main() {
       await tester.pumpAndSettle();
       expect(find.text('United States'), findsOneWidget);
       expect(find.text('401(k) / IRA'), findsOneWidget);
-      expect(find.text('Other Assets'), findsOneWidget);
+      expect(find.text('Other Assets'), findsNothing);
+      expect(find.text('Property'), findsNothing);
       expect(find.text('Provident Fund'), findsNothing);
 
-      await tester.tap(find.byType(DropdownButtonFormField<String>));
+      final selector = find.byKey(
+        const ValueKey('asset-template-region-selector'),
+      );
+      await tester.tap(selector);
       await tester.pumpAndSettle();
+      expect(
+        tester.getTopLeft(find.byType(PopupMenuItem<String>).first).dy,
+        greaterThanOrEqualTo(tester.getBottomLeft(selector).dy),
+      );
       await tester.tap(find.text('Mainland China').last);
       await tester.pumpAndSettle();
       expect(find.text('Provident Fund'), findsOneWidget);
+      expect(find.text('401(k) / IRA'), findsNothing);
+      expect(find.text('Other Assets'), findsNothing);
+
+      await tester.tap(selector);
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Hong Kong').last);
+      await tester.pumpAndSettle();
+      expect(find.text('MPF'), findsOneWidget);
+      expect(find.text('Provident Fund'), findsNothing);
+
+      await tester.tap(selector);
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('General').last);
+      await tester.pumpAndSettle();
+      expect(find.text('Property'), findsOneWidget);
+      expect(find.text('Other Assets'), findsOneWidget);
+      expect(find.text('MPF'), findsNothing);
+
+      await tester.tap(selector);
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Mainland China').last);
+      await tester.pumpAndSettle();
       await tester.tap(find.text('Provident Fund'));
       await tester.pumpAndSettle();
       expect(selected?.id, 'providentFund');
