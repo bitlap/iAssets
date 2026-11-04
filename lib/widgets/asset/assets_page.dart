@@ -642,12 +642,15 @@ class AssetsPageState extends State<AssetsPage> {
     Color? detailColor;
     if (asset is TimeDeposit) {
       final daysLeft = asset.endDate.difference(DateTime.now()).inDays;
-      detail = daysLeft > 0
+      final term = daysLeft > 0
           ? AssetConfig.daysRemaining.replaceAll('{days}', '$daysLeft')
           : AssetConfig.expired;
+      detail =
+          '${AssetConfig.fieldAnnualRate.replaceAll(' (%)', '')} ${CurrencyUtil.formatCompact(asset.annualRate)}%\n$term';
       if (daysLeft <= 0) detailColor = AssetStyle.deposit;
     } else if (asset is WealthProduct) {
-      detail = '${AssetConfig.fieldNav} ${CurrencyUtil.formatRate(asset.nav)}';
+      detail =
+          '${AssetConfig.fieldShares} ${CurrencyUtil.formatCompact(asset.shares)}\n${AssetConfig.fieldNav} ${CurrencyUtil.formatRate(asset.nav)}';
     }
     return AssetCardFrame(
       leading: ReorderableDragStartListener(

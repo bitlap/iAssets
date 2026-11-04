@@ -104,26 +104,55 @@ class AssetCardFrame extends StatelessWidget {
                             ],
                           ),
                           const SizedBox(height: 10),
-                          FittedBox(
-                            fit: BoxFit.scaleDown,
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                              amount,
-                              style: TextStyles.sectionTitle.copyWith(
-                                fontSize: 25,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
+                          LayoutBuilder(
+                            builder: (context, constraints) {
+                              final stacked =
+                                  constraints.maxWidth < 310 ||
+                                  MediaQuery.textScalerOf(context).scale(1) >
+                                      1.2;
+                              final amountText = FittedBox(
+                                fit: BoxFit.scaleDown,
+                                alignment: Alignment.centerLeft,
+                                child: Text(
+                                  amount,
+                                  style: TextStyles.sectionTitle.copyWith(
+                                    fontSize: 25,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              );
+                              if (detail == null) return amountText;
+                              final detailText = Text(
+                                detail!,
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                                textAlign: stacked
+                                    ? TextAlign.left
+                                    : TextAlign.right,
+                                style: TextStyles.caption.copyWith(
+                                  color: detailColor ?? AppColors.textSecondary,
+                                ),
+                              );
+                              if (stacked) {
+                                return Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    amountText,
+                                    const SizedBox(height: 4),
+                                    detailText,
+                                  ],
+                                );
+                              }
+                              return Row(
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                children: [
+                                  Expanded(flex: 3, child: amountText),
+                                  const SizedBox(width: 12),
+                                  Expanded(flex: 2, child: detailText),
+                                ],
+                              );
+                            },
                           ),
-                          if (detail != null) ...[
-                            const SizedBox(height: 3),
-                            Text(
-                              detail!,
-                              style: TextStyles.caption.copyWith(
-                                color: detailColor ?? AppColors.textSecondary,
-                              ),
-                            ),
-                          ],
                           if (createdAt != null || updatedAt != null) ...[
                             const SizedBox(height: 10),
                             Divider(

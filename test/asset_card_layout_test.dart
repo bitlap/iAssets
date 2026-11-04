@@ -96,4 +96,41 @@ void main() {
       );
     }
   }
+
+  testWidgets('asset key detail occupies space beside the amount', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(402, 874);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+    L10n.applyLanguage(L10n.langZh);
+    AppColors.applyBrightness(Brightness.light);
+    await tester.pumpWidget(
+      MaterialApp(
+        theme: AppTheme.data(Brightness.light),
+        home: Scaffold(
+          body: Padding(
+            padding: const EdgeInsets.all(16),
+            child: AssetCardFrame(
+              icon: Icons.savings,
+              name: '三年定期存款',
+              colorSeed: '三年定期存款',
+              currency: 'USD',
+              amount: '\$33,240.00',
+              detail: '年利率 3.60%\n还剩 727 天',
+              onTap: () {},
+              leading: const SizedBox(width: 28),
+            ),
+          ),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+    expect(tester.takeException(), isNull);
+    final amount = tester.getRect(find.text('\$33,240.00'));
+    final detail = tester.getRect(find.text('年利率 3.60%\n还剩 727 天'));
+    expect(detail.left, greaterThan(amount.left));
+    expect(detail.top, lessThan(amount.bottom));
+  });
 }
