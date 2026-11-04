@@ -51,6 +51,8 @@ TestFlight 使用 Apple 沙盒：可以测试订阅、买断及其恢复，但�
 
 `PRO_PRIVACY_URL` 默认使用现有的 `https://bitlap.org/iAssets-privacy/`，可覆盖为其他已发布的 HTTPS 隐私政策，购买页同时提供 Apple 标准 EULA、恢复购买与管理订阅。分界时间缺失或隐私政策链接无效时购买按钮不可用，发布脚本会停止。
 
+自动续期订阅的 App Store 产品页也必须显示使用条款链接。提交审核前，核对 `changelog/app_store.txt`、`changelog/app_store_hant.txt` 和 `changelog/app_store_en.txt` 对应的每一种 App Store 语言描述均包含 Apple 标准 EULA 链接：`https://www.apple.com/legal/internet-services/itunes/dev/stdeula/`。应用内购买页的链接不能替代商店描述中的链接。
+
 本机调试可通过 `flutter run --dart-define=PRO_LEGACY_CUTOFF=<UTC时间> --dart-define=PRO_PRIVACY_URL=<HTTPS地址>` 传入同样配置。请勿把示例时间当成正式分界时间。
 
 StoreKit 2 交易在设备端验证，应用启动、回到前台、收到交易更新及订阅到期时刷新权益；账单宽限期按 StoreKit 返回的状态和截止时间处理。买断不会自动取消已存在的订阅，购买前和购买后均提示用户管理原订阅。权益不写入用户可导入的备份，也不使用本地布尔值永久解锁。

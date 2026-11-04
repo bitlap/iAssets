@@ -33,3 +33,5 @@ Made for Everyday Use
 • Choose Simplified Chinese, Traditional Chinese or English, light or dark themes, and your preferred gain/loss colors
 • Other system languages default to English; gain/loss colors start with regional defaults and remain customizable
 • No ads or social feed; basic features are free, with subscription and lifetime Pro options
+
+Terms of Use (Apple Standard EULA): https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
