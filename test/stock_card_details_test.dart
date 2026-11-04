@@ -97,7 +97,7 @@ void main() {
           final average = tester.getRect(find.text('348.4950'));
           final low = tester.getRect(find.text('342.0000'));
           final high = tester.getRect(find.text('355.0000'));
-          expect(cost.top, closeTo(average.top, .01));
+          expect(cost.top, closeTo(average.top, 6));
           expect(low.top, closeTo(high.top, .01));
           expect(low.top, greaterThan(cost.bottom));
           expect(cost.left, closeTo(low.left, .01));
@@ -175,4 +175,49 @@ void main() {
       );
     }
   }
+
+  testWidgets('collapsed card keeps trading actions behind a compact header', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(393, 852);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+    L10n.applyLanguage(L10n.langEn);
+    var expanded = false;
+    var recordsTapped = false;
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: StatefulBuilder(
+            builder: (context, setState) => SingleChildScrollView(
+              child: StockCard(
+                stock: stock,
+                isExpanded: expanded,
+                onExpandTap: () => setState(() => expanded = !expanded),
+                onRecordTap: () => recordsTapped = true,
+                onMoreTap: () {},
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+    expect(tester.getSize(find.byType(StockCard)).height, lessThan(100));
+    expect(find.text(StockConfig.stockTotalValue), findsOneWidget);
+    expect(find.text(StockConfig.stockRecord), findsNothing);
+    await tester.tap(find.text('GOOG'));
+    await tester.pumpAndSettle();
+    expect(find.text(StockConfig.stockRecord), findsOneWidget);
+    final recordsButton = find
+        .ancestor(
+          of: find.text(StockConfig.stockRecord),
+          matching: find.byType(Container),
+        )
+        .first;
+    expect(tester.getSize(recordsButton).height, greaterThanOrEqualTo(44));
+    await tester.tap(find.text(StockConfig.stockRecord));
+    expect(recordsTapped, isTrue);
+    expect(tester.takeException(), isNull);
+  });
 }

@@ -190,14 +190,18 @@ void main() {
         final currency = tester.getRect(find.byType(CurrencySelectorButton));
         expect(stockAmount.top - currency.bottom, inInclusiveRange(4, 5));
         expect(
-          tester.getRect(find.text('-12.34%')).right,
-          closeTo(currency.right, .01),
+          tester.getRect(find.text('-12.34%')).left,
+          closeTo(
+            tester.getRect(find.text(StockConfig.assetTodayProfit)).left,
+            .01,
+          ),
         );
         final today = tester.getRect(find.text(StockConfig.assetTodayProfit));
         expect(
           today.top,
-          greaterThan(
-            tester.getRect(find.text(StockConfig.assetTotalProfit)).bottom,
+          closeTo(
+            tester.getRect(find.text(StockConfig.assetTotalProfit)).top,
+            .01,
           ),
         );
         expect(
@@ -223,5 +227,55 @@ void main() {
         expect(tester.takeException(), isNull);
       },
     );
+  }
+
+  test('refresh subtitle omits seconds', () {
+    expect(
+      formatRefreshTime(DateTime(2026, 11, 4, 9, 7, 59)),
+      '2026-11-04 09:07',
+    );
+  });
+
+  for (final brightness in Brightness.values) {
+    testWidgets('stock summary stays readable on iPad / $brightness', (
+      tester,
+    ) async {
+      tester.view.physicalSize = const Size(1024, 1366);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.resetPhysicalSize);
+      addTearDown(tester.view.resetDevicePixelRatio);
+      L10n.applyLanguage(L10n.langEn);
+      AppColors.applyBrightness(brightness);
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: AppTheme.data(brightness),
+          home: Scaffold(
+            body: MediaQuery(
+              data: const MediaQueryData(textScaler: TextScaler.linear(1.5)),
+              child: SingleChildScrollView(
+                child: StockHeaderCard(
+                  selectedCurrency: 'USD',
+                  totalAssets: 1000,
+                  totalMarketValue: 1000,
+                  totalCost: 700,
+                  totalProfit: 300,
+                  totalRealizedPL: 100,
+                  totalProfitPercent: 30,
+                  todayProfit: -12,
+                  todayProfitPercent: -1.2,
+                  totalAfterTaxDividends: 20,
+                  totalSellAmount: 300,
+                  onCurrencyChanged: (_) {},
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+      expect(find.text(StockConfig.assetTotalAssets), findsOneWidget);
+      expect(find.text(StockConfig.assetTotalProfit), findsOneWidget);
+      expect(find.text(StockConfig.assetTodayProfit), findsOneWidget);
+      expect(tester.takeException(), isNull);
+    });
   }
 }

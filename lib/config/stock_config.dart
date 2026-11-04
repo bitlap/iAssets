@@ -226,7 +226,9 @@ class StockConfig {
   static String get dividendCurrentCost => L10n.t('dividendCurrentCost');
   static String get dividendCurrentValue => L10n.t('dividendCurrentValue');
   static String get dividendRecordCount => L10n.t('dividendRecordCount');
+  static String get dividendRecordCountOne => L10n.t('dividendRecordCountOne');
   static String get dividendExpandAll => L10n.t('dividendExpandAll');
+  static String get dividendCollapseAll => L10n.t('dividendCollapseAll');
   static String get dividendLatestDate => L10n.t('dividendLatestDate');
   static String get dividendSortYield => L10n.t('dividendSortYield');
   static String get dividendSortCostYield => L10n.t('dividendSortCostYield');

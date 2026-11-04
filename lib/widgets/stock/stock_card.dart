@@ -49,93 +49,97 @@ class StockCard extends StatelessWidget {
       ),
       child: Column(
         children: [
-          // 头部可点击区域：点击展开/收缩
-          GestureDetector(
-            onTap: onExpandTap,
-            behavior: HitTestBehavior.opaque,
-            child: Column(
-              children: [
-                Row(
-                  children: [
-                    MarketAndCurrencyBadges(
-                      market: stock.marketType,
-                      currency: stock.currency,
-                    ),
-                    const SizedBox(width: 8),
-                    Expanded(
-                      child: Wrap(
-                        alignment: WrapAlignment.end,
-                        crossAxisAlignment: WrapCrossAlignment.center,
-                        spacing: 2,
-                        runSpacing: 2,
-                        children: [
-                          Text(
-                            StockConfig.stockTotalValue,
-                            style: TextStyles.body13.copyWith(
-                              color: AppColors.textSecondary,
-                            ),
-                          ),
-                          Text(
-                            '${CurrencyUtil.getSymbol(stock.currency)}${CurrencyUtil.formatCompact(stock.totalValue)}',
-                            style: TextStyles.valueSmall.copyWith(fontSize: 13),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 4),
-                StockColumns(
-                  name: Row(
+          Semantics(
+            button: true,
+            expanded: isExpanded,
+            label: '${stock.companyName} ${stock.symbol}',
+            child: GestureDetector(
+              onTap: onExpandTap,
+              behavior: HitTestBehavior.opaque,
+              child: Column(
+                children: [
+                  Row(
                     children: [
-                      _buildLogo(),
-                      const SizedBox(width: StockColumns.logoGap),
-                      Expanded(child: _buildCompanyInfo()),
+                      MarketAndCurrencyBadges(
+                        market: stock.marketType,
+                        currency: stock.currency,
+                      ),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: LayoutBuilder(
+                          builder: (context, constraints) => Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              if (constraints.maxWidth >= 190) ...[
+                                Flexible(
+                                  child: Text(
+                                    StockConfig.stockTotalValue,
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyles.caption,
+                                  ),
+                                ),
+                                const SizedBox(width: 4),
+                              ],
+                              Flexible(
+                                child: Text(
+                                  '${CurrencyUtil.getSymbol(stock.currency)}${CurrencyUtil.formatCompact(stock.totalValue)}',
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyles.valueSmall.copyWith(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                              ),
+                              AnimatedRotation(
+                                turns: isExpanded ? 0.5 : 0,
+                                duration: const Duration(milliseconds: 200),
+                                child: Icon(
+                                  Icons.keyboard_arrow_down,
+                                  size: 20,
+                                  color: AppColors.textSecondary,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
                     ],
                   ),
-                  holdings: _buildSharesAndPrice(),
-                  profit: Align(
-                    alignment: Alignment.centerRight,
-                    child: _buildProfitLoss(),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          // 非点击区域：分割线 + 展开详情 + 底部按钮行
-          const SizedBox(height: 4),
-          Divider(thickness: 0.5, color: AppColors.border),
-          const SizedBox(height: 4),
-          if (isExpanded) ..._buildExpandedDetails(),
-          if (isExpanded) const SizedBox(height: 4),
-          if (isExpanded) Divider(thickness: 0.5, color: AppColors.border),
-          if (isExpanded) const SizedBox(height: 4),
-          Row(
-            children: [
-              Expanded(child: _buildRecordButton()),
-              const SizedBox(width: 6),
-              GestureDetector(
-                onTap: onExpandTap,
-                behavior: HitTestBehavior.opaque,
-                child: Container(
-                  padding: const EdgeInsets.symmetric(vertical: 6),
-                  child: AnimatedRotation(
-                    turns: isExpanded ? 0.5 : 0,
-                    duration: const Duration(milliseconds: 200),
-                    child: Icon(
-                      Icons.keyboard_arrow_down,
-                      size: 18,
-                      color: isExpanded
-                          ? AppColors.textPrimary
-                          : AppColors.textTertiary,
+                  const SizedBox(height: 4),
+                  StockColumns(
+                    name: Row(
+                      children: [
+                        _buildLogo(),
+                        const SizedBox(width: StockColumns.logoGap),
+                        Expanded(child: _buildCompanyInfo()),
+                      ],
+                    ),
+                    holdings: _buildSharesAndPrice(),
+                    profit: Align(
+                      alignment: Alignment.centerRight,
+                      child: _buildProfitLoss(),
                     ),
                   ),
-                ),
+                ],
               ),
-              const SizedBox(width: 6),
-              Expanded(child: _buildMoreButton()),
-            ],
+            ),
           ),
+          if (isExpanded) ...[
+            const SizedBox(height: 4),
+            Divider(thickness: 0.5, color: AppColors.border),
+            ..._buildExpandedDetails(),
+            Divider(thickness: 0.5, color: AppColors.border),
+            const SizedBox(height: 4),
+            Row(
+              children: [
+                Expanded(child: _buildRecordButton()),
+                const SizedBox(width: 8),
+                Expanded(child: _buildMoreButton()),
+              ],
+            ),
+          ],
         ],
       ),
     );
@@ -185,7 +189,7 @@ class StockCard extends StatelessWidget {
       return Image(
         image: cached,
         fit: stock.isCustom ? BoxFit.cover : BoxFit.contain,
-        errorBuilder: (_, __, ___) => _buildFallbackChar(fallbackChar),
+        errorBuilder: (_, _, _) => _buildFallbackChar(fallbackChar),
       );
     }
     if (stock.isCustom) return _buildFallbackChar(fallbackChar);
@@ -208,7 +212,7 @@ class StockCard extends StatelessWidget {
             return Image(
               image: snapshot.data!,
               fit: BoxFit.contain,
-              errorBuilder: (_, __, ___) => _buildFallbackChar(fallbackChar),
+              errorBuilder: (_, _, _) => _buildFallbackChar(fallbackChar),
             );
           }
           return _buildFallbackChar(fallbackChar);
@@ -267,7 +271,7 @@ class StockCard extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
-                  '${CurrencyUtil.formatRate(stock.currentPrice)}',
+                  CurrencyUtil.formatRate(stock.currentPrice),
                   style: TextStyles.smallBold.copyWith(
                     fontWeight: FontWeight.bold,
                   ),
@@ -320,7 +324,8 @@ class StockCard extends StatelessWidget {
     return GestureDetector(
       onTap: onRecordTap,
       child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 8),
+        constraints: const BoxConstraints(minHeight: 44),
+        padding: const EdgeInsets.symmetric(vertical: 10),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
           color: AppColors.accent.withValues(
@@ -350,7 +355,8 @@ class StockCard extends StatelessWidget {
     return GestureDetector(
       onTap: onMoreTap,
       child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 8),
+        constraints: const BoxConstraints(minHeight: 44),
+        padding: const EdgeInsets.symmetric(vertical: 10),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
           color: AppColors.warning.withValues(
@@ -387,7 +393,7 @@ class StockCard extends StatelessWidget {
       Padding(
         padding: const EdgeInsets.symmetric(horizontal: 12),
         child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             Expanded(
               child: _buildDetailMetric(
@@ -415,7 +421,7 @@ class StockCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(10),
         ),
         child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             Expanded(
               child: _buildDetailMetric(

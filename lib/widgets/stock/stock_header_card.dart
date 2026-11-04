@@ -99,24 +99,19 @@ class _StockHeaderCardState extends State<StockHeaderCard> {
             style: TextStyles.amountLarge,
           ),
           const SizedBox(height: 8),
-          // 总成本、总盈亏和总股息
+          // The asset amount already equals current stock market value. Keep
+          // the two return horizons visible and move supporting totals to help.
           IntrinsicHeight(
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                Expanded(child: _buildTotalCostSummaryCard()),
-                const SizedBox(width: 8),
                 Expanded(child: _buildProfitSummaryCard()),
-                const SizedBox(width: 8),
-                Expanded(child: _buildDividendSummaryCard()),
+                const SizedBox(width: 12),
+                Expanded(child: _buildTodayProfitSummaryCard()),
               ],
             ),
           ),
-          const SizedBox(height: 12),
-          Divider(height: 1, thickness: .5, color: AppColors.border),
           const SizedBox(height: 8),
-          _buildTodayProfitRow(),
-          const SizedBox(height: 6),
           ProfitChartWidget(
             totalProfit: widget.totalProfit,
             targetCurrency: widget.selectedCurrency,
@@ -132,91 +127,43 @@ class _StockHeaderCardState extends State<StockHeaderCard> {
     onTap: _toggleDropdown,
   );
 
-  /// Daily performance sits with the chart rather than above the asset total.
-  Widget _buildTodayProfitRow() {
+  Widget _buildTodayProfitSummaryCard() {
     final color = ProfitUtil.colorOf(widget.todayProfit);
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Expanded(
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Flexible(
-                child: Text(
-                  StockConfig.assetTodayProfit,
-                  style: TextStyles.body13.copyWith(
-                    color: AppColors.textSecondary,
-                  ),
-                ),
-              ),
-              const SizedBox(width: 4),
-              GestureDetector(
-                onTap: _showTodayProfitHelpDialog,
-                child: Icon(
-                  Icons.help_outline,
-                  size: 13,
-                  color: AppColors.textSecondary,
-                ),
-              ),
-            ],
-          ),
-        ),
-        const SizedBox(width: 12),
-        Expanded(
-          child: Wrap(
-            alignment: WrapAlignment.end,
-            crossAxisAlignment: WrapCrossAlignment.center,
-            spacing: 8,
-            runSpacing: 2,
-            children: [
-              Text(
-                ProfitUtil.amount(widget.todayProfit),
-                style: TextStyles.body13.copyWith(
-                  color: color,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              Text(
-                ProfitUtil.percent(widget.todayProfitPercent),
-                style: TextStyles.caption.copyWith(color: color),
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildTotalCostSummaryCard() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Row(
           children: [
-            Icon(Icons.account_balance, size: 10, color: AppColors.accent),
-            const SizedBox(width: 4),
             Flexible(
               child: Text(
-                StockConfig.assetTotalCost,
+                StockConfig.assetTodayProfit,
                 maxLines: 2,
-                overflow: TextOverflow.ellipsis,
                 style: TextStyles.caption,
               ),
             ),
-            const SizedBox(width: 2),
-            GestureDetector(
-              onTap: _showTotalCostHelpDialog,
-              child: Icon(
-                Icons.help_outline,
-                size: 10,
-                color: AppColors.accent,
-              ),
+            IconButton(
+              onPressed: _showTodayProfitHelpDialog,
+              tooltip: StockConfig.assetTodayProfitHelp,
+              icon: Icon(Icons.help_outline, color: AppColors.textSecondary),
+              iconSize: 14,
+              constraints: const BoxConstraints(minWidth: 40, minHeight: 40),
+              padding: EdgeInsets.zero,
             ),
           ],
         ),
-        const SizedBox(height: 4),
-        _buildTotalMarketText(),
+        Text(
+          ProfitUtil.amount(widget.todayProfit),
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          style: TextStyles.valueMedium.copyWith(color: color),
+        ),
+        Text(
+          ProfitUtil.percent(widget.todayProfitPercent),
+          style: TextStyles.caption.copyWith(
+            color: color,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
       ],
     );
   }
@@ -248,33 +195,19 @@ class _StockHeaderCardState extends State<StockHeaderCard> {
         ),
         const SizedBox(height: 8),
         _helpLine(
-          StockConfig.assetTotalSellAmount,
-          sellText,
-          AppColors.textPrimary,
-        ),
-      ],
-    );
-  }
-
-  void _showTotalCostHelpDialog() {
-    final costText = CurrencyUtil.formatCompact(widget.totalCost);
-    final floatPL = widget.totalMarketValue - widget.totalCost;
-    final floatText = ProfitUtil.amount(floatPL);
-    _helpDialogFrame(
-      title: StockConfig.assetTotalCost,
-      icon: Icons.account_balance,
-      iconColor: AppColors.accent,
-      children: [
-        _helpLine(
-          StockConfig.assetCostDetailLabel,
-          costText,
-          AppColors.textPrimary,
+          StockConfig.assetTotalCost,
+          CurrencyUtil.formatCompact(widget.totalMarketValue),
         ),
         const SizedBox(height: 6),
         _helpLine(
-          StockConfig.assetFloatProfitLabel,
-          floatText,
-          ProfitUtil.colorOf(floatPL),
+          StockConfig.assetTotalDividends,
+          CurrencyUtil.formatCompact(widget.totalAfterTaxDividends),
+        ),
+        const SizedBox(height: 6),
+        _helpLine(
+          StockConfig.assetTotalSellAmount,
+          sellText,
+          AppColors.textPrimary,
         ),
       ],
     );
@@ -301,13 +234,16 @@ class _StockHeaderCardState extends State<StockHeaderCard> {
               ),
             ),
             const SizedBox(width: 2),
-            GestureDetector(
-              onTap: _showProfitHelpDialog,
-              child: Icon(
+            IconButton(
+              onPressed: _showProfitHelpDialog,
+              tooltip: StockConfig.assetTotalProfitHelp,
+              icon: Icon(
                 Icons.help_outline,
-                size: 10,
                 color: ProfitUtil.colorOf(widget.totalProfit),
               ),
+              iconSize: 14,
+              constraints: const BoxConstraints(minWidth: 40, minHeight: 40),
+              padding: EdgeInsets.zero,
             ),
           ],
         ),
@@ -326,19 +262,22 @@ class _StockHeaderCardState extends State<StockHeaderCard> {
       icon: Icons.trending_up,
       iconColor: ProfitUtil.colorOf(widget.totalProfit),
       children: [
+        Text(
+          StockConfig.assetTotalProfitHelp,
+          style: TextStyles.body13.copyWith(color: AppColors.textSecondary),
+        ),
+        const SizedBox(height: 8),
+        _helpLine(
+          StockConfig.assetCostDetailLabel,
+          CurrencyUtil.formatCompact(widget.totalCost),
+        ),
+        const SizedBox(height: 6),
         _helpLine(
           StockConfig.assetTotalRealizedPL,
           realizedText,
           ProfitUtil.colorOf(widget.totalRealizedPL),
         ),
       ],
-    );
-  }
-
-  Widget _buildTotalMarketText() {
-    return Text(
-      CurrencyUtil.formatCompact(widget.totalMarketValue),
-      style: TextStyles.valueMedium,
     );
   }
 
@@ -358,33 +297,6 @@ class _StockHeaderCardState extends State<StockHeaderCard> {
         fontWeight: FontWeight.w600,
         color: ProfitUtil.colorOf(widget.totalProfit),
       ),
-    );
-  }
-
-  Widget _buildDividendSummaryCard() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          children: [
-            Icon(Icons.monetization_on, size: 10, color: AppColors.warning),
-            const SizedBox(width: 4),
-            Flexible(
-              child: Text(
-                StockConfig.assetTotalDividends,
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-                style: TextStyles.caption,
-              ),
-            ),
-            const SizedBox(width: 2),
-          ],
-        ),
-        const SizedBox(height: 4),
-        _buildDividendText(),
-        const SizedBox(height: 1),
-        _buildDividendPercent(),
-      ],
     );
   }
 
@@ -431,23 +343,6 @@ class _StockHeaderCardState extends State<StockHeaderCard> {
           ...children,
         ],
       ),
-    );
-  }
-
-  Widget _buildDividendPercent() {
-    final percent = widget.totalAssets > 0
-        ? (widget.totalAfterTaxDividends / widget.totalAssets * 100)
-        : 0.0;
-    return Text(
-      percent.isFinite ? '${percent.toStringAsFixed(2)}%' : '—',
-      style: TextStyles.caption.copyWith(fontWeight: FontWeight.w500),
-    );
-  }
-
-  Widget _buildDividendText() {
-    return Text(
-      CurrencyUtil.formatCompact(widget.totalAfterTaxDividends),
-      style: TextStyles.valueMedium,
     );
   }
 }
