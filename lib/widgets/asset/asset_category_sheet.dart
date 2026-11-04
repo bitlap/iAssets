@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../config/asset_config.dart';
+import '../../l10n/l10n.dart';
 import '../../models/asset_account.dart';
 import '../../models/asset_category.dart';
 import '../common/app_colors.dart';
@@ -45,6 +46,7 @@ Color assetCategoryColor(AssetCategory category) {
 Future<AssetCategory?> showAssetCategorySheet(
   BuildContext context, {
   required List<AssetCategory> categories,
+  Set<String> usedCategoryIds = const {},
   required Future<bool> Function(AssetCategory) onCreate,
   required Future<bool> Function(AssetCategory, String) onRename,
   required Future<bool> Function(AssetCategory) onDelete,
@@ -57,7 +59,13 @@ Future<AssetCategory?> showAssetCategorySheet(
     borderRadius: BorderRadius.vertical(top: Radius.circular(22)),
   ),
   builder: (sheetContext) => _CategorySheet(
-    categories: categories,
+    categories: categories.where((category) {
+      return AssetCategory.availableInPicker(
+        category,
+        AssetCategory.defaultTemplateRegion(L10n.deviceLocale.countryCode),
+        hasAssets: usedCategoryIds.contains(category.id),
+      );
+    }).toList(),
     onCreate: onCreate,
     onRename: onRename,
     onDelete: onDelete,
@@ -259,13 +267,12 @@ Future<AssetCategory?> _showTemplateDialog(
 ) => showDialog<AssetCategory>(
   context: context,
   builder: (dialogContext) {
-    var region = 'global';
+    var region = AssetCategory.defaultTemplateRegion(
+      L10n.deviceLocale.countryCode,
+    );
     return StatefulBuilder(
       builder: (context, setState) {
-        final templates = [
-          ...AssetCategory.globalTemplates,
-          ...?AssetCategory.regionTemplates[region],
-        ];
+        final templates = AssetCategory.templatesForRegion(region);
         return AlertDialog(
           backgroundColor: AppColors.surface,
           title: Text(AssetConfig.categoryTemplates),

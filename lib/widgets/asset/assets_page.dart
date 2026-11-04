@@ -452,6 +452,7 @@ class AssetsPageState extends State<AssetsPage> {
     final category = await showAssetCategorySheet(
       context,
       categories: _categories,
+      usedCategoryIds: _assets.map((asset) => asset.categoryKey).toSet(),
       onCreate: _createCategory,
       onRename: _renameCategory,
       onDelete: _deleteCategory,
@@ -462,7 +463,13 @@ class AssetsPageState extends State<AssetsPage> {
   }
 
   Future<bool> _createCategory(AssetCategory category) async {
-    if (_categories.any((item) => item.id == category.id)) return false;
+    if (_categories.any((item) => item.id == category.id)) {
+      // The mainland-only built-in remains in storage for legacy accounts.
+      // Selecting it from the CN template on another device can still open
+      // the add-asset form without creating a duplicate category.
+      return category.id == AssetType.providentFund.name &&
+          !_assets.any((asset) => asset.categoryKey == category.id);
+    }
     if (_categories.any(
       (item) =>
           AssetConfig.labelForCategory(item).toLowerCase() ==

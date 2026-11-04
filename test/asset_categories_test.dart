@@ -44,6 +44,44 @@ void main() {
     expect(order, contains('timeDeposit'));
   });
 
+  test(
+    'regional templates keep universal types and limit provident fund to CN',
+    () {
+      expect(AssetCategory.defaultTemplateRegion('us'), 'US');
+      expect(AssetCategory.defaultTemplateRegion('hk'), 'HK');
+      expect(AssetCategory.defaultTemplateRegion('cn'), 'CN');
+      expect(AssetCategory.defaultTemplateRegion('GB'), 'global');
+      expect(AssetCategory.defaultTemplateRegion(null), 'global');
+
+      final globalIds = AssetCategory.templatesForRegion(
+        'global',
+      ).map((category) => category.id).toSet();
+      expect(globalIds, contains('template.other'));
+      expect(globalIds, isNot(contains('providentFund')));
+      expect(
+        AssetCategory.templatesForRegion('CN').map((category) => category.id),
+        contains('providentFund'),
+      );
+      for (final type in AssetType.values.where(
+        (type) => type != AssetType.providentFund,
+      )) {
+        final category = AssetCategory.builtIns.firstWhere(
+          (item) => item.id == type.name,
+        );
+        expect(AssetCategory.availableInPicker(category, 'US'), isTrue);
+      }
+      final provident = AssetCategory.builtIns.firstWhere(
+        (category) => category.id == 'providentFund',
+      );
+      expect(AssetCategory.availableInPicker(provident, 'US'), isFalse);
+      expect(AssetCategory.availableInPicker(provident, 'CN'), isTrue);
+      expect(
+        AssetCategory.availableInPicker(provident, 'US', hasAssets: true),
+        isTrue,
+      );
+    },
+  );
+
   test('rename and backup metadata do not change calculation type', () async {
     final category = AssetCategory.custom('Retirement', AssetType.timeDeposit);
     final asset = TimeDeposit(
