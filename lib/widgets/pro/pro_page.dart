@@ -3,6 +3,8 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../l10n/l10n.dart';
 import '../../services/pro_service.dart';
 import '../common/app_colors.dart';
+import '../common/app_ui.dart';
+import '../common/dialog_utils.dart';
 
 enum ProReason {
   general,
@@ -154,19 +156,37 @@ class _ProPageState extends State<ProPage> {
     if (id == ProService.lifetime && service.hasSubscription) {
       final confirmed = await showDialog<bool>(
         context: context,
-        builder: (context) => AlertDialog(
-          title: Text(L10n.t('proLifetimeName')),
-          content: Text(L10n.t('proLifetimeWarning')),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context, false),
-              child: Text(L10n.t('btnCancel')),
-            ),
-            TextButton(
-              onPressed: () => Navigator.pop(context, true),
-              child: Text(L10n.t('btnConfirm')),
-            ),
-          ],
+        builder: (context) => dialogFrame(
+          context: context,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Center(
+                child: Text(
+                  L10n.t('proLifetimeName'),
+                  style: TextStyles.dialogTitle,
+                ),
+              ),
+              const SizedBox(height: 16),
+              Text(
+                L10n.t('proLifetimeWarning'),
+                style: TextStyles.body13.copyWith(
+                  color: AppColors.textSecondary,
+                ),
+              ),
+              const SizedBox(height: 20),
+              actionButtonRow(
+                onCancel: () => Navigator.pop(context, false),
+                onConfirm: () => Navigator.pop(context, true),
+                cancelText: L10n.t('btnCancel'),
+                confirmText: L10n.t('btnConfirm'),
+                confirmGradient: const LinearGradient(
+                  colors: [AppColors.blueDark, AppColors.blueAccent],
+                ),
+              ),
+            ],
+          ),
         ),
       );
       if (confirmed != true) return;

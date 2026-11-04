@@ -141,9 +141,9 @@ void main() {
       await tester.pumpAndSettle();
       await tester.tap(purchaseButton);
       await tester.pumpAndSettle();
-      expect(find.byType(AlertDialog), findsOneWidget);
+      expect(find.byType(Dialog), findsOneWidget);
       expect(purchased, isEmpty);
-      final dialog = find.byType(AlertDialog);
+      final dialog = find.byType(Dialog);
       await tester.tap(
         find.descendant(
           of: dialog,
