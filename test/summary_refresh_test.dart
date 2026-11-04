@@ -57,6 +57,14 @@ void main() {
         brightness == Brightness.light ? greaterThan(.7) : lessThan(.1),
       );
       expect(find.byType(LinearProgressIndicator), findsNothing);
+      expect(
+        tester
+            .getRect(
+              find.textContaining('${L10n.t('exchangeRateStatus')}:').first,
+            )
+            .top,
+        greaterThan(tester.getRect(find.byType(ProfitChartWidget)).bottom),
+      );
       expect(tester.takeException(), isNull);
 
       Widget asset() => AssetHeader(
@@ -69,6 +77,14 @@ void main() {
 
       await tester.pumpWidget(page(asset()));
       expect(find.byType(LinearProgressIndicator), findsNothing);
+      expect(
+        tester
+            .getRect(
+              find.textContaining('${L10n.t('exchangeRateStatus')}:').first,
+            )
+            .top,
+        greaterThan(tester.getRect(find.text(StockConfig.tabStock)).bottom),
+      );
       final assetGradient =
           tester
                   .widget<SummaryCardFrame>(find.byType(SummaryCardFrame))

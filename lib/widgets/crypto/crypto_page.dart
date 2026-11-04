@@ -161,17 +161,6 @@ class CryptoPageState extends State<CryptoPage>
                       ),
                       style: TextStyles.amountLarge,
                     ),
-                    ExchangeRateNotice(
-                      incomplete:
-                          widget.store.incomplete ||
-                          (snapshots.isNotEmpty &&
-                              CurrencyUtil.tryConvertCurrency(
-                                    total.toDouble(),
-                                    'USD',
-                                    widget.currency,
-                                  ) ==
-                                  null),
-                    ),
                     const SizedBox(height: 8),
                     Row(
                       children: [
@@ -217,6 +206,17 @@ class CryptoPageState extends State<CryptoPage>
                           ),
                         ],
                       ],
+                    ),
+                    ExchangeRateNotice(
+                      incomplete:
+                          widget.store.incomplete ||
+                          (snapshots.isNotEmpty &&
+                              CurrencyUtil.tryConvertCurrency(
+                                    total.toDouble(),
+                                    'USD',
+                                    widget.currency,
+                                  ) ==
+                                  null),
                     ),
                   ],
                 ),

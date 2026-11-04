@@ -14,6 +14,7 @@ import 'package:assets/config/asset_config.dart';
 import 'package:assets/widgets/common/currency_selector.dart';
 import 'package:assets/widgets/common/form_sheet.dart';
 import 'package:assets/widgets/common/app_ui.dart';
+import 'package:assets/widgets/common/exchange_rate_notice.dart';
 import 'package:assets/widgets/stock/add_stock_sheet.dart';
 import 'package:assets/models/crypto/crypto_models.dart';
 import 'package:assets/services/crypto/crypto_store.dart';
@@ -363,6 +364,12 @@ void main() {
           expect(summaryText(L10n.t('cryptoUnknown')), findsNWidgets(2));
           expect(summaryText('100.00'), findsOneWidget);
           expect(summaryText('0.00'), findsOneWidget);
+          expect(
+            tester.getRect(find.byType(ExchangeRateNotice)).top,
+            greaterThan(
+              tester.getRect(summaryText(L10n.t('cryptoBreakdownSpot'))).bottom,
+            ),
+          );
           expect(find.text(L10n.t('cryptoIncomplete')), findsNothing);
 
           reader.snapshot = CryptoSnapshot(

@@ -67,9 +67,6 @@ class AssetHeader extends StatelessWidget {
                 : L10n.t('exchangeRateCannotValue'),
             style: TextStyles.amountLarge,
           ),
-          ExchangeRateNotice(
-            incomplete: !totalAssets.isFinite || cryptoIncomplete,
-          ),
           const SizedBox(height: 8),
           Row(
             children: [
@@ -98,6 +95,9 @@ class AssetHeader extends StatelessWidget {
                 iconColor: AssetStyle.deposit,
               ),
             ],
+          ),
+          ExchangeRateNotice(
+            incomplete: !totalAssets.isFinite || cryptoIncomplete,
           ),
         ],
       ),

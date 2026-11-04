@@ -98,7 +98,6 @@ class _StockHeaderCardState extends State<StockHeaderCard> {
                 : L10n.t('exchangeRateCannotValue'),
             style: TextStyles.amountLarge,
           ),
-          ExchangeRateNotice(incomplete: !widget.totalAssets.isFinite),
           const SizedBox(height: 8),
           // 总成本、总盈亏和总股息
           IntrinsicHeight(
@@ -122,6 +121,7 @@ class _StockHeaderCardState extends State<StockHeaderCard> {
             totalProfit: widget.totalProfit,
             targetCurrency: widget.selectedCurrency,
           ),
+          ExchangeRateNotice(incomplete: !widget.totalAssets.isFinite),
         ],
       ),
     );
