@@ -1148,17 +1148,19 @@ class _SettingsPageState extends State<SettingsPage> {
   void _showFeedbackDialog() {
     showDialog(
       context: context,
-      builder: (ctx) => AlertDialog(
-        backgroundColor: AppColors.surface,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        title: Text(
-          SettingsConfig.feedbackTitle,
-          style: TextStyles.sectionTitle,
-        ),
-        content: Column(
+      builder: (ctx) => dialogFrame(
+        context: ctx,
+        child: Column(
           mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
+            Center(
+              child: Text(
+                SettingsConfig.feedbackTitle,
+                style: TextStyles.dialogTitle,
+              ),
+            ),
+            const SizedBox(height: 16),
             Text(
               SettingsConfig.feedbackHint,
               style: TextStyles.body13.copyWith(
@@ -1183,14 +1185,13 @@ class _SettingsPageState extends State<SettingsPage> {
                 AppConfig.toastWechatCopied,
               ),
             ),
+            const SizedBox(height: 20),
+            cancelButton(
+              onTap: () => Navigator.pop(ctx),
+              text: AppConfig.btnClose,
+            ),
           ],
         ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(ctx),
-            child: Text(AppConfig.btnClose, style: TextStyles.body13),
-          ),
-        ],
       ),
     );
   }

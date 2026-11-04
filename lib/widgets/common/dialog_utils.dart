@@ -195,27 +195,22 @@ class InfoDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AlertDialog(
-      backgroundColor: AppColors.surface,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
-        side: BorderSide(color: AppColors.border, width: 0.5),
-      ),
-      insetPadding: const EdgeInsets.symmetric(horizontal: 40, vertical: 24),
-      title: title,
-      content: SizedBox(
-        width: MediaQuery.of(context).size.width * AppLayout.dialogWidthRatio,
-        child: content,
-      ),
-      actions: [
-        TextButton(
-          onPressed: () => Navigator.pop(context),
-          child: Text(
-            closeText ?? AppConfig.btnClose,
-            style: TextStyles.body13,
+    return dialogFrame(
+      context: context,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Center(child: title),
+          const SizedBox(height: 16),
+          content,
+          const SizedBox(height: 20),
+          cancelButton(
+            onTap: () => Navigator.pop(context),
+            text: closeText ?? AppConfig.btnClose,
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

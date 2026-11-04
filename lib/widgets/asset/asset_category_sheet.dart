@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 
 import '../../config/asset_config.dart';
+import '../../l10n/l10n.dart';
 import '../../models/asset_account.dart';
 import '../../models/asset_category.dart';
 import '../common/app_colors.dart';
 import '../common/app_ui.dart';
+import '../common/dialog_utils.dart';
+import '../common/form_sheet.dart';
 import '../../utils/center_toast.dart';
 import 'asset_style.dart';
 
@@ -45,6 +48,7 @@ Color assetCategoryColor(AssetCategory category) {
 Future<AssetCategory?> showAssetCategorySheet(
   BuildContext context, {
   required List<AssetCategory> categories,
+  Set<String> usedCategoryIds = const {},
   required Future<bool> Function(AssetCategory) onCreate,
   required Future<bool> Function(AssetCategory, String) onRename,
   required Future<bool> Function(AssetCategory) onDelete,
@@ -57,7 +61,13 @@ Future<AssetCategory?> showAssetCategorySheet(
     borderRadius: BorderRadius.vertical(top: Radius.circular(22)),
   ),
   builder: (sheetContext) => _CategorySheet(
-    categories: categories,
+    categories: categories.where((category) {
+      return AssetCategory.availableInPicker(
+        category,
+        AssetCategory.defaultTemplateRegion(L10n.deviceLocale.countryCode),
+        hasAssets: usedCategoryIds.contains(category.id),
+      );
+    }).toList(),
     onCreate: onCreate,
     onRename: onRename,
     onDelete: onDelete,
@@ -213,27 +223,34 @@ class _CategorySheetState extends State<_CategorySheet> {
               padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
               child: LayoutBuilder(
                 builder: (context, constraints) {
-                  final template = OutlinedButton.icon(
-                    onPressed: _createTemplate,
-                    icon: const Icon(Icons.grid_view_outlined),
-                    label: Text(AssetConfig.categoryTemplates),
+                  final template = SizedBox(
+                    height: 48,
+                    child: cancelButton(
+                      onTap: _createTemplate,
+                      text: AssetConfig.categoryTemplates,
+                    ),
                   );
-                  final custom = FilledButton.icon(
-                    onPressed: _createCustom,
-                    icon: const Icon(Icons.add),
-                    label: Text(AssetConfig.categoryCustom),
+                  final custom = SizedBox(
+                    height: 48,
+                    child: confirmButton(
+                      onTap: _createCustom,
+                      text: AssetConfig.categoryCustom,
+                      gradient: const LinearGradient(
+                        colors: [AppColors.blueDark, AppColors.blueAccent],
+                      ),
+                    ),
                   );
                   if (constraints.maxWidth < 360) {
                     return Column(
                       mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [template, const SizedBox(height: 8), custom],
+                      children: [template, const SizedBox(height: 12), custom],
                     );
                   }
                   return Row(
                     children: [
                       Expanded(child: template),
-                      const SizedBox(width: 8),
+                      const SizedBox(width: 12),
                       Expanded(child: custom),
                     ],
                   );
@@ -259,69 +276,78 @@ Future<AssetCategory?> _showTemplateDialog(
 ) => showDialog<AssetCategory>(
   context: context,
   builder: (dialogContext) {
-    var region = 'global';
+    var region = AssetCategory.defaultTemplateRegion(
+      L10n.deviceLocale.countryCode,
+    );
     return StatefulBuilder(
       builder: (context, setState) {
-        final templates = [
-          ...AssetCategory.globalTemplates,
-          ...?AssetCategory.regionTemplates[region],
-        ];
-        return AlertDialog(
-          backgroundColor: AppColors.surface,
-          title: Text(AssetConfig.categoryTemplates),
-          content: SizedBox(
-            width: 380,
-            height: 320,
-            child: Column(
-              children: [
-                DropdownButtonFormField<String>(
-                  initialValue: region,
-                  isExpanded: true,
-                  dropdownColor: AppColors.surface,
-                  decoration: InputDecoration(
-                    labelText: AssetConfig.categoryRegion,
-                    border: const OutlineInputBorder(),
-                  ),
-                  items: [
-                    for (final value in ['global', 'US', 'HK', 'CN'])
-                      DropdownMenuItem(
-                        value: value,
-                        child: Text(AssetConfig.regionLabel(value)),
+        final templates = AssetCategory.templatesForRegion(region);
+        return dialogFrame(
+          context: context,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Center(
+                child: Text(
+                  AssetConfig.categoryTemplates,
+                  style: TextStyles.dialogTitle,
+                ),
+              ),
+              const SizedBox(height: 16),
+              _categoryFieldLabel(AssetConfig.categoryRegion),
+              const SizedBox(height: 6),
+              _categoryDropdown<String>(
+                value: region,
+                items: [
+                  for (final value in ['global', 'US', 'HK', 'CN'])
+                    DropdownMenuItem(
+                      value: value,
+                      child: Text(AssetConfig.regionLabel(value)),
+                    ),
+                ],
+                onChanged: (value) {
+                  if (value != null) setState(() => region = value);
+                },
+              ),
+              const SizedBox(height: 12),
+              SizedBox(
+                height: (MediaQuery.sizeOf(context).height * .42).clamp(
+                  140.0,
+                  340.0,
+                ),
+                child: ListView(
+                  children: [
+                    for (final template in templates)
+                      ListTile(
+                        contentPadding: EdgeInsets.zero,
+                        title: Text(
+                          AssetConfig.labelForCategory(template),
+                          style: TextStyles.bodyRegular,
+                        ),
+                        subtitle: Text(
+                          _valueTypeLabel(template.calculationType),
+                          style: TextStyles.body13.copyWith(
+                            color: AppColors.textSecondary,
+                          ),
+                        ),
+                        enabled: !existing.any(
+                          (item) => item.id == template.id,
+                        ),
+                        onTap: existing.any((item) => item.id == template.id)
+                            ? null
+                            : () => Navigator.of(dialogContext).pop(template),
                       ),
                   ],
-                  onChanged: (value) {
-                    if (value != null) setState(() => region = value);
-                  },
                 ),
-                const SizedBox(height: 12),
-                Expanded(
-                  child: ListView(
-                    children: [
-                      for (final template in templates)
-                        ListTile(
-                          title: Text(AssetConfig.labelForCategory(template)),
-                          subtitle: Text(
-                            _valueTypeLabel(template.calculationType),
-                          ),
-                          enabled: !existing.any(
-                            (item) => item.id == template.id,
-                          ),
-                          onTap: existing.any((item) => item.id == template.id)
-                              ? null
-                              : () => Navigator.of(dialogContext).pop(template),
-                        ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
+              ),
+              const SizedBox(height: 20),
+              cancelButton(
+                onTap: () => Navigator.of(dialogContext).pop(),
+                text: AssetConfig.categoryCancel,
+              ),
+            ],
           ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(dialogContext).pop(),
-              child: Text(AssetConfig.categoryCancel),
-            ),
-          ],
         );
       },
     );
@@ -352,67 +378,67 @@ class _CustomCategoryDialogState extends State<_CustomCategoryDialog> {
   }
 
   @override
-  Widget build(BuildContext context) => AlertDialog(
-    backgroundColor: AppColors.surface,
-    title: Text(AssetConfig.categoryCustom),
-    content: SizedBox(
-      width: 380,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          TextField(
-            controller: nameController,
-            maxLength: 32,
-            autofocus: true,
-            decoration: InputDecoration(
-              labelText: AssetConfig.categoryName,
-              border: const OutlineInputBorder(),
-            ),
+  Widget build(BuildContext context) => dialogFrame(
+    context: context,
+    child: Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Center(
+          child: Text(
+            AssetConfig.categoryCustom,
+            style: TextStyles.dialogTitle,
           ),
-          const SizedBox(height: 12),
-          DropdownButtonFormField<AssetType>(
-            initialValue: type,
-            isExpanded: true,
-            dropdownColor: AppColors.surface,
-            decoration: InputDecoration(
-              labelText: AssetConfig.categoryCalculation,
-              border: const OutlineInputBorder(),
-            ),
-            items: [
-              for (final value in [
-                AssetType.cash,
-                AssetType.timeDeposit,
-                AssetType.wealthProduct,
-              ])
-                DropdownMenuItem(
-                  value: value,
-                  child: Text(_valueTypeLabel(value)),
-                ),
-            ],
-            onChanged: (value) {
-              if (value != null) setState(() => type = value);
-            },
+        ),
+        const SizedBox(height: 16),
+        _categoryFieldLabel(AssetConfig.categoryName),
+        const SizedBox(height: 6),
+        TextField(
+          controller: nameController,
+          maxLength: 32,
+          autofocus: true,
+          style: TextStyles.bodyRegular,
+          decoration: appInputDecoration(hintText: AssetConfig.categoryName),
+        ),
+        const SizedBox(height: 12),
+        _categoryFieldLabel(AssetConfig.categoryCalculation),
+        const SizedBox(height: 6),
+        _categoryDropdown<AssetType>(
+          value: type,
+          items: [
+            for (final value in [
+              AssetType.cash,
+              AssetType.timeDeposit,
+              AssetType.wealthProduct,
+            ])
+              DropdownMenuItem(
+                value: value,
+                child: Text(_valueTypeLabel(value)),
+              ),
+          ],
+          onChanged: (value) {
+            if (value != null) setState(() => type = value);
+          },
+        ),
+        const SizedBox(height: 20),
+        actionButtonRow(
+          onCancel: () => Navigator.of(context).pop(),
+          onConfirm: () {
+            final name = nameController.text.trim();
+            if (name.isEmpty) {
+              CenterToast.error(context, AssetConfig.categoryNameInvalid);
+              return;
+            }
+            Navigator.of(context).pop(AssetCategory.custom(name, type));
+          },
+          cancelText: AssetConfig.categoryCancel,
+          confirmText: AssetConfig.categoryCreate,
+          confirmGradient: const LinearGradient(
+            colors: [AppColors.blueDark, AppColors.blueAccent],
           ),
-        ],
-      ),
+        ),
+      ],
     ),
-    actions: [
-      TextButton(
-        onPressed: () => Navigator.of(context).pop(),
-        child: Text(AssetConfig.categoryCancel),
-      ),
-      FilledButton(
-        onPressed: () {
-          final name = nameController.text.trim();
-          if (name.isEmpty) {
-            CenterToast.error(context, AssetConfig.categoryNameInvalid);
-            return;
-          }
-          Navigator.of(context).pop(AssetCategory.custom(name, type));
-        },
-        child: Text(AssetConfig.categoryCreate),
-      ),
-    ],
   );
 }
 
@@ -451,27 +477,61 @@ class _RenameCategoryDialogState extends State<_RenameCategoryDialog> {
   }
 
   @override
-  Widget build(BuildContext context) => AlertDialog(
-    backgroundColor: AppColors.surface,
-    title: Text(AssetConfig.categoryRename),
-    content: TextField(
-      controller: controller,
-      maxLength: 32,
-      autofocus: true,
-      decoration: InputDecoration(
-        labelText: AssetConfig.categoryName,
-        border: const OutlineInputBorder(),
-      ),
+  Widget build(BuildContext context) => dialogFrame(
+    context: context,
+    child: Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Center(
+          child: Text(
+            AssetConfig.categoryRename,
+            style: TextStyles.dialogTitle,
+          ),
+        ),
+        const SizedBox(height: 16),
+        _categoryFieldLabel(AssetConfig.categoryName),
+        const SizedBox(height: 6),
+        TextField(
+          controller: controller,
+          maxLength: 32,
+          autofocus: true,
+          style: TextStyles.bodyRegular,
+          decoration: appInputDecoration(hintText: AssetConfig.categoryName),
+        ),
+        const SizedBox(height: 20),
+        actionButtonRow(
+          onCancel: () => Navigator.of(context).pop(),
+          onConfirm: () => Navigator.of(context).pop(controller.text),
+          cancelText: AssetConfig.categoryCancel,
+          confirmText: AssetConfig.categorySave,
+          confirmGradient: const LinearGradient(
+            colors: [AppColors.blueDark, AppColors.blueAccent],
+          ),
+        ),
+      ],
     ),
-    actions: [
-      TextButton(
-        onPressed: () => Navigator.of(context).pop(),
-        child: Text(AssetConfig.categoryCancel),
-      ),
-      FilledButton(
-        onPressed: () => Navigator.of(context).pop(controller.text),
-        child: Text(AssetConfig.categorySave),
-      ),
-    ],
   );
 }
+
+Widget _categoryFieldLabel(String label) => Text(
+  label,
+  style: TextStyles.body13.copyWith(color: AppColors.textSecondary),
+);
+
+Widget _categoryDropdown<T>({
+  required T value,
+  required List<DropdownMenuItem<T>> items,
+  required ValueChanged<T?> onChanged,
+}) => DropdownButtonFormField<T>(
+  initialValue: value,
+  isExpanded: true,
+  borderRadius: BorderRadius.circular(12),
+  menuMaxHeight: 280,
+  dropdownColor: AppColors.surface,
+  iconEnabledColor: AppColors.textSecondary,
+  style: TextStyles.bodyRegular,
+  decoration: appInputDecoration(),
+  items: items,
+  onChanged: onChanged,
+);

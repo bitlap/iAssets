@@ -91,12 +91,39 @@ class AssetCategory {
     ],
     'CN': [
       AssetCategory(
+        id: 'providentFund',
+        calculationType: AssetType.providentFund,
+        labelKey: 'providentFund',
+      ),
+      AssetCategory(
         id: 'template.cnPension',
         calculationType: AssetType.cash,
         labelKey: 'assetCategoryCnPension',
       ),
     ],
   };
+
+  /// Templates follow the device region, independently of the app language.
+  static String defaultTemplateRegion(String? countryCode) {
+    final region = countryCode?.toUpperCase();
+    return regionTemplates.containsKey(region) ? region! : 'global';
+  }
+
+  static List<AssetCategory> templatesForRegion(String region) => [
+    ...globalTemplates,
+    ...?regionTemplates[region],
+  ];
+
+  /// Keep legacy provident-fund holdings visible after a user changes region.
+  static bool availableInPicker(
+    AssetCategory category,
+    String region, {
+    bool hasAssets = false,
+  }) =>
+      category.id != AssetType.providentFund.name ||
+      region == 'CN' ||
+      hasAssets ||
+      (category.customName?.trim().isNotEmpty ?? false);
 
   static AssetCategory custom(String name, AssetType calculationType) {
     final random = Random.secure().nextInt(1 << 24).toRadixString(36);
