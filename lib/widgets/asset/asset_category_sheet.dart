@@ -6,6 +6,7 @@ import '../../models/asset_account.dart';
 import '../../models/asset_category.dart';
 import '../common/app_colors.dart';
 import '../common/app_ui.dart';
+import '../common/dialog_utils.dart';
 import '../../utils/center_toast.dart';
 import 'asset_style.dart';
 
@@ -221,27 +222,34 @@ class _CategorySheetState extends State<_CategorySheet> {
               padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
               child: LayoutBuilder(
                 builder: (context, constraints) {
-                  final template = OutlinedButton.icon(
-                    onPressed: _createTemplate,
-                    icon: const Icon(Icons.grid_view_outlined),
-                    label: Text(AssetConfig.categoryTemplates),
+                  final template = SizedBox(
+                    height: 48,
+                    child: cancelButton(
+                      onTap: _createTemplate,
+                      text: AssetConfig.categoryTemplates,
+                    ),
                   );
-                  final custom = FilledButton.icon(
-                    onPressed: _createCustom,
-                    icon: const Icon(Icons.add),
-                    label: Text(AssetConfig.categoryCustom),
+                  final custom = SizedBox(
+                    height: 48,
+                    child: confirmButton(
+                      onTap: _createCustom,
+                      text: AssetConfig.categoryCustom,
+                      gradient: const LinearGradient(
+                        colors: [AppColors.blueDark, AppColors.blueAccent],
+                      ),
+                    ),
                   );
                   if (constraints.maxWidth < 360) {
                     return Column(
                       mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [template, const SizedBox(height: 8), custom],
+                      children: [template, const SizedBox(height: 12), custom],
                     );
                   }
                   return Row(
                     children: [
                       Expanded(child: template),
-                      const SizedBox(width: 8),
+                      const SizedBox(width: 12),
                       Expanded(child: custom),
                     ],
                   );
