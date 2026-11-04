@@ -257,6 +257,7 @@ class _StockHeaderCardState extends State<StockHeaderCard> {
 
   void _showProfitHelpDialog() {
     final realizedText = ProfitUtil.amount(widget.totalRealizedPL);
+    final openPL = widget.totalMarketValue - widget.totalCost;
     _helpDialogFrame(
       title: StockConfig.assetTotalProfit,
       icon: Icons.trending_up,
@@ -270,6 +271,12 @@ class _StockHeaderCardState extends State<StockHeaderCard> {
         _helpLine(
           StockConfig.assetCostDetailLabel,
           CurrencyUtil.formatCompact(widget.totalCost),
+        ),
+        const SizedBox(height: 6),
+        _helpLine(
+          StockConfig.assetFloatProfitLabel,
+          ProfitUtil.amount(openPL),
+          ProfitUtil.colorOf(openPL),
         ),
         const SizedBox(height: 6),
         _helpLine(

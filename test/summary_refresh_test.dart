@@ -139,6 +139,15 @@ void main() {
         tester.element(find.text(StockConfig.assetTotalAssetsHelp)),
       ).pop();
       await tester.pumpAndSettle();
+      await tester.tap(find.byIcon(Icons.help_outline).at(1));
+      await tester.pumpAndSettle();
+      expect(find.text(StockConfig.assetTotalProfitHelp), findsOneWidget);
+      expect(find.text(StockConfig.assetFloatProfitLabel), findsOneWidget);
+      expect(find.text(StockConfig.assetTotalRealizedPL), findsOneWidget);
+      Navigator.of(
+        tester.element(find.text(StockConfig.assetTotalProfitHelp)),
+      ).pop();
+      await tester.pumpAndSettle();
       await tester.pumpWidget(
         page(
           AssetHeader(
