@@ -54,6 +54,10 @@ void main() {
     await tester.pump();
     expect(find.byType(StockCard), findsOneWidget);
 
+    await tester.tap(
+      find.descendant(of: find.byType(StockCard), matching: find.text('TEST')),
+    );
+    await tester.pumpAndSettle();
     await tester.ensureVisible(find.byIcon(Icons.more_horiz));
     await tester.tap(find.byIcon(Icons.more_horiz));
     await tester.pumpAndSettle();

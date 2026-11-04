@@ -6,10 +6,10 @@ Stocks & Dividends
 • Search by name or symbol across US, Hong Kong, Shanghai, Shenzhen, Beijing, Japanese, Korean, UK and over-the-counter markets
 • Filter search results, holdings and dividends by individual exchange or market, with clear color labels
 • Recognize your holdings more easily with company logos across more markets
-• Record buys, sells, dividends and fees, with automatic calculations for cost, P&L and after-tax dividends
+• Record buys, sells, dividends and fees, with automatic calculations for net invested, P&L and after-tax dividends
 • Stock assets reflect current holdings only; net sale proceeds remain a separate transaction statistic
 • Fully selling a position removes the stock and related records; existing closed-position history is not deleted automatically
-• Follow today's P&L and profit charts, and review your trading history
+• See assets, total and today's P&L at a glance; expand a holding for trade details and actions
 • Add custom stocks with a currency picker beside the price and an easy-to-reach button below
 • Quotes from Eastmoney, Tencent and Yahoo Finance; some market quotes may be delayed
 • Stock search shows prices and currency codes, with more display currencies supported

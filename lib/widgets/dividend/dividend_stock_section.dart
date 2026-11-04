@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../../models/calculator_models.dart';
-import '../../models/stock_model.dart';
 import '../common/app_colors.dart';
 import '../../config/app_config.dart';
 import '../../utils/currency_util.dart';
@@ -72,7 +71,7 @@ class DividendStockSection extends StatelessWidget {
                 ),
                 const SizedBox(height: 2),
                 Text(
-                  '${item.symbol} · ${item.recordCount} ${StockConfig.dividendRecordCount}',
+                  '${item.symbol} · ${item.recordCount} ${item.recordCount == 1 ? StockConfig.dividendRecordCountOne : StockConfig.dividendRecordCount}',
                   style: TextStyles.bodySmall,
                 ),
               ],
@@ -168,7 +167,12 @@ class DividendStockSection extends StatelessWidget {
               style: TextStyles.caption,
             ),
           ),
-          Text(StockConfig.dividendExpandAll, style: TextStyles.accentLink),
+          Text(
+            isExpanded
+                ? StockConfig.dividendCollapseAll
+                : StockConfig.dividendExpandAll,
+            style: TextStyles.accentLink,
+          ),
         ],
       ),
     );
