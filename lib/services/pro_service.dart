@@ -11,11 +11,17 @@ class ProAccess {
 
   bool canAddStock(int count) => isPro || count < freeLimit;
 
-  bool canAddAsset(Iterable<AssetBase> assets, AssetType type) {
+  bool canAddAsset(
+    Iterable<AssetBase> assets,
+    AssetType type, {
+    String? categoryId,
+  }) {
     if (isPro) return true;
-    final types = assets.map((a) => a.type).toSet();
-    return (types.contains(type) || types.length < freeLimit) &&
-        assets.where((a) => a.type == type).length < freeLimit;
+    final category = categoryId ?? type.name;
+    final categories = assets.map((asset) => asset.categoryKey).toSet();
+    return (categories.contains(category) || categories.length < freeLimit) &&
+        assets.where((asset) => asset.categoryKey == category).length <
+            freeLimit;
   }
 }
 

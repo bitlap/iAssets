@@ -18,7 +18,6 @@ import 'widgets/crypto/crypto_page.dart';
 import 'utils/logo_cacher.dart';
 import 'widgets/stock/stock_portfolio_page.dart';
 import 'widgets/asset/assets_page.dart';
-import 'widgets/asset/asset_dialogs.dart';
 import 'widgets/common/section_title.dart';
 import 'widgets/common/app_ui.dart';
 import 'task/profit_task.dart';
@@ -231,10 +230,7 @@ class _AppShellState extends State<_AppShell> with WidgetsBindingObserver {
       case 1:
         _cryptoKey.currentState?.addConnection();
       case 2:
-        showAddAssetSheet(context).then((type) {
-          if (type == null || !mounted) return;
-          _assetKey.currentState?.onAddAsset(type);
-        });
+        _assetKey.currentState?.showAddAssetPicker();
     }
   }
 

@@ -6,8 +6,10 @@ sealed class AssetFlatItem {
 
 class SectionHeader extends AssetFlatItem {
   final AssetType type;
+  final String categoryId;
   final bool expanded;
-  const SectionHeader(this.type, this.expanded);
+  SectionHeader(this.type, this.expanded, {String? categoryId})
+    : categoryId = categoryId ?? type.name;
 }
 
 class AssetCardItem extends AssetFlatItem {

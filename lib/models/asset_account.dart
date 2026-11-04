@@ -8,6 +8,9 @@ sealed class AssetBase {
   int sortOrder;
   String currency;
   String name;
+
+  /// Display grouping. Older records omit this and retain their original type.
+  String? categoryId;
   DateTime? createdAt;
   DateTime? updatedAt;
 
@@ -17,9 +20,12 @@ sealed class AssetBase {
     this.sortOrder = 0,
     this.currency = AppConfig.defaultCurrency,
     this.name = '',
+    this.categoryId,
     this.createdAt,
     this.updatedAt,
   });
+
+  String get categoryKey => categoryId ?? type.name;
 
   Map<String, dynamic> toJson() => {
     'id': id,
@@ -27,6 +33,7 @@ sealed class AssetBase {
     'sortOrder': sortOrder,
     'currency': currency,
     'name': name,
+    if (categoryId != null) 'categoryId': categoryId,
     'createdAt': createdAt?.toIso8601String(),
     'updatedAt': updatedAt?.toIso8601String(),
   };
@@ -61,6 +68,7 @@ class CashAccount extends AssetBase {
     super.sortOrder = 0,
     super.currency = AppConfig.defaultCurrency,
     super.name = '',
+    super.categoryId,
     super.createdAt,
     super.updatedAt,
     this.balance = 0,
@@ -74,6 +82,7 @@ class CashAccount extends AssetBase {
     sortOrder: (json['sortOrder'] as num?)?.toInt() ?? 0,
     currency: json['currency'] as String? ?? AppConfig.defaultCurrency,
     name: json['name'] as String? ?? '',
+    categoryId: json['categoryId'] as String?,
     balance: (json['balance'] as num?)?.toDouble() ?? 0,
     createdAt: json['createdAt'] != null
         ? DateTime.parse(json['createdAt'] as String)
@@ -92,6 +101,7 @@ class CurrentAccount extends AssetBase {
     super.sortOrder = 0,
     super.currency = AppConfig.defaultCurrency,
     super.name = '',
+    super.categoryId,
     super.createdAt,
     super.updatedAt,
     this.balance = 0,
@@ -105,6 +115,7 @@ class CurrentAccount extends AssetBase {
     sortOrder: (json['sortOrder'] as num?)?.toInt() ?? 0,
     currency: json['currency'] as String? ?? AppConfig.defaultCurrency,
     name: json['name'] as String? ?? '',
+    categoryId: json['categoryId'] as String?,
     balance: (json['balance'] as num?)?.toDouble() ?? 0,
     createdAt: json['createdAt'] != null
         ? DateTime.parse(json['createdAt'] as String)
@@ -123,6 +134,7 @@ class ProvidentFundAccount extends AssetBase {
     super.sortOrder = 0,
     super.currency = AppConfig.defaultCurrency,
     super.name = '',
+    super.categoryId,
     super.createdAt,
     super.updatedAt,
     this.balance = 0,
@@ -137,6 +149,7 @@ class ProvidentFundAccount extends AssetBase {
         sortOrder: (json['sortOrder'] as num?)?.toInt() ?? 0,
         currency: json['currency'] as String? ?? AppConfig.defaultCurrency,
         name: json['name'] as String? ?? '',
+        categoryId: json['categoryId'] as String?,
         balance: (json['balance'] as num?)?.toDouble() ?? 0,
         createdAt: json['createdAt'] != null
             ? DateTime.parse(json['createdAt'] as String)
@@ -158,6 +171,7 @@ class TimeDeposit extends AssetBase {
     super.sortOrder = 0,
     super.currency = AppConfig.defaultCurrency,
     super.name = '',
+    super.categoryId,
     super.createdAt,
     super.updatedAt,
     this.principal = 0,
@@ -186,6 +200,7 @@ class TimeDeposit extends AssetBase {
     sortOrder: (json['sortOrder'] as num?)?.toInt() ?? 0,
     currency: json['currency'] as String? ?? AppConfig.defaultCurrency,
     name: json['name'] as String? ?? '',
+    categoryId: json['categoryId'] as String?,
     principal: (json['principal'] as num?)?.toDouble() ?? 0,
     annualRate: (json['annualRate'] as num?)?.toDouble() ?? 0,
     startDate: json['startDate'] != null
@@ -210,6 +225,7 @@ class WealthProduct extends AssetBase {
     super.sortOrder = 0,
     super.currency = AppConfig.defaultCurrency,
     super.name = '',
+    super.categoryId,
     super.createdAt,
     super.updatedAt,
     this.shares = 0,
@@ -230,6 +246,7 @@ class WealthProduct extends AssetBase {
     sortOrder: (json['sortOrder'] as num?)?.toInt() ?? 0,
     currency: json['currency'] as String? ?? AppConfig.defaultCurrency,
     name: json['name'] as String? ?? '',
+    categoryId: json['categoryId'] as String?,
     shares: (json['shares'] as num?)?.toDouble() ?? 0,
     nav: (json['nav'] as num?)?.toDouble() ?? 0,
     createdAt: json['createdAt'] != null

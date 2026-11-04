@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../models/asset_account.dart';
+import '../../models/asset_category.dart';
 import '../../models/asset_flat_item.dart';
 import '../../utils/currency_util.dart';
 import '../../utils/center_toast.dart';
@@ -16,6 +17,7 @@ import 'asset_card.dart';
 import 'asset_header.dart';
 import 'asset_dialogs.dart';
 import 'asset_style.dart';
+import 'asset_category_sheet.dart';
 import '../../services/pro_service.dart';
 import '../pro/pro_page.dart';
 
@@ -50,14 +52,11 @@ class AssetsPageState extends State<AssetsPage> {
   bool _isLoading = false;
   Future<void>? _refreshInFlight;
   DateTime? _lastRefreshTime;
-  final Set<AssetType> _expandedTypes = {};
-  List<AssetType> _sectionOrder = [
-    AssetType.cash,
-    AssetType.timeDeposit,
-    AssetType.wealthProduct,
-    AssetType.current,
-    AssetType.providentFund,
-  ];
+  final Set<String> _expandedCategories = {};
+  List<AssetCategory> _categories = AssetCategory.builtIns;
+  List<String> _sectionOrder = AssetType.values
+      .map((type) => type.name)
+      .toList();
   List<AssetFlatItem> _flatItems = [];
 
   double get _totalAssets => AssetCalculator.calculateTotalAssets(
@@ -71,11 +70,24 @@ class AssetsPageState extends State<AssetsPage> {
   Map<AssetType, double> _totalByType(String currency) =>
       AssetCalculator.getTotalByType(_assets, currency);
 
+  Map<String, double> _totalByCategory(String currency) {
+    final totals = <String, double>{};
+    for (final asset in _assets) {
+      totals.update(
+        asset.categoryKey,
+        (value) => value + AssetCalculator.getAssetValue(asset, currency),
+        ifAbsent: () => AssetCalculator.getAssetValue(asset, currency),
+      );
+    }
+    return totals;
+  }
+
   void _rebuildFlatItems() {
-    _flatItems = AssetDataManager.buildFlatItems(
+    _flatItems = AssetDataManager.buildCategoryFlatItems(
       _assets,
+      _categories,
       _sectionOrder,
-      _expandedTypes,
+      _expandedCategories,
     );
   }
 
@@ -87,17 +99,19 @@ class AssetsPageState extends State<AssetsPage> {
 
   Future<void> _load({bool showOverlay = true}) async {
     if (showOverlay) setState(() => _isLoading = true);
-    final (assets, order) = await AssetDataManager.loadAssetsAndOrder();
+    final (assets, categories, order) =
+        await AssetDataManager.loadCategoryState();
     if (!mounted) return;
     setState(() {
       _assets = assets;
-      _expandedTypes.clear();
+      _categories = categories;
+      _expandedCategories.clear();
       _sectionOrder = order;
       if (showOverlay) _isLoading = false;
       _lastRefreshTime = DateTime.now();
+      _rebuildFlatItems();
     });
     widget.onHeaderChanged?.call();
-    _rebuildFlatItems();
   }
 
   Future<void> _refreshAssets() {
@@ -116,12 +130,18 @@ class AssetsPageState extends State<AssetsPage> {
     await AssetDataManager.saveAssets(_assets);
   }
 
-  bool _canAddAsset(AssetType type) {
+  bool _canAddAsset(AssetType type, String categoryId) {
     if (_isLoading) return false;
-    if (ProService.instance.access.canAddAsset(_assets, type)) return true;
+    if (ProService.instance.access.canAddAsset(
+      _assets,
+      type,
+      categoryId: categoryId,
+    )) {
+      return true;
+    }
     showProPage(
       context,
-      reason: _assets.any((a) => a.type == type)
+      reason: _assets.any((a) => a.categoryKey == categoryId)
           ? ProReason.assetRecordLimit
           : ProReason.assetTypeLimit,
     );
@@ -129,11 +149,11 @@ class AssetsPageState extends State<AssetsPage> {
   }
 
   Future<bool> _addAsset(AssetBase asset) async {
-    if (!mounted || !_canAddAsset(asset.type)) return false;
+    if (!mounted || !_canAddAsset(asset.type, asset.categoryKey)) return false;
     setState(() {
       _assets.add(asset);
-      if (!_sectionOrder.contains(asset.type)) {
-        _sectionOrder.add(asset.type);
+      if (!_sectionOrder.contains(asset.categoryKey)) {
+        _sectionOrder.add(asset.categoryKey);
       }
     });
     _rebuildFlatItems();
@@ -148,9 +168,10 @@ class AssetsPageState extends State<AssetsPage> {
     final idx = _assets.indexWhere((a) => a.id == id);
     if (idx == -1) return;
     setState(() {
+      asset.categoryId = _assets[idx].categoryId;
       _assets[idx] = asset;
-      if (!_sectionOrder.contains(asset.type)) {
-        _sectionOrder.add(asset.type);
+      if (!_sectionOrder.contains(asset.categoryKey)) {
+        _sectionOrder.add(asset.categoryKey);
       }
     });
     _rebuildFlatItems();
@@ -177,6 +198,35 @@ class AssetsPageState extends State<AssetsPage> {
     }
   }
 
+  Future<void> _moveAssetToCategory(
+    AssetBase asset,
+    AssetCategory category,
+  ) async {
+    if (asset.categoryKey == category.id) return;
+    final remaining = _assets.where((item) => item.id != asset.id).toList();
+    if (!ProService.instance.access.canAddAsset(
+      remaining,
+      asset.type,
+      categoryId: category.id,
+    )) {
+      if (mounted) {
+        showProPage(
+          context,
+          reason: remaining.any((item) => item.categoryKey == category.id)
+              ? ProReason.assetRecordLimit
+              : ProReason.assetTypeLimit,
+        );
+      }
+      return;
+    }
+    setState(() {
+      asset.categoryId = category.id;
+      _rebuildFlatItems();
+    });
+    await _save();
+    if (mounted) CenterToast.success(context, AssetConfig.toastSaved);
+  }
+
   void _onFlatReorder(int oldIndex, int newIndex) {
     try {
       if (newIndex > oldIndex) newIndex--;
@@ -186,28 +236,34 @@ class AssetsPageState extends State<AssetsPage> {
         if (newIndex < _flatItems.length - 1) {
           final targetIdx = newIndex < oldIndex ? newIndex : newIndex + 1;
           if (_flatItems[targetIdx] is AssetCardItem) {
-            if (mounted)
+            if (mounted) {
               CenterToast.warning(
                 context,
                 StockConfig.dragBetweenCategoriesHint,
               );
+            }
             return;
           }
         }
-        final order = reorderSectionOrder(
+        final order = reorderCategorySectionOrder(
           _sectionOrder,
           _flatItems,
-          item.type,
+          item.categoryId,
           oldIndex,
           newIndex,
         );
         if (identical(order, _sectionOrder)) return;
         setState(() => _sectionOrder = order);
       } else if (item is AssetCardItem) {
-        final type = item.asset.type;
-        final typeAssetsLen = _assets.where((a) => a.type == type).length;
+        final categoryId = item.asset.categoryKey;
+        final categoryAssetsLen = _assets
+            .where((asset) => asset.categoryKey == categoryId)
+            .length;
 
-        final (sectionStart, sectionEnd) = findSectionRange(_flatItems, type);
+        final (sectionStart, sectionEnd) = findCategorySectionRange(
+          _flatItems,
+          categoryId,
+        );
         if (sectionStart < 0) return;
 
         int adjEnd = sectionEnd;
@@ -217,23 +273,24 @@ class AssetsPageState extends State<AssetsPage> {
           adjEnd--;
         }
         if (newIndex <= sectionStart || newIndex > adjEnd) {
-          if (mounted)
+          if (mounted) {
             CenterToast.warning(context, AssetConfig.toastCrossSection);
+          }
           return;
         }
-        if (typeAssetsLen <= 1) return;
+        if (categoryAssetsLen <= 1) return;
 
-        final sameTypeCount = computeSameTypeCount(
+        final sameCategoryCount = computeSameCategoryCount(
           _flatItems,
-          type,
+          categoryId,
           oldIndex,
           newIndex,
         );
-        final newAssets = reorderAssets(
+        final newAssets = reorderCategoryAssets(
           _assets,
           item.asset,
-          type,
-          sameTypeCount,
+          categoryId,
+          sameCategoryCount,
         );
         setState(() => _assets = newAssets);
       } else {
@@ -249,15 +306,15 @@ class AssetsPageState extends State<AssetsPage> {
   }
 
   Future<void> _saveSectionOrder() async {
-    await AssetDataManager.saveSectionOrder(_sectionOrder);
+    await AssetDataManager.saveCategoryState(_categories, _sectionOrder);
   }
 
-  void _toggleSection(AssetType type) {
+  void _toggleSection(String categoryId) {
     setState(() {
-      if (_expandedTypes.contains(type)) {
-        _expandedTypes.remove(type);
+      if (_expandedCategories.contains(categoryId)) {
+        _expandedCategories.remove(categoryId);
       } else {
-        _expandedTypes.add(type);
+        _expandedCategories.add(categoryId);
       }
     });
     _rebuildFlatItems();
@@ -273,13 +330,14 @@ class AssetsPageState extends State<AssetsPage> {
 
   // Dialogs
 
-  void _onAddCash() => _openDialog<CashAccount>(
+  void _onAddCash(String categoryId) => _openDialog<CashAccount>(
     showCashAssetDialog(
       context,
       defaultCurrency: widget.currency,
       assetCount: _assets.length,
     ),
     onAdd: (r) => _addAsset(r),
+    categoryId: categoryId,
   );
 
   void _onEditCash(CashAccount cash) => _openDialog<CashAccount>(
@@ -292,13 +350,14 @@ class AssetsPageState extends State<AssetsPage> {
     onUpdate: (r) => _updateAsset(cash.id, r),
   );
 
-  void _onAddTD() => _openDialog<TimeDeposit>(
+  void _onAddTD(String categoryId) => _openDialog<TimeDeposit>(
     showTimeDepositDialog(
       context,
       defaultCurrency: widget.currency,
       assetCount: _assets.length,
     ),
     onAdd: (r) => _addAsset(r),
+    categoryId: categoryId,
   );
 
   void _onEditTD(TimeDeposit td) => _openDialog<TimeDeposit>(
@@ -311,13 +370,14 @@ class AssetsPageState extends State<AssetsPage> {
     onUpdate: (r) => _updateAsset(td.id, r),
   );
 
-  void _onAddWP() => _openDialog<WealthProduct>(
+  void _onAddWP(String categoryId) => _openDialog<WealthProduct>(
     showWealthProductDialog(
       context,
       defaultCurrency: widget.currency,
       assetCount: _assets.length,
     ),
     onAdd: (r) => _addAsset(r),
+    categoryId: categoryId,
   );
 
   void _onEditWP(WealthProduct wp) => _openDialog<WealthProduct>(
@@ -330,13 +390,14 @@ class AssetsPageState extends State<AssetsPage> {
     onUpdate: (r) => _updateAsset(wp.id, r),
   );
 
-  void _onAddCurrent() => _openDialog<CurrentAccount>(
+  void _onAddCurrent(String categoryId) => _openDialog<CurrentAccount>(
     showCurrentAssetDialog(
       context,
       defaultCurrency: widget.currency,
       assetCount: _assets.length,
     ),
     onAdd: (r) => _addAsset(r),
+    categoryId: categoryId,
   );
 
   void _onEditCurrent(CurrentAccount account) => _openDialog<CurrentAccount>(
@@ -349,14 +410,16 @@ class AssetsPageState extends State<AssetsPage> {
     onUpdate: (r) => _updateAsset(account.id, r),
   );
 
-  void _onAddProvidentFund() => _openDialog<ProvidentFundAccount>(
-    showProvidentFundAssetDialog(
-      context,
-      defaultCurrency: widget.currency,
-      assetCount: _assets.length,
-    ),
-    onAdd: (r) => _addAsset(r),
-  );
+  void _onAddProvidentFund(String categoryId) =>
+      _openDialog<ProvidentFundAccount>(
+        showProvidentFundAssetDialog(
+          context,
+          defaultCurrency: widget.currency,
+          assetCount: _assets.length,
+        ),
+        onAdd: (r) => _addAsset(r),
+        categoryId: categoryId,
+      );
 
   void _onEditProvidentFund(ProvidentFundAccount account) =>
       _openDialog<ProvidentFundAccount>(
@@ -373,13 +436,78 @@ class AssetsPageState extends State<AssetsPage> {
     Future<T?> dialog, {
     Future<bool> Function(T)? onAdd,
     Future<void> Function(T)? onUpdate,
+    String? categoryId,
   }) async {
     final result = await dialog;
     if (result != null && mounted) {
+      if (categoryId != null) result.categoryId = categoryId;
       if (onAdd != null && !await onAdd(result)) return;
       if (onUpdate != null) await onUpdate(result);
       if (mounted) CenterToast.success(context, AssetConfig.toastSaved);
     }
+  }
+
+  Future<void> showAddAssetPicker() async {
+    if (_isLoading) return;
+    final category = await showAssetCategorySheet(
+      context,
+      categories: _categories,
+      onCreate: _createCategory,
+      onRename: _renameCategory,
+      onDelete: _deleteCategory,
+    );
+    if (category != null && mounted) {
+      onAddAsset(category.calculationType, categoryId: category.id);
+    }
+  }
+
+  Future<bool> _createCategory(AssetCategory category) async {
+    if (_categories.any((item) => item.id == category.id)) return false;
+    if (_categories.any(
+      (item) =>
+          AssetConfig.labelForCategory(item).toLowerCase() ==
+          AssetConfig.labelForCategory(category).toLowerCase(),
+    )) {
+      return false;
+    }
+    setState(() {
+      _categories.add(category);
+      _sectionOrder.add(category.id);
+    });
+    await _saveSectionOrder();
+    return true;
+  }
+
+  Future<bool> _renameCategory(AssetCategory category, String name) async {
+    final trimmed = name.trim();
+    if (trimmed.isEmpty ||
+        _categories.any(
+          (item) =>
+              item.id != category.id &&
+              AssetConfig.labelForCategory(item).toLowerCase() ==
+                  trimmed.toLowerCase(),
+        )) {
+      return false;
+    }
+    final index = _categories.indexWhere((item) => item.id == category.id);
+    if (index < 0) return false;
+    setState(() => _categories[index] = category.renamed(trimmed));
+    await _saveSectionOrder();
+    return true;
+  }
+
+  Future<bool> _deleteCategory(AssetCategory category) async {
+    if (category.isBuiltIn ||
+        _assets.any((asset) => asset.categoryKey == category.id)) {
+      return false;
+    }
+    setState(() {
+      _categories.removeWhere((item) => item.id == category.id);
+      _sectionOrder.remove(category.id);
+      _expandedCategories.remove(category.id);
+    });
+    await _saveSectionOrder();
+    return true;
   }
 
   // Build
@@ -404,6 +532,8 @@ class AssetsPageState extends State<AssetsPage> {
                   cryptoUpdatedAt: widget.cryptoUpdatedAt,
                   currency: widget.currency,
                   totalsByType: _totalByType(widget.currency),
+                  categories: _categories,
+                  totalsByCategory: _totalByCategory(widget.currency),
                   onCurrencyTap: _showCurrencyMenu,
                 ),
               ),
@@ -427,8 +557,8 @@ class AssetsPageState extends State<AssetsPage> {
                   itemBuilder: (context, index) {
                     final item = _flatItems[index];
                     return switch (item) {
-                      SectionHeader(:final type, :final expanded) =>
-                        _buildSectionHeader(type, expanded, index),
+                      SectionHeader(:final categoryId, :final expanded) =>
+                        _buildSectionHeader(categoryId, expanded, index),
                       AssetCardItem(:final asset) => _buildAssetCardItem(
                         asset,
                         index,
@@ -452,39 +582,21 @@ class AssetsPageState extends State<AssetsPage> {
 
   // Section Header
 
-  Widget _buildSectionHeader(AssetType type, bool expanded, int index) {
-    final items = _assets.where((a) => a.type == type).toList();
+  Widget _buildSectionHeader(String categoryId, bool expanded, int index) {
+    final category = _categories.firstWhere((item) => item.id == categoryId);
+    final items = _assets
+        .where((asset) => asset.categoryKey == categoryId)
+        .toList();
     final count = items.length;
-    final total = _totalByType(widget.currency)[type] ?? 0;
-
-    final (icon, iconColor, label) = switch (type) {
-      AssetType.cash => (Icons.payments, AssetStyle.cash, AssetConfig.cash),
-      AssetType.timeDeposit => (
-        Icons.savings,
-        AssetStyle.deposit,
-        AssetConfig.timeDeposit,
-      ),
-      AssetType.wealthProduct => (
-        Icons.monetization_on,
-        AssetStyle.wealth,
-        AssetConfig.wealthProduct,
-      ),
-      AssetType.current => (
-        Icons.account_balance,
-        AssetStyle.current,
-        AssetConfig.current,
-      ),
-      AssetType.providentFund => (
-        Icons.home_work,
-        AssetStyle.provident,
-        AssetConfig.providentFund,
-      ),
-    };
+    final total = _totalByCategory(widget.currency)[categoryId] ?? 0;
+    final icon = assetCategoryIcon(category);
+    final iconColor = assetCategoryColor(category);
+    final label = AssetConfig.labelForCategory(category);
 
     final sym = CurrencyUtil.getSymbol(widget.currency);
 
     return ReorderableDelayedDragStartListener(
-      key: ValueKey('section_${type.name}'),
+      key: ValueKey('section_$categoryId'),
       index: index,
       child: Container(
         margin: const EdgeInsets.fromLTRB(16, 4, 16, 4),
@@ -513,20 +625,29 @@ class AssetsPageState extends State<AssetsPage> {
             const SizedBox(width: 6),
             Expanded(
               child: GestureDetector(
-                onTap: () => _toggleSection(type),
+                onTap: () => _toggleSection(categoryId),
                 behavior: HitTestBehavior.opaque,
                 child: Row(
                   children: [
-                    Text(label, style: TextStyles.subtitle),
-                    const SizedBox(width: 4),
-                    Text(
-                      '($count)',
-                      style: TextStyles.body13.copyWith(
-                        fontWeight: FontWeight.w500,
-                        color: AppColors.textSecondary,
+                    Expanded(
+                      child: Text.rich(
+                        TextSpan(
+                          children: [
+                            TextSpan(text: label, style: TextStyles.subtitle),
+                            TextSpan(
+                              text: ' ($count)',
+                              style: TextStyles.body13.copyWith(
+                                fontWeight: FontWeight.w500,
+                                color: AppColors.textSecondary,
+                              ),
+                            ),
+                          ],
+                        ),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
                       ),
                     ),
-                    const Spacer(),
+                    const SizedBox(width: 8),
                     Text(
                       '$sym${CurrencyUtil.formatCompact(total)}',
                       style: TextStyles.bodyMedium,
@@ -678,23 +799,41 @@ class AssetsPageState extends State<AssetsPage> {
       createdAt: asset.createdAt,
       updatedAt: asset.updatedAt,
       onTap: onTap,
+      trailing: PopupMenuButton<AssetCategory>(
+        tooltip: AssetConfig.categoryMove,
+        color: AppColors.surface,
+        icon: Icon(Icons.more_horiz, size: 18, color: AppColors.textSecondary),
+        iconSize: 18,
+        padding: EdgeInsets.zero,
+        constraints: const BoxConstraints(minWidth: 36, minHeight: 36),
+        onSelected: (category) => _moveAssetToCategory(asset, category),
+        itemBuilder: (_) => [
+          for (final category in _categories)
+            if (category.id != asset.categoryKey)
+              PopupMenuItem(
+                value: category,
+                child: Text(AssetConfig.labelForCategory(category)),
+              ),
+        ],
+      ),
     );
   }
 
   /// 由底部 + 号按钮调用
-  void onAddAsset(AssetType type) {
-    if (!_canAddAsset(type)) return;
+  void onAddAsset(AssetType type, {String? categoryId}) {
+    final id = categoryId ?? type.name;
+    if (!_canAddAsset(type, id)) return;
     switch (type) {
       case AssetType.cash:
-        _onAddCash();
+        _onAddCash(id);
       case AssetType.timeDeposit:
-        _onAddTD();
+        _onAddTD(id);
       case AssetType.wealthProduct:
-        _onAddWP();
+        _onAddWP(id);
       case AssetType.current:
-        _onAddCurrent();
+        _onAddCurrent(id);
       case AssetType.providentFund:
-        _onAddProvidentFund();
+        _onAddProvidentFund(id);
     }
   }
 

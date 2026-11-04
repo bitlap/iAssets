@@ -1,4 +1,5 @@
 import '../models/asset_account.dart';
+import '../models/asset_category.dart';
 import '../l10n/l10n.dart';
 
 /// 资产模块配置 - 集中管理资产相关的文案和常量
@@ -82,6 +83,29 @@ class AssetConfig {
   static String get createdLabel => L10n.t('createdLabel');
   static String get updatedLabel => L10n.t('updatedLabel');
 
+  // 展示分类
+  static String get categoryChoose => L10n.t('assetCategoryChoose');
+  static String get categoryManage => L10n.t('assetCategoryManage');
+  static String get categoryMove => L10n.t('assetCategoryMove');
+  static String get categoryTemplates => L10n.t('assetCategoryTemplates');
+  static String get categoryCustom => L10n.t('assetCategoryCustom');
+  static String get categoryRename => L10n.t('assetCategoryRename');
+  static String get categoryDelete => L10n.t('assetCategoryDelete');
+  static String get categoryName => L10n.t('assetCategoryName');
+  static String get categoryCalculation => L10n.t('assetCategoryCalculation');
+  static String get categoryRegion => L10n.t('assetCategoryRegion');
+  static String get categoryValueBalance => L10n.t('assetCategoryValueBalance');
+  static String get categoryValueDeposit => L10n.t('assetCategoryValueDeposit');
+  static String get categoryValueNav => L10n.t('assetCategoryValueNav');
+  static String get categoryCancel => L10n.t('assetCategoryCancel');
+  static String get categoryCreate => L10n.t('assetCategoryCreate');
+  static String get categorySave => L10n.t('assetCategorySave');
+  static String get categoryAlreadyExists => L10n.t('assetCategoryExists');
+  static String get categoryNameInvalid => L10n.t('assetCategoryInvalidName');
+  static String get categoryDeleteBlocked =>
+      L10n.t('assetCategoryDeleteBlocked');
+  static String regionLabel(String region) => L10n.t('assetRegion$region');
+
   // 辅助方法
   static String labelForType(AssetType type) {
     return switch (type) {
@@ -91,5 +115,10 @@ class AssetConfig {
       AssetType.current => current,
       AssetType.providentFund => providentFund,
     };
+  }
+
+  static String labelForCategory(AssetCategory category) {
+    final name = category.customName?.trim();
+    return name != null && name.isNotEmpty ? name : L10n.t(category.labelKey);
   }
 }

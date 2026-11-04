@@ -1,9 +1,89 @@
 import '../../models/asset_account.dart';
+import '../../models/asset_category.dart';
 import '../../models/asset_flat_item.dart';
 import '../../services/icloud_storage.dart';
 import '../../services/settings_service.dart';
 
 class AssetDataManager {
+  static Future<(List<AssetBase>, List<AssetCategory>, List<String>)>
+  loadCategoryState() async {
+    await IcloudStorage.loadSettings();
+    final results = await Future.wait([
+      IcloudStorage.loadAssets(),
+      SettingsService.getAssetCategories(),
+      SettingsService.getAssetSectionOrder(),
+    ]);
+    final assets = results[0] as List<AssetBase>;
+    final saved = results[1] as List<Map<String, dynamic>>;
+    final byId = <String, AssetCategory>{
+      for (final category in AssetCategory.builtIns) category.id: category,
+    };
+    for (final raw in saved) {
+      final category = AssetCategory.fromJson(raw);
+      if (category == null) continue;
+      final builtIn = byId[category.id];
+      byId[category.id] = builtIn != null && builtIn.isBuiltIn
+          ? builtIn.renamed(category.customName ?? '')
+          : category;
+    }
+    for (final asset in assets) {
+      byId.putIfAbsent(
+        asset.categoryKey,
+        () => AssetCategory(
+          id: asset.categoryKey,
+          calculationType: asset.type,
+          labelKey: asset.type.name,
+        ),
+      );
+    }
+    final order = <String>[];
+    for (final id in results[2] as List<String>) {
+      if (byId.containsKey(id) && !order.contains(id)) order.add(id);
+    }
+    for (final id in byId.keys) {
+      if (!order.contains(id)) order.add(id);
+    }
+    return (assets, byId.values.toList(), order);
+  }
+
+  static Future<void> saveCategoryState(
+    List<AssetCategory> categories,
+    List<String> order,
+  ) async {
+    await SettingsService.setAssetCategories(
+      categories.map((category) => category.toJson()).toList(),
+    );
+    await SettingsService.setAssetSectionOrder(order);
+    await IcloudStorage.saveSettings();
+  }
+
+  static List<AssetFlatItem> buildCategoryFlatItems(
+    List<AssetBase> assets,
+    List<AssetCategory> categories,
+    List<String> sectionOrder,
+    Set<String> expandedIds,
+  ) {
+    final byId = {for (final category in categories) category.id: category};
+    final items = <AssetFlatItem>[];
+    for (final id in sectionOrder) {
+      final category = byId[id];
+      if (category == null) continue;
+      final members = assets.where((asset) => asset.categoryKey == id).toList();
+      if (members.isEmpty) continue;
+      items.add(
+        SectionHeader(
+          category.calculationType,
+          expandedIds.contains(id),
+          categoryId: id,
+        ),
+      );
+      if (expandedIds.contains(id)) {
+        items.addAll(members.map((asset) => AssetCardItem(asset)));
+      }
+    }
+    return items;
+  }
+
   static Future<(List<AssetBase>, List<AssetType>)> loadAssetsAndOrder() async {
     final results = await Future.wait([
       IcloudStorage.loadAssets(),

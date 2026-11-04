@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../models/asset_account.dart';
+import '../../models/asset_category.dart';
 import '../../utils/currency_util.dart';
 import '../../config/app_config.dart';
 import '../common/app_colors.dart';
@@ -9,6 +10,7 @@ import '../common/dialog_utils.dart';
 import '../common/exchange_rate_notice.dart';
 import '../../l10n/l10n.dart';
 import 'asset_style.dart';
+import 'asset_category_sheet.dart';
 
 // Header (Summary Card)
 
@@ -21,6 +23,8 @@ class AssetHeader extends StatelessWidget {
   final String currency;
   final VoidCallback onCurrencyTap;
   final Map<AssetType, double> totalsByType;
+  final List<AssetCategory> categories;
+  final Map<String, double> totalsByCategory;
 
   const AssetHeader({
     super.key,
@@ -32,6 +36,8 @@ class AssetHeader extends StatelessWidget {
     required this.currency,
     required this.onCurrencyTap,
     required this.totalsByType,
+    this.categories = const [],
+    this.totalsByCategory = const {},
   });
 
   @override
@@ -118,41 +124,56 @@ class AssetHeader extends StatelessWidget {
         StockConfig.tabStock,
         stockTotalValue,
       ),
-      for (final type in AssetType.values)
-        if ((totalsByType[type] ?? 0) > 0)
-          switch (type) {
-            AssetType.cash => (
-              Icons.payments,
-              AssetStyle.cash,
-              AssetConfig.cash,
-              totalsByType[type]!,
-            ),
-            AssetType.timeDeposit => (
-              Icons.savings,
-              AssetStyle.deposit,
-              AssetConfig.timeDeposit,
-              totalsByType[type]!,
-            ),
-            AssetType.wealthProduct => (
-              Icons.monetization_on,
-              AssetStyle.wealth,
-              AssetConfig.wealthProduct,
-              totalsByType[type]!,
-            ),
-            AssetType.current => (
-              Icons.account_balance,
-              AssetStyle.current,
-              AssetConfig.current,
-              totalsByType[type]!,
-            ),
-            AssetType.providentFund => (
-              Icons.home_work,
-              AssetStyle.provident,
-              AssetConfig.providentFund,
-              totalsByType[type]!,
-            ),
-          },
     ];
+    if (categories.isNotEmpty) {
+      entries.addAll([
+        for (final category in categories)
+          if ((totalsByCategory[category.id] ?? 0) > 0)
+            (
+              assetCategoryIcon(category),
+              assetCategoryColor(category),
+              AssetConfig.labelForCategory(category),
+              totalsByCategory[category.id]!,
+            ),
+      ]);
+    } else {
+      entries.addAll([
+        for (final type in AssetType.values)
+          if ((totalsByType[type] ?? 0) > 0)
+            switch (type) {
+              AssetType.cash => (
+                Icons.payments,
+                AssetStyle.cash,
+                AssetConfig.cash,
+                totalsByType[type]!,
+              ),
+              AssetType.timeDeposit => (
+                Icons.savings,
+                AssetStyle.deposit,
+                AssetConfig.timeDeposit,
+                totalsByType[type]!,
+              ),
+              AssetType.wealthProduct => (
+                Icons.monetization_on,
+                AssetStyle.wealth,
+                AssetConfig.wealthProduct,
+                totalsByType[type]!,
+              ),
+              AssetType.current => (
+                Icons.account_balance,
+                AssetStyle.current,
+                AssetConfig.current,
+                totalsByType[type]!,
+              ),
+              AssetType.providentFund => (
+                Icons.home_work,
+                AssetStyle.provident,
+                AssetConfig.providentFund,
+                totalsByType[type]!,
+              ),
+            },
+      ]);
+    }
     entries.sort((a, b) => b.$4.compareTo(a.$4));
 
     showDialog(
