@@ -54,6 +54,9 @@ class ExchangeRateService extends ChangeNotifier {
   static const Duration _cacheTTL = Duration(
     minutes: AppConfig.exchangeRateCacheTTLMin,
   );
+  // The provider may return yesterday's snapshot shortly after its daily
+  // update time. Retry stale source data without requesting it every minute.
+  static const Duration _staleSourceRetryInterval = Duration(minutes: 5);
 
   /// 熔断机制（与股票服务独立，互不影响）
   int _consecutiveFailures = 0;
@@ -228,10 +231,17 @@ class ExchangeRateService extends ChangeNotifier {
   }
 
   /// 是否已有有效缓存
-  bool get hasValidCache =>
-      _cachedRates != null &&
-      _lastFetchTime != null &&
-      DateTime.now().difference(_lastFetchTime!) < _cacheTTL;
+  bool get hasValidCache {
+    if (_cachedRates == null || _lastFetchTime == null) return false;
+    final now = DateTime.now();
+    final fetchAge = now.difference(_lastFetchTime!);
+    if (fetchAge >= _cacheTTL) return false;
+    if (_sourceUpdatedAt != null &&
+        now.difference(_sourceUpdatedAt!) >= _cacheTTL) {
+      return fetchAge < _staleSourceRetryInterval;
+    }
+    return true;
+  }
 
   /// 获取实时汇率，返回各币种对 USD 的汇率
   /// 1 USD = X 目标货币

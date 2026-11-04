@@ -30,11 +30,12 @@ void main() {
     expect(CurrencyUtil.convertCurrency(0, 'EUR', 'USD'), 0);
 
     final yesterday = DateTime.now().subtract(const Duration(days: 2));
+    final savedRecently = DateTime.now().subtract(const Duration(hours: 1));
     File('${dir.path}/exchange_rates.json').writeAsStringSync(
       jsonEncode({
         'USD': 1,
         'CNY': 7,
-        '_savedAt': yesterday.millisecondsSinceEpoch,
+        '_savedAt': savedRecently.millisecondsSinceEpoch,
         '_sourceUpdatedAt': yesterday.millisecondsSinceEpoch,
       }),
     );
@@ -46,10 +47,15 @@ void main() {
     expect(CurrencyUtil.convertCurrency(10, 'USD', 'CNY'), 70);
     expect(CurrencyUtil.tryConvertCurrency(10, 'EUR', 'USD'), isNull);
 
+    var fetchAttempts = 0;
     await http.runWithClient(
       () => service.fetchRates(),
-      () => MockClient((_) async => http.Response('{bad json', 200)),
+      () => MockClient((_) async {
+        fetchAttempts++;
+        return http.Response('{bad json', 200);
+      }),
     );
+    expect(fetchAttempts, 1);
     expect(service.freshness, ExchangeRateFreshness.stale);
     expect(CurrencyUtil.convertCurrency(10, 'USD', 'CNY'), 70);
 
