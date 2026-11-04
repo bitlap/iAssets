@@ -16,6 +16,7 @@ class AssetCardFrame extends StatelessWidget {
   final DateTime? updatedAt;
   final VoidCallback onTap;
   final Widget? leading;
+  final Widget? trailing;
 
   const AssetCardFrame({
     super.key,
@@ -30,6 +31,7 @@ class AssetCardFrame extends StatelessWidget {
     this.updatedAt,
     required this.onTap,
     this.leading,
+    this.trailing,
   });
 
   String _f(DateTime d) =>
@@ -101,6 +103,7 @@ class AssetCardFrame extends StatelessWidget {
                                   color: AppColors.textSecondary,
                                 ),
                               ),
+                              ?trailing,
                             ],
                           ),
                           const SizedBox(height: 10),

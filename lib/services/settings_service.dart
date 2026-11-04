@@ -16,6 +16,7 @@ class SettingsService {
   static const String keyAssetSortColumn = 'asset_sort_column';
   static const String keyAssetSortAscending = 'asset_sort_ascending';
   static const String keyAssetSectionOrder = 'asset_section_order';
+  static const String keyAssetCategories = 'asset_categories';
   static const String keyPreferredLanguage = 'preferred_language';
   static const String keyThemeMode = 'theme_mode';
   static const String keyRedUpGreenDown = 'red_up_green_down';
@@ -165,6 +166,24 @@ class SettingsService {
   static Future<void> setAssetSectionOrder(List<String> order) async {
     final settings = await _load();
     settings[keyAssetSectionOrder] = order;
+    await _save();
+  }
+
+  static Future<List<Map<String, dynamic>>> getAssetCategories() async {
+    final settings = await _load();
+    final raw = settings[keyAssetCategories];
+    if (raw is! List) return [];
+    return [
+      for (final entry in raw)
+        if (entry is Map) Map<String, dynamic>.from(entry),
+    ];
+  }
+
+  static Future<void> setAssetCategories(
+    List<Map<String, dynamic>> categories,
+  ) async {
+    final settings = await _load();
+    settings[keyAssetCategories] = categories;
     await _save();
   }
 

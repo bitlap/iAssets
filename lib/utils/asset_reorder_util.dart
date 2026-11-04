@@ -1,6 +1,97 @@
 import '../models/asset_account.dart';
 import '../models/asset_flat_item.dart';
 
+(int, int) findCategorySectionRange(
+  List<AssetFlatItem> items,
+  String categoryId,
+) {
+  var start = -1;
+  var end = items.length;
+  for (var i = 0; i < items.length; i++) {
+    final item = items[i];
+    if (item is! SectionHeader) continue;
+    if (item.categoryId == categoryId) {
+      start = i;
+    } else if (start >= 0) {
+      end = i;
+      break;
+    }
+  }
+  return (start, end);
+}
+
+List<String> reorderCategorySectionOrder(
+  List<String> order,
+  List<AssetFlatItem> flatItems,
+  String categoryId,
+  int oldIndex,
+  int newIndex,
+) {
+  if (!order.contains(categoryId)) return order;
+  final visible = flatItems
+      .whereType<SectionHeader>()
+      .map((item) => item.categoryId)
+      .toList();
+  final oldVisibleIndex = visible.indexOf(categoryId);
+  if (oldVisibleIndex < 0) return order;
+  var targetSectionIndex = 0;
+  for (var i = 0; i < newIndex; i++) {
+    final originalIndex = i < oldIndex ? i : i + 1;
+    if (originalIndex >= flatItems.length) break;
+    if (flatItems[originalIndex] is SectionHeader) targetSectionIndex++;
+  }
+  if (oldVisibleIndex == targetSectionIndex) return order;
+  visible.remove(categoryId);
+  visible.insert(targetSectionIndex.clamp(0, visible.length), categoryId);
+  return [
+    ...visible,
+    for (final id in order)
+      if (!visible.contains(id)) id,
+  ];
+}
+
+int computeSameCategoryCount(
+  List<AssetFlatItem> flatItems,
+  String categoryId,
+  int oldIndex,
+  int newIndex,
+) {
+  var count = 0;
+  for (var i = 0; i < newIndex; i++) {
+    final originalIndex = i < oldIndex ? i : i + 1;
+    if (originalIndex >= flatItems.length) break;
+    final item = flatItems[originalIndex];
+    if (item is AssetCardItem && item.asset.categoryKey == categoryId) count++;
+  }
+  return count;
+}
+
+List<AssetBase> reorderCategoryAssets(
+  List<AssetBase> assets,
+  AssetBase item,
+  String categoryId,
+  int sameCategoryCount,
+) {
+  final reordered = List<AssetBase>.from(assets)..remove(item);
+  var insertAt = reordered.length;
+  var seen = 0;
+  for (var i = 0; i < reordered.length; i++) {
+    if (reordered[i].categoryKey != categoryId) continue;
+    if (seen == sameCategoryCount) {
+      insertAt = i;
+      break;
+    }
+    seen++;
+  }
+  if (insertAt == reordered.length && seen > 0) {
+    insertAt =
+        reordered.lastIndexWhere((asset) => asset.categoryKey == categoryId) +
+        1;
+  }
+  reordered.insert(insertAt, item);
+  return reordered;
+}
+
 (int, int) findSectionRange(List<AssetFlatItem> items, AssetType type) {
   int start = -1;
   int end = items.length;
