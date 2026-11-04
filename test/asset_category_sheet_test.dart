@@ -2,6 +2,7 @@ import 'package:assets/l10n/l10n.dart';
 import 'package:assets/models/asset_account.dart';
 import 'package:assets/models/asset_category.dart';
 import 'package:assets/widgets/asset/asset_category_sheet.dart';
+import 'package:assets/widgets/common/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -108,4 +109,49 @@ void main() {
       expect(tester.takeException(), isNull);
     },
   );
+
+  testWidgets('rename category remains usable in a narrow dark dialog', (
+    tester,
+  ) async {
+    L10n.applyLanguage(L10n.langEn);
+    final previousBrightness = AppColors.isDark
+        ? Brightness.dark
+        : Brightness.light;
+    AppColors.applyBrightness(Brightness.dark);
+    tester.view.physicalSize = const Size(320, 568);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(() {
+      tester.view.resetPhysicalSize();
+      tester.view.resetDevicePixelRatio();
+      AppColors.applyBrightness(previousBrightness);
+      L10n.applyLanguage(L10n.langZh);
+    });
+
+    String? renamed;
+    await tester.pumpWidget(
+      MaterialApp(
+        theme: ThemeData.dark(),
+        home: Scaffold(
+          body: Builder(
+            builder: (context) => ElevatedButton(
+              onPressed: () async {
+                renamed = await showRenameAssetCategoryDialog(
+                  context,
+                  AssetCategory.custom('Old name', AssetType.cash),
+                );
+              },
+              child: const Text('Rename'),
+            ),
+          ),
+        ),
+      ),
+    );
+    await tester.tap(find.text('Rename'));
+    await tester.pumpAndSettle();
+    await tester.enterText(find.byType(TextField), 'New name');
+    await tester.tap(find.text('Save'));
+    await tester.pumpAndSettle();
+    expect(renamed, 'New name');
+    expect(tester.takeException(), isNull);
+  });
 }
