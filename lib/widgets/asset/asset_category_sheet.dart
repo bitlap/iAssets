@@ -376,7 +376,7 @@ Widget _templateRegionMenu({
                 ),
               ),
               if (region == value)
-                Icon(Icons.check, size: 18, color: AppColors.accent),
+                Icon(Icons.check, size: 18, color: AppColors.textPrimary),
             ],
           ),
         ),
