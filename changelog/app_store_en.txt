@@ -20,7 +20,8 @@ Crypto Assets
 • Viewing only, with no trading or transfers; copy trader portfolios are not currently supported
 
 Asset Overview
-• Organize cash, deposits, wealth products and provident fund with colorful cards and consistent colors for each name
+• Organize cash, deposits and wealth products with colorful cards; regional templates offer 401(k) / IRA, MPF or provident fund, with Property and Other Assets in the common templates
+• Create custom asset categories and valuation methods, rename categories, and move assets between them
 • See deposit rates and time remaining, or wealth-product shares and NAV, beside balances
 • See creation and update times clearly, with collapsible groups and drag-to-reorder
 • View stocks, crypto and other assets together, with support for multiple display currencies
