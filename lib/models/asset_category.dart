@@ -58,11 +58,6 @@ class AssetCategory {
 
   static const List<AssetCategory> globalTemplates = [
     AssetCategory(
-      id: 'template.retirement',
-      calculationType: AssetType.cash,
-      labelKey: 'assetCategoryRetirement',
-    ),
-    AssetCategory(
       id: 'template.property',
       calculationType: AssetType.cash,
       labelKey: 'assetCategoryProperty',
@@ -95,11 +90,6 @@ class AssetCategory {
         calculationType: AssetType.providentFund,
         labelKey: 'providentFund',
       ),
-      AssetCategory(
-        id: 'template.cnPension',
-        calculationType: AssetType.cash,
-        labelKey: 'assetCategoryCnPension',
-      ),
     ],
   };
 
@@ -109,10 +99,8 @@ class AssetCategory {
     return regionTemplates.containsKey(region) ? region! : 'global';
   }
 
-  static List<AssetCategory> templatesForRegion(String region) => [
-    ...globalTemplates,
-    ...?regionTemplates[region],
-  ];
+  static List<AssetCategory> templatesForRegion(String region) =>
+      regionTemplates[region] ?? globalTemplates;
 
   /// Keep legacy provident-fund holdings visible after a user changes region.
   static bool availableInPicker(

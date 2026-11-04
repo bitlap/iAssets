@@ -297,50 +297,29 @@ Future<AssetCategory?> _showTemplateDialog(
               const SizedBox(height: 16),
               _categoryFieldLabel(AssetConfig.categoryRegion),
               const SizedBox(height: 6),
-              _categoryDropdown<String>(
+              _templateRegionMenu(
                 value: region,
-                items: [
-                  for (final value in ['global', 'US', 'HK', 'CN'])
-                    DropdownMenuItem(
-                      value: value,
-                      child: Text(AssetConfig.regionLabel(value)),
-                    ),
-                ],
-                onChanged: (value) {
-                  if (value != null) setState(() => region = value);
-                },
+                onSelected: (value) => setState(() => region = value),
               ),
               const SizedBox(height: 12),
-              SizedBox(
-                height: (MediaQuery.sizeOf(context).height * .42).clamp(
-                  140.0,
-                  340.0,
+              for (final template in templates)
+                ListTile(
+                  contentPadding: EdgeInsets.zero,
+                  title: Text(
+                    AssetConfig.labelForCategory(template),
+                    style: TextStyles.bodyRegular,
+                  ),
+                  subtitle: Text(
+                    _valueTypeLabel(template.calculationType),
+                    style: TextStyles.body13.copyWith(
+                      color: AppColors.textSecondary,
+                    ),
+                  ),
+                  enabled: !existing.any((item) => item.id == template.id),
+                  onTap: existing.any((item) => item.id == template.id)
+                      ? null
+                      : () => Navigator.of(dialogContext).pop(template),
                 ),
-                child: ListView(
-                  children: [
-                    for (final template in templates)
-                      ListTile(
-                        contentPadding: EdgeInsets.zero,
-                        title: Text(
-                          AssetConfig.labelForCategory(template),
-                          style: TextStyles.bodyRegular,
-                        ),
-                        subtitle: Text(
-                          _valueTypeLabel(template.calculationType),
-                          style: TextStyles.body13.copyWith(
-                            color: AppColors.textSecondary,
-                          ),
-                        ),
-                        enabled: !existing.any(
-                          (item) => item.id == template.id,
-                        ),
-                        onTap: existing.any((item) => item.id == template.id)
-                            ? null
-                            : () => Navigator.of(dialogContext).pop(template),
-                      ),
-                  ],
-                ),
-              ),
               const SizedBox(height: 20),
               cancelButton(
                 onTap: () => Navigator.of(dialogContext).pop(),
@@ -366,6 +345,64 @@ class _CustomCategoryDialog extends StatefulWidget {
   @override
   State<_CustomCategoryDialog> createState() => _CustomCategoryDialogState();
 }
+
+Widget _templateRegionMenu({
+  required String value,
+  required ValueChanged<String> onSelected,
+}) => LayoutBuilder(
+  builder: (context, constraints) => PopupMenuButton<String>(
+    key: const ValueKey('asset-template-region-selector'),
+    tooltip: AssetConfig.categoryRegion,
+    initialValue: value,
+    position: PopupMenuPosition.under,
+    offset: const Offset(0, 4),
+    constraints: BoxConstraints.tightFor(width: constraints.maxWidth),
+    color: AppColors.surface,
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(12),
+      side: BorderSide(color: AppColors.border),
+    ),
+    onSelected: onSelected,
+    itemBuilder: (context) => [
+      for (final region in ['global', 'US', 'HK', 'CN'])
+        PopupMenuItem(
+          value: region,
+          child: Row(
+            children: [
+              Expanded(
+                child: Text(
+                  AssetConfig.regionLabel(region),
+                  style: TextStyles.bodyRegular,
+                ),
+              ),
+              if (region == value)
+                Icon(Icons.check, size: 18, color: AppColors.accent),
+            ],
+          ),
+        ),
+    ],
+    child: Container(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+      decoration: BoxDecoration(
+        color: AppColors.surface,
+        border: Border.all(color: AppColors.border),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Row(
+        children: [
+          Expanded(
+            child: Text(
+              AssetConfig.regionLabel(value),
+              style: TextStyles.bodyRegular,
+            ),
+          ),
+          Icon(Icons.arrow_drop_down, color: AppColors.textSecondary),
+        ],
+      ),
+    ),
+  ),
+);
 
 class _CustomCategoryDialogState extends State<_CustomCategoryDialog> {
   final nameController = TextEditingController();
