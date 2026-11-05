@@ -103,4 +103,34 @@ class RunnerTests: XCTestCase {
     }
   }
 
+  func testWidgetPrivacyFlagIsSharedAndSnapshotRedactsEveryAmount() {
+    let key = AssetWidgetSnapshotStore.hideAmountsKey
+    let local = UserDefaults.standard
+    let shared = UserDefaults(suiteName: AssetWidgetSnapshotStore.group)
+    let oldLocal = local.object(forKey: key)
+    let oldShared = shared?.object(forKey: key)
+    defer {
+      if let oldLocal { local.set(oldLocal, forKey: key) }
+      else { local.removeObject(forKey: key) }
+      if let oldShared { shared?.set(oldShared, forKey: key) }
+      else { shared?.removeObject(forKey: key) }
+    }
+
+    AssetWidgetSnapshotStore.setPrivacyPreference(key, value: true)
+    XCTAssertTrue(local.bool(forKey: key))
+    XCTAssertTrue(shared?.bool(forKey: key) ?? false)
+    XCTAssertTrue(AssetWidgetSnapshotStore.privacyIsEnabled)
+
+    let snapshot = AssetWidgetSnapshot(
+      schema: 1, currency: "USD", language: "zh", updatedAtMillis: 1,
+      incomplete: false, hidden: false, total: "$100", stocks: "$40",
+      crypto: "$30", other: "$30")
+    let protected = AssetWidgetSnapshotStore.protectedSnapshot(snapshot, privacyEnabled: true)
+    XCTAssertTrue(protected.hidden)
+    XCTAssertNil(protected.total)
+    XCTAssertNil(protected.stocks)
+    XCTAssertNil(protected.crypto)
+    XCTAssertNil(protected.other)
+  }
+
 }

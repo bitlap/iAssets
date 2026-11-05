@@ -133,13 +133,15 @@ import workmanager_apple
         ])
       case "setHideAmounts":
         guard let value = call.arguments as? Bool else { result(FlutterMethodNotImplemented); return }
-        defaults.set(value, forKey: "privacy.hideAmounts")
+        AssetWidgetSnapshotStore.setPrivacyPreference(AssetWidgetSnapshotStore.hideAmountsKey,
+                                                       value: value)
         AssetWidgetSnapshotStore.applyPrivacy()
         WidgetCenter.shared.reloadTimelines(ofKind: AssetWidgetSnapshotStore.widgetKind)
         result(nil)
       case "setBiometricLock":
         guard let value = call.arguments as? Bool else { result(FlutterMethodNotImplemented); return }
-        defaults.set(value, forKey: "privacy.biometricLock")
+        AssetWidgetSnapshotStore.setPrivacyPreference(AssetWidgetSnapshotStore.biometricLockKey,
+                                                       value: value)
         AssetWidgetSnapshotStore.applyPrivacy()
         WidgetCenter.shared.reloadTimelines(ofKind: AssetWidgetSnapshotStore.widgetKind)
         result(nil)
@@ -147,6 +149,7 @@ import workmanager_apple
         result(FlutterMethodNotImplemented)
       }
     }
+    AssetWidgetSnapshotStore.syncEnabledPrivacyPreferences()
     AssetWidgetSnapshotStore.applyPrivacy()
 
     let widgetChannel = FlutterMethodChannel(

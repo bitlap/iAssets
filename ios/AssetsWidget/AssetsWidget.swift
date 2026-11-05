@@ -81,24 +81,33 @@ private enum WidgetWords {
 private struct AssetWidgetView: View {
   @Environment(\.widgetFamily) private var family
   @Environment(\.colorScheme) private var colorScheme
+  @AppStorage(AssetWidgetSnapshotStore.hideAmountsKey,
+              store: UserDefaults(suiteName: AssetWidgetSnapshotStore.group))
+  private var hideAmounts = false
+  @AppStorage(AssetWidgetSnapshotStore.biometricLockKey,
+              store: UserDefaults(suiteName: AssetWidgetSnapshotStore.group))
+  private var biometricLock = false
   let entry: AssetWidgetEntry
 
   private var language: String { WidgetWords.language(entry.snapshot) }
   private func word(_ key: String) -> String { WidgetWords.text(key, language) }
-  private var isHidden: Bool { entry.snapshot?.hidden ?? false }
+  private var isHidden: Bool {
+    (entry.snapshot?.hidden ?? false) || hideAmounts || biometricLock
+  }
   private var total: String {
     if isHidden { return "••••" }
     return entry.snapshot?.total ?? "—"
   }
   private var status: String {
+    if isHidden { return word("hidden") }
     guard let snapshot = entry.snapshot else { return word("empty") }
-    if snapshot.hidden { return word("hidden") }
     if snapshot.incomplete { return word("incomplete") }
     if entry.stale { return word("stale") }
     return word("updated")
   }
   private var statusColor: Color {
-    entry.snapshot == nil || entry.stale || entry.snapshot?.incomplete == true
+    if isHidden { return .gray }
+    return entry.snapshot == nil || entry.stale || entry.snapshot?.incomplete == true
       ? Color.orange : Color.green
   }
   private func formattedUpdateTime(compact: Bool) -> String? {
@@ -152,10 +161,12 @@ private struct AssetWidgetView: View {
         .lineLimit(1)
         .minimumScaleFactor(0.75)
         .privacySensitive()
-      HStack(spacing: 3) {
+      VStack(spacing: 0) {
         Text(status)
-        if let compactUpdateTime { Text("· \(compactUpdateTime)") }
+        if let compactUpdateTime { Text(compactUpdateTime) }
       }
+      .frame(maxWidth: .infinity, alignment: .center)
+      .multilineTextAlignment(.center)
       .font(.system(size: 11))
       .lineLimit(1)
     }
@@ -239,14 +250,19 @@ private struct AssetWidgetView: View {
       .lineLimit(1)
       .minimumScaleFactor(0.85)
     } else {
-      HStack(spacing: 5) {
+      ZStack(alignment: .leading) {
         label
-        if let updateTime { Text(updateTime) }
+        if let updateTime {
+          Text(updateTime)
+            .frame(maxWidth: .infinity, alignment: .center)
+            .multilineTextAlignment(.center)
+        }
       }
-      .frame(maxWidth: .infinity, alignment: .center)
+      .frame(maxWidth: .infinity)
       .font(.system(size: 12, weight: .medium))
       .foregroundStyle(.secondary)
       .lineLimit(1)
+      .minimumScaleFactor(0.85)
     }
   }
 
