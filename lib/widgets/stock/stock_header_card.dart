@@ -144,17 +144,21 @@ class _StockHeaderCardState extends State<StockHeaderCard> {
       children: [
         Row(
           children: [
+            Icon(Icons.today, size: 10, color: color),
+            const SizedBox(width: 4),
             Flexible(
               child: Text(
                 StockConfig.assetTodayProfit,
                 maxLines: 2,
+                overflow: TextOverflow.ellipsis,
                 style: TextStyles.caption,
               ),
             ),
+            const SizedBox(width: 2),
             IconButton(
               onPressed: _showTodayProfitHelpDialog,
               tooltip: StockConfig.assetTodayProfitHelp,
-              icon: Icon(Icons.help_outline, color: AppColors.textSecondary),
+              icon: Icon(Icons.help_outline, color: color),
               iconSize: 14,
               constraints: const BoxConstraints(minWidth: 40, minHeight: 40),
               padding: EdgeInsets.zero,
@@ -182,7 +186,7 @@ class _StockHeaderCardState extends State<StockHeaderCard> {
     _helpDialogFrame(
       title: StockConfig.assetTodayProfit,
       icon: Icons.today,
-      iconColor: AppColors.warning,
+      iconColor: ProfitUtil.colorOf(widget.todayProfit),
       children: [
         Text(
           StockConfig.assetTodayProfitHelp,
