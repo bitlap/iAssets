@@ -110,17 +110,13 @@ private struct AssetWidgetView: View {
     return entry.snapshot == nil || entry.stale || entry.snapshot?.incomplete == true
       ? Color.orange : Color.green
   }
-  private func formattedUpdateTime(compact: Bool) -> String? {
+  private var updateTime: String? {
     guard let snapshot = entry.snapshot else { return nil }
-    let formatter = DateFormatter()
-    formatter.locale = Locale(identifier: language == "zh_Hant" ? "zh_TW" :
-                              language == "zh" ? "zh_CN" : "en_US")
-    formatter.dateFormat = compact ? "M/d HH:mm" :
-      language == "en" ? "MMM d, HH:mm:ss" : "M月d日 HH:mm:ss"
-    return formatter.string(from: snapshot.updatedAt)
+    return snapshot.formattedUpdateTime(language: language)
   }
-  private var updateTime: String? { formattedUpdateTime(compact: false) }
-  private var compactUpdateTime: String? { formattedUpdateTime(compact: true) }
+  private var updateLine: String? {
+    updateTime.map { "\(word("updated")) \($0)" }
+  }
 
   var body: some View {
     Group {
@@ -162,13 +158,14 @@ private struct AssetWidgetView: View {
         .minimumScaleFactor(0.75)
         .privacySensitive()
       VStack(spacing: 0) {
-        Text(status)
-        if let compactUpdateTime { Text(compactUpdateTime) }
+        if status != word("updated") { Text(status) }
+        if let updateLine { Text(updateLine) }
       }
       .frame(maxWidth: .infinity, alignment: .center)
       .multilineTextAlignment(.center)
       .font(.system(size: 11))
       .lineLimit(1)
+      .minimumScaleFactor(0.7)
     }
     .accessibilityElement(children: .combine)
   }
@@ -235,34 +232,37 @@ private struct AssetWidgetView: View {
 
   @ViewBuilder
   private func statusRow(size: HomeSize) -> some View {
-    let label = HStack(spacing: 5) {
-      Circle().fill(statusColor).frame(width: 6, height: 6)
-      Text(status)
-    }
     if size == .small {
       VStack(spacing: 1) {
-        label
-        if let updateTime { Text(updateTime) }
+        if status != word("updated") { Text(status) }
+        Text(updateLine ?? status)
       }
       .frame(maxWidth: .infinity, alignment: .center)
+      .multilineTextAlignment(.center)
       .font(.system(size: 12, weight: .medium))
       .foregroundStyle(.secondary)
       .lineLimit(1)
-      .minimumScaleFactor(0.85)
+      .minimumScaleFactor(0.7)
     } else {
       ZStack(alignment: .leading) {
-        label
-        if let updateTime {
-          Text(updateTime)
-            .frame(maxWidth: .infinity, alignment: .center)
-            .multilineTextAlignment(.center)
+        HStack(spacing: 4) {
+          Circle().fill(statusColor).frame(width: 6, height: 6)
+          if status != word("updated") { Text(status) }
         }
+        .frame(maxWidth: 80, alignment: .leading)
+        .font(.system(size: 10, weight: .medium))
+        .lineLimit(1)
+        .minimumScaleFactor(0.7)
+        Text(updateLine ?? status)
+          .frame(maxWidth: .infinity, alignment: .center)
+          .multilineTextAlignment(.center)
       }
       .frame(maxWidth: .infinity)
       .font(.system(size: 12, weight: .medium))
       .foregroundStyle(.secondary)
       .lineLimit(1)
-      .minimumScaleFactor(0.85)
+      .minimumScaleFactor(0.8)
+      .accessibilityLabel(status == word("updated") ? updateLine ?? status : "\(status)，\(updateLine ?? "")")
     }
   }
 

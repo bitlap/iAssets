@@ -16,6 +16,15 @@ struct AssetWidgetSnapshot: Codable {
     Date(timeIntervalSince1970: TimeInterval(updatedAtMillis) / 1000)
   }
 
+  func formattedUpdateTime(language: String, timeZone: TimeZone = .current) -> String {
+    let formatter = DateFormatter()
+    formatter.locale = Locale(identifier: language == "zh_Hant" ? "zh_TW" :
+                              language == "zh" ? "zh_CN" : "en_US")
+    formatter.timeZone = timeZone
+    formatter.dateFormat = language == "en" ? "MMM d, HH:mm:ss" : "M月d日 HH:mm:ss"
+    return formatter.string(from: updatedAt)
+  }
+
   mutating func redact() {
     hidden = true
     total = nil

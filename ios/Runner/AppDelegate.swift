@@ -151,6 +151,9 @@ import workmanager_apple
     }
     AssetWidgetSnapshotStore.syncEnabledPrivacyPreferences()
     AssetWidgetSnapshotStore.applyPrivacy()
+    // An installed update can leave a previously rendered widget on screen
+    // until WidgetKit requests a new timeline. Ask it to use this extension.
+    WidgetCenter.shared.reloadTimelines(ofKind: AssetWidgetSnapshotStore.widgetKind)
 
     let widgetChannel = FlutterMethodChannel(
       name: "org.bitlap.assets/widget-snapshot", binaryMessenger: flutterEngine.binaryMessenger)

@@ -77,6 +77,7 @@ void main() {
       bool cryptoInitialized = true,
       bool cryptoSyncing = false,
       bool cryptoIncomplete = false,
+      int cryptoConnectionCount = 1,
     }) => WidgetSnapshotService.isPortfolioReady(
       entitlementLoading: entitlementLoading,
       entitlementFailed: entitlementFailed,
@@ -84,6 +85,7 @@ void main() {
       cryptoInitialized: cryptoInitialized,
       cryptoSyncing: cryptoSyncing,
       cryptoIncomplete: cryptoIncomplete,
+      cryptoConnectionCount: cryptoConnectionCount,
     );
 
     expect(ready(entitlementLoading: true), isFalse);
@@ -92,7 +94,9 @@ void main() {
     expect(ready(cryptoSyncing: true), isFalse);
     expect(ready(cryptoIncomplete: true), isFalse);
     expect(ready(), isTrue);
-    expect(ready(isPro: false, cryptoInitialized: false), isTrue);
+    expect(ready(isPro: false, cryptoInitialized: false), isFalse);
+    expect(ready(isPro: false), isFalse);
+    expect(ready(isPro: false, cryptoConnectionCount: 0), isTrue);
   });
 
   test(

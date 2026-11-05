@@ -249,6 +249,10 @@ class _AppShellState extends State<_AppShell> with WidgetsBindingObserver {
     if (stock == null || !stock.isLoaded || stock.lastRefreshedAt == null) {
       return;
     }
+    // Read the Keychain connection list before a temporary Free result can
+    // replace a previously verified crypto balance with zero.
+    await _crypto.initialize();
+    if (!mounted || generation != _widgetSnapshotGeneration) return;
     final pro = ProService.instance;
     if (!WidgetSnapshotService.isPortfolioReady(
       entitlementLoading: pro.loading,
@@ -257,6 +261,7 @@ class _AppShellState extends State<_AppShell> with WidgetsBindingObserver {
       cryptoInitialized: _crypto.initialized,
       cryptoSyncing: _crypto.syncing,
       cryptoIncomplete: _crypto.incomplete,
+      cryptoConnectionCount: _crypto.connections.length,
     )) {
       return;
     }

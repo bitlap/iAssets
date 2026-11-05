@@ -18,10 +18,14 @@ class WidgetSnapshotService {
     required bool cryptoInitialized,
     required bool cryptoSyncing,
     required bool cryptoIncomplete,
+    required int cryptoConnectionCount,
   }) =>
       !entitlementLoading &&
       !entitlementFailed &&
-      (!isPro || (cryptoInitialized && !cryptoSyncing && !cryptoIncomplete));
+      cryptoInitialized &&
+      (isPro
+          ? !cryptoSyncing && !cryptoIncomplete
+          : cryptoConnectionCount == 0);
 
   /// A headless task cannot distinguish a genuinely empty Keychain from an
   /// unavailable connection list. Only a foreground session may publish the
@@ -44,6 +48,7 @@ class WidgetSnapshotService {
         cryptoInitialized: cryptoInitialized,
         cryptoSyncing: cryptoSyncing,
         cryptoIncomplete: cryptoIncomplete,
+        cryptoConnectionCount: cryptoConnectionCount,
       );
 
   static const MethodChannel _channel = MethodChannel(

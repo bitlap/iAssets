@@ -133,4 +133,15 @@ class RunnerTests: XCTestCase {
     XCTAssertNil(protected.other)
   }
 
+  func testWidgetUpdateTimeUsesLocalizedDateAndSeconds() {
+    let date = ISO8601DateFormatter().date(from: "2026-11-05T13:25:58Z")!
+    let snapshot = AssetWidgetSnapshot(
+      schema: 1, currency: "USD", language: "zh", updatedAtMillis: Int64(date.timeIntervalSince1970 * 1000),
+      incomplete: false, hidden: false, total: nil, stocks: nil, crypto: nil, other: nil)
+    let timeZone = TimeZone(secondsFromGMT: 8 * 3600)!
+    XCTAssertEqual(snapshot.formattedUpdateTime(language: "zh", timeZone: timeZone), "11月5日 21:25:58")
+    XCTAssertEqual(snapshot.formattedUpdateTime(language: "zh_Hant", timeZone: timeZone), "11月5日 21:25:58")
+    XCTAssertEqual(snapshot.formattedUpdateTime(language: "en", timeZone: timeZone), "Nov 5, 21:25:58")
+  }
+
 }
