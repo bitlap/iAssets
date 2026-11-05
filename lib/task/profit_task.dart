@@ -107,8 +107,10 @@ Future<void> _refreshWidgetSnapshot(double stocks, String currency) async {
     isPro: pro.isPro,
     cryptoInitialized: crypto.initialized,
     cryptoSyncing: crypto.syncing,
-    cryptoIncomplete: crypto.incomplete,
     cryptoConnectionCount: crypto.connections.length,
+    cryptoSnapshotCount: crypto.connections
+        .where((connection) => crypto.snapshot(connection.id) != null)
+        .length,
   )) {
     return;
   }

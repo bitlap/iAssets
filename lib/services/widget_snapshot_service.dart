@@ -9,22 +9,24 @@ import 'privacy_service.dart';
 class WidgetSnapshotService {
   WidgetSnapshotService._();
 
-  /// Never replace the last valid widget balance with a startup or in-flight
-  /// crypto value. A genuinely empty, initialized portfolio may still be zero.
+  /// Wait for verified access and a completed sync. A connected portfolio
+  /// needs at least one account snapshot; partial results can be shown with
+  /// the incomplete marker instead of freezing the entire widget.
   static bool isPortfolioReady({
     required bool entitlementLoading,
     required bool entitlementFailed,
     required bool isPro,
     required bool cryptoInitialized,
     required bool cryptoSyncing,
-    required bool cryptoIncomplete,
     required int cryptoConnectionCount,
+    required int cryptoSnapshotCount,
   }) =>
       !entitlementLoading &&
-      !entitlementFailed &&
+      (!entitlementFailed || isPro) &&
       cryptoInitialized &&
       (isPro
-          ? !cryptoSyncing && !cryptoIncomplete
+          ? !cryptoSyncing &&
+                (cryptoConnectionCount == 0 || cryptoSnapshotCount > 0)
           : cryptoConnectionCount == 0);
 
   /// A headless task cannot distinguish a genuinely empty Keychain from an
@@ -36,8 +38,8 @@ class WidgetSnapshotService {
     required bool isPro,
     required bool cryptoInitialized,
     required bool cryptoSyncing,
-    required bool cryptoIncomplete,
     required int cryptoConnectionCount,
+    required int cryptoSnapshotCount,
   }) =>
       isPro &&
       cryptoConnectionCount > 0 &&
@@ -47,8 +49,8 @@ class WidgetSnapshotService {
         isPro: isPro,
         cryptoInitialized: cryptoInitialized,
         cryptoSyncing: cryptoSyncing,
-        cryptoIncomplete: cryptoIncomplete,
         cryptoConnectionCount: cryptoConnectionCount,
+        cryptoSnapshotCount: cryptoSnapshotCount,
       );
 
   static const MethodChannel _channel = MethodChannel(

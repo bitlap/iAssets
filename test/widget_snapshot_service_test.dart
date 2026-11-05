@@ -69,6 +69,15 @@ void main() {
     expect(captured?['stocks'], '\$50.00');
   });
 
+  test(
+    'a partial portfolio keeps available crypto and marks it incomplete',
+    () async {
+      await publish(incomplete: true);
+      expect(captured?['crypto'], '\$20.00');
+      expect(captured?['incomplete'], true);
+    },
+  );
+
   test('preserves the last balance until crypto and entitlement are ready', () {
     bool ready({
       bool entitlementLoading = false,
@@ -76,23 +85,25 @@ void main() {
       bool isPro = true,
       bool cryptoInitialized = true,
       bool cryptoSyncing = false,
-      bool cryptoIncomplete = false,
       int cryptoConnectionCount = 1,
+      int cryptoSnapshotCount = 1,
     }) => WidgetSnapshotService.isPortfolioReady(
       entitlementLoading: entitlementLoading,
       entitlementFailed: entitlementFailed,
       isPro: isPro,
       cryptoInitialized: cryptoInitialized,
       cryptoSyncing: cryptoSyncing,
-      cryptoIncomplete: cryptoIncomplete,
       cryptoConnectionCount: cryptoConnectionCount,
+      cryptoSnapshotCount: cryptoSnapshotCount,
     );
 
     expect(ready(entitlementLoading: true), isFalse);
-    expect(ready(entitlementFailed: true), isFalse);
+    expect(ready(entitlementFailed: true, isPro: false), isFalse);
+    expect(ready(entitlementFailed: true), isTrue);
     expect(ready(cryptoInitialized: false), isFalse);
     expect(ready(cryptoSyncing: true), isFalse);
-    expect(ready(cryptoIncomplete: true), isFalse);
+    expect(ready(cryptoSnapshotCount: 0), isFalse);
+    expect(ready(cryptoConnectionCount: 2, cryptoSnapshotCount: 1), isTrue);
     expect(ready(), isTrue);
     expect(ready(isPro: false, cryptoInitialized: false), isFalse);
     expect(ready(isPro: false), isFalse);
@@ -102,19 +113,19 @@ void main() {
   test(
     'headless refresh cannot replace crypto with an empty connection list',
     () {
-      bool ready(int count, {bool incomplete = false}) =>
+      bool ready(int count, {int snapshots = 1}) =>
           WidgetSnapshotService.isBackgroundPortfolioReady(
             entitlementLoading: false,
             entitlementFailed: false,
             isPro: true,
             cryptoInitialized: true,
             cryptoSyncing: false,
-            cryptoIncomplete: incomplete,
             cryptoConnectionCount: count,
+            cryptoSnapshotCount: snapshots,
           );
 
       expect(ready(0), isFalse);
-      expect(ready(1, incomplete: true), isFalse);
+      expect(ready(1, snapshots: 0), isFalse);
       expect(ready(1), isTrue);
     },
   );

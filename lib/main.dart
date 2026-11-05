@@ -14,6 +14,7 @@ import 'services/settings_service.dart';
 import 'services/privacy_service.dart';
 import 'services/widget_snapshot_service.dart';
 import 'services/asset_data_manager.dart';
+import 'services/stock_data_manager.dart';
 import 'services/pro_service.dart';
 import 'services/crypto/crypto_store.dart';
 import 'services/exchange_rate_service.dart';
@@ -245,10 +246,6 @@ class _AppShellState extends State<_AppShell> with WidgetsBindingObserver {
   }
 
   Future<void> _publishWidgetSnapshot(int generation) async {
-    final stock = _stockKey.currentState;
-    if (stock == null || !stock.isLoaded || stock.lastRefreshedAt == null) {
-      return;
-    }
     // Read the Keychain connection list before a temporary Free result can
     // replace a previously verified crypto balance with zero.
     await _crypto.initialize();
@@ -260,12 +257,34 @@ class _AppShellState extends State<_AppShell> with WidgetsBindingObserver {
       isPro: pro.isPro,
       cryptoInitialized: _crypto.initialized,
       cryptoSyncing: _crypto.syncing,
-      cryptoIncomplete: _crypto.incomplete,
       cryptoConnectionCount: _crypto.connections.length,
+      cryptoSnapshotCount: _crypto.connections
+          .where((connection) => _crypto.snapshot(connection.id) != null)
+          .length,
     )) {
       return;
     }
     try {
+      final stock = _stockKey.currentState;
+      late final double stocks;
+      late final DateTime stockUpdatedAt;
+      if (stock != null && stock.isLoaded && stock.lastRefreshedAt != null) {
+        stocks = stock.totalAssets;
+        stockUpdatedAt = stock.lastRefreshedAt!;
+      } else {
+        // The PageView may not have built the stock tab when a widget opens
+        // directly into Assets. Read the same saved portfolio independently.
+        final (holdings, operations, dividends) =
+            await StockDataManager.loadStocks();
+        if (!mounted || generation != _widgetSnapshotGeneration) return;
+        stocks = StockDataManager.calculateAssetSummary(
+          holdings,
+          operations,
+          dividends,
+          _selectedCurrency,
+        ).totalAssets;
+        stockUpdatedAt = DateTime.now();
+      }
       final (assets, _, _) = await AssetDataManager.loadCategoryState();
       if (!mounted || generation != _widgetSnapshotGeneration) return;
       final other = AssetCalculator.calculateTotalAssets(
@@ -273,14 +292,13 @@ class _AppShellState extends State<_AppShell> with WidgetsBindingObserver {
         0,
         _selectedCurrency,
       );
-      final stocks = stock.totalAssets;
       final crypto = CurrencyUtil.convertCurrency(
         pro.isPro ? _crypto.totalUsd.toDouble() : 0,
         'USD',
         _selectedCurrency,
       );
       final dates = <DateTime>[
-        stock.lastRefreshedAt!,
+        stockUpdatedAt,
         if (pro.isPro &&
             _crypto.connections.isNotEmpty &&
             _crypto.oldestUpdate != null)
