@@ -25,11 +25,13 @@ class CryptoPage extends StatefulWidget {
   final CryptoStore store;
   final String currency;
   final ValueChanged<String> onCurrencyChanged;
+  final Future<void> Function()? onRefresh;
   const CryptoPage({
     super.key,
     required this.store,
     required this.currency,
     required this.onCurrencyChanged,
+    this.onRefresh,
   });
   @override
   State<CryptoPage> createState() => CryptoPageState();
@@ -123,7 +125,7 @@ class CryptoPageState extends State<CryptoPage>
           (v, s) => v + s.totalUsd,
         );
         return RefreshIndicator(
-          onRefresh: () => widget.store.refresh(),
+          onRefresh: widget.onRefresh ?? widget.store.refresh,
           color: AppColors.accent,
           child: ListView(
             padding: const EdgeInsets.fromLTRB(16, 0, 16, 110),

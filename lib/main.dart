@@ -193,6 +193,7 @@ class _AppShellState extends State<_AppShell> with WidgetsBindingObserver {
     await _crypto.refresh();
     await ExchangeRateService().fetchRates();
     _refreshHeader();
+    await _publishWidgetSnapshotNow();
   }
 
   @override
@@ -218,6 +219,12 @@ class _AppShellState extends State<_AppShell> with WidgetsBindingObserver {
     _widgetSnapshotTimer = Timer(const Duration(milliseconds: 350), () {
       unawaited(_publishWidgetSnapshot(generation));
     });
+  }
+
+  Future<void> _publishWidgetSnapshotNow() async {
+    final generation = ++_widgetSnapshotGeneration;
+    _widgetSnapshotTimer?.cancel();
+    await _publishWidgetSnapshot(generation);
   }
 
   Future<void> _consumeWidgetDestination() async {
@@ -436,6 +443,7 @@ class _AppShellState extends State<_AppShell> with WidgetsBindingObserver {
                               store: _crypto,
                               currency: _selectedCurrency,
                               onCurrencyChanged: _changeCurrency,
+                              onRefresh: _refreshCrypto,
                             ),
                             AssetsPage(
                               key: _assetKey,

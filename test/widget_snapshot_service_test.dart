@@ -94,4 +94,24 @@ void main() {
     expect(ready(), isTrue);
     expect(ready(isPro: false, cryptoInitialized: false), isTrue);
   });
+
+  test(
+    'headless refresh cannot replace crypto with an empty connection list',
+    () {
+      bool ready(int count, {bool incomplete = false}) =>
+          WidgetSnapshotService.isBackgroundPortfolioReady(
+            entitlementLoading: false,
+            entitlementFailed: false,
+            isPro: true,
+            cryptoInitialized: true,
+            cryptoSyncing: false,
+            cryptoIncomplete: incomplete,
+            cryptoConnectionCount: count,
+          );
+
+      expect(ready(0), isFalse);
+      expect(ready(1, incomplete: true), isFalse);
+      expect(ready(1), isTrue);
+    },
+  );
 }

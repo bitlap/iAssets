@@ -23,6 +23,29 @@ class WidgetSnapshotService {
       !entitlementFailed &&
       (!isPro || (cryptoInitialized && !cryptoSyncing && !cryptoIncomplete));
 
+  /// A headless task cannot distinguish a genuinely empty Keychain from an
+  /// unavailable connection list. Only a foreground session may publish the
+  /// zero-connection state after the user removes their last connection.
+  static bool isBackgroundPortfolioReady({
+    required bool entitlementLoading,
+    required bool entitlementFailed,
+    required bool isPro,
+    required bool cryptoInitialized,
+    required bool cryptoSyncing,
+    required bool cryptoIncomplete,
+    required int cryptoConnectionCount,
+  }) =>
+      isPro &&
+      cryptoConnectionCount > 0 &&
+      isPortfolioReady(
+        entitlementLoading: entitlementLoading,
+        entitlementFailed: entitlementFailed,
+        isPro: isPro,
+        cryptoInitialized: cryptoInitialized,
+        cryptoSyncing: cryptoSyncing,
+        cryptoIncomplete: cryptoIncomplete,
+      );
+
   static const MethodChannel _channel = MethodChannel(
     'org.bitlap.assets/widget-snapshot',
   );

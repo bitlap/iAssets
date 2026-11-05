@@ -101,13 +101,14 @@ Future<void> _refreshWidgetSnapshot(double stocks, String currency) async {
   if (!pro.isPro) return;
   final crypto = CryptoStore();
   await crypto.refresh();
-  if (!WidgetSnapshotService.isPortfolioReady(
+  if (!WidgetSnapshotService.isBackgroundPortfolioReady(
     entitlementLoading: pro.loading,
     entitlementFailed: pro.error != null,
     isPro: pro.isPro,
     cryptoInitialized: crypto.initialized,
     cryptoSyncing: crypto.syncing,
     cryptoIncomplete: crypto.incomplete,
+    cryptoConnectionCount: crypto.connections.length,
   )) {
     return;
   }
