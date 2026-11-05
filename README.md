@@ -22,7 +22,7 @@
 </p>
 
 <p align="center">
-  <a href="changelog/2.0.0.md">更新日志</a> ·
+  <a href="changelog/2.0.1.md">更新日志</a> ·
   <a href="https://github.com/bitlap/iAssets/issues">反馈问题</a>
 </p>
 

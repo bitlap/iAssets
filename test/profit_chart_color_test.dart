@@ -63,14 +63,25 @@ void main() {
           });
           await tester.pumpAndSettle();
 
-          Color chartColor(String painterName) {
-            final paint = tester.widget<CustomPaint>(
-              find.byWidgetPredicate(
-                (widget) =>
-                    widget is CustomPaint &&
-                    widget.painter.runtimeType.toString() == painterName,
-              ),
+          Future<Color> chartColor(String painterName) async {
+            final finder = find.byWidgetPredicate(
+              (widget) =>
+                  widget is CustomPaint &&
+                  widget.painter.runtimeType.toString() == painterName,
             );
+            // Snapshot loading reads the test file asynchronously. Wait for
+            // the chart itself instead of assuming that 30 ms is enough.
+            for (
+              var attempt = 0;
+              attempt < 40 && finder.evaluate().isEmpty;
+              attempt++
+            ) {
+              await tester.runAsync(
+                () => Future<void>.delayed(const Duration(milliseconds: 20)),
+              );
+              await tester.pump();
+            }
+            final paint = tester.widget<CustomPaint>(finder);
             final dynamic painter = paint.painter;
             return painter.color as Color;
           }
@@ -80,19 +91,19 @@ void main() {
               : dailyProfit > 0
               ? AppColors.rise
               : AppColors.fall;
-          expect(chartColor('_MiniChartPainter'), expected);
+          expect(await chartColor('_MiniChartPainter'), expected);
           await tester.runAsync(() async {
             await tester.tap(find.byType(TextButton));
             await Future<void>.delayed(const Duration(milliseconds: 30));
           });
           await tester.pumpAndSettle();
-          expect(chartColor('_ProfitChartPainter'), expected);
+          expect(await chartColor('_ProfitChartPainter'), expected);
           await tester.tap(find.text(StockConfig.profitRange7d));
           await tester.pumpAndSettle();
-          expect(chartColor('_ProfitChartPainter'), AppColors.fall);
+          expect(await chartColor('_ProfitChartPainter'), AppColors.fall);
           await tester.tap(find.text(StockConfig.profitRangeToday));
           await tester.pumpAndSettle();
-          expect(chartColor('_ProfitChartPainter'), expected);
+          expect(await chartColor('_ProfitChartPainter'), expected);
           expect(tester.takeException(), isNull);
         },
       );
