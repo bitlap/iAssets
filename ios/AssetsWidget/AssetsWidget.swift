@@ -112,8 +112,9 @@ private struct AssetWidgetView: View {
       switch family {
       case .accessoryInline: inlineView
       case .accessoryRectangular: lockView
-      case .systemSmall: homeView(compact: true)
-      default: homeView(compact: false)
+      case .systemSmall: homeView(size: .small)
+      case .systemMedium: homeView(size: .medium)
+      default: homeView(size: .large)
       }
     }
     .widgetURL(URL(string: "iassets://assets"))
@@ -140,68 +141,107 @@ private struct AssetWidgetView: View {
           Image(systemName: "exclamationmark.circle.fill")
         }
       }
-      .font(.caption2.weight(.semibold))
+      .font(.system(size: 12, weight: .semibold))
       Text(total)
-        .font(.system(size: 20, weight: .bold, design: .rounded))
+        .font(.system(size: 23, weight: .bold, design: .rounded))
         .lineLimit(1)
-        .minimumScaleFactor(0.65)
+        .minimumScaleFactor(0.75)
         .privacySensitive()
       HStack(spacing: 3) {
         Text(status)
         if let updateTime { Text("· \(updateTime)") }
       }
-      .font(.system(size: 10))
+      .font(.system(size: 11))
       .lineLimit(1)
     }
     .accessibilityElement(children: .combine)
   }
 
+  private enum HomeSize { case small, medium, large }
+
   @ViewBuilder
-  private func homeView(compact: Bool) -> some View {
-    let content = VStack(alignment: .leading, spacing: compact ? 5 : 9) {
-      HStack(spacing: 6) {
-        Image(systemName: "chart.pie.fill")
-          .foregroundStyle(Color(red: 0.56, green: 0.34, blue: 0.86))
-        Text("iAssets")
-          .font(.system(size: 14, weight: .bold))
-        Spacer(minLength: 0)
-        if !compact { Text(entry.snapshot?.currency ?? "").font(.caption2).foregroundStyle(.secondary) }
-      }
+  private func homeView(size: HomeSize) -> some View {
+    let content = VStack(alignment: .leading, spacing: size == .small ? 5 : 8) {
+      header(showCurrency: size != .small)
       Spacer(minLength: 0)
-      Text(word("total"))
-        .font(.system(size: compact ? 12 : 13, weight: .medium))
-        .foregroundStyle(.secondary)
-      Text(total)
-        .font(.system(size: compact ? 25 : 31, weight: .bold, design: .rounded))
-        .lineLimit(1)
-        .minimumScaleFactor(0.58)
-        .privacySensitive()
-      if !compact {
-        HStack(alignment: .top, spacing: 4) {
-          breakdown("stocks", value: entry.snapshot?.stocks, color: .blue)
-          breakdown("crypto", value: entry.snapshot?.crypto, color: .purple)
-          breakdown("other", value: entry.snapshot?.other, color: .orange)
+      if size == .medium {
+        HStack(alignment: .center, spacing: 14) {
+          VStack(alignment: .leading, spacing: 4) {
+            totalAmount(size: size)
+            Spacer(minLength: 0)
+            statusRow()
+          }
+          .frame(maxWidth: .infinity, alignment: .leading)
+          VStack(alignment: .leading, spacing: 6) {
+            breakdownRow("stocks", value: entry.snapshot?.stocks, color: .blue)
+            breakdownRow("crypto", value: entry.snapshot?.crypto, color: .purple)
+            breakdownRow("other", value: entry.snapshot?.other, color: .orange)
+          }
+          .frame(maxWidth: .infinity, alignment: .leading)
         }
-      }
-      Spacer(minLength: 0)
-      HStack(spacing: 5) {
-        Circle().fill(statusColor).frame(width: 5, height: 5)
-        Text(status)
+      } else {
+        totalAmount(size: size)
+        if size == .large {
+          Spacer(minLength: 0)
+          HStack(alignment: .top, spacing: 10) {
+            breakdownColumn("stocks", value: entry.snapshot?.stocks, color: .blue)
+            breakdownColumn("crypto", value: entry.snapshot?.crypto, color: .purple)
+            breakdownColumn("other", value: entry.snapshot?.other, color: .orange)
+          }
+        }
         Spacer(minLength: 0)
-        if let updateTime { Text(updateTime) }
+        statusRow()
       }
-      .font(.system(size: 10))
-      .foregroundStyle(.secondary)
-      .lineLimit(1)
-      .minimumScaleFactor(0.75)
     }
-    .padding(compact ? 15 : 18)
+    .padding(size == .small ? 14 : 16)
 
     if #available(iOSApplicationExtension 17.0, *) {
       content.containerBackground(for: .widget) { background }
     } else {
       content.background(background)
     }
+  }
+
+  private func header(showCurrency: Bool) -> some View {
+    HStack(spacing: 6) {
+      Image(systemName: "chart.pie.fill")
+        .foregroundStyle(Color(red: 0.56, green: 0.34, blue: 0.86))
+      Text("iAssets")
+        .font(.system(size: 16, weight: .bold))
+      Spacer(minLength: 0)
+      if showCurrency {
+        Text(entry.snapshot?.currency ?? "")
+          .font(.system(size: 13, weight: .medium))
+          .foregroundStyle(.secondary)
+      }
+    }
+  }
+
+  private func totalAmount(size: HomeSize) -> some View {
+    VStack(alignment: .leading, spacing: 2) {
+      Text(word("total"))
+        .font(.system(size: size == .large ? 15 : 14, weight: .medium))
+        .foregroundStyle(.secondary)
+      Text(total)
+        .font(.system(size: size == .small ? 29 : size == .medium ? 33 : 40,
+                      weight: .bold, design: .rounded))
+        .lineLimit(1)
+        .minimumScaleFactor(0.72)
+        .privacySensitive()
+    }
+  }
+
+  private func statusRow() -> some View {
+    HStack(spacing: 5) {
+      Circle().fill(statusColor).frame(width: 6, height: 6)
+      Text(status)
+      Spacer(minLength: 0)
+      if let updateTime { Text(updateTime) }
+    }
+    .font(.system(size: 12, weight: .medium))
+    .foregroundStyle(.secondary)
+    .lineLimit(1)
+    .minimumScaleFactor(0.85)
   }
 
   private var background: some View {
@@ -214,21 +254,37 @@ private struct AssetWidgetView: View {
     )
   }
 
-  private func breakdown(_ key: String, value: String?, color: Color) -> some View {
-    VStack(alignment: .leading, spacing: 4) {
+  private func breakdownColumn(_ key: String, value: String?, color: Color) -> some View {
+    VStack(alignment: .leading, spacing: 5) {
       HStack(spacing: 3) {
-        Circle().fill(color).frame(width: 5, height: 5)
-        Text(word(key)).lineLimit(1).minimumScaleFactor(0.75)
+        Circle().fill(color).frame(width: 6, height: 6)
+        Text(word(key)).lineLimit(1).minimumScaleFactor(0.85)
       }
-      .font(.system(size: 10, weight: .medium))
+      .font(.system(size: 14, weight: .medium))
       .foregroundStyle(.secondary)
       Text(isHidden ? "••••" : (value ?? "—"))
-        .font(.system(size: 12, weight: .semibold, design: .rounded))
+        .font(.system(size: 19, weight: .semibold, design: .rounded))
         .lineLimit(1)
-        .minimumScaleFactor(0.6)
+        .minimumScaleFactor(0.72)
         .privacySensitive()
     }
     .frame(maxWidth: .infinity, alignment: .leading)
+  }
+
+  private func breakdownRow(_ key: String, value: String?, color: Color) -> some View {
+    HStack(spacing: 5) {
+      Circle().fill(color).frame(width: 6, height: 6)
+      Text(word(key))
+        .font(.system(size: 13, weight: .medium))
+        .foregroundStyle(.secondary)
+        .lineLimit(1)
+      Spacer(minLength: 2)
+      Text(isHidden ? "••••" : (value ?? "—"))
+        .font(.system(size: 16, weight: .semibold, design: .rounded))
+        .lineLimit(1)
+        .minimumScaleFactor(0.75)
+        .privacySensitive()
+    }
   }
 }
 
@@ -241,6 +297,7 @@ private struct AssetSummaryWidget: Widget {
     .description(WidgetWords.text("description", WidgetWords.language(nil)))
     .supportedFamilies([.systemSmall, .systemMedium, .systemLarge,
                         .accessoryRectangular, .accessoryInline])
+    .contentMarginsDisabled()
   }
 }
 
