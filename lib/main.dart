@@ -242,6 +242,17 @@ class _AppShellState extends State<_AppShell> with WidgetsBindingObserver {
     if (stock == null || !stock.isLoaded || stock.lastRefreshedAt == null) {
       return;
     }
+    final pro = ProService.instance;
+    if (!WidgetSnapshotService.isPortfolioReady(
+      entitlementLoading: pro.loading,
+      entitlementFailed: pro.error != null,
+      isPro: pro.isPro,
+      cryptoInitialized: _crypto.initialized,
+      cryptoSyncing: _crypto.syncing,
+      cryptoIncomplete: _crypto.incomplete,
+    )) {
+      return;
+    }
     try {
       final (assets, _, _) = await AssetDataManager.loadCategoryState();
       if (!mounted || generation != _widgetSnapshotGeneration) return;
@@ -252,13 +263,13 @@ class _AppShellState extends State<_AppShell> with WidgetsBindingObserver {
       );
       final stocks = stock.totalAssets;
       final crypto = CurrencyUtil.convertCurrency(
-        ProService.instance.isPro ? _crypto.totalUsd.toDouble() : 0,
+        pro.isPro ? _crypto.totalUsd.toDouble() : 0,
         'USD',
         _selectedCurrency,
       );
       final dates = <DateTime>[
         stock.lastRefreshedAt!,
-        if (ProService.instance.isPro &&
+        if (pro.isPro &&
             _crypto.connections.isNotEmpty &&
             _crypto.oldestUpdate != null)
           _crypto.oldestUpdate!,
@@ -270,7 +281,7 @@ class _AppShellState extends State<_AppShell> with WidgetsBindingObserver {
         other: other,
         currency: _selectedCurrency,
         updatedAt: dates.first,
-        incomplete: ProService.instance.isPro && _crypto.incomplete,
+        incomplete: pro.isPro && _crypto.incomplete,
       );
     } catch (error) {
       // A failed local/iCloud read must never publish a misleading zero total.

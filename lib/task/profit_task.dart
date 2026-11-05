@@ -94,20 +94,28 @@ Future<void> _refreshWidgetSnapshot(double stocks, String currency) async {
   L10n.deviceLocale = PlatformDispatcher.instance.locale;
   L10n.applyLanguage(await SettingsService.getPreferredLanguage());
   await ProService.instance.refresh();
-  if (ProService.instance.error != null) return;
-
+  final pro = ProService.instance;
+  // A headless StoreKit check can temporarily report Free while the foreground
+  // app still has verified Pro access. Preserve the last widget balance rather
+  // than publishing an apparent zero crypto allocation in that case.
+  if (!pro.isPro) return;
   final crypto = CryptoStore();
-  if (ProService.instance.isPro) {
-    await crypto.refresh();
-    // Without persisted holdings, a failed headless sync must not replace a
-    // previously correct widget balance with zero.
-    if (crypto.incomplete) return;
+  await crypto.refresh();
+  if (!WidgetSnapshotService.isPortfolioReady(
+    entitlementLoading: pro.loading,
+    entitlementFailed: pro.error != null,
+    isPro: pro.isPro,
+    cryptoInitialized: crypto.initialized,
+    cryptoSyncing: crypto.syncing,
+    cryptoIncomplete: crypto.incomplete,
+  )) {
+    return;
   }
 
   final (assets, _, _) = await AssetDataManager.loadCategoryState();
   final other = AssetCalculator.calculateTotalAssets(assets, 0, currency);
   final cryptoValue = CurrencyUtil.convertCurrency(
-    ProService.instance.isPro ? crypto.totalUsd.toDouble() : 0,
+    crypto.totalUsd.toDouble(),
     'USD',
     currency,
   );

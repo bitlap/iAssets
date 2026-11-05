@@ -9,6 +9,20 @@ import 'privacy_service.dart';
 class WidgetSnapshotService {
   WidgetSnapshotService._();
 
+  /// Never replace the last valid widget balance with a startup or in-flight
+  /// crypto value. A genuinely empty, initialized portfolio may still be zero.
+  static bool isPortfolioReady({
+    required bool entitlementLoading,
+    required bool entitlementFailed,
+    required bool isPro,
+    required bool cryptoInitialized,
+    required bool cryptoSyncing,
+    required bool cryptoIncomplete,
+  }) =>
+      !entitlementLoading &&
+      !entitlementFailed &&
+      (!isPro || (cryptoInitialized && !cryptoSyncing && !cryptoIncomplete));
+
   static const MethodChannel _channel = MethodChannel(
     'org.bitlap.assets/widget-snapshot',
   );

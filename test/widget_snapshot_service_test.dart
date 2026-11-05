@@ -68,4 +68,30 @@ void main() {
     expect(captured?['incomplete'], true);
     expect(captured?['stocks'], '\$50.00');
   });
+
+  test('preserves the last balance until crypto and entitlement are ready', () {
+    bool ready({
+      bool entitlementLoading = false,
+      bool entitlementFailed = false,
+      bool isPro = true,
+      bool cryptoInitialized = true,
+      bool cryptoSyncing = false,
+      bool cryptoIncomplete = false,
+    }) => WidgetSnapshotService.isPortfolioReady(
+      entitlementLoading: entitlementLoading,
+      entitlementFailed: entitlementFailed,
+      isPro: isPro,
+      cryptoInitialized: cryptoInitialized,
+      cryptoSyncing: cryptoSyncing,
+      cryptoIncomplete: cryptoIncomplete,
+    );
+
+    expect(ready(entitlementLoading: true), isFalse);
+    expect(ready(entitlementFailed: true), isFalse);
+    expect(ready(cryptoInitialized: false), isFalse);
+    expect(ready(cryptoSyncing: true), isFalse);
+    expect(ready(cryptoIncomplete: true), isFalse);
+    expect(ready(), isTrue);
+    expect(ready(isPro: false, cryptoInitialized: false), isTrue);
+  });
 }
