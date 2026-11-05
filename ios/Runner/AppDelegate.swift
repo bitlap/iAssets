@@ -3,11 +3,29 @@ import Flutter
 import UIKit
 import Security
 import StoreKit
+import WidgetKit
 import workmanager_apple
 
 @main
 @objc class AppDelegate: FlutterAppDelegate {
   var flutterEngine: FlutterEngine!
+  private var widgetNavigationChannel: FlutterMethodChannel?
+  private var pendingWidgetDestination: String?
+
+  func openWidgetURL(_ url: URL) -> Bool {
+    guard url.scheme == "iassets", url.host == "assets" else { return false }
+    pendingWidgetDestination = "assets"
+    widgetNavigationChannel?.invokeMethod("openDestination", arguments: "assets")
+    return true
+  }
+
+  override func application(
+    _ app: UIApplication, open url: URL,
+    options: [UIApplication.OpenURLOptionsKey: Any] = [:]
+  ) -> Bool {
+    if openWidgetURL(url) { return true }
+    return super.application(app, open: url, options: options)
+  }
 
   override func application(
     _ application: UIApplication,
@@ -74,13 +92,46 @@ import workmanager_apple
         ])
       case "setHideAmounts":
         guard let value = call.arguments as? Bool else { result(FlutterMethodNotImplemented); return }
-        defaults.set(value, forKey: "privacy.hideAmounts")
+        AssetWidgetSnapshotStore.setPrivacyPreference(AssetWidgetSnapshotStore.hideAmountsKey,
+                                                       value: value)
+        AssetWidgetSnapshotStore.applyPrivacy()
+        WidgetCenter.shared.reloadTimelines(ofKind: AssetWidgetSnapshotStore.widgetKind)
         result(nil)
       case "setBiometricLock":
         guard let value = call.arguments as? Bool else { result(FlutterMethodNotImplemented); return }
-        defaults.set(value, forKey: "privacy.biometricLock")
+        AssetWidgetSnapshotStore.setPrivacyPreference(AssetWidgetSnapshotStore.biometricLockKey,
+                                                       value: value)
+        AssetWidgetSnapshotStore.applyPrivacy()
+        WidgetCenter.shared.reloadTimelines(ofKind: AssetWidgetSnapshotStore.widgetKind)
         result(nil)
       default:
+        result(FlutterMethodNotImplemented)
+      }
+    }
+    AssetWidgetSnapshotStore.syncEnabledPrivacyPreferences()
+    AssetWidgetSnapshotStore.applyPrivacy()
+    let widgetChannel = FlutterMethodChannel(
+      name: "org.bitlap.assets/widget-snapshot", binaryMessenger: flutterEngine.binaryMessenger)
+    widgetChannel.setMethodCallHandler { call, result in
+      guard call.method == "publish", let values = call.arguments as? [String: Any] else {
+        result(FlutterMethodNotImplemented); return
+      }
+      do {
+        try AssetWidgetSnapshotStore.publish(values)
+        WidgetCenter.shared.reloadTimelines(ofKind: AssetWidgetSnapshotStore.widgetKind)
+        result(nil)
+      } catch {
+        result(FlutterError(code: "widgetSnapshot", message: "Shared widget storage unavailable", details: nil))
+      }
+    }
+
+    widgetNavigationChannel = FlutterMethodChannel(
+      name: "org.bitlap.assets/widget-navigation", binaryMessenger: flutterEngine.binaryMessenger)
+    widgetNavigationChannel?.setMethodCallHandler { [weak self] call, result in
+      if call.method == "consumePendingDestination" {
+        result(self?.pendingWidgetDestination)
+        self?.pendingWidgetDestination = nil
+      } else {
         result(FlutterMethodNotImplemented)
       }
     }

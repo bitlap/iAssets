@@ -129,6 +129,7 @@ class AssetsPageState extends State<AssetsPage> {
 
   Future<void> _save() async {
     await AssetDataManager.saveAssets(_assets);
+    widget.onHeaderChanged?.call();
   }
 
   bool _canAddAsset(AssetType type, String categoryId) {

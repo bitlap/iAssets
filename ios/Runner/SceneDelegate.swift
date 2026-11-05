@@ -4,8 +4,26 @@ import UIKit
 class SceneDelegate: FlutterSceneDelegate {
   private var privacyCover: UIView?
 
+  override func scene(
+    _ scene: UIScene, willConnectTo session: UISceneSession,
+    options connectionOptions: UIScene.ConnectionOptions
+  ) {
+    super.scene(scene, willConnectTo: session, options: connectionOptions)
+    for context in connectionOptions.urlContexts {
+      _ = (UIApplication.shared.delegate as? AppDelegate)?.openWidgetURL(context.url)
+    }
+  }
+
+  override func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {
+    let otherURLs = URLContexts.filter { context in
+      !((UIApplication.shared.delegate as? AppDelegate)?.openWidgetURL(context.url) ?? false)
+    }
+    if !otherURLs.isEmpty { super.scene(scene, openURLContexts: Set(otherURLs)) }
+  }
+
   override func sceneWillResignActive(_ scene: UIScene) {
     super.sceneWillResignActive(scene)
+    guard UserDefaults.standard.bool(forKey: "privacy.biometricLock") else { return }
     guard privacyCover == nil else { return }
     guard let windows = (scene as? UIWindowScene)?.windows,
           let window = windows.first(where: { $0.isKeyWindow }) ?? windows.first else { return }

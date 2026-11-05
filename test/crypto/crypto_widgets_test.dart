@@ -45,6 +45,34 @@ void main() {
           (call) async => testDirectory.path,
         );
   });
+  testWidgets('pull refresh delegates to the host refresh', (tester) async {
+    final store = CryptoStore(
+      reader: fixtures.FakeReader(fixtures.sample(DateTime.now())),
+      persistence: fixtures.MemoryPersistence(),
+    );
+    addTearDown(store.dispose);
+    var refreshes = 0;
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: CryptoPage(
+            store: store,
+            currency: 'USD',
+            onCurrencyChanged: (_) {},
+            onRefresh: () async {
+              refreshes++;
+            },
+          ),
+        ),
+      ),
+    );
+
+    await tester
+        .widget<RefreshIndicator>(find.byType(RefreshIndicator))
+        .onRefresh();
+    expect(refreshes, 1);
+    expect(store.initialized, isFalse);
+  });
   testWidgets(
     'crypto details truncate to eight decimal places across currencies',
     (tester) async {

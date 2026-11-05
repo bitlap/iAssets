@@ -21,6 +21,8 @@ Optional environment variables:
   BUILD_NAME         App version; defaults to pubspec.yaml
   BUILD_NUMBER       Build number; defaults to pubspec.yaml suffix or 1
   RELEASE_OUTPUT_DIR Output directory; defaults to build/ios/releases/<timestamp>
+  IOS_APP_PROFILE_NAME    App Store profile name for org.bitlap.assets
+  IOS_WIDGET_PROFILE_NAME App Store profile name for the widget extension
 
 Xcode manages the uploaded build number to avoid conflicts. --dry-run validates
 configuration and prints the commands without building or uploading.
@@ -43,7 +45,7 @@ done
 project_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 load_config() {
   local name index
-  local names=(ASC_KEY_PATH ASC_KEY_ID ASC_ISSUER_ID APPLE_TEAM_ID BUILD_NAME BUILD_NUMBER RELEASE_OUTPUT_DIR PRO_LEGACY_CUTOFF PRO_PRIVACY_URL)
+  local names=(ASC_KEY_PATH ASC_KEY_ID ASC_ISSUER_ID APPLE_TEAM_ID BUILD_NAME BUILD_NUMBER RELEASE_OUTPUT_DIR PRO_LEGACY_CUTOFF PRO_PRIVACY_URL IOS_APP_PROFILE_NAME IOS_WIDGET_PROFILE_NAME)
   local saved_names=() saved_values=()
   for name in "${names[@]}"; do
     if [[ ${!name+x} ]]; then
@@ -111,6 +113,9 @@ build_number="${BUILD_NUMBER:-$pubspec_build}"
 [[ "$build_name" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]] || fail 'BUILD_NAME must have the form 2.0.0.'
 [[ "$build_number" =~ ^[0-9]+(\.[0-9]+){0,2}$ ]] || fail 'BUILD_NUMBER must have one to three numeric components.'
 [[ "$signing_team" =~ ^[A-Za-z0-9]{10}$ && "$signing_team" != YOUR_TEAM_ID ]] || fail 'Set APPLE_TEAM_ID or DEVELOPMENT_TEAM in ios/Config.xcconfig.'
+if [[ -n "${IOS_APP_PROFILE_NAME:-}" || -n "${IOS_WIDGET_PROFILE_NAME:-}" ]]; then
+  [[ -n "${IOS_APP_PROFILE_NAME:-}" && -n "${IOS_WIDGET_PROFILE_NAME:-}" ]] || fail 'Set both IOS_APP_PROFILE_NAME and IOS_WIDGET_PROFILE_NAME.'
+fi
 
 output_dir="${RELEASE_OUTPUT_DIR:-$project_dir/build/ios/releases/$(date +%Y%m%d-%H%M%S)-$$}"
 [[ "$output_dir" = /* ]] || output_dir="$project_dir/$output_dir"
@@ -119,12 +124,18 @@ mkdir -p "$(dirname "$output_dir")"
 mkdir "$output_dir" || fail 'RELEASE_OUTPUT_DIR already exists; choose a new directory.'
 archive_path="$output_dir/Runner.xcarchive"
 python3 - "$output_dir" "$signing_team" "$internal_testflight" <<'PY'
-import pathlib, plistlib, sys
+import os, pathlib, plistlib, sys
 root, team, internal_only = pathlib.Path(sys.argv[1]), sys.argv[2], sys.argv[3] == 'true'
 for destination in ('export', 'upload'):
     options = {'method': 'app-store-connect', 'destination': destination,
                'signingStyle': 'automatic', 'teamID': team,
                'uploadSymbols': True, 'manageAppVersionAndBuildNumber': True}
+    if os.environ.get('IOS_APP_PROFILE_NAME'):
+        options.update(signingStyle='manual', signingCertificate='Apple Distribution',
+                       provisioningProfiles={
+                           'org.bitlap.assets': os.environ['IOS_APP_PROFILE_NAME'],
+                           'org.bitlap.assets.AssetsWidget': os.environ['IOS_WIDGET_PROFILE_NAME'],
+                       })
     if destination == 'upload' and internal_only:
         options['testFlightInternalTestingOnly'] = True
     (root / f'{destination}.plist').write_bytes(plistlib.dumps(options))

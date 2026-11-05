@@ -103,4 +103,45 @@ class RunnerTests: XCTestCase {
     }
   }
 
+  func testWidgetPrivacyFlagIsSharedAndSnapshotRedactsEveryAmount() {
+    let key = AssetWidgetSnapshotStore.hideAmountsKey
+    let local = UserDefaults.standard
+    let shared = UserDefaults(suiteName: AssetWidgetSnapshotStore.group)
+    let oldLocal = local.object(forKey: key)
+    let oldShared = shared?.object(forKey: key)
+    defer {
+      if let oldLocal { local.set(oldLocal, forKey: key) }
+      else { local.removeObject(forKey: key) }
+      if let oldShared { shared?.set(oldShared, forKey: key) }
+      else { shared?.removeObject(forKey: key) }
+    }
+
+    AssetWidgetSnapshotStore.setPrivacyPreference(key, value: true)
+    XCTAssertTrue(local.bool(forKey: key))
+    XCTAssertTrue(shared?.bool(forKey: key) ?? false)
+    XCTAssertTrue(AssetWidgetSnapshotStore.privacyIsEnabled)
+
+    let snapshot = AssetWidgetSnapshot(
+      schema: 1, currency: "USD", language: "zh", updatedAtMillis: 1,
+      incomplete: false, hidden: false, total: "$100", stocks: "$40",
+      crypto: "$30", other: "$30")
+    let protected = AssetWidgetSnapshotStore.protectedSnapshot(snapshot, privacyEnabled: true)
+    XCTAssertTrue(protected.hidden)
+    XCTAssertNil(protected.total)
+    XCTAssertNil(protected.stocks)
+    XCTAssertNil(protected.crypto)
+    XCTAssertNil(protected.other)
+  }
+
+  func testWidgetUpdateTimeUsesLocalizedDateAndSeconds() {
+    let date = ISO8601DateFormatter().date(from: "2026-11-05T13:25:58Z")!
+    let snapshot = AssetWidgetSnapshot(
+      schema: 1, currency: "USD", language: "zh", updatedAtMillis: Int64(date.timeIntervalSince1970 * 1000),
+      incomplete: false, hidden: false, total: nil, stocks: nil, crypto: nil, other: nil)
+    let timeZone = TimeZone(secondsFromGMT: 8 * 3600)!
+    XCTAssertEqual(snapshot.formattedUpdateTime(language: "zh", timeZone: timeZone), "11月5日 21:25:58")
+    XCTAssertEqual(snapshot.formattedUpdateTime(language: "zh_Hant", timeZone: timeZone), "11月5日 21:25:58")
+    XCTAssertEqual(snapshot.formattedUpdateTime(language: "en", timeZone: timeZone), "Nov 5, 21:25:58")
+  }
+
 }

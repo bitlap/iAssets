@@ -29,6 +29,8 @@ BUILD_NUMBER=2 ./scripts/release_ios.sh
 归档、IPA、导出配置及各阶段日志保存在 `build/ios/releases/` 的独立目录；可用 `RELEASE_OUTPUT_DIR` 指定一个尚不存在的目录。任何阶段失败立即停止，上传成功后仍需等待 Apple 处理，不会自动提交审核或发布。
 
 `--internal-testflight` 使用 Xcode 的内部测试专用标记。此类构建不能转为外部测试或正式上架；正式版必须以最终固定的 `PRO_LEGACY_CUTOFF` 重新构建并上传。内测时可通过环境变量临时覆盖该值，不要把测试分界时间写入正式发布配置。
+
+包含桌面和锁屏组件的版本需要主 App 与 Widget 扩展分别使用含 App Groups 权限的 App Store 描述文件。在 `release_ios.env` 中配置 `IOS_APP_PROFILE_NAME` 和 `IOS_WIDGET_PROFILE_NAME` 两个名称；脚本在导出和上传时会显式选用它们。
 TestFlight 使用 Apple 沙盒：可以测试订阅、买断及其恢复，但沙盒中的 App 首次获取日期不能证明旧版付费下载，旧用户永久 Pro 必须在正式版通过生产环境 AppTransaction 验证。
 
 ## Pro 发布配置

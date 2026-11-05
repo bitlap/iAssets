@@ -9,7 +9,6 @@ import '../services/settings_service.dart';
 import '../services/stock_data_manager.dart';
 import '../services/stock_quote_service.dart';
 import '../services/exchange_rate_service.dart';
-import '../utils/market_util.dart';
 import '../utils/stock_calculator.dart';
 
 @pragma('vm:entry-point')

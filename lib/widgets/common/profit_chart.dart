@@ -150,6 +150,7 @@ class _ProfitChartWidgetState extends State<ProfitChartWidget> {
             child: _buildChart(),
           ),
         ],
+        const SizedBox(height: 6),
         Semantics(
           expanded: _isExpanded,
           label:
@@ -159,7 +160,7 @@ class _ProfitChartWidgetState extends State<ProfitChartWidget> {
             child: TextButton(
               onPressed: _toggleExpanded,
               style: TextButton.styleFrom(
-                minimumSize: const Size.fromHeight(14),
+                minimumSize: const Size.fromHeight(28),
                 tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                 padding: EdgeInsets.zero,
                 overlayColor: Colors.transparent,
@@ -170,15 +171,11 @@ class _ProfitChartWidgetState extends State<ProfitChartWidget> {
                 ),
               ),
               child: SizedBox(
-                height: 14,
-                child: OverflowBox(
-                  minHeight: 22,
-                  maxHeight: 22,
-                  child: Icon(
-                    _isExpanded ? Icons.expand_less : Icons.expand_more,
-                    size: 22,
-                    color: AppColors.textSecondary,
-                  ),
+                height: 28,
+                child: Icon(
+                  _isExpanded ? Icons.expand_less : Icons.expand_more,
+                  size: 22,
+                  color: AppColors.textSecondary,
                 ),
               ),
             ),

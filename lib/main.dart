@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:workmanager/workmanager.dart';
@@ -11,10 +12,13 @@ import 'widgets/common/floating_bottom_bar.dart';
 import 'l10n/l10n.dart';
 import 'services/settings_service.dart';
 import 'services/privacy_service.dart';
+import 'services/widget_snapshot_service.dart';
+import 'services/asset_data_manager.dart';
 import 'services/pro_service.dart';
 import 'services/crypto/crypto_store.dart';
 import 'services/exchange_rate_service.dart';
 import 'utils/currency_util.dart';
+import 'utils/asset_calculator.dart';
 import 'widgets/crypto/crypto_page.dart';
 import 'utils/logo_cacher.dart';
 import 'widgets/stock/stock_portfolio_page.dart';
@@ -140,12 +144,17 @@ class _AppShell extends StatefulWidget {
 }
 
 class _AppShellState extends State<_AppShell> with WidgetsBindingObserver {
+  static const _widgetNavigation = MethodChannel(
+    'org.bitlap.assets/widget-navigation',
+  );
   int _currentIndex = 0;
   final GlobalKey<StockPortfolioPageState> _stockKey = GlobalKey();
   final GlobalKey<AssetsPageState> _assetKey = GlobalKey();
   final GlobalKey<CryptoPageState> _cryptoKey = GlobalKey();
   final CryptoStore _crypto = CryptoStore.instance;
   Timer? _cryptoTimer;
+  Timer? _widgetSnapshotTimer;
+  int _widgetSnapshotGeneration = 0;
   bool _foreground = true;
   final PageController _pageController = PageController();
   String _selectedCurrency = AppConfig.defaultCurrency;
@@ -159,6 +168,15 @@ class _AppShellState extends State<_AppShell> with WidgetsBindingObserver {
     _crypto.addListener(_refreshHeader);
     ExchangeRateService().addListener(_refreshHeader);
     ProService.instance.addListener(_onProChanged);
+    PrivacyService.instance.hideAmounts.addListener(_scheduleWidgetSnapshot);
+    PrivacyService.instance.biometricLock.addListener(_scheduleWidgetSnapshot);
+    L10n.notifier.addListener(_scheduleWidgetSnapshot);
+    _widgetNavigation.setMethodCallHandler((call) async {
+      if (call.method == 'openDestination' && call.arguments == 'assets') {
+        _openAssetsFromWidget();
+      }
+    });
+    unawaited(_consumeWidgetDestination());
     unawaited(_refreshCrypto());
     _cryptoTimer = Timer.periodic(const Duration(minutes: 5), (_) {
       if (_foreground) unawaited(_refreshCrypto());
@@ -190,6 +208,73 @@ class _AppShellState extends State<_AppShell> with WidgetsBindingObserver {
     final saved = await SettingsService.getDefaultCurrency();
     if (saved != null && mounted) {
       setState(() => _selectedCurrency = saved);
+      _scheduleWidgetSnapshot();
+    }
+  }
+
+  void _scheduleWidgetSnapshot() {
+    final generation = ++_widgetSnapshotGeneration;
+    _widgetSnapshotTimer?.cancel();
+    _widgetSnapshotTimer = Timer(const Duration(milliseconds: 350), () {
+      unawaited(_publishWidgetSnapshot(generation));
+    });
+  }
+
+  Future<void> _consumeWidgetDestination() async {
+    try {
+      final destination = await _widgetNavigation.invokeMethod<String>(
+        'consumePendingDestination',
+      );
+      if (destination == 'assets') _openAssetsFromWidget();
+    } on MissingPluginException {
+      // No native widget navigation on non-iOS platforms.
+    }
+  }
+
+  void _openAssetsFromWidget() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) _onTabChanged(2);
+    });
+  }
+
+  Future<void> _publishWidgetSnapshot(int generation) async {
+    final stock = _stockKey.currentState;
+    if (stock == null || !stock.isLoaded || stock.lastRefreshedAt == null) {
+      return;
+    }
+    try {
+      final (assets, _, _) = await AssetDataManager.loadCategoryState();
+      if (!mounted || generation != _widgetSnapshotGeneration) return;
+      final other = AssetCalculator.calculateTotalAssets(
+        assets,
+        0,
+        _selectedCurrency,
+      );
+      final stocks = stock.totalAssets;
+      final crypto = CurrencyUtil.convertCurrency(
+        ProService.instance.isPro ? _crypto.totalUsd.toDouble() : 0,
+        'USD',
+        _selectedCurrency,
+      );
+      final dates = <DateTime>[
+        stock.lastRefreshedAt!,
+        if (ProService.instance.isPro &&
+            _crypto.connections.isNotEmpty &&
+            _crypto.oldestUpdate != null)
+          _crypto.oldestUpdate!,
+      ]..sort();
+      await WidgetSnapshotService.publish(
+        total: stocks + crypto + other,
+        stocks: stocks,
+        crypto: crypto,
+        other: other,
+        currency: _selectedCurrency,
+        updatedAt: dates.first,
+        incomplete: ProService.instance.isPro && _crypto.incomplete,
+      );
+    } catch (error) {
+      // A failed local/iCloud read must never publish a misleading zero total.
+      debugPrint('[WidgetSnapshot] Could not publish: $error');
     }
   }
 
@@ -200,6 +285,7 @@ class _AppShellState extends State<_AppShell> with WidgetsBindingObserver {
 
   void _refreshHeader() {
     _syncStockTotalValue();
+    _scheduleWidgetSnapshot();
     if (mounted) setState(() {});
   }
 
@@ -226,6 +312,7 @@ class _AppShellState extends State<_AppShell> with WidgetsBindingObserver {
       _syncStockTotalValue();
     });
     SettingsService.setDefaultCurrency(currency);
+    _scheduleWidgetSnapshot();
   }
 
   void _onAddTap() {
@@ -253,9 +340,16 @@ class _AppShellState extends State<_AppShell> with WidgetsBindingObserver {
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
     _cryptoTimer?.cancel();
+    _widgetSnapshotTimer?.cancel();
     _crypto.removeListener(_refreshHeader);
     ExchangeRateService().removeListener(_refreshHeader);
     ProService.instance.removeListener(_onProChanged);
+    PrivacyService.instance.hideAmounts.removeListener(_scheduleWidgetSnapshot);
+    PrivacyService.instance.biometricLock.removeListener(
+      _scheduleWidgetSnapshot,
+    );
+    L10n.notifier.removeListener(_scheduleWidgetSnapshot);
+    _widgetNavigation.setMethodCallHandler(null);
     _pageController.dispose();
     super.dispose();
   }

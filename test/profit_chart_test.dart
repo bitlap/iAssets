@@ -46,7 +46,7 @@ void main() {
           final button = find.byType(TextButton);
           final rect = tester.getRect(button);
           expect(rect.width, 264);
-          expect(rect.height, 14);
+          expect(rect.height, 28);
           final style = tester.widget<TextButton>(button).style!;
           expect(
             style.overlayColor!.resolve({WidgetState.pressed}),

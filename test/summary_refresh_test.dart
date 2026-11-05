@@ -97,6 +97,77 @@ void main() {
       expect(tester.takeException(), isNull);
     });
   }
+
+  testWidgets('today profit icons and amount follow the market color setting', (
+    tester,
+  ) async {
+    AppColors.applyBrightness(Brightness.light);
+    AppColors.applyMarketColorPreference(true);
+    addTearDown(() => AppColors.applyMarketColorPreference(true));
+
+    double todayProfit = 10;
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: ValueListenableBuilder<bool>(
+            valueListenable: AppColors.marketColorNotifier,
+            builder: (context, _, _) => StockHeaderCard(
+              selectedCurrency: 'USD',
+              totalAssets: 100,
+              totalMarketValue: 100,
+              totalCost: 80,
+              totalProfit: 20,
+              totalRealizedPL: 0,
+              totalProfitPercent: 25,
+              todayProfit: todayProfit,
+              todayProfitPercent: todayProfit,
+              totalAfterTaxDividends: 0,
+              totalSellAmount: 0,
+              onCurrencyChanged: (_) {},
+            ),
+          ),
+        ),
+      ),
+    );
+
+    Color? todayIconColor() =>
+        tester.widget<Icon>(find.byIcon(Icons.today)).color;
+    Color? todayHelpColor() => tester
+        .widget<Icon>(
+          find.descendant(
+            of: find.byTooltip(StockConfig.assetTodayProfitHelp),
+            matching: find.byIcon(Icons.help_outline),
+          ),
+        )
+        .color;
+
+    expect(todayIconColor(), AppColors.danger);
+    expect(todayHelpColor(), AppColors.danger);
+    expect(
+      tester.widget<Text>(find.text('+10.00')).style?.color,
+      AppColors.danger,
+    );
+
+    AppColors.applyMarketColorPreference(false);
+    await tester.pump();
+    expect(todayIconColor(), AppColors.success);
+    expect(todayHelpColor(), AppColors.success);
+    expect(
+      tester.widget<Text>(find.text('+10.00')).style?.color,
+      AppColors.success,
+    );
+
+    todayProfit = -10;
+    AppColors.applyMarketColorPreference(true);
+    await tester.pump();
+    expect(todayIconColor(), AppColors.success);
+    expect(todayHelpColor(), AppColors.success);
+    expect(
+      tester.widget<Text>(find.text('-10.00')).style?.color,
+      AppColors.success,
+    );
+  });
+
   for (final language in [L10n.langZh, L10n.langEn, L10n.langZhHant]) {
     testWidgets('asset formulas fit a narrow screen in $language', (
       tester,
@@ -200,10 +271,7 @@ void main() {
         expect(stockAmount.top - currency.bottom, inInclusiveRange(4, 5));
         expect(
           tester.getRect(find.text('-12.34%')).left,
-          closeTo(
-            tester.getRect(find.text(StockConfig.assetTodayProfit)).left,
-            .01,
-          ),
+          closeTo(tester.getRect(find.byIcon(Icons.today)).left, .01),
         );
         final today = tester.getRect(find.text(StockConfig.assetTodayProfit));
         expect(

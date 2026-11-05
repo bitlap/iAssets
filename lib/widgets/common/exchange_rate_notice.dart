@@ -41,9 +41,13 @@ class ExchangeRateNotice extends StatelessWidget {
             border: Border(top: BorderSide(color: AppColors.border, width: .5)),
           ),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Row(
+              Wrap(
+                alignment: WrapAlignment.center,
+                crossAxisAlignment: WrapCrossAlignment.center,
+                spacing: 4,
+                runSpacing: 2,
                 children: [
                   Icon(
                     warning
@@ -54,27 +58,20 @@ class ExchangeRateNotice extends StatelessWidget {
                         ? AppColors.warning
                         : AppColors.textSecondary,
                   ),
-                  const SizedBox(width: 4),
-                  Expanded(
-                    child: Text(
-                      '${L10n.t('exchangeRateStatus')}: $status',
-                      style: TextStyles.caption.copyWith(
-                        color: warning
-                            ? AppColors.warning
-                            : AppColors.textSecondary,
-                      ),
+                  Text(
+                    '${L10n.t('exchangeRateStatus')}: $status',
+                    style: TextStyles.caption.copyWith(
+                      color: warning
+                          ? AppColors.warning
+                          : AppColors.textSecondary,
                     ),
                   ),
                   if (date != null) ...[
-                    const SizedBox(width: 8),
-                    Flexible(
-                      child: Text(
-                        dateText,
-                        textAlign: TextAlign.right,
-                        semanticsLabel:
-                            '${L10n.t('exchangeRateDate')}: $dateText',
-                        style: TextStyles.caption,
-                      ),
+                    Text(
+                      dateText,
+                      semanticsLabel:
+                          '${L10n.t('exchangeRateDate')}: $dateText',
+                      style: TextStyles.caption,
                     ),
                   ],
                 ],
@@ -83,6 +80,7 @@ class ExchangeRateNotice extends StatelessWidget {
                 const SizedBox(height: 4),
                 Text(
                   L10n.t('exchangeRateIncomplete'),
+                  textAlign: TextAlign.center,
                   style: TextStyles.caption.copyWith(color: AppColors.warning),
                 ),
               ],
