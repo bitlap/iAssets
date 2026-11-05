@@ -31,9 +31,7 @@ private struct AssetWidgetProvider: TimelineProvider {
     }
     // The app publishes a new snapshot and calls WidgetCenter after data or
     // privacy changes. The second entry updates the visible stale marker.
-    // A foreground publish requests a reload, but WidgetKit may defer it.
-    // Re-read the shared snapshot on the next eligible timeline request too.
-    completion(Timeline(entries: entries, policy: .after(now.addingTimeInterval(5 * 60))))
+    completion(Timeline(entries: entries, policy: .atEnd))
   }
 
   private func entry(for snapshot: AssetWidgetSnapshot?, at date: Date) -> AssetWidgetEntry {

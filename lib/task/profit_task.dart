@@ -9,14 +9,6 @@ import '../services/settings_service.dart';
 import '../services/stock_data_manager.dart';
 import '../services/stock_quote_service.dart';
 import '../services/exchange_rate_service.dart';
-import '../services/asset_data_manager.dart';
-import '../services/crypto/crypto_store.dart';
-import '../services/privacy_service.dart';
-import '../services/pro_service.dart';
-import '../services/widget_snapshot_service.dart';
-import '../l10n/l10n.dart';
-import '../utils/asset_calculator.dart';
-import '../utils/currency_util.dart';
 import '../utils/stock_calculator.dart';
 
 @pragma('vm:entry-point')
@@ -74,7 +66,6 @@ void callbackDispatcher() {
         summary.totalProfit,
         currency,
       );
-      await _refreshWidgetSnapshot(summary.totalAssets, currency);
       debugPrint(
         '[${DateTime.now().toString().substring(11, 19)}][WorkManager] ===> 后台任务执行成功 totalProfit: ${summary.totalProfit} ($currency)',
       );
@@ -85,55 +76,6 @@ void callbackDispatcher() {
     }
     return Future.value(true);
   });
-}
-
-Future<void> _refreshWidgetSnapshot(double stocks, String currency) async {
-  // A headless Workmanager engine has its own Dart singletons. Re-read the
-  // user's presentation and verified entitlement before accessing exchanges.
-  await PrivacyService.instance.initialize();
-  L10n.deviceLocale = PlatformDispatcher.instance.locale;
-  L10n.applyLanguage(await SettingsService.getPreferredLanguage());
-  await ProService.instance.refresh();
-  final pro = ProService.instance;
-  // A headless StoreKit check can temporarily report Free while the foreground
-  // app still has verified Pro access. Preserve the last widget balance rather
-  // than publishing an apparent zero crypto allocation in that case.
-  if (!pro.isPro) return;
-  final crypto = CryptoStore();
-  await crypto.refresh();
-  if (!WidgetSnapshotService.isBackgroundPortfolioReady(
-    entitlementLoading: pro.loading,
-    entitlementFailed: pro.error != null,
-    isPro: pro.isPro,
-    cryptoInitialized: crypto.initialized,
-    cryptoSyncing: crypto.syncing,
-    cryptoConnectionCount: crypto.connections.length,
-    cryptoSnapshotCount: crypto.connections
-        .where((connection) => crypto.snapshot(connection.id) != null)
-        .length,
-  )) {
-    return;
-  }
-
-  final (assets, _, _) = await AssetDataManager.loadCategoryState();
-  final other = AssetCalculator.calculateTotalAssets(assets, 0, currency);
-  final cryptoValue = CurrencyUtil.convertCurrency(
-    crypto.totalUsd.toDouble(),
-    'USD',
-    currency,
-  );
-  final updatedAt = crypto.oldestUpdate;
-  await WidgetSnapshotService.publish(
-    total: stocks + cryptoValue + other,
-    stocks: stocks,
-    crypto: cryptoValue,
-    other: other,
-    currency: currency,
-    updatedAt: updatedAt != null && updatedAt.isBefore(DateTime.now())
-        ? updatedAt
-        : DateTime.now(),
-    incomplete: crypto.incomplete,
-  );
 }
 
 Future<String> _readCurrency() async {

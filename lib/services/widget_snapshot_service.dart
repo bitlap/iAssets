@@ -9,50 +9,6 @@ import 'privacy_service.dart';
 class WidgetSnapshotService {
   WidgetSnapshotService._();
 
-  /// Wait for verified access and a completed sync. A connected portfolio
-  /// needs at least one account snapshot; partial results can be shown with
-  /// the incomplete marker instead of freezing the entire widget.
-  static bool isPortfolioReady({
-    required bool entitlementLoading,
-    required bool entitlementFailed,
-    required bool isPro,
-    required bool cryptoInitialized,
-    required bool cryptoSyncing,
-    required int cryptoConnectionCount,
-    required int cryptoSnapshotCount,
-  }) =>
-      !entitlementLoading &&
-      (!entitlementFailed || isPro) &&
-      cryptoInitialized &&
-      (isPro
-          ? !cryptoSyncing &&
-                (cryptoConnectionCount == 0 || cryptoSnapshotCount > 0)
-          : cryptoConnectionCount == 0);
-
-  /// A headless task cannot distinguish a genuinely empty Keychain from an
-  /// unavailable connection list. Only a foreground session may publish the
-  /// zero-connection state after the user removes their last connection.
-  static bool isBackgroundPortfolioReady({
-    required bool entitlementLoading,
-    required bool entitlementFailed,
-    required bool isPro,
-    required bool cryptoInitialized,
-    required bool cryptoSyncing,
-    required int cryptoConnectionCount,
-    required int cryptoSnapshotCount,
-  }) =>
-      isPro &&
-      cryptoConnectionCount > 0 &&
-      isPortfolioReady(
-        entitlementLoading: entitlementLoading,
-        entitlementFailed: entitlementFailed,
-        isPro: isPro,
-        cryptoInitialized: cryptoInitialized,
-        cryptoSyncing: cryptoSyncing,
-        cryptoConnectionCount: cryptoConnectionCount,
-        cryptoSnapshotCount: cryptoSnapshotCount,
-      );
-
   static const MethodChannel _channel = MethodChannel(
     'org.bitlap.assets/widget-snapshot',
   );
