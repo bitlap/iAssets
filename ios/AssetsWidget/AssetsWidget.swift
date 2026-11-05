@@ -99,13 +99,17 @@ private struct AssetWidgetView: View {
     entry.snapshot == nil || entry.stale || entry.snapshot?.incomplete == true
       ? Color.orange : Color.green
   }
-  private var updateTime: String? {
+  private func formattedUpdateTime(compact: Bool) -> String? {
     guard let snapshot = entry.snapshot else { return nil }
     let formatter = DateFormatter()
-    formatter.locale = Locale(identifier: language == "zh_Hant" ? "zh_TW" : language)
-    formatter.dateFormat = "M/d HH:mm"
+    formatter.locale = Locale(identifier: language == "zh_Hant" ? "zh_TW" :
+                              language == "zh" ? "zh_CN" : "en_US")
+    formatter.dateFormat = compact ? "M/d HH:mm" :
+      language == "en" ? "MMM d, HH:mm:ss" : "M月d日 HH:mm:ss"
     return formatter.string(from: snapshot.updatedAt)
   }
+  private var updateTime: String? { formattedUpdateTime(compact: false) }
+  private var compactUpdateTime: String? { formattedUpdateTime(compact: true) }
 
   var body: some View {
     Group {
@@ -148,7 +152,7 @@ private struct AssetWidgetView: View {
         .privacySensitive()
       HStack(spacing: 3) {
         Text(status)
-        if let updateTime { Text("· \(updateTime)") }
+        if let compactUpdateTime { Text("· \(compactUpdateTime)") }
       }
       .font(.system(size: 11))
       .lineLimit(1)
@@ -175,7 +179,7 @@ private struct AssetWidgetView: View {
         totalAmount(size: size)
       }
       Spacer(minLength: 3)
-      statusRow()
+      statusRow(size: size)
     }
     .padding(.horizontal, size == .small ? 11 : 12)
     .padding(.vertical, 9)
@@ -216,17 +220,32 @@ private struct AssetWidgetView: View {
     }
   }
 
-  private func statusRow() -> some View {
-    HStack(spacing: 5) {
+  @ViewBuilder
+  private func statusRow(size: HomeSize) -> some View {
+    let label = HStack(spacing: 5) {
       Circle().fill(statusColor).frame(width: 6, height: 6)
       Text(status)
-      Spacer(minLength: 0)
-      if let updateTime { Text(updateTime) }
     }
-    .font(.system(size: 12, weight: .medium))
-    .foregroundStyle(.secondary)
-    .lineLimit(1)
-    .minimumScaleFactor(0.85)
+    if size == .small {
+      VStack(spacing: 1) {
+        label
+        if let updateTime { Text(updateTime) }
+      }
+      .frame(maxWidth: .infinity, alignment: .center)
+      .font(.system(size: 12, weight: .medium))
+      .foregroundStyle(.secondary)
+      .lineLimit(1)
+      .minimumScaleFactor(0.85)
+    } else {
+      HStack(spacing: 5) {
+        label
+        if let updateTime { Text(updateTime) }
+      }
+      .frame(maxWidth: .infinity, alignment: .center)
+      .font(.system(size: 12, weight: .medium))
+      .foregroundStyle(.secondary)
+      .lineLimit(1)
+    }
   }
 
   private var background: some View {
