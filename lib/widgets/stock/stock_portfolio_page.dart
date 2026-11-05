@@ -166,6 +166,7 @@ class StockPortfolioPageState extends State<StockPortfolioPage>
   /// 标记数据已变更，并立即异步保存到本地（同步 iCloud 由内部处理）
   void _markDirty() {
     _dataDirty = true;
+    widget.onHeaderChanged?.call();
     unawaited(_saveAll());
   }
 
@@ -328,6 +329,8 @@ class StockPortfolioPageState extends State<StockPortfolioPage>
     selectedCurrency,
   );
   double get totalAssets => _assetSummary.totalAssets;
+  bool get isLoaded => _stocksLoaded;
+  DateTime? get lastRefreshedAt => _lastRefreshTime;
   double get totalMarketValue => _assetSummary.totalMarketValue;
   double get totalCost => _assetSummary.totalCost;
   double get totalProfit => _assetSummary.totalProfit;

@@ -4,6 +4,23 @@ import UIKit
 class SceneDelegate: FlutterSceneDelegate {
   private var privacyCover: UIView?
 
+  override func scene(
+    _ scene: UIScene, willConnectTo session: UISceneSession,
+    options connectionOptions: UIScene.ConnectionOptions
+  ) {
+    super.scene(scene, willConnectTo: session, options: connectionOptions)
+    for context in connectionOptions.urlContexts {
+      _ = (UIApplication.shared.delegate as? AppDelegate)?.openWidgetURL(context.url)
+    }
+  }
+
+  override func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {
+    let otherURLs = URLContexts.filter { context in
+      !((UIApplication.shared.delegate as? AppDelegate)?.openWidgetURL(context.url) ?? false)
+    }
+    if !otherURLs.isEmpty { super.scene(scene, openURLContexts: Set(otherURLs)) }
+  }
+
   override func sceneWillResignActive(_ scene: UIScene) {
     super.sceneWillResignActive(scene)
     guard privacyCover == nil else { return }
