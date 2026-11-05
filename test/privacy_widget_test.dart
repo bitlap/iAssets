@@ -44,7 +44,7 @@ void main() {
     expect(find.text('+\$987.65'), findsNothing);
   });
 
-  testWidgets('inactive app covers content even without biometric lock', (
+  testWidgets('inactive app keeps preview visible without biometric lock', (
     tester,
   ) async {
     await tester.pumpWidget(
@@ -65,7 +65,7 @@ void main() {
                 .first,
           )
           .excluding,
-      isTrue,
+      isFalse,
     );
     expect(
       tester
@@ -78,8 +78,10 @@ void main() {
                 .first,
           )
           .ignoring,
-      isTrue,
+      isFalse,
     );
+    expect(find.text('private balance'), findsOneWidget);
+    expect(find.byIcon(Icons.shield_outlined), findsNothing);
 
     tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.resumed);
     await tester.pump();
@@ -96,6 +98,19 @@ void main() {
           .excluding,
       isFalse,
     );
+  });
+
+  testWidgets('amount hiding alone keeps the app preview visible', (
+    tester,
+  ) async {
+    PrivacyService.instance.hideAmounts.value = true;
+    await tester.pumpWidget(
+      const MaterialApp(home: PrivacyGate(child: SensitiveText('\$12,345.67'))),
+    );
+    tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.inactive);
+    await tester.pump();
+    expect(find.text('••••'), findsOneWidget);
+    expect(find.byIcon(Icons.shield_outlined), findsNothing);
   });
 
   testWidgets('failed authentication leaves the app locked with retry', (

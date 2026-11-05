@@ -48,6 +48,7 @@ class _PrivacyGateState extends State<PrivacyGate> with WidgetsBindingObserver {
     if (state == AppLifecycleState.inactive ||
         state == AppLifecycleState.hidden ||
         state == AppLifecycleState.paused) {
+      if (!PrivacyService.instance.biometricLock.value) return;
       // The system authentication prompt itself can make iOS inactive.
       // Only invalidate that prompt when the app actually backgrounds.
       if (state != AppLifecycleState.inactive || !_authenticating) {

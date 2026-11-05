@@ -23,6 +23,7 @@ class SceneDelegate: FlutterSceneDelegate {
 
   override func sceneWillResignActive(_ scene: UIScene) {
     super.sceneWillResignActive(scene)
+    guard UserDefaults.standard.bool(forKey: "privacy.biometricLock") else { return }
     guard privacyCover == nil else { return }
     guard let windows = (scene as? UIWindowScene)?.windows,
           let window = windows.first(where: { $0.isKeyWindow }) ?? windows.first else { return }
