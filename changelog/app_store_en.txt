@@ -1,40 +1,17 @@
 iAssets — Clear Overview, Easy Tracking
 
-Keep stocks, crypto, savings and other investments together. See how your assets are allocated and how your returns change over time.
+See your stocks, crypto and other assets in one app, with a clear view of totals, allocation and returns.
 
-Stocks and Dividends
-• Search by name or symbol across US, Hong Kong, Shanghai, Shenzhen, Beijing, Japanese, Korean, UK and over-the-counter markets
-• Filter search results, holdings and dividends by individual exchange or market, with clear color labels
-• Recognize your holdings more easily with company logos across more markets
-• Record buys, sells, dividends and fees, with automatic calculations for net invested, profit and loss and after-tax dividends
-• Stock assets reflect current holdings only; net sale proceeds remain a separate transaction statistic
-• Fully selling a position removes the stock and related records; existing closed-position history is not deleted automatically
-• See assets, total profit and loss and today's profit and loss at a glance; expand a holding for trade details and actions
-• Add custom stocks with a currency picker beside the price and an easy-to-reach button below
-• Quotes from Eastmoney, Tencent and Yahoo Finance; some market quotes may be delayed
-• Stock search shows prices and currency codes, with more display currencies supported
+Key Features
+• Track stocks across multiple markets, record trades and dividends, and view holdings and returns
+• View Binance spot, futures and lead trader assets through read-only API access
+• Organize cash, deposits, investments and custom asset categories across currencies
+• Check your asset overview with Home Screen and Lock Screen widgets
 
-Crypto Assets
-• Connect regular Binance accounts or lead trader accounts to view spot balances, futures positions and estimated asset values
-• Refresh automatically or pull to refresh, and include crypto in your total assets and allocation
-• Viewing only, with no trading or transfers; copy trader portfolios are not currently supported
-
-Asset Overview
-• Organize cash, deposits and wealth products with colorful cards; regional templates offer 401(k) / IRA, MPF or provident fund, with Property and Other Assets in the common templates
-• Create custom asset categories and valuation methods, rename categories, and move assets between them
-• See deposit rates and time remaining, or wealth-product shares and NAV, beside balances
-• See creation and update times clearly, with collapsible groups and drag-to-reorder
-• View stocks, crypto and other assets together, with support for multiple display currencies
-• Home Screen and Lock Screen widgets show total assets, category values and update time; eligible background refreshes sync crypto and update widgets when iOS permits
-• See FX rate status and data dates; missing rates mark totals incomplete while original-currency assets remain visible
-
-Made for Everyday Use
-• Optionally lock the app with Face ID or Touch ID when opening or returning; use your device passcode to regain access
-• Hide amounts in assets, holdings and earnings with one tap; a privacy cover protects the app preview when switching away
-• Sync stocks, manually managed assets and settings with iCloud; view and record stocks and manual assets offline
-• Crypto connection details stay on your device; crypto balances and positions are not synced to iCloud
-• Choose Simplified Chinese, Traditional Chinese or English, light or dark themes, and your preferred gain/loss colors
-• Other system languages default to English; gain/loss colors start with regional defaults and remain customizable
-• No ads or social feed; basic features are free, with subscription and lifetime Pro options
+Privacy and Experience
+• Protect the app with Face ID / Touch ID and hide amounts with one tap
+• Sync stocks, manual assets and settings with iCloud; crypto credentials stay on your device
+• Choose Simplified Chinese, Traditional Chinese or English, with light and dark themes
+• Use core features for free, or unlock Pro with a subscription or lifetime purchase
 
 Terms of Use (Apple Standard EULA): https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
