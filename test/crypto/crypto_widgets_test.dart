@@ -45,9 +45,7 @@ void main() {
           (call) async => testDirectory.path,
         );
   });
-  testWidgets('pull refresh delegates to the host refresh', (
-    tester,
-  ) async {
+  testWidgets('pull refresh delegates to the host refresh', (tester) async {
     final store = CryptoStore(
       reader: fixtures.FakeReader(fixtures.sample(DateTime.now())),
       persistence: fixtures.MemoryPersistence(),
