@@ -25,6 +25,7 @@ Asset Overview
 • See deposit rates and time remaining, or wealth-product shares and NAV, beside balances
 • See creation and update times clearly, with collapsible groups and drag-to-reorder
 • View stocks, crypto and other assets together, with support for multiple display currencies
+• Home Screen and Lock Screen widgets show total assets, category values and update time; eligible background refreshes sync crypto and update widgets when iOS permits
 • See FX rate status and data dates; missing rates mark totals incomplete while original-currency assets remain visible
 
 Made for Everyday Use
