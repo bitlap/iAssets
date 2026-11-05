@@ -1,6 +1,7 @@
-import 'package:flutter/material.dart';
 import 'dart:math';
+import 'package:flutter/material.dart';
 import 'app_colors.dart';
+import 'sensitive_text.dart';
 
 class AppLayout {
   AppLayout._();
@@ -215,7 +216,7 @@ class YieldTile extends StatelessWidget {
         children: [
           Text(label, style: TextStyles.caption),
           const SizedBox(height: 4),
-          Text(
+          SensitiveText(
             value,
             style: TextStyles.valueMedium.copyWith(color: valueColor),
           ),
@@ -363,7 +364,10 @@ class StatMetricCard extends StatelessWidget {
         children: [
           Text(label, style: TextStyles.caption),
           const SizedBox(height: 6),
-          Text(value, style: TextStyles.valueLarge.copyWith(color: valueColor)),
+          SensitiveText(
+            value,
+            style: TextStyles.valueLarge.copyWith(color: valueColor),
+          ),
         ],
       ),
     );

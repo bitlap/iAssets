@@ -9,6 +9,8 @@ import '../common/dialog_utils.dart';
 import '../common/currency_selector.dart';
 import '../common/app_ui.dart';
 import '../common/exchange_rate_notice.dart';
+import '../common/sensitive_text.dart';
+import '../../services/privacy_service.dart';
 import 'stock_style.dart';
 
 class StockHeaderCard extends StatefulWidget {
@@ -92,7 +94,7 @@ class _StockHeaderCardState extends State<StockHeaderCard> {
           ),
           const SizedBox(height: 4),
           // 总金额（已经是目标币种，直接格式化）
-          Text(
+          SensitiveText(
             widget.totalAssets.isFinite
                 ? '${CurrencyUtil.getSymbol(widget.selectedCurrency)}${CurrencyUtil.formatCompact(widget.totalAssets)}'
                 : L10n.t('exchangeRateCannotValue'),
@@ -112,9 +114,17 @@ class _StockHeaderCardState extends State<StockHeaderCard> {
             ),
           ),
           const SizedBox(height: 8),
-          ProfitChartWidget(
-            totalProfit: widget.totalProfit,
-            targetCurrency: widget.selectedCurrency,
+          ValueListenableBuilder<bool>(
+            valueListenable: PrivacyService.instance.hideAmounts,
+            builder: (context, hidden, _) => hidden
+                ? const SizedBox(
+                    height: 44,
+                    child: Center(child: Icon(Icons.shield_outlined)),
+                  )
+                : ProfitChartWidget(
+                    totalProfit: widget.totalProfit,
+                    targetCurrency: widget.selectedCurrency,
+                  ),
           ),
           ExchangeRateNotice(incomplete: !widget.totalAssets.isFinite),
         ],
@@ -151,13 +161,13 @@ class _StockHeaderCardState extends State<StockHeaderCard> {
             ),
           ],
         ),
-        Text(
+        SensitiveText(
           ProfitUtil.amount(widget.todayProfit),
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
           style: TextStyles.valueMedium.copyWith(color: color),
         ),
-        Text(
+        SensitiveText(
           ProfitUtil.percent(widget.todayProfitPercent),
           style: TextStyles.caption.copyWith(
             color: color,
@@ -289,7 +299,7 @@ class _StockHeaderCardState extends State<StockHeaderCard> {
   }
 
   Widget _buildProfitText() {
-    return Text(
+    return SensitiveText(
       ProfitUtil.amount(widget.totalProfit),
       style: TextStyles.valueMedium.copyWith(
         color: ProfitUtil.colorOf(widget.totalProfit),
@@ -298,7 +308,7 @@ class _StockHeaderCardState extends State<StockHeaderCard> {
   }
 
   Widget _buildProfitPercent() {
-    return Text(
+    return SensitiveText(
       ProfitUtil.percent(widget.totalProfitPercent),
       style: TextStyles.caption.copyWith(
         fontWeight: FontWeight.w600,
@@ -319,7 +329,7 @@ class _StockHeaderCardState extends State<StockHeaderCard> {
         ),
         const SizedBox(width: 8),
         Flexible(
-          child: Text(
+          child: SensitiveText(
             value,
             textAlign: TextAlign.right,
             style: TextStyles.valueMedium.copyWith(

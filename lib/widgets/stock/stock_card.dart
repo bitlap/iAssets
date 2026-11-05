@@ -9,6 +9,7 @@ import '../../utils/logo_cacher.dart';
 import '../../utils/market_util.dart';
 import '../../utils/stock_logo_urls.dart';
 import '../common/app_ui.dart';
+import '../common/sensitive_text.dart';
 import 'market_badges.dart';
 import 'stock_columns.dart';
 
@@ -82,7 +83,7 @@ class StockCard extends StatelessWidget {
                                 const SizedBox(width: 4),
                               ],
                               Flexible(
-                                child: Text(
+                                child: SensitiveText(
                                   '${CurrencyUtil.getSymbol(stock.currency)}${CurrencyUtil.formatCompact(stock.totalValue)}',
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
@@ -257,7 +258,7 @@ class StockCard extends StatelessWidget {
           FittedBox(
             fit: BoxFit.scaleDown,
             alignment: Alignment.centerLeft,
-            child: Text(
+            child: SensitiveText(
               '${CurrencyUtil.formatRate(stock.shares)}${StockConfig.stockSharesSuffix}',
               style: TextStyles.smallBold.copyWith(fontWeight: FontWeight.bold),
             ),
@@ -270,14 +271,14 @@ class StockCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: [
-                Text(
+                SensitiveText(
                   CurrencyUtil.formatRate(stock.currentPrice),
                   style: TextStyles.smallBold.copyWith(
                     fontWeight: FontWeight.bold,
                   ),
                 ),
                 const SizedBox(width: 4),
-                Text(
+                SensitiveText(
                   ProfitUtil.percent(stock.changePercent),
                   style: TextStyles.label.copyWith(
                     color: changeColor,
@@ -303,7 +304,7 @@ class StockCard extends StatelessWidget {
         FittedBox(
           fit: BoxFit.scaleDown,
           alignment: Alignment.centerRight,
-          child: Text(
+          child: SensitiveText(
             ProfitUtil.amount(stock.profitLossAmount),
             style: TextStyles.smallBold.copyWith(color: profitColor),
           ),
@@ -311,7 +312,7 @@ class StockCard extends StatelessWidget {
         FittedBox(
           fit: BoxFit.scaleDown,
           alignment: Alignment.centerRight,
-          child: Text(
+          child: SensitiveText(
             ProfitUtil.percent(stock.profitLossPercent),
             style: TextStyles.smallBold.copyWith(color: profitColor),
           ),
@@ -489,7 +490,7 @@ class StockCard extends StatelessWidget {
         FittedBox(
           fit: BoxFit.scaleDown,
           alignment: Alignment.centerLeft,
-          child: Text(
+          child: SensitiveText(
             value,
             style: TextStyles.valueMedium.copyWith(
               fontSize: prominent ? 16 : 14,

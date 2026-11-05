@@ -642,6 +642,21 @@ const Map<String, String> stringsEn = {
   "proManage": "Manage subscriptions",
   "proTerms": "Terms of use",
   "proPrivacy": "Privacy policy",
+  'privacySection': 'Privacy',
+  'privacyBiometricLock': 'Face ID / Touch ID lock',
+  'privacyBiometricHint':
+      'Authenticate at launch and on return; device passcode can recover access',
+  'privacyHideAmounts': 'Hide amounts',
+  'privacyShowAmounts': 'Show amounts',
+  'privacyHideHint': 'Hide amounts in assets, holdings, and earnings',
+  'privacyAuthReason': 'Unlock iAssets to view your assets',
+  'privacyLocked': 'iAssets is locked',
+  'privacyUnlock': 'Unlock',
+  'privacyUnavailable': 'Set up Face ID or Touch ID in device settings first',
+  'privacyAuthFailed':
+      'Authentication did not complete. Try again or use your device passcode.',
+  'privacyAuthCanceled': 'Authentication canceled; the lock was not enabled',
+  'privacySaveFailed': 'Could not save privacy settings. Try again.',
   "proRenewalTerms":
       "Monthly and annual plans renew automatically unless canceled at least 24 hours before the current period ends. Manage or cancel in your App Store account settings. Lifetime is a one-time purchase with no renewal.",
   "proLifetimeWarning":

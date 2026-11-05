@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../common/sensitive_text.dart';
 import 'package:intl/intl.dart';
 import '../../models/stock_model.dart';
 import '../../config/app_config.dart';
@@ -148,7 +149,7 @@ class _OperationRecordsTabState extends State<OperationRecordsTab> {
             overflow: TextOverflow.ellipsis,
           ),
         ),
-        Text(
+        SensitiveText(
           '${isBuy ? "+" : "-"}${CurrencyUtil.formatRate(record.shares)}${StockConfig.stockSharesSuffix}',
           style: TextStyles.body13.copyWith(
             fontWeight: FontWeight.bold,
@@ -163,14 +164,14 @@ class _OperationRecordsTabState extends State<OperationRecordsTab> {
     return Row(
       children: [
         if (record.amount > 0)
-          Text(
+          SensitiveText(
             '${CurrencyUtil.formatRate(record.amount)}${StockConfig.recordsTimesSign}${CurrencyUtil.formatRate(record.shares)}',
             style: TextStyles.caption,
           )
         else
           Text('-', style: TextStyles.caption),
         const Spacer(),
-        Text(
+        SensitiveText(
           '${CurrencyUtil.getSymbol(widget.stock.currency)}${CurrencyUtil.formatRate(record.amount * record.shares)}',
           style: TextStyles.smallBold.copyWith(
             color: isBuy ? AppColors.rise : AppColors.fall,

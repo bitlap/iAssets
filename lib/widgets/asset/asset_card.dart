@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../../config/asset_config.dart';
 import '../common/app_colors.dart';
 import '../common/app_ui.dart';
+import '../common/sensitive_text.dart';
 import 'asset_style.dart';
 
 class AssetCardFrame extends StatelessWidget {
@@ -116,7 +117,7 @@ class AssetCardFrame extends StatelessWidget {
                               final amountText = FittedBox(
                                 fit: BoxFit.scaleDown,
                                 alignment: Alignment.centerLeft,
-                                child: Text(
+                                child: SensitiveText(
                                   amount,
                                   style: TextStyles.sectionTitle.copyWith(
                                     fontSize: 25,
@@ -125,7 +126,7 @@ class AssetCardFrame extends StatelessWidget {
                                 ),
                               );
                               if (detail == null) return amountText;
-                              final detailText = Text(
+                              final detailText = SensitiveText(
                                 detail!,
                                 maxLines: 2,
                                 overflow: TextOverflow.ellipsis,

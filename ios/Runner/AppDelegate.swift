@@ -62,6 +62,29 @@ import workmanager_apple
     }
     ProStore.shared.observe(channel: proChannel)
 
+    let privacyChannel = FlutterMethodChannel(
+      name: "org.bitlap.assets/privacy", binaryMessenger: flutterEngine.binaryMessenger)
+    privacyChannel.setMethodCallHandler { call, result in
+      let defaults = UserDefaults.standard
+      switch call.method {
+      case "read":
+        result([
+          "hideAmounts": defaults.bool(forKey: "privacy.hideAmounts"),
+          "biometricLock": defaults.bool(forKey: "privacy.biometricLock")
+        ])
+      case "setHideAmounts":
+        guard let value = call.arguments as? Bool else { result(FlutterMethodNotImplemented); return }
+        defaults.set(value, forKey: "privacy.hideAmounts")
+        result(nil)
+      case "setBiometricLock":
+        guard let value = call.arguments as? Bool else { result(FlutterMethodNotImplemented); return }
+        defaults.set(value, forKey: "privacy.biometricLock")
+        result(nil)
+      default:
+        result(FlutterMethodNotImplemented)
+      }
+    }
+
     let window = UIWindow(frame: UIScreen.main.bounds)
     window.rootViewController = FlutterViewController(engine: flutterEngine, nibName: nil, bundle: nil)
     window.makeKeyAndVisible()

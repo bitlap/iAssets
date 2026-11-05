@@ -17,6 +17,7 @@ import 'asset_card.dart';
 import 'asset_header.dart';
 import 'asset_dialogs.dart';
 import 'asset_style.dart';
+import '../common/sensitive_text.dart';
 import 'asset_category_sheet.dart';
 import '../../services/pro_service.dart';
 import '../pro/pro_page.dart';
@@ -655,7 +656,7 @@ class AssetsPageState extends State<AssetsPage> {
                       ),
                     ),
                     const SizedBox(width: 8),
-                    Text(
+                    SensitiveText(
                       '$sym${CurrencyUtil.formatCompact(total)}',
                       style: TextStyles.bodyMedium,
                     ),

@@ -5,6 +5,7 @@ import '../common/app_colors.dart';
 import '../../config/app_config.dart';
 import '../../utils/currency_util.dart';
 import '../common/app_ui.dart';
+import '../common/sensitive_text.dart';
 
 /// 展开的股息记录列表
 class DividendRecordList extends StatelessWidget {
@@ -77,7 +78,7 @@ class _DividendRecordItem extends StatelessWidget {
                       style: TextStyles.valueSmall,
                     ),
                     const Spacer(),
-                    Text(
+                    SensitiveText(
                       '${StockConfig.recordsDivLabel}: $sym${CurrencyUtil.formatCompact(record.afterTaxAmount)}',
                       style: TextStyles.whiteBold12.copyWith(
                         color: AppColors.warning,
@@ -86,7 +87,7 @@ class _DividendRecordItem extends StatelessWidget {
                   ],
                 ),
                 const SizedBox(height: 2),
-                Text(
+                SensitiveText(
                   '${CurrencyUtil.formatRate(record.shares)}${StockConfig.recordsTimesSign}${CurrencyUtil.formatRate(record.amount)}${StockConfig.recordsTimesSign}${1 - record.taxRate}',
                   style: TextStyles.caption,
                 ),

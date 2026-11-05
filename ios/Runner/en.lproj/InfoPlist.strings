@@ -1,3 +1,4 @@
 /* Localized versions of Info.plist keys */
 "CFBundleDisplayName" = "iAssets";
 "NSPhotoLibraryUsageDescription" = "Choose an image to display for a custom stock.";
+"NSFaceIDUsageDescription" = "Unlock iAssets and protect your financial information.";

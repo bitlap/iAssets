@@ -7,6 +7,7 @@ import '../../utils/currency_util.dart';
 import '../common/app_ui.dart';
 import '../stock/market_badges.dart';
 import 'dividend_record_list.dart';
+import '../common/sensitive_text.dart';
 
 /// 每只股票的股息聚合区块
 class DividendStockSection extends StatelessWidget {
@@ -147,7 +148,7 @@ class DividendStockSection extends StatelessWidget {
       children: [
         Text(label, style: TextStyles.label),
         const SizedBox(height: 2),
-        Text(
+        SensitiveText(
           value,
           style: TextStyles.valueSmallMono,
           overflow: TextOverflow.ellipsis,

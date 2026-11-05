@@ -8,6 +8,7 @@ import '../utils/currency_util.dart';
 import '../services/exchange_rate_service.dart';
 import '../utils/center_toast.dart';
 import '../services/settings_service.dart';
+import '../services/privacy_service.dart';
 import '../config/app_config.dart';
 import 'common/app_colors.dart';
 import 'common/app_theme.dart';
@@ -207,6 +208,10 @@ class _SettingsPageState extends State<SettingsPage> {
           const SizedBox(height: 8),
           _buildGeneralSettingsGroup(),
           const SizedBox(height: 24),
+          _buildSectionHeader(Icons.shield_outlined, L10n.t('privacySection')),
+          const SizedBox(height: 8),
+          _buildPrivacyGroup(),
+          const SizedBox(height: 24),
           _buildSectionHeader(
             Icons.currency_exchange,
             SettingsConfig.sectionCurrency,
@@ -254,6 +259,82 @@ class _SettingsPageState extends State<SettingsPage> {
       ),
     );
   }
+
+  Widget _buildPrivacyGroup() => Container(
+    decoration: BoxDecoration(
+      color: AppColors.surface,
+      borderRadius: BorderRadius.circular(14),
+      border: Border.all(color: AppColors.border, width: 0.5),
+    ),
+    child: Column(
+      children: [
+        ValueListenableBuilder<bool>(
+          valueListenable: PrivacyService.instance.biometricLock,
+          builder: (context, enabled, _) => SwitchListTile(
+            secondary: Icon(Icons.fingerprint, color: AppColors.accent),
+            title: Text(L10n.t('privacyBiometricLock')),
+            subtitle: Text(L10n.t('privacyBiometricHint')),
+            value: enabled,
+            activeTrackColor: AppColors.accent.withValues(alpha: .45),
+            activeThumbColor: AppColors.accent,
+            onChanged: (value) async {
+              try {
+                if (value) {
+                  final result = await PrivacyService.instance
+                      .enableBiometricLock(L10n.t('privacyAuthReason'));
+                  if (result != BiometricSetupResult.enabled &&
+                      context.mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(
+                          L10n.t(
+                            result == BiometricSetupResult.unavailable
+                                ? 'privacyUnavailable'
+                                : 'privacyAuthCanceled',
+                          ),
+                        ),
+                      ),
+                    );
+                  }
+                } else {
+                  await PrivacyService.instance.disableBiometricLock();
+                }
+              } catch (_) {
+                if (context.mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text(L10n.t('privacyAuthFailed'))),
+                  );
+                }
+              }
+            },
+          ),
+        ),
+        _buildGroupDivider(),
+        ValueListenableBuilder<bool>(
+          valueListenable: PrivacyService.instance.hideAmounts,
+          builder: (context, hidden, _) => SwitchListTile(
+            secondary: Icon(Icons.shield_outlined, color: AppColors.accent),
+            title: Text(L10n.t('privacyHideAmounts')),
+            subtitle: Text(L10n.t('privacyHideHint')),
+            value: hidden,
+            activeTrackColor: AppColors.accent.withValues(alpha: .45),
+            activeThumbColor: AppColors.accent,
+            onChanged: (value) async {
+              try {
+                await PrivacyService.instance.setHideAmounts(value);
+              } catch (_) {
+                if (context.mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text(L10n.t('privacySaveFailed'))),
+                  );
+                }
+              }
+            },
+          ),
+        ),
+      ],
+    ),
+  );
 
   Widget _buildMarketColorTile() {
     return Padding(

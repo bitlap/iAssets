@@ -1,3 +1,4 @@
 /* Localized versions of Info.plist keys */
 "CFBundleDisplayName" = "iAssets";
 "NSPhotoLibraryUsageDescription" = "用於為自訂股票選擇顯示圖片";
+"NSFaceIDUsageDescription" = "用於解鎖 iAssets 並保護資產資訊";

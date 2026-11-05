@@ -10,6 +10,7 @@ import 'widgets/common/app_theme.dart';
 import 'widgets/common/floating_bottom_bar.dart';
 import 'l10n/l10n.dart';
 import 'services/settings_service.dart';
+import 'services/privacy_service.dart';
 import 'services/pro_service.dart';
 import 'services/crypto/crypto_store.dart';
 import 'services/exchange_rate_service.dart';
@@ -20,6 +21,7 @@ import 'widgets/stock/stock_portfolio_page.dart';
 import 'widgets/asset/assets_page.dart';
 import 'widgets/common/section_title.dart';
 import 'widgets/common/app_ui.dart';
+import 'widgets/common/privacy_gate.dart';
 import 'task/profit_task.dart';
 
 void main() async {
@@ -35,6 +37,7 @@ void main() async {
   AppColors.applyMarketColorPreference(
     await SettingsService.getRedUpGreenDown(deviceLocale: L10n.deviceLocale),
   );
+  await PrivacyService.instance.initialize();
 
   await Workmanager().initialize(callbackDispatcher);
   await Workmanager().registerPeriodicTask(
@@ -117,6 +120,8 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
                 theme: AppTheme.data(Brightness.light),
                 darkTheme: AppTheme.data(Brightness.dark),
                 themeMode: AppTheme.mode,
+                builder: (context, child) =>
+                    PrivacyGate(child: child ?? const SizedBox.shrink()),
                 home: const _AppShell(),
               ),
             );
@@ -286,6 +291,22 @@ class _AppShellState extends State<_AppShell> with WidgetsBindingObserver {
                           _stockKey.currentState?.showBackupDialog(),
                       onSettings: () =>
                           _stockKey.currentState?.showSettingsPage(),
+                      onPrivacy: () async {
+                        final service = PrivacyService.instance;
+                        try {
+                          await service.setHideAmounts(
+                            !service.hideAmounts.value,
+                          );
+                        } catch (_) {
+                          if (context.mounted) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(L10n.t('privacySaveFailed')),
+                              ),
+                            );
+                          }
+                        }
+                      },
                     ),
                   ),
                   const SizedBox(height: 8),

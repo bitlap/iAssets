@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../common/sensitive_text.dart';
 import 'package:intl/intl.dart';
 import '../../models/stock_model.dart';
 import '../../config/app_config.dart';
@@ -157,7 +158,7 @@ class _DividendRecordsTabState extends State<DividendRecordsTab> {
             overflow: TextOverflow.ellipsis,
           ),
         ),
-        Text(
+        SensitiveText(
           '${CurrencyUtil.getSymbol(widget.stock.currency)}${CurrencyUtil.formatRate(record.totalAmount)}',
           style: TextStyles.body13.copyWith(
             fontWeight: FontWeight.bold,
@@ -171,7 +172,7 @@ class _DividendRecordsTabState extends State<DividendRecordsTab> {
   Widget _detailRow(DividendRecord record) {
     return Row(
       children: [
-        Text(
+        SensitiveText(
           '${CurrencyUtil.formatRate(record.shares)}${StockConfig.recordsTimesSign}${CurrencyUtil.formatRate(record.amount)}${StockConfig.recordsTimesSign}${1 - record.taxRate}',
           style: TextStyles.caption,
         ),

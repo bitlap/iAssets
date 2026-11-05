@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'app_colors.dart';
 import 'app_ui.dart';
+import '../../l10n/l10n.dart';
+import '../../services/privacy_service.dart';
 
 class SectionTitle extends StatelessWidget {
   final String title;
@@ -129,6 +131,7 @@ class AnimatedHomeHeader extends StatelessWidget {
   final VoidCallback onDividendOverview;
   final VoidCallback onBackup;
   final VoidCallback onSettings;
+  final VoidCallback onPrivacy;
 
   const AnimatedHomeHeader({
     super.key,
@@ -142,6 +145,7 @@ class AnimatedHomeHeader extends StatelessWidget {
     required this.onDividendOverview,
     required this.onBackup,
     required this.onSettings,
+    required this.onPrivacy,
   });
 
   @override
@@ -183,6 +187,26 @@ class AnimatedHomeHeader extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               _circleButton(Icons.backup_outlined, onBackup),
+              const SizedBox(width: 8),
+              ValueListenableBuilder<bool>(
+                valueListenable: PrivacyService.instance.hideAmounts,
+                builder: (context, hidden, _) => Semantics(
+                  button: true,
+                  toggled: hidden,
+                  label: L10n.t(
+                    hidden ? 'privacyShowAmounts' : 'privacyHideAmounts',
+                  ),
+                  child: Tooltip(
+                    message: L10n.t(
+                      hidden ? 'privacyShowAmounts' : 'privacyHideAmounts',
+                    ),
+                    child: _circleButton(
+                      hidden ? Icons.shield : Icons.shield_outlined,
+                      onPrivacy,
+                    ),
+                  ),
+                ),
+              ),
               const SizedBox(width: 8),
               _circleButton(Icons.settings, onSettings),
             ],

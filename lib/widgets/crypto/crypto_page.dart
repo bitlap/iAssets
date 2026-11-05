@@ -14,6 +14,7 @@ import '../common/confirm_delete_dialog.dart';
 import '../common/empty_state_widget.dart';
 import '../common/form_sheet.dart';
 import '../common/exchange_rate_notice.dart';
+import '../common/sensitive_text.dart';
 import 'add_exchange_sheet.dart';
 import 'crypto_text.dart';
 import 'crypto_style.dart';
@@ -153,7 +154,7 @@ class CryptoPageState extends State<CryptoPage>
                       ],
                     ),
                     const SizedBox(height: 4),
-                    Text(
+                    SensitiveText(
                       _summaryMoney(
                         snapshots.isEmpty || widget.store.incomplete
                             ? null
@@ -194,7 +195,7 @@ class CryptoPageState extends State<CryptoPage>
                                   ],
                                 ),
                                 const SizedBox(height: 4),
-                                Text(
+                                SensitiveText(
                                   _summaryMoney(
                                     _categoryAmount(entry.$1),
                                     showSymbol: false,
@@ -518,6 +519,7 @@ class CryptoPageState extends State<CryptoPage>
                   p.symbol,
                   L10n.t(p.isLong ? 'cryptoLong' : 'cryptoShort'),
                   valueColor: p.isLong ? AppColors.rise : AppColors.fall,
+                  sensitive: false,
                 ),
                 const SizedBox(height: 6),
                 _row(
@@ -537,6 +539,7 @@ class CryptoPageState extends State<CryptoPage>
                   _row(
                     L10n.t('cryptoLeverage'),
                     '${p.leverage!.truncate().toString()}×',
+                    sensitive: false,
                   ),
                 if (p.liquidationPrice != null &&
                     p.liquidationPrice! > Decimal.zero)
@@ -574,7 +577,12 @@ class CryptoPageState extends State<CryptoPage>
       ? AppColors.rise
       : AppColors.fall;
 
-  Widget _row(String label, String value, {Color? valueColor}) => Padding(
+  Widget _row(
+    String label,
+    String value, {
+    Color? valueColor,
+    bool sensitive = true,
+  }) => Padding(
     padding: const EdgeInsets.symmetric(vertical: 5),
     child: LayoutBuilder(
       builder: (context, constraints) {
@@ -591,12 +599,19 @@ class CryptoPageState extends State<CryptoPage>
         }
 
         final labelText = Text(label, style: TextStyles.bodySmall);
-        final valueText = Text(
-          value,
-          textAlign: TextAlign.end,
-          style: valueStyle,
-          softWrap: true,
-        );
+        final Widget valueText = sensitive
+            ? SensitiveText(
+                value,
+                textAlign: TextAlign.end,
+                style: valueStyle,
+                softWrap: true,
+              )
+            : Text(
+                value,
+                textAlign: TextAlign.end,
+                style: valueStyle,
+                softWrap: true,
+              );
         if (textWidth(label, TextStyles.bodySmall) +
                 8 +
                 textWidth(value, valueStyle) >

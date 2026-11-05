@@ -8,6 +8,7 @@ import '../common/app_ui.dart';
 import '../common/currency_selector.dart';
 import '../common/dialog_utils.dart';
 import '../common/exchange_rate_notice.dart';
+import '../common/sensitive_text.dart';
 import '../../l10n/l10n.dart';
 import 'asset_style.dart';
 import 'asset_category_sheet.dart';
@@ -67,7 +68,7 @@ class AssetHeader extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 4),
-          Text(
+          SensitiveText(
             totalAssets.isFinite
                 ? '${CurrencyUtil.getSymbol(currency)}${CurrencyUtil.formatCompact(totalAssets)}'
                 : L10n.t('exchangeRateCannotValue'),
@@ -214,7 +215,7 @@ class AssetHeader extends StatelessWidget {
                     Icon(icon, size: 18, color: color),
                     const SizedBox(width: 8),
                     Expanded(child: Text(label, style: TextStyles.body13)),
-                    Text(
+                    SensitiveText(
                       _formatRatio(value),
                       style: TextStyles.body13.copyWith(
                         color: AppColors.textPrimary,
@@ -272,7 +273,7 @@ Widget _summaryChip(
           ],
         ),
         const SizedBox(height: 4),
-        Text(value, style: TextStyles.valueMedium),
+        SensitiveText(value, style: TextStyles.valueMedium),
       ],
     ),
   );
