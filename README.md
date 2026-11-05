@@ -42,7 +42,77 @@ Pro 权益、老用户升级规则及验证说明见 [Pro 使用与开发说明]
 
 ## 界面预览
 
-以下截图在 iPhone 17 Pro 和 iPad Air 13 英寸（M4）模拟器中重新生成，使用 iOS 系统字体和演示数据。点击图片可查看原图。
+以下截图在 iPhone 17 Pro Max、iPhone 17 Pro 和 iPad Air 13 英寸（M4）模拟器中重新生成，使用 iOS 系统字体和演示数据。点击图片可查看原图。
+
+### iPhone 17 Pro Max
+
+<details open>
+<summary>简体中文 · 浅色</summary>
+
+| 股票持仓 | 股票搜索 | 股息概览 |
+| --- | --- | --- |
+| [<img src="docs/images/iphone-17-pro-max/zh-light-stocks.png" width="220" alt="iPhone 17 Pro Max · 简体中文 · 浅色 · 股票持仓">](docs/images/iphone-17-pro-max/zh-light-stocks.png) | [<img src="docs/images/iphone-17-pro-max/zh-light-search.png" width="220" alt="iPhone 17 Pro Max · 简体中文 · 浅色 · 股票搜索">](docs/images/iphone-17-pro-max/zh-light-search.png) | [<img src="docs/images/iphone-17-pro-max/zh-light-dividends.png" width="220" alt="iPhone 17 Pro Max · 简体中文 · 浅色 · 股息概览">](docs/images/iphone-17-pro-max/zh-light-dividends.png) |
+
+| 数字币总览 | 现货余额 | 合约持仓 |
+| --- | --- | --- |
+| [<img src="docs/images/iphone-17-pro-max/zh-light-crypto.png" width="220" alt="iPhone 17 Pro Max · 简体中文 · 浅色 · 数字币总览">](docs/images/iphone-17-pro-max/zh-light-crypto.png) | [<img src="docs/images/iphone-17-pro-max/zh-light-crypto-spot.png" width="220" alt="iPhone 17 Pro Max · 简体中文 · 浅色 · 现货余额">](docs/images/iphone-17-pro-max/zh-light-crypto-spot.png) | [<img src="docs/images/iphone-17-pro-max/zh-light-crypto-futures.png" width="220" alt="iPhone 17 Pro Max · 简体中文 · 浅色 · 合约持仓">](docs/images/iphone-17-pro-max/zh-light-crypto-futures.png) |
+
+| 资产总览 | 自定义股票 |
+| --- | --- |
+| [<img src="docs/images/iphone-17-pro-max/zh-light-assets.png" width="220" alt="iPhone 17 Pro Max · 简体中文 · 浅色 · 资产总览">](docs/images/iphone-17-pro-max/zh-light-assets.png) | [<img src="docs/images/iphone-17-pro-max/zh-light-custom-stock.png" width="220" alt="iPhone 17 Pro Max · 简体中文 · 浅色 · 自定义股票">](docs/images/iphone-17-pro-max/zh-light-custom-stock.png) |
+
+</details>
+
+<details>
+<summary>简体中文 · 深色</summary>
+
+| 股票持仓 | 股票搜索 | 股息概览 |
+| --- | --- | --- |
+| [<img src="docs/images/iphone-17-pro-max/zh-dark-stocks.png" width="220" alt="iPhone 17 Pro Max · 简体中文 · 深色 · 股票持仓">](docs/images/iphone-17-pro-max/zh-dark-stocks.png) | [<img src="docs/images/iphone-17-pro-max/zh-dark-search.png" width="220" alt="iPhone 17 Pro Max · 简体中文 · 深色 · 股票搜索">](docs/images/iphone-17-pro-max/zh-dark-search.png) | [<img src="docs/images/iphone-17-pro-max/zh-dark-dividends.png" width="220" alt="iPhone 17 Pro Max · 简体中文 · 深色 · 股息概览">](docs/images/iphone-17-pro-max/zh-dark-dividends.png) |
+
+| 数字币总览 | 现货余额 | 合约持仓 |
+| --- | --- | --- |
+| [<img src="docs/images/iphone-17-pro-max/zh-dark-crypto.png" width="220" alt="iPhone 17 Pro Max · 简体中文 · 深色 · 数字币总览">](docs/images/iphone-17-pro-max/zh-dark-crypto.png) | [<img src="docs/images/iphone-17-pro-max/zh-dark-crypto-spot.png" width="220" alt="iPhone 17 Pro Max · 简体中文 · 深色 · 现货余额">](docs/images/iphone-17-pro-max/zh-dark-crypto-spot.png) | [<img src="docs/images/iphone-17-pro-max/zh-dark-crypto-futures.png" width="220" alt="iPhone 17 Pro Max · 简体中文 · 深色 · 合约持仓">](docs/images/iphone-17-pro-max/zh-dark-crypto-futures.png) |
+
+| 资产总览 | 自定义股票 |
+| --- | --- |
+| [<img src="docs/images/iphone-17-pro-max/zh-dark-assets.png" width="220" alt="iPhone 17 Pro Max · 简体中文 · 深色 · 资产总览">](docs/images/iphone-17-pro-max/zh-dark-assets.png) | [<img src="docs/images/iphone-17-pro-max/zh-dark-custom-stock.png" width="220" alt="iPhone 17 Pro Max · 简体中文 · 深色 · 自定义股票">](docs/images/iphone-17-pro-max/zh-dark-custom-stock.png) |
+
+</details>
+
+<details>
+<summary>English · Light</summary>
+
+| Holdings | Stock Search | Dividends |
+| --- | --- | --- |
+| [<img src="docs/images/iphone-17-pro-max/en-light-stocks.png" width="220" alt="iPhone 17 Pro Max · English · Light · Holdings">](docs/images/iphone-17-pro-max/en-light-stocks.png) | [<img src="docs/images/iphone-17-pro-max/en-light-search.png" width="220" alt="iPhone 17 Pro Max · English · Light · Stock Search">](docs/images/iphone-17-pro-max/en-light-search.png) | [<img src="docs/images/iphone-17-pro-max/en-light-dividends.png" width="220" alt="iPhone 17 Pro Max · English · Light · Dividends">](docs/images/iphone-17-pro-max/en-light-dividends.png) |
+
+| Crypto Overview | Spot Balances | Futures Positions |
+| --- | --- | --- |
+| [<img src="docs/images/iphone-17-pro-max/en-light-crypto.png" width="220" alt="iPhone 17 Pro Max · English · Light · Crypto Overview">](docs/images/iphone-17-pro-max/en-light-crypto.png) | [<img src="docs/images/iphone-17-pro-max/en-light-crypto-spot.png" width="220" alt="iPhone 17 Pro Max · English · Light · Spot Balances">](docs/images/iphone-17-pro-max/en-light-crypto-spot.png) | [<img src="docs/images/iphone-17-pro-max/en-light-crypto-futures.png" width="220" alt="iPhone 17 Pro Max · English · Light · Futures Positions">](docs/images/iphone-17-pro-max/en-light-crypto-futures.png) |
+
+| Asset Overview | Custom Stocks |
+| --- | --- |
+| [<img src="docs/images/iphone-17-pro-max/en-light-assets.png" width="220" alt="iPhone 17 Pro Max · English · Light · Asset Overview">](docs/images/iphone-17-pro-max/en-light-assets.png) | [<img src="docs/images/iphone-17-pro-max/en-light-custom-stock.png" width="220" alt="iPhone 17 Pro Max · English · Light · Custom Stocks">](docs/images/iphone-17-pro-max/en-light-custom-stock.png) |
+
+</details>
+
+<details>
+<summary>English · Dark</summary>
+
+| Holdings | Stock Search | Dividends |
+| --- | --- | --- |
+| [<img src="docs/images/iphone-17-pro-max/en-dark-stocks.png" width="220" alt="iPhone 17 Pro Max · English · Dark · Holdings">](docs/images/iphone-17-pro-max/en-dark-stocks.png) | [<img src="docs/images/iphone-17-pro-max/en-dark-search.png" width="220" alt="iPhone 17 Pro Max · English · Dark · Stock Search">](docs/images/iphone-17-pro-max/en-dark-search.png) | [<img src="docs/images/iphone-17-pro-max/en-dark-dividends.png" width="220" alt="iPhone 17 Pro Max · English · Dark · Dividends">](docs/images/iphone-17-pro-max/en-dark-dividends.png) |
+
+| Crypto Overview | Spot Balances | Futures Positions |
+| --- | --- | --- |
+| [<img src="docs/images/iphone-17-pro-max/en-dark-crypto.png" width="220" alt="iPhone 17 Pro Max · English · Dark · Crypto Overview">](docs/images/iphone-17-pro-max/en-dark-crypto.png) | [<img src="docs/images/iphone-17-pro-max/en-dark-crypto-spot.png" width="220" alt="iPhone 17 Pro Max · English · Dark · Spot Balances">](docs/images/iphone-17-pro-max/en-dark-crypto-spot.png) | [<img src="docs/images/iphone-17-pro-max/en-dark-crypto-futures.png" width="220" alt="iPhone 17 Pro Max · English · Dark · Futures Positions">](docs/images/iphone-17-pro-max/en-dark-crypto-futures.png) |
+
+| Asset Overview | Custom Stocks |
+| --- | --- |
+| [<img src="docs/images/iphone-17-pro-max/en-dark-assets.png" width="220" alt="iPhone 17 Pro Max · English · Dark · Asset Overview">](docs/images/iphone-17-pro-max/en-dark-assets.png) | [<img src="docs/images/iphone-17-pro-max/en-dark-custom-stock.png" width="220" alt="iPhone 17 Pro Max · English · Dark · Custom Stocks">](docs/images/iphone-17-pro-max/en-dark-custom-stock.png) |
+
+</details>
 
 ### iPhone 17 Pro
 
