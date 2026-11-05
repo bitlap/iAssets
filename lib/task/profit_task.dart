@@ -9,7 +9,14 @@ import '../services/settings_service.dart';
 import '../services/stock_data_manager.dart';
 import '../services/stock_quote_service.dart';
 import '../services/exchange_rate_service.dart';
-import '../utils/market_util.dart';
+import '../services/asset_data_manager.dart';
+import '../services/crypto/crypto_store.dart';
+import '../services/privacy_service.dart';
+import '../services/pro_service.dart';
+import '../services/widget_snapshot_service.dart';
+import '../l10n/l10n.dart';
+import '../utils/asset_calculator.dart';
+import '../utils/currency_util.dart';
 import '../utils/stock_calculator.dart';
 
 @pragma('vm:entry-point')
@@ -67,6 +74,7 @@ void callbackDispatcher() {
         summary.totalProfit,
         currency,
       );
+      await _refreshWidgetSnapshot(summary.totalAssets, currency);
       debugPrint(
         '[${DateTime.now().toString().substring(11, 19)}][WorkManager] ===> 后台任务执行成功 totalProfit: ${summary.totalProfit} ($currency)',
       );
@@ -77,6 +85,44 @@ void callbackDispatcher() {
     }
     return Future.value(true);
   });
+}
+
+Future<void> _refreshWidgetSnapshot(double stocks, String currency) async {
+  // A headless Workmanager engine has its own Dart singletons. Re-read the
+  // user's presentation and verified entitlement before accessing exchanges.
+  await PrivacyService.instance.initialize();
+  L10n.deviceLocale = PlatformDispatcher.instance.locale;
+  L10n.applyLanguage(await SettingsService.getPreferredLanguage());
+  await ProService.instance.refresh();
+  if (ProService.instance.error != null) return;
+
+  final crypto = CryptoStore();
+  if (ProService.instance.isPro) {
+    await crypto.refresh();
+    // Without persisted holdings, a failed headless sync must not replace a
+    // previously correct widget balance with zero.
+    if (crypto.incomplete) return;
+  }
+
+  final (assets, _, _) = await AssetDataManager.loadCategoryState();
+  final other = AssetCalculator.calculateTotalAssets(assets, 0, currency);
+  final cryptoValue = CurrencyUtil.convertCurrency(
+    ProService.instance.isPro ? crypto.totalUsd.toDouble() : 0,
+    'USD',
+    currency,
+  );
+  final updatedAt = crypto.oldestUpdate;
+  await WidgetSnapshotService.publish(
+    total: stocks + cryptoValue + other,
+    stocks: stocks,
+    crypto: cryptoValue,
+    other: other,
+    currency: currency,
+    updatedAt: updatedAt != null && updatedAt.isBefore(DateTime.now())
+        ? updatedAt
+        : DateTime.now(),
+    incomplete: crypto.incomplete,
+  );
 }
 
 Future<String> _readCurrency() async {

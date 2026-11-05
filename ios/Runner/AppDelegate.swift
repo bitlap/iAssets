@@ -35,6 +35,47 @@ import workmanager_apple
       WorkmanagerDebug.setCurrent(LoggingDebugHandler())
     }
 
+    // Workmanager runs Dart in a separate Flutter engine. Register the app's
+    // native bridges there as well so background crypto and widget updates work.
+    WorkmanagerPlugin.setPluginRegistrantCallback { registry in
+      GeneratedPluginRegistrant.register(with: registry)
+      guard let engine = registry as? FlutterEngine else { return }
+      let crypto = FlutterMethodChannel(
+        name: "org.bitlap.assets/crypto-storage", binaryMessenger: engine.binaryMessenger)
+      crypto.setMethodCallHandler { call, result in
+        CryptoStorage.handle(call, result: result)
+      }
+      let pro = FlutterMethodChannel(
+        name: "org.bitlap.assets/pro", binaryMessenger: engine.binaryMessenger)
+      pro.setMethodCallHandler { call, result in
+        Task { @MainActor in await ProStore.shared.handle(call, result: result) }
+      }
+      let privacy = FlutterMethodChannel(
+        name: "org.bitlap.assets/privacy", binaryMessenger: engine.binaryMessenger)
+      privacy.setMethodCallHandler { call, result in
+        guard call.method == "read" else { result(FlutterMethodNotImplemented); return }
+        let defaults = UserDefaults.standard
+        result([
+          "hideAmounts": defaults.bool(forKey: "privacy.hideAmounts"),
+          "biometricLock": defaults.bool(forKey: "privacy.biometricLock")
+        ])
+      }
+      let widget = FlutterMethodChannel(
+        name: "org.bitlap.assets/widget-snapshot", binaryMessenger: engine.binaryMessenger)
+      widget.setMethodCallHandler { call, result in
+        guard call.method == "publish", let values = call.arguments as? [String: Any] else {
+          result(FlutterMethodNotImplemented); return
+        }
+        do {
+          try AssetWidgetSnapshotStore.publish(values)
+          WidgetCenter.shared.reloadTimelines(ofKind: AssetWidgetSnapshotStore.widgetKind)
+          result(nil)
+        } catch {
+          result(FlutterError(code: "widgetSnapshot", message: "Shared widget storage unavailable", details: nil))
+        }
+      }
+    }
+
     if #available(iOS 13.0, *) {
       BGTaskScheduler.shared.register(
         forTaskWithIdentifier: "profit-snapshot",
@@ -166,6 +207,15 @@ private enum CryptoStorage {
         guard status == errSecSuccess, let data = item as? Data else {
           result(FlutterError(code: "keychain", message: "Keychain unavailable", details: nil)); return
         }
+        // Older installs used WhenUnlocked. Migrate on the next successful
+        // foreground read so scheduled refreshes can run while the phone is locked.
+        let accessibility: [String: Any] = [
+          kSecAttrAccessible as String: kSecAttrAccessibleAfterFirstUnlockThisDeviceOnly
+        ]
+        let migration = SecItemUpdate(query as CFDictionary, accessibility as CFDictionary)
+        if migration != errSecSuccess {
+          NSLog("[CryptoStorage] Keychain accessibility migration failed: %d", migration)
+        }
         result(String(data: data, encoding: .utf8))
       case "writeConnections":
         guard let value = call.arguments as? String, let data = value.data(using: .utf8) else {
@@ -173,7 +223,7 @@ private enum CryptoStorage {
         }
         let attributes: [String: Any] = [
           kSecValueData as String: data,
-          kSecAttrAccessible as String: kSecAttrAccessibleWhenUnlockedThisDeviceOnly
+          kSecAttrAccessible as String: kSecAttrAccessibleAfterFirstUnlockThisDeviceOnly
         ]
         var status = SecItemUpdate(query as CFDictionary, attributes as CFDictionary)
         if status == errSecItemNotFound {
