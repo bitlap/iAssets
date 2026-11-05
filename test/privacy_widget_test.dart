@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:assets/l10n/l10n.dart';
 import 'package:assets/services/privacy_service.dart';
 import 'package:assets/widgets/common/privacy_gate.dart';
@@ -112,5 +114,131 @@ void main() {
     tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.resumed);
     await tester.pump();
     expect(find.text('iAssets is locked'), findsOneWidget);
+  });
+
+  testWidgets('Face ID success before resumed unlocks on return', (
+    tester,
+  ) async {
+    PrivacyService.instance.biometricLock.value = true;
+    final authentication = Completer<bool>();
+    var calls = 0;
+    await tester.pumpWidget(
+      MaterialApp(
+        home: PrivacyGate(
+          authenticate: (_) {
+            calls++;
+            return authentication.future;
+          },
+          child: const Text('private balance'),
+        ),
+      ),
+    );
+    await tester.pump();
+    expect(calls, 1);
+
+    tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.inactive);
+    await tester.pump();
+    authentication.complete(true);
+    await tester.pump();
+    expect(find.text('iAssets is locked'), findsNothing);
+    expect(find.byIcon(Icons.shield_outlined), findsOneWidget);
+
+    tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.resumed);
+    await tester.pump();
+    expect(find.text('private balance'), findsOneWidget);
+    expect(find.text('iAssets is locked'), findsNothing);
+    expect(calls, 1);
+  });
+
+  testWidgets('Face ID result after resumed does not prompt again', (
+    tester,
+  ) async {
+    PrivacyService.instance.biometricLock.value = true;
+    final authentication = Completer<bool>();
+    var calls = 0;
+    await tester.pumpWidget(
+      MaterialApp(
+        home: PrivacyGate(
+          authenticate: (_) {
+            calls++;
+            return authentication.future;
+          },
+          child: const Text('private balance'),
+        ),
+      ),
+    );
+    await tester.pump();
+    tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.inactive);
+    tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.resumed);
+    authentication.complete(true);
+    await tester.pump();
+    expect(find.text('private balance'), findsOneWidget);
+    expect(calls, 1);
+  });
+
+  testWidgets('returning from background accepts Face ID before resumed', (
+    tester,
+  ) async {
+    PrivacyService.instance.biometricLock.value = true;
+    final first = Completer<bool>();
+    final second = Completer<bool>();
+    var calls = 0;
+    await tester.pumpWidget(
+      MaterialApp(
+        home: PrivacyGate(
+          authenticate: (_) => ++calls == 1 ? first.future : second.future,
+          child: const Text('private balance'),
+        ),
+      ),
+    );
+    await tester.pump();
+    first.complete(true);
+    await tester.pump();
+    expect(find.text('private balance'), findsOneWidget);
+
+    tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.inactive);
+    tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.paused);
+    await tester.pump();
+    tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.resumed);
+    await tester.pump();
+    expect(calls, 2);
+
+    tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.inactive);
+    second.complete(true);
+    await tester.pump();
+    tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.resumed);
+    await tester.pump();
+    expect(find.text('private balance'), findsOneWidget);
+    expect(calls, 2);
+  });
+
+  testWidgets('backgrounding during Face ID invalidates that result', (
+    tester,
+  ) async {
+    PrivacyService.instance.biometricLock.value = true;
+    final interrupted = Completer<bool>();
+    final retry = Completer<bool>();
+    var calls = 0;
+    await tester.pumpWidget(
+      MaterialApp(
+        home: PrivacyGate(
+          authenticate: (_) => ++calls == 1 ? interrupted.future : retry.future,
+          child: const Text('private balance'),
+        ),
+      ),
+    );
+    await tester.pump();
+    tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.inactive);
+    tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.paused);
+    interrupted.complete(true);
+    await tester.pump();
+    tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.resumed);
+    await tester.pump();
+    expect(find.text('iAssets is locked'), findsOneWidget);
+    expect(calls, 2);
+
+    retry.complete(true);
+    await tester.pump();
+    expect(find.text('private balance'), findsOneWidget);
   });
 }

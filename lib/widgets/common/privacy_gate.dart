@@ -7,8 +7,9 @@ import 'app_ui.dart';
 
 /// Covers every route and dialog until local authentication completes.
 class PrivacyGate extends StatefulWidget {
-  const PrivacyGate({super.key, required this.child});
+  const PrivacyGate({super.key, required this.child, this.authenticate});
   final Widget child;
+  final Future<bool> Function(String reason)? authenticate;
 
   @override
   State<PrivacyGate> createState() => _PrivacyGateState();
@@ -20,6 +21,7 @@ class _PrivacyGateState extends State<PrivacyGate> with WidgetsBindingObserver {
   bool _authenticating = false;
   bool _resumeNeedsPrompt = false;
   bool _promptAfterCurrent = false;
+  int? _authenticatedWhileInactive;
   String? _error;
   int _generation = 0;
 
@@ -51,6 +53,7 @@ class _PrivacyGateState extends State<PrivacyGate> with WidgetsBindingObserver {
       if (state != AppLifecycleState.inactive || !_authenticating) {
         _generation++;
         _resumeNeedsPrompt = true;
+        _authenticatedWhileInactive = null;
       }
       if (mounted) {
         setState(() {
@@ -59,7 +62,12 @@ class _PrivacyGateState extends State<PrivacyGate> with WidgetsBindingObserver {
         });
       }
     } else if (state == AppLifecycleState.resumed) {
-      setState(() => _active = true);
+      final authenticated = _authenticatedWhileInactive == _generation;
+      _authenticatedWhileInactive = null;
+      setState(() {
+        _active = true;
+        if (authenticated) _locked = false;
+      });
       if (_locked && _resumeNeedsPrompt) {
         if (_authenticating) {
           _promptAfterCurrent = true;
@@ -74,16 +82,24 @@ class _PrivacyGateState extends State<PrivacyGate> with WidgetsBindingObserver {
   Future<void> _unlock() async {
     if (!mounted || !_active || !_locked || _authenticating) return;
     final generation = _generation;
+    _promptAfterCurrent = false;
     setState(() {
       _authenticating = true;
       _error = null;
     });
     try {
-      final success = await PrivacyService.instance.authenticate(
-        L10n.t('privacyAuthReason'),
-      );
-      if (mounted && success && _active && generation == _generation) {
-        setState(() => _locked = false);
+      final reason = L10n.t('privacyAuthReason');
+      final success =
+          await (widget.authenticate?.call(reason) ??
+              PrivacyService.instance.authenticate(reason));
+      if (mounted && success && generation == _generation) {
+        if (_active) {
+          setState(() => _locked = false);
+        } else {
+          // LocalAuthentication can return before iOS reports `resumed`.
+          // Keep the cover up and apply the successful result on resume.
+          _authenticatedWhileInactive = generation;
+        }
       }
     } on PlatformException {
       if (mounted) setState(() => _error = L10n.t('privacyAuthFailed'));
@@ -92,8 +108,9 @@ class _PrivacyGateState extends State<PrivacyGate> with WidgetsBindingObserver {
     } finally {
       if (mounted) {
         setState(() => _authenticating = false);
-        if (_promptAfterCurrent && _active && _locked) {
-          _promptAfterCurrent = false;
+        final shouldRetry = _promptAfterCurrent && _active && _locked;
+        _promptAfterCurrent = false;
+        if (shouldRetry) {
           WidgetsBinding.instance.addPostFrameCallback((_) => _unlock());
         }
       }
