@@ -103,11 +103,6 @@ private struct AssetWidgetView: View {
     if entry.stale { return word("stale") }
     return word("updated")
   }
-  private var statusColor: Color {
-    if isHidden { return .gray }
-    return entry.snapshot == nil || entry.stale || entry.snapshot?.incomplete == true
-      ? Color.orange : Color.green
-  }
   private var updateTime: String? {
     guard let snapshot = entry.snapshot else { return nil }
     return snapshot.formattedUpdateTime(language: language)
@@ -237,26 +232,25 @@ private struct AssetWidgetView: View {
       }
       .frame(maxWidth: .infinity, alignment: .center)
       .multilineTextAlignment(.center)
-      .font(.system(size: 12, weight: .medium))
+      .font(.system(size: 11, weight: .medium))
       .foregroundStyle(.secondary)
       .lineLimit(1)
       .minimumScaleFactor(0.7)
     } else {
       ZStack(alignment: .leading) {
-        HStack(spacing: 4) {
-          Circle().fill(statusColor).frame(width: 6, height: 6)
-          if status != word("updated") { Text(status) }
+        if updateLine != nil && status != word("updated") {
+          Text(status)
+            .frame(maxWidth: 80, alignment: .leading)
+            .font(.system(size: 10, weight: .medium))
+            .lineLimit(1)
+            .minimumScaleFactor(0.7)
         }
-        .frame(maxWidth: 80, alignment: .leading)
-        .font(.system(size: 10, weight: .medium))
-        .lineLimit(1)
-        .minimumScaleFactor(0.7)
         Text(updateLine ?? status)
           .frame(maxWidth: .infinity, alignment: .center)
           .multilineTextAlignment(.center)
       }
       .frame(maxWidth: .infinity)
-      .font(.system(size: 12, weight: .medium))
+      .font(.system(size: 11, weight: .medium))
       .foregroundStyle(.secondary)
       .lineLimit(1)
       .minimumScaleFactor(0.8)
