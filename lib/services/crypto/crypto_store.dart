@@ -57,6 +57,7 @@ class CryptoStore extends ChangeNotifier {
 
   List<ExchangeConnection> _connections = [];
   final Map<String, CryptoSnapshot> _snapshots = {};
+  final Map<String, CryptoSnapshot> _valuationSnapshots = {};
   final Map<String, CryptoSyncException> _errors = {};
   List<ExchangeConnection> get connections => List.unmodifiable(_connections);
   Map<String, CryptoSyncException> get errors => Map.unmodifiable(_errors);
@@ -102,6 +103,59 @@ class CryptoStore extends ChangeNotifier {
     if (times.isEmpty) return null;
     times.sort();
     return times.first;
+  }
+
+  /// 缺少任一账户的可用估值时返回空值，让组件继续显示已有共享快照。
+  CryptoValuation? get cachedValuation {
+    if (!initialized || storageError != null) return null;
+    var total = Decimal.zero;
+    DateTime? updatedAt;
+    for (final connection in _connections) {
+      final value = _valuationSnapshots[connection.id];
+      if (connection.exchange != CryptoExchange.binance ||
+          value == null ||
+          now().isBefore(value.updatedAt)) {
+        return null;
+      }
+      total += value.totalUsd;
+      if (updatedAt == null || value.updatedAt.isBefore(updatedAt)) {
+        updatedAt = value.updatedAt;
+      }
+    }
+    return CryptoValuation(totalUsd: total, updatedAt: updatedAt);
+  }
+
+  void _acceptSnapshot(String id, CryptoSnapshot next) {
+    _snapshots[id] = next;
+    final previous = _valuationSnapshots[id];
+    if (!next.complete) {
+      // 缺价得到的零值不能覆盖已知金额；首次不完整同步仍可展示已估值部分。
+      if (!next.coverageComplete || next.totalUsd == Decimal.zero) return;
+      if (previous != null) {
+        final lostWalletValue = previous.wallets.any(
+          (old) =>
+              old.equityUsd != null &&
+              !next.wallets.any(
+                (wallet) =>
+                    wallet.name == old.name &&
+                    wallet.kind == old.kind &&
+                    wallet.equityUsd != null,
+              ),
+        );
+        final lostPrice = next.balances.any(
+          (balance) =>
+              balance.priceUsd == null &&
+              previous.balances.any(
+                (old) =>
+                    old.wallet == balance.wallet &&
+                    old.asset == balance.asset &&
+                    old.priceUsd != null,
+              ),
+        );
+        if (lostWalletValue || lostPrice) return;
+      }
+    }
+    _valuationSnapshots[id] = next;
   }
 
   Future<void> initialize() => _initializing ??= _initialize();
@@ -195,7 +249,7 @@ class CryptoStore extends ChangeNotifier {
         jsonEncode(next.map((c) => c.toSecureJson()).toList()),
       );
       _connections = next;
-      _snapshots[tested.connection.id] = tested.snapshot;
+      _acceptSnapshot(tested.connection.id, tested.snapshot);
       notifyListeners();
     });
   }
@@ -207,6 +261,7 @@ class CryptoStore extends ChangeNotifier {
     );
     _connections = next;
     _snapshots.remove(id);
+    _valuationSnapshots.remove(id);
     _errors.remove(id);
     notifyListeners();
   });
@@ -247,7 +302,7 @@ class CryptoStore extends ChangeNotifier {
             throw const CryptoSyncException('accountChanged');
           }
           if (!_connections.any((v) => v.id == c.id)) continue;
-          _snapshots[c.id] = s;
+          _acceptSnapshot(c.id, s);
           _errors.remove(c.id);
         } catch (error) {
           if (!_connections.any((v) => v.id == c.id)) continue;

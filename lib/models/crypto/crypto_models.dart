@@ -270,6 +270,13 @@ class CryptoSnapshot {
   );
 }
 
+/// 用于资产组件的会话内估值，时间对应所用数据，不随失败重试推进。
+class CryptoValuation {
+  final Decimal totalUsd;
+  final DateTime? updatedAt;
+  const CryptoValuation({required this.totalUsd, required this.updatedAt});
+}
+
 class CryptoSyncException implements Exception {
   final String code;
   final String? detail;

@@ -251,26 +251,13 @@ class _AppShellState extends State<_AppShell> with WidgetsBindingObserver {
         _selectedCurrency,
       );
       final stocks = stock.totalAssets;
-      final crypto = CurrencyUtil.convertCurrency(
-        ProService.instance.isPro ? _crypto.totalUsd.toDouble() : 0,
-        'USD',
-        _selectedCurrency,
-      );
-      final dates = <DateTime>[
-        stock.lastRefreshedAt!,
-        if (ProService.instance.isPro &&
-            _crypto.connections.isNotEmpty &&
-            _crypto.oldestUpdate != null)
-          _crypto.oldestUpdate!,
-      ]..sort();
-      await WidgetSnapshotService.publish(
-        total: stocks + crypto + other,
+      await WidgetSnapshotService.publishPortfolio(
         stocks: stocks,
-        crypto: crypto,
         other: other,
         currency: _selectedCurrency,
-        updatedAt: dates.first,
-        incomplete: ProService.instance.isPro && _crypto.incomplete,
+        stockUpdatedAt: stock.lastRefreshedAt!,
+        cryptoStore: _crypto,
+        pro: ProService.instance,
       );
     } catch (error) {
       // 本地或 iCloud 读取失败时，不得发布会误导用户的零资产总额。
