@@ -29,8 +29,8 @@ private struct AssetWidgetProvider: TimelineProvider {
         entries.append(entry(for: snapshot, at: staleAt))
       }
     }
-    // The app publishes a new snapshot and calls WidgetCenter after data or
-    // privacy changes. The second entry updates the visible stale marker.
+    // 数据或隐私设置变化后，应用发布新快照并调用 WidgetCenter。
+    // 第二个时间线条目用于更新界面上的过期状态标记。
     completion(Timeline(entries: entries, policy: .atEnd))
   }
 

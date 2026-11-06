@@ -40,7 +40,7 @@ void main() {
             ),
           );
           if (scale == 1) {
-            // Match the reference's compact 56-point capsule (plus bottom gap).
+            // 与参考设计一致：胶囊栏高度为 56 点，另加底部间距。
             expect(tester.getSize(find.byType(FloatingBottomBar)).height, 64);
             expect(tester.getSize(find.byType(ClipRRect).first).width, 216);
           }

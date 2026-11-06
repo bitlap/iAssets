@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-/// APP 统一语义颜色系统。
+/// 应用统一语义颜色系统。
 ///
 /// 页面继续通过语义名称取色，主题切换时由 [applyBrightness] 一次性更新，
 /// 避免在业务组件中散落明暗主题判断。

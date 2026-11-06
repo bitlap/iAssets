@@ -13,7 +13,7 @@ import '../../l10n/l10n.dart';
 import 'asset_style.dart';
 import 'asset_category_sheet.dart';
 
-// Header (Summary Card)
+// 顶部资产汇总卡片
 
 class AssetHeader extends StatelessWidget {
   final double totalAssets;

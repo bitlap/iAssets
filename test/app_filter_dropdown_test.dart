@@ -81,7 +81,7 @@ void main() {
       await tester.pumpAndSettle();
       expect(value, 'us');
       expect(focus().hasFocus, isFalse);
-      // Outside taps also dismiss focus acquired through keyboard navigation.
+      // 点击外部区域时，也应取消通过键盘导航获得的焦点。
       focus().requestFocus();
       await tester.pump();
       expect(focus().hasFocus, isTrue);

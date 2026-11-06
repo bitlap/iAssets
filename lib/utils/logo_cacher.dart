@@ -8,7 +8,7 @@ import 'package:path_provider/path_provider.dart';
 import '../config/app_config.dart';
 import 'stock_logo_urls.dart';
 
-/// Logo 本地缓存：并发请求共享下载结果，缺失或损坏时交给界面显示文字占位。
+/// 图标本地缓存：并发请求共享下载结果，缺失或损坏时交给界面显示文字占位。
 class LogoCacher {
   static String? _cachePath;
   static final Map<String, Future<ImageProvider?>> _downloading = {};

@@ -11,7 +11,7 @@ import '../common/dialog_utils.dart';
 import '../common/app_ui.dart';
 import 'asset_style.dart';
 
-// Add Asset Sheet
+// 添加资产表单弹窗
 
 class _AssetOption {
   final IconData icon;
@@ -147,7 +147,7 @@ Widget _addOption(
   );
 }
 
-// Balance Dialog (shared by Cash / Current / ProvidentFund)
+// 余额弹窗（现金、活期存款和公积金共用）
 
 class _BalanceDialog extends StatefulWidget {
   final AssetType assetType;
@@ -363,7 +363,7 @@ Future<ProvidentFundAccount?> showProvidentFundAssetDialog(
   );
 }
 
-// Time Deposit Dialog
+// 定期存款弹窗
 
 class _TimeDepositDialog extends StatefulWidget {
   final TimeDeposit? td;
@@ -546,7 +546,7 @@ Future<TimeDeposit?> showTimeDepositDialog(
   );
 }
 
-// Wealth Product Dialog
+// 理财产品弹窗
 
 class _WealthProductDialog extends StatefulWidget {
   final WealthProduct? wp;
@@ -691,7 +691,7 @@ Future<WealthProduct?> showWealthProductDialog(
   );
 }
 
-// Shared Form Widgets
+// 共用表单组件
 
 Widget _label(String text) {
   return Text(

@@ -145,7 +145,7 @@ import workmanager_apple
   }
 }
 
-// Connection secrets never enter Documents, iCloud or the JSON backup system.
+// 连接密钥不得写入文档目录、iCloud 或 JSON 备份。
 private enum CryptoStorage {
   static let service = "org.bitlap.assets.exchange-connections"
   static var query: [String: Any] {
@@ -201,8 +201,8 @@ private enum CryptoStorage {
   }
 }
 
-/// Pure eligibility rules shared by the StoreKit adapter and native unit tests.
-/// VerificationResult must be checked by the caller before passing any facts in.
+/// StoreKit 适配器与原生单元测试共用的纯资格判断规则。
+/// 调用方必须先检查 VerificationResult，再传入已验证的信息。
 enum ProEntitlementPolicy {
   static let monthly = "org.bitlap.assets.pro.subscription.monthly"
   static let yearly = "org.bitlap.assets.pro.subscription.yearly"
@@ -237,8 +237,8 @@ enum ProEntitlementPolicy {
   }
 }
 
-/// StoreKit owns and verifies entitlements. Nothing in an imported backup can
-/// grant Pro, and an existing installation/data file isn't proof of ownership.
+/// 付费权益由 StoreKit 管理并验证，导入的备份不能授予 Pro。
+/// 已安装应用或已有数据文件也不能作为付费凭据。
 @MainActor
 final class ProStore {
   static let shared = ProStore()
@@ -333,7 +333,7 @@ final class ProStore {
          app.bundleID == Bundle.main.bundleIdentifier {
         legacyVerified = true
         appTransactionEnvironment = app.environment == .production ? "production" : "testing"
-        // Sandbox acquisition dates are synthetic and must never grant legacy Pro.
+        // 沙盒获取日期是模拟数据，不得据此授予老用户永久 Pro。
         if ProEntitlementPolicy.grantsLegacy(
           bundleID: app.bundleID, expectedBundleID: Bundle.main.bundleIdentifier,
           environment: app.environment, originalPurchaseDate: app.originalPurchaseDate,
@@ -358,7 +358,7 @@ final class ProStore {
         expiry = max(expiry ?? date, date)
       }
     }
-    // Catalog errors must not discard locally verified ownership.
+    // 商品目录获取失败时，不得丢弃本地已验证的付费权益。
     if products.isEmpty, let loaded = try? await Product.products(for: ids) {
       products = loaded
     }

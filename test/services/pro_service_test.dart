@@ -117,8 +117,7 @@ void main() {
       ]);
       expect(await service.purchase(ProService.lifetime), 'success');
       expect(service.kind, 'lifetime');
-      snapshot['kind'] =
-          'free'; // Refund/revocation reflected in verified snapshot.
+      snapshot['kind'] = 'free'; // 已验证的权益快照反映退款或撤销状态。
       await service.restore();
       expect(calls, contains('restore'));
       expect(service.isPro, isFalse);

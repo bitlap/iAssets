@@ -93,7 +93,7 @@ void main() {
             await tester.tap(find.text(row.$1));
             await tester.pumpAndSettle();
             if (row.$3 == 0) {
-              // Missing quotes must allow the user to choose the input currency.
+              // 缺少报价时，仍须允许用户选择输入金额的币种。
               await tester.tap(find.byType(DropdownButtonFormField<String>));
               await tester.pumpAndSettle();
               await tester.scrollUntilVisible(

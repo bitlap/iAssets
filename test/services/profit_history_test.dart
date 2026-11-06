@@ -82,7 +82,7 @@ void main() {
       ),
     ]);
     await IcloudStorage.recordProfitIfNeeded(100, 'USD');
-    // Both instants are in the same trading day unless this runs across 9 AM ET.
+    // 除非测试跨越美东时间上午 9 点，否则两个时刻属于同一交易日。
     final intraday = await IcloudStorage.loadIntradayProfitHistory();
     final daily = await IcloudStorage.loadDailyProfitHistory();
     expect(intraday.length + daily.length, 2);

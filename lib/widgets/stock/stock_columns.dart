@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-/// Keeps the list headings and card contents on the same column boundaries.
+/// 确保列表表头与卡片内容的列边界一致。
 class StockColumns extends StatelessWidget {
   static const double logoWidth = 40;
   static const double logoGap = 8;

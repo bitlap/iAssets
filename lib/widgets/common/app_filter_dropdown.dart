@@ -3,7 +3,7 @@ import 'app_colors.dart';
 import 'app_ui.dart';
 import 'form_sheet.dart';
 
-/// Shared selector for portfolio filters, including the nullable “all” option.
+/// 资产组合筛选共用的选择器，支持以空值表示“全部”。
 class AppFilterDropdown<T> extends StatefulWidget {
   final T? value;
   final List<DropdownMenuItem<T>> items;

@@ -7,7 +7,7 @@ import 'package:assets/services/exchange_rate_service.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-/// Isolates all persistence and fixes USD/CNY/HKD rates without network access.
+/// 隔离所有持久化数据，并在离线状态下固定美元、人民币和港币的汇率。
 Future<Directory> initializeTestStorage() async {
   final dir = Directory.systemTemp.createTempSync('iassets-core-tests-');
   final messenger =
@@ -24,7 +24,7 @@ Future<Directory> initializeTestStorage() async {
     jsonEncode({'USD': 1, 'CNY': 7, 'CNH': 7, 'HKD': 8, 'EUR': .5}),
   );
   final rates = ExchangeRateService();
-  // Allow its platform path lookup to finish before any synchronous conversion.
+  // 同步换算前，先等待平台路径查询完成。
   await Future<void>.delayed(Duration.zero);
   expect(rates.effectiveRates['CNY'], 7);
   return dir;

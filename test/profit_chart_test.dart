@@ -68,7 +68,7 @@ void main() {
             rect.bottom,
             tester.getRect(find.byType(ProfitChartWidget)).bottom,
           );
-          // Both ends and the center of the invisible touch area remain usable.
+          // 不可见触控区域的两端和中心均应可用。
           await tester.tapAt(Offset(rect.right - 4, rect.center.dy));
           await tester.pumpAndSettle();
           expect(find.byIcon(Icons.expand_less), findsOneWidget);

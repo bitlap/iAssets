@@ -65,8 +65,8 @@ enum AssetWidgetSnapshotStore {
     UserDefaults.standard.set(value, forKey: key)
   }
 
-  /// Migrate an existing app-only setting before the widget reads its own
-  /// App Group defaults. Never clear a shared flag during migration.
+  /// 小组件读取 App Group 的共享偏好前，先迁移应用原有的本机设置。
+  /// 迁移过程中不得清除共享的隐私开关。
   static func syncEnabledPrivacyPreferences() {
     for key in [hideAmountsKey, biometricLockKey] where UserDefaults.standard.bool(forKey: key) {
       sharedDefaults?.set(true, forKey: key)
@@ -99,8 +99,8 @@ enum AssetWidgetSnapshotStore {
     try JSONEncoder().encode(protected).write(to: url, options: .atomic)
   }
 
-  /// Scrub persisted amounts before requesting a WidgetKit reload. A previous
-  /// render may remain visible briefly because WidgetKit controls scheduling.
+  /// 请求 WidgetKit 重新加载前，先清除已持久化的金额。
+  /// 刷新由 WidgetKit 调度，旧内容可能短暂保留。
   static func applyPrivacy() {
     guard privacyIsEnabled, let url = snapshotURL, var snapshot = read() else { return }
     snapshot.redact()

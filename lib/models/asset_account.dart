@@ -9,7 +9,7 @@ sealed class AssetBase {
   String currency;
   String name;
 
-  /// Display grouping. Older records omit this and retain their original type.
+  /// 用于展示分组；旧记录未保存此字段时，沿用原资产类型。
   String? categoryId;
   DateTime? createdAt;
   DateTime? updatedAt;

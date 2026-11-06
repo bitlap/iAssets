@@ -9,12 +9,12 @@ class TradingDayUtil {
       utc.year,
       3,
       2,
-    ).add(const Duration(hours: 7)); // 02:00 EST = 07:00 UTC
+    ).add(const Duration(hours: 7)); // 美东标准时间 02:00 对应 UTC 07:00。
     final dstEnd = _nthSunday(
       utc.year,
       11,
       1,
-    ).add(const Duration(hours: 6)); // 02:00 EDT = 06:00 UTC
+    ).add(const Duration(hours: 6)); // 美东夏令时间 02:00 对应 UTC 06:00。
     return !utc.isBefore(dstStart) && utc.isBefore(dstEnd);
   }
 

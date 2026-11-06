@@ -54,8 +54,8 @@ class ExchangeRateService extends ChangeNotifier {
   static const Duration _cacheTTL = Duration(
     minutes: AppConfig.exchangeRateCacheTTLMin,
   );
-  // The provider may return yesterday's snapshot shortly after its daily
-  // update time. Retry stale source data without requesting it every minute.
+  // 数据源在每日更新时间刚过时，仍可能返回昨日快照。
+  // 对已过期的源数据进行重试，避免每分钟都请求。
   static const Duration _staleSourceRetryInterval = Duration(minutes: 5);
 
   /// 熔断机制（与股票服务独立，互不影响）

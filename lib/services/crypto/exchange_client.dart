@@ -38,7 +38,7 @@ abstract interface class ExchangeReader {
   Future<CryptoSnapshot> read(ExchangeConnection connection);
 }
 
-/// All exchange requests are GETs to fixed HTTPS origins. No trading API exists here.
+/// 交易所请求仅通过 GET 访问固定的 HTTPS 来源，此处不提供交易接口。
 class ExchangeClient implements ExchangeReader {
   final http.Client _http;
   final DateTime Function() now;
@@ -108,8 +108,8 @@ class ExchangeClient implements ExchangeReader {
     return base64Output ? base64Encode(bytes.bytes) : bytes.toString();
   }
 
-  // Public fiat conversion, queried without sending any account identifiers.
-  // A missing quote stays missing; stablecoins are never silently valued at $1.
+  // 查询公共法币汇率时，不发送任何账户标识。
+  // 缺失报价保持缺失状态，不得静默将稳定币按 1 美元估值。
   Future<Map<String, Decimal>> usdRates() async {
     try {
       final data = object(

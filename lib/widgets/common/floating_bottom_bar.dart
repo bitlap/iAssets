@@ -2,7 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 
-/// Three page tabs in a floating capsule with a separate circular add action.
+/// 悬浮胶囊栏包含三个页面标签，并提供独立的圆形添加按钮。
 class FloatingBottomBar extends StatelessWidget {
   final int selectedIndex;
   final List<String> labels;

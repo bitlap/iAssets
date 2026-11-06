@@ -1,6 +1,6 @@
-/// 繁体中文（繁體中文）字符串表
+/// 繁体中文字符串表
 const Map<String, String> stringsZhHant = {
-  // AppConfig
+  // 应用通用文案
   'appName': '股票',
   'btnClose': '確定',
   'btnCancel': '取消',
@@ -56,7 +56,7 @@ const Map<String, String> stringsZhHant = {
   'customStockInvalidPrice': '請輸入有效的目前價格',
   'customStockImageFailed': '圖片選擇失敗，請重試',
 
-  // SettingsConfig
+  // 设置文案
   'sectionCurrency': '本機貨幣',
   'sectionStock': '股票設定',
   'sectionSync': '資料同步',
@@ -125,7 +125,7 @@ const Map<String, String> stringsZhHant = {
   'dataSourceNameTencent': '騰訊股票行情',
   'dataSourceAuthorTencent': '騰訊',
 
-  // StockConfig - StockHeaderCard
+  // 股票顶部汇总卡片文案
   'assetTotalAssets': '總資產',
   'assetTodayProfit': '今日盈虧',
   'assetTodayProfitHelp':
@@ -184,7 +184,7 @@ const Map<String, String> stringsZhHant = {
   'marketUK': '英股',
   'marketPink': '粉單',
 
-  // Home
+  // 首页
   'homeTitle': '股票',
   'homeSubtitle': '共 {count} 檔 · 即時更新',
   'homeSubtitleRefresh': '最近更新：{time}',
@@ -194,13 +194,13 @@ const Map<String, String> stringsZhHant = {
   'homeHoldingHeader': '持倉',
   'homeProfitHeader': '盈虧',
 
-  // Tab
+  // 标签页
   'tabStock': '股票',
   'tabAsset': '資產',
   'assetComingSoon': '資產頁面開發中',
   'assetComingSoonDesc': '敬請期待',
 
-  // StockCard
+  // 股票卡片
   'stockTotalValue': '總市值',
   'stockRecord': '記錄',
   'stockMore': '更多',
@@ -213,7 +213,7 @@ const Map<String, String> stringsZhHant = {
   'stockDetailBuyCount': '加倉次數',
   'stockDetailSellCount': '減倉次數',
 
-  // Operations
+  // 交易操作
   'opBuy': '買入',
   'opSell': '賣出',
   'opAddPosition': '加倉',
@@ -226,7 +226,7 @@ const Map<String, String> stringsZhHant = {
   'opMoreActions': '更多操作',
   'opConfirmDelete': '確認刪除',
 
-  // Edit dialogs
+  // 编辑弹窗
   'editPriceHint': '成交價',
   'editPricePlaceholder': '請輸入價格',
   'editFeeLabel': '手續費（可選）',
@@ -239,7 +239,7 @@ const Map<String, String> stringsZhHant = {
   'editOverflow': '減倉股數不能超過持股數',
   'deleteConfirmContent': '確定要刪除 {symbol} ({name}) 嗎？',
 
-  // Dividend dialog
+  // 股息弹窗
   'dividendTitle': '派息',
   'dividendDateLabel': '派息日期',
   'dividendAmountLabel': '每股派息金額',
@@ -253,7 +253,7 @@ const Map<String, String> stringsZhHant = {
   'dividendEditSharesLabel': '持股數',
   'dividendEditDateLabel': '派息日期',
 
-  // Search dialog
+  // 搜索弹窗
   'searchTitle': '添加股票',
   'searchHint': '輸入股票名稱或代碼（如 AAPL、騰訊）',
   'searchRateLimit': '請求過於頻繁，請{secs}秒後再試',
@@ -277,7 +277,7 @@ const Map<String, String> stringsZhHant = {
   'searchInvalidShares': '請輸入有效的持股數量',
   'searchQuoteUnavailable': '暫無法取得',
 
-  // Records
+  // 记录
   'recordsOpTab': '操作',
   'recordsDivTab': '派息',
   'recordsEmptyOp': '尚無操作記錄',
@@ -306,7 +306,7 @@ const Map<String, String> stringsZhHant = {
   'recordsEditPrice': '價格',
   'recordsEditShares': '股數',
 
-  // Results
+  // 操作结果
   'resultCloseSuccess': '平倉成功',
   'resultOpenSuccess': '開倉成功',
   'resultAddSuccess': '加倉成功',
@@ -314,7 +314,7 @@ const Map<String, String> stringsZhHant = {
   'resultDeleteSuccess': '刪除成功',
   'resultAddStockSuccess': '添加成功',
 
-  // Profit chart
+  // 收益曲线
   'profitExpand': '展開',
   'profitCollapse': '收起',
   'profitChartTitle': '盈虧曲線',
@@ -324,7 +324,7 @@ const Map<String, String> stringsZhHant = {
   'profitRange180d': '180天',
   'profitRange360d': '360天',
 
-  // Global dividend page
+  // 全局股息页面
   'dividendOverviewTitle': '股息記錄',
   'dividendOverviewEmpty': '尚無派息記錄',
   'dividendOverviewEmptyHint': '展開股票卡片，在更多選單中新增派息',
@@ -349,7 +349,7 @@ const Map<String, String> stringsZhHant = {
   'dividendRecords': '派息記錄',
   'dividendAllMarkets': '全部市場',
 
-  // AssetConfig
+  // 资产文案
   'cash': '現金',
   'timeDeposit': '定期存款',
   'wealthProduct': '理財',
@@ -465,7 +465,7 @@ const Map<String, String> stringsZhHant = {
   'fileBrowserSaveFail': '儲存失敗',
   'fileBrowserImportConfirm': '確認匯入',
 
-  // Crypto exchange read-only assets
+  // 交易所只读数字币资产
   "cryptoAccountEquity": "帳戶權益",
   "cryptoBinanceOnly": "暫時僅支援幣安",
   "cryptoRiskTestPassed": "帳戶查詢測試成功；偵測到交易權限，請確認風險後新增。",

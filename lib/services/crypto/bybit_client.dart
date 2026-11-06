@@ -58,7 +58,7 @@ extension BybitExchangeClient on ExchangeClient {
           .toList();
       prices = spotPrices(list, rates, okxStyle: false);
     } catch (_) {
-      /* Preserve account data when public quotes fail. */
+      /* 公共行情获取失败时，仍保留账户数据。 */
     }
     final balances = <CryptoBalance>[];
     Decimal equityFallback = Decimal.zero;
@@ -146,7 +146,7 @@ extension BybitExchangeClient on ExchangeClient {
       for (final account in rows(overview['list'])) {
         if (textField(account, 'accountType') != 'CopyTrading') continue;
         final categories = rows(account['categories']);
-        // Categories partition the account. Do not also add its parent totalEquity.
+        // 各分类已分别计入账户资产，不得再叠加上层的 totalEquity 总权益。
         for (final category in categories) {
           final label = 'Bybit · ${textField(category, 'category')}';
           wallets.add(

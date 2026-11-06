@@ -121,12 +121,12 @@ class CryptoStore extends ChangeNotifier {
       storageError = const CryptoSyncException('storage');
       _initializing = null;
       notifyListeners();
-      return; // Never overwrite inaccessible Keychain entries with an empty list.
+      return; // 钥匙串条目无法访问时，不得用空列表覆盖。
     }
     try {
       await persistence.clearLegacyCache();
     } catch (_) {
-      // Retry legacy-file cleanup on the next launch; no snapshot is ever read or written.
+      // 下次启动时重试清理旧文件；不读取或写入任何资产快照文件。
     }
     initialized = true;
     storageError = null;
@@ -236,7 +236,7 @@ class CryptoStore extends ChangeNotifier {
     syncing = true;
     notifyListeners();
     try {
-      // Sequential per-account calls avoid bursting exchange rate limits.
+      // 按账户顺序请求，避免并发请求触发交易所限流。
       for (final c in targets) {
         if (!canAccess()) break;
         try {

@@ -4,7 +4,7 @@ import 'market_util.dart';
 class StockLogoUrls {
   StockLogoUrls._();
 
-  /// 风险警示前缀不属于公司名称，仅用于生成缺失 Logo 时的文字图标。
+  /// 风险警示前缀不属于公司名称，仅用于生成缺失图标时的文字图标。
   static String fallbackText(String name, String code) {
     final companyName = name.trim().replaceFirst(
       RegExp(r'^[*＊]?ST\s*(?=[\u3400-\u9FFF])', caseSensitive: false),
@@ -23,7 +23,7 @@ class StockLogoUrls {
     if (!RegExp(r'^[A-Z0-9][A-Z0-9.\-]*$').hasMatch(symbol)) return [];
     final exchange = MarketUtil.marketFromProvider(market, secid: secid);
     if (_hasKnownCompanyPhoto(symbol, exchange)) {
-      // 图标源已知返回办公楼照片；缺少可信 Logo 时交给界面显示文字。
+      // 图标源已知返回办公楼照片；缺少可信图标时交给界面显示文字。
       return [];
     }
     String image(String ticker) =>

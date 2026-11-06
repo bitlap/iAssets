@@ -187,7 +187,7 @@ class _FileBrowserDialogState extends State<FileBrowserDialog> {
           style: TextStyles.sectionTitle.copyWith(fontWeight: FontWeight.bold),
         ),
         const SizedBox(height: 8),
-        // Current path
+        // 当前路径
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
           decoration: BoxDecoration(
@@ -205,7 +205,7 @@ class _FileBrowserDialogState extends State<FileBrowserDialog> {
           ),
         ),
         const SizedBox(height: 8),
-        // Go up button
+        // 返回上级目录按钮
         if (dir.parent.path != dir.path)
           ListTile(
             leading: Icon(Icons.chevron_left, size: 20),
@@ -217,7 +217,7 @@ class _FileBrowserDialogState extends State<FileBrowserDialog> {
             contentPadding: const EdgeInsets.symmetric(horizontal: 12),
           ),
         const SizedBox(height: 8),
-        // File list
+        // 文件列表
         SizedBox(
           height: 200,
           child: FutureBuilder<List<FileSystemEntity>>(
@@ -342,7 +342,7 @@ class _FileBrowserDialogState extends State<FileBrowserDialog> {
         ],
         if (widget.isSaveMode) ...[
           const SizedBox(height: 12),
-          // File name input
+          // 文件名输入框
           TextField(
             controller: _fileNameController,
             style: TextStyles.inputText,
@@ -366,7 +366,7 @@ class _FileBrowserDialogState extends State<FileBrowserDialog> {
             ),
           ),
           const SizedBox(height: 12),
-          // Save button
+          // 保存按钮
           SizedBox(
             width: double.infinity,
             child: Opacity(

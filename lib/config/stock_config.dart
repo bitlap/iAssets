@@ -3,7 +3,7 @@ import '../l10n/l10n.dart';
 class StockConfig {
   StockConfig._();
 
-  // StockHeaderCard 文案
+  // 股票顶部汇总卡片文案
   static String get assetTotalAssets => L10n.t('assetTotalAssets');
   static String get assetTodayProfit => L10n.t('assetTodayProfit');
   static String get assetTodayProfitHelp => L10n.t('assetTodayProfitHelp');
@@ -39,13 +39,13 @@ class StockConfig {
   static String get homeHoldingHeader => L10n.t('homeHoldingHeader');
   static String get homeProfitHeader => L10n.t('homeProfitHeader');
 
-  // 底部 Tab 文案
+  // 底部标签页文案
   static String get tabStock => L10n.t('tabStock');
   static String get tabAsset => L10n.t('tabAsset');
   static String get assetComingSoon => L10n.t('assetComingSoon');
   static String get assetComingSoonDesc => L10n.t('assetComingSoonDesc');
 
-  // StockCard 文案
+  // 股票卡片文案
   static String get stockTotalValue => L10n.t('stockTotalValue');
   static String get stockRecord => L10n.t('stockRecord');
   static String get stockMore => L10n.t('stockMore');

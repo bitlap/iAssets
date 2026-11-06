@@ -154,7 +154,7 @@ class TextStyles {
     height: 1.1,
   );
 
-  /// 17px 白色加粗（AppBar 标题）
+  /// 17px 白色加粗（应用栏标题）
   static TextStyle get appBarTitle => TextStyle(
     fontSize: 17,
     fontWeight: FontWeight.w600,
@@ -178,7 +178,7 @@ class TextStyles {
 //  通用工具函数
 // ═══════════════════════════════════════
 
-/// 格式化时间用于「最近更新」subtitle
+/// 格式化时间用于“最近更新”副标题
 String formatRefreshTime(DateTime t) {
   return '${t.year}-${t.month.toString().padLeft(2, '0')}-'
       '${t.day.toString().padLeft(2, '0')} '

@@ -12,7 +12,7 @@ import '../common/app_number_field.dart';
 import '../common/dialog_utils.dart';
 import '../common/percent_selector.dart';
 
-/// 派息记录Tab
+/// 派息记录标签页
 class DividendRecordsTab extends StatefulWidget {
   final StockModel stock;
   final List<DividendRecord> dividendRecords;

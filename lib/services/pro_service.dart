@@ -3,7 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import '../models/asset_account.dart';
 
-/// Limits apply to additions only. Existing records are never truncated.
+/// 数量限制仅约束新增操作，不会截断已有记录。
 class ProAccess {
   final bool isPro;
   const ProAccess({this.isPro = false});
@@ -42,7 +42,7 @@ class ProService extends ChangeNotifier {
   static const yearly = 'org.bitlap.assets.pro.subscription.yearly';
   static const lifetime = 'org.bitlap.assets.pro.lifetime';
   static const productIds = [monthly, yearly, lifetime];
-  // Freeze this UTC timestamp at the first monetized release. Never move it.
+  // 此 UTC 时间戳固定为首次启用付费机制的上线时间，后续不得调整。
   static const legacyCutoff = String.fromEnvironment('PRO_LEGACY_CUTOFF');
   static const privacyUrl = String.fromEnvironment(
     'PRO_PRIVACY_URL',
@@ -89,7 +89,7 @@ class ProService extends ChangeNotifier {
   Future<void> initialize() async {
     channel.setMethodCallHandler((call) async {
       if (call.method == 'changed') {
-        // A purchase can complete after an in-flight snapshot was captured.
+        // 购买可能在进行中的权益快照请求取值之后才完成。
         if (_refreshing != null) await _refreshing;
         await refresh();
       }
@@ -133,7 +133,7 @@ class ProService extends ChangeNotifier {
         });
       }
     } catch (_) {
-      // Keep a previously verified in-session entitlement only until its expiry.
+      // 当前会话中已验证的权益仅保留到其到期时间。
       error = 'proVerificationError';
     } finally {
       loading = false;
@@ -151,7 +151,7 @@ class ProService extends ChangeNotifier {
     error = null;
     notifyListeners();
     try {
-      // Refresh first so an existing owner isn't charged again after reconnecting.
+      // 恢复连接后先刷新权益，避免已有付费用户重复购买。
       await refresh();
       if (kind == 'legacy' ||
           kind == 'lifetime' ||

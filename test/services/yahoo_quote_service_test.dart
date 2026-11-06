@@ -38,7 +38,7 @@ void main() {
     ),
   ];
   final symbols = ['7203.T', '005930.KS', 'HSBA.L', 'NSRGY'];
-  // Public chart metadata captured on 2026-10-23; prices may be delayed.
+  // 公开图表元数据采集于 2026-10-23，价格可能存在延迟。
   String fixture(String symbol) =>
       File('test/fixtures/global_quotes/$symbol.json').readAsStringSync();
   http.Response response(String symbol) => http.Response(fixture(symbol), 200);
@@ -215,7 +215,7 @@ void main() {
       await http.runWithClient(
         () async {
           final service = StockQuoteService();
-          // Enter domestic cooldown: the independent fallback must still run.
+          // 进入国内行情源冷却期后，独立的备用行情源仍须运行。
           for (var i = 0; i < 3; i++) {
             CircuitBreaker.eastMoney.onFailure();
           }
@@ -228,7 +228,7 @@ void main() {
           await service.getStockQuotesBatch(stocks);
           expect(yahooRequests, 4);
           CircuitBreaker.eastMoney.onSuccess();
-          // Distinct secid avoids the singleton cache, and forces EastMoney failure.
+          // 使用不同的 secid 避开单例缓存，确保触发东方财富请求失败。
           final other = StockSearchResult(
             code: '7203',
             name: 'Toyota',

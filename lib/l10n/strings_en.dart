@@ -1,6 +1,6 @@
-/// 英文（English）字符串表
+/// 英文字符串表
 const Map<String, String> stringsEn = {
-  // AppConfig
+  // 应用通用文案
   'appName': 'Stocks',
   'btnClose': 'OK',
   'btnCancel': 'Cancel',
@@ -56,7 +56,7 @@ const Map<String, String> stringsEn = {
   'customStockInvalidPrice': 'Enter a valid current price',
   'customStockImageFailed': 'Could not select the image. Try again.',
 
-  // SettingsConfig
+  // 设置文案
   'sectionCurrency': 'Local Currency',
   'sectionStock': 'Stock Settings',
   'sectionSync': 'Data Sync',
@@ -130,7 +130,7 @@ const Map<String, String> stringsEn = {
   'dataSourceNameTencent': 'Tencent Stock Quotes',
   'dataSourceAuthorTencent': 'Tencent',
 
-  // StockConfig - StockHeaderCard
+  // 股票顶部汇总卡片文案
   'assetTotalAssets': 'Total Assets',
   'assetTodayProfit': "Today's P&L",
   'assetTodayProfitHelp':
@@ -168,7 +168,7 @@ const Map<String, String> stringsEn = {
   'assetPositionRatioHelp':
       'Each asset category value / total assets; stocks include current holdings only',
 
-  // Market filter
+  // 市场筛选
   'marketAll': 'All',
   'marketUS': 'US',
   'marketNASDAQ': 'NASDAQ',
@@ -193,7 +193,7 @@ const Map<String, String> stringsEn = {
   'marketUK': 'UK',
   'marketPink': 'Pink Sheets',
 
-  // Home
+  // 首页
   'homeTitle': 'Stocks',
   'homeSubtitle': '{count} stocks · live',
   'homeSubtitleRefresh': 'Updated: {time}',
@@ -203,13 +203,13 @@ const Map<String, String> stringsEn = {
   'homeHoldingHeader': 'Holding',
   'homeProfitHeader': 'P&L',
 
-  // Tab
+  // 标签页
   'tabStock': 'Stocks',
   'tabAsset': 'Assets',
   'assetComingSoon': 'Asset page under development',
   'assetComingSoonDesc': 'Coming soon',
 
-  // StockCard
+  // 股票卡片
   'stockTotalValue': 'Market Value',
   'stockRecord': 'Records',
   'stockMore': 'More',
@@ -222,7 +222,7 @@ const Map<String, String> stringsEn = {
   'stockDetailBuyCount': 'Buys',
   'stockDetailSellCount': 'Sells',
 
-  // Operations
+  // 交易操作
   'opBuy': 'Buy',
   'opSell': 'Sell',
   'opAddPosition': 'Add',
@@ -236,7 +236,7 @@ const Map<String, String> stringsEn = {
   'opMoreActions': 'More Actions',
   'opConfirmDelete': 'Confirm Delete',
 
-  // Edit dialogs
+  // 编辑弹窗
   'editPriceHint': 'Price',
   'editPricePlaceholder': 'Enter price',
   'editFeeLabel': 'Fee (optional)',
@@ -249,7 +249,7 @@ const Map<String, String> stringsEn = {
   'editOverflow': 'Cannot reduce more shares than held',
   'deleteConfirmContent': 'Delete {symbol} ({name})?',
 
-  // Dividend dialog
+  // 股息弹窗
   'dividendTitle': 'Dividend',
   'dividendDateLabel': 'Dividend Date',
   'dividendAmountLabel': 'Dividend Per Share',
@@ -263,7 +263,7 @@ const Map<String, String> stringsEn = {
   'dividendEditSharesLabel': 'Shares Held',
   'dividendEditDateLabel': 'Dividend Date',
 
-  // Search dialog
+  // 搜索弹窗
   'searchTitle': 'Add Stock',
   'searchHint': 'Search by name or code (e.g. AAPL, Tencent)',
   'searchRateLimit': 'Too many requests, try again in {secs}s',
@@ -287,7 +287,7 @@ const Map<String, String> stringsEn = {
   'searchInvalidShares': 'Enter a valid number of shares',
   'searchQuoteUnavailable': 'Unavailable',
 
-  // Records
+  // 记录
   'recordsOpTab': 'Trades',
   'recordsDivTab': 'Dividends',
   'recordsEmptyOp': 'No trades yet',
@@ -318,7 +318,7 @@ const Map<String, String> stringsEn = {
   'recordsEditPrice': 'Price',
   'recordsEditShares': 'Shares',
 
-  // Results
+  // 操作结果
   'resultCloseSuccess': 'Position closed',
   'resultOpenSuccess': 'Position opened',
   'resultAddSuccess': 'Position added',
@@ -326,7 +326,7 @@ const Map<String, String> stringsEn = {
   'resultDeleteSuccess': 'Deleted',
   'resultAddStockSuccess': 'Added',
 
-  // Profit chart
+  // 收益曲线
   'profitExpand': 'Expand',
   'profitCollapse': 'Collapse',
   'profitChartTitle': 'Profit Curve',
@@ -336,7 +336,7 @@ const Map<String, String> stringsEn = {
   'profitRange180d': '180D',
   'profitRange360d': '360D',
 
-  // Global dividend page
+  // 全局股息页面
   'dividendOverviewTitle': 'Dividends',
   'dividendOverviewEmpty': 'No dividends yet',
   'dividendOverviewEmptyHint':
@@ -362,7 +362,7 @@ const Map<String, String> stringsEn = {
   'dividendRecords': 'Dividend Records',
   'dividendAllMarkets': 'All Markets',
 
-  // AssetConfig
+  // 资产文案
   'cash': 'Cash',
   'timeDeposit': 'Time Deposit',
   'wealthProduct': 'Investment Product',
@@ -447,7 +447,7 @@ const Map<String, String> stringsEn = {
   'createdLabel': 'Created: {date}',
   'updatedLabel': 'Updated: {date}',
 
-  // Backup
+  // 备份
   'backupTitle': 'Data Backup',
   'backupExport': 'Export Data',
   'backupImport': 'Import Data',
@@ -470,7 +470,7 @@ const Map<String, String> stringsEn = {
   'backupRollbackFail': 'Rollback failed, no backup available',
   'backupNoBackup': 'No backup available to rollback',
 
-  // File browser
+  // 文件浏览器
   'fileBrowserTitle': 'Import File',
   'fileBrowserExportTitle': 'Export File',
   'fileBrowserGoUp': 'Go Up',
@@ -480,7 +480,7 @@ const Map<String, String> stringsEn = {
   'fileBrowserSaveFail': 'Save failed',
   'fileBrowserImportConfirm': 'Import',
 
-  // Crypto exchange read-only assets
+  // 交易所只读数字币资产
   "cryptoAccountEquity": "Account equity",
   "cryptoBinanceOnly": "Only Binance is currently supported",
   "cryptoRiskTestPassed":

@@ -10,7 +10,7 @@ import '../common/empty_state_widget.dart';
 import '../common/confirm_delete_dialog.dart';
 import '../common/dialog_utils.dart';
 
-/// 操作记录Tab
+/// 操作记录标签页
 class OperationRecordsTab extends StatefulWidget {
   final StockModel stock;
   final List<OperationRecord> operationRecords;

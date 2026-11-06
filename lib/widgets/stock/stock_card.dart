@@ -13,7 +13,7 @@ import '../common/sensitive_text.dart';
 import 'market_badges.dart';
 import 'stock_columns.dart';
 
-/// 股票卡片组件（纯UI展示）
+/// 股票卡片组件（仅负责界面展示）
 class StockCard extends StatelessWidget {
   final StockModel stock;
   final bool isExpanded;
@@ -385,7 +385,7 @@ class StockCard extends StatelessWidget {
     );
   }
 
-  /// Costs are primary; entry prices and trading activity provide context.
+  /// 优先展示成本，买入价格和交易活动作为补充信息。
   List<Widget> _buildExpandedDetails() {
     final stats = StockCalculator.calculateRecordStats(operationRecords);
     final totalCost = stats.totalBuyAmount - stats.totalSellAmount;

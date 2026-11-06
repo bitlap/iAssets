@@ -8,8 +8,8 @@ extension BinanceExchangeClient on ExchangeClient {
     Map<String, String> params = const {},
   ]) async {
     for (var attempt = 0; attempt < 2; attempt++) {
-      // A dropped keep-alive connection can fail before Binance responds.
-      // Re-sign the read-only GET for the retry so its timestamp stays fresh.
+      // 长连接中断可能导致请求在币安返回响应前失败。
+      // 重试只读 GET 请求时重新签名，确保使用最新时间戳。
       final q = {
         ...params,
         'timestamp': '${now().millisecondsSinceEpoch}',
@@ -72,7 +72,7 @@ extension BinanceExchangeClient on ExchangeClient {
         okxStyle: false,
       );
     } catch (_) {
-      /* Private account testing remains valid if public quotes fail. */
+      /* 公共行情获取失败时，私有账户的连接测试结果仍然有效。 */
     }
     final balances = <CryptoBalance>[];
     for (final row in rows(account['balances'])) {
@@ -177,7 +177,7 @@ extension BinanceExchangeClient on ExchangeClient {
           );
         }
       } on CryptoSyncException catch (e) {
-        // Never interpret permission, IP or network failures as an empty wallet.
+        // 不得将权限、IP 地址或网络错误误判为空钱包。
         if (e.detail == '-2015') {
           throw CryptoSyncException('futuresUnavailable', '-2015', e.stage);
         }
@@ -253,7 +253,7 @@ extension BinanceExchangeClient on ExchangeClient {
         okxStyle: false,
       );
     } catch (_) {
-      /* Unknown prices are retained as unknown, never set to zero. */
+      /* 未知价格继续标记为未知，不得替换为零。 */
     }
     final balances = <CryptoBalance>[];
     for (final row in rows(account['balances'])) {
@@ -296,7 +296,7 @@ extension BinanceExchangeClient on ExchangeClient {
   }
 
   Future<CryptoSnapshot> _binanceLead(ExchangeConnection c) async {
-    // A lead portfolio key addresses its own USD-M account, not the main Spot/COIN-M wallets.
+    // 带单组合密钥仅访问其专属 U 本位账户，不访问主账户的现货或币本位钱包。
     final account = object(
       await binance(c, 'fapi.binance.com', '/fapi/v2/account'),
     );

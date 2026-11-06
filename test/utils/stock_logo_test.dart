@@ -248,7 +248,7 @@ void main() {
                   ),
                 ),
               );
-              // Join the download triggered by the widget; no fixed timing delay.
+              // 等待组件触发的下载任务完成，不依赖固定延时。
               await LogoCacher.getLogo(
                 StockLogoUrls.cacheKey(stock.symbol, stock.marketType),
                 StockLogoUrls.forStock(stock.symbol, stock.marketType).first,

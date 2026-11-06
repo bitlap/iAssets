@@ -69,7 +69,7 @@ class _StockHeaderCardState extends State<StockHeaderCard> {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
-          // Keep the heading height independent of daily profit values.
+          // 标题高度不随今日盈亏的数值变化。
           Row(
             children: [
               Text(StockConfig.assetTotalAssets, style: TextStyles.body13),
@@ -95,8 +95,8 @@ class _StockHeaderCardState extends State<StockHeaderCard> {
             style: TextStyles.amountLarge,
           ),
           const SizedBox(height: 8),
-          // The asset amount already equals current stock market value. Keep
-          // the two return horizons visible and move supporting totals to help.
+          // 资产金额已等于当前股票持仓市值；保留今日和累计盈亏，
+          // 其余汇总统计移至帮助说明。
           IntrinsicHeight(
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.stretch,

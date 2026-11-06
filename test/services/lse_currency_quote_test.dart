@@ -137,7 +137,7 @@ void main() {
         'TRY',
       ]) {
         expect(ExchangeRateService.supportedCurrencies, contains(code));
-        // A supported currency without a fetched rate must remain unavailable.
+        // 已支持的币种在尚未获取汇率时，仍应标记为不可用。
         expect(ExchangeRateService().effectiveRates[code], isNull);
       }
       expect(ExchangeRateService.supportedCurrencies, isNot(contains('GBp')));

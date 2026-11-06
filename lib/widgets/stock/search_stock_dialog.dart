@@ -55,7 +55,7 @@ class _SearchStockDialogState extends State<SearchStockDialog> {
   Timer? _debounceTimer;
   String? _selectedMarket; // 按原始市场名称筛选，null 表示全部
 
-  // 正在获取行情的股票（loading 状态）
+  // 正在获取行情的股票（加载状态）
   final Set<String> _loadingQuotes = {};
   // 缓存行情数据
   final Map<String, StockQuote?> _quoteCache = {};
@@ -75,7 +75,7 @@ class _SearchStockDialogState extends State<SearchStockDialog> {
   void dispose() {
     _controller.dispose();
     _debounceTimer?.cancel();
-    // 不再 dispose service，因为是单例，其他 dialog 还要用
+    // 行情服务为单例，其他弹窗仍需使用，因此此处不释放服务。
     _focusNode.dispose();
     super.dispose();
   }
@@ -150,7 +150,7 @@ class _SearchStockDialogState extends State<SearchStockDialog> {
               : StockConfig.searchNotFound;
         }
       });
-      // 从 service 缓存中恢复已有行情
+      // 从服务缓存中恢复已有行情
       _restoreCachedQuotes();
     } catch (e) {
       if (!mounted) return;
@@ -403,7 +403,7 @@ class _SearchStockDialogState extends State<SearchStockDialog> {
         .toList();
   }
 
-  /// 从 service 缓存中恢复已有行情，并对未缓存的股票批量获取行情
+  /// 从服务缓存中恢复已有行情，并对未缓存的股票批量获取行情
   void _restoreCachedQuotes() {
     final needFetch = <StockSearchResult>[];
     for (final stock in _allResults) {
@@ -417,14 +417,14 @@ class _SearchStockDialogState extends State<SearchStockDialog> {
       }
     }
     if (needFetch.isEmpty) {
-      // 全部命中缓存，直接结束 loading 显示结果
+      // 全部命中缓存，直接结束加载并显示结果。
       setState(() => _isLoading = false);
     } else {
       _fetchQuotesBatch(needFetch);
     }
   }
 
-  /// 批量获取股票行情并更新 UI
+  /// 批量获取股票行情并更新界面
   Future<void> _fetchQuotesBatch(List<StockSearchResult> stocks) async {
     setState(() {
       for (final stock in stocks) {
@@ -557,7 +557,7 @@ class _SearchStockDialogState extends State<SearchStockDialog> {
         ),
         child: Row(
           children: [
-            // Logo
+            // 股票图标
             Container(
               width: 36,
               height: 36,

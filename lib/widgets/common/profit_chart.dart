@@ -368,7 +368,7 @@ class _ProfitChartPainter extends CustomPainter {
       return (index / (data.length - 1)) * paintWidth;
     }
 
-    // Y-axis labels
+    // 纵轴标签
     for (int i = 0; i <= 4; i++) {
       final val = minVal + (maxVal - minVal) * i / 4;
       final y = paintHeight - (i / 4) * (paintHeight - 8);
@@ -385,7 +385,7 @@ class _ProfitChartPainter extends CustomPainter {
       tp.paint(canvas, Offset(-tp.width, y - tp.height / 2));
     }
 
-    // grid lines
+    // 网格线
     final gridPaint = Paint()
       ..color = AppColors.textPrimary.withValues(alpha: 0.06)
       ..strokeWidth = 0.5;
@@ -394,7 +394,7 @@ class _ProfitChartPainter extends CustomPainter {
       canvas.drawLine(Offset(0, y), Offset(paintWidth, y), gridPaint);
     }
 
-    // zero line
+    // 零值基准线
     if (minVal < 0 && maxVal > 0) {
       final zeroY = scaleY(0);
       final zeroPaint = Paint()
@@ -403,7 +403,7 @@ class _ProfitChartPainter extends CustomPainter {
       canvas.drawLine(Offset(0, zeroY), Offset(paintWidth, zeroY), zeroPaint);
     }
 
-    // fill
+    // 曲线区域填充
     final fillPaint = Paint()
       ..shader = LinearGradient(
         begin: Alignment.topCenter,
@@ -426,7 +426,7 @@ class _ProfitChartPainter extends CustomPainter {
     path.close();
     canvas.drawPath(path, fillPaint);
 
-    // line
+    // 曲线
     final linePaint = Paint()
       ..color = color.withValues(alpha: 0.8)
       ..strokeWidth = 2
@@ -445,7 +445,7 @@ class _ProfitChartPainter extends CustomPainter {
     }
     canvas.drawPath(linePath, linePaint);
 
-    // data points
+    // 数据点
     for (int i = 0; i < data.length; i++) {
       final x = scaleX(i);
       final y = scaleY(data[i]);
@@ -460,13 +460,13 @@ class _ProfitChartPainter extends CustomPainter {
       );
     }
 
-    // selected indicator: dashed vertical line + value + date
+    // 选中指示器：垂直虚线、数值和日期
     if (selectedIndex != null && selectedIndex! < data.length) {
       final selX = scaleX(selectedIndex!);
       final selY = scaleY(data[selectedIndex!]);
       final selSnapshot = snapshots[selectedIndex!];
 
-      // dashed vertical line from top to bottom of chart container
+      // 贯穿图表容器顶部与底部的垂直虚线
       final dashPaint = Paint()
         ..color = AppColors.textPrimary.withValues(alpha: 0.5)
         ..strokeWidth = 1.5
@@ -485,7 +485,7 @@ class _ProfitChartPainter extends CustomPainter {
         dashY += dashLen + gapLen;
       }
 
-      // value label at top
+      // 顶部数值标签
       final valueText = CurrencyUtil.formatCompact(data[selectedIndex!]);
       final valueTp = TextPainter(
         text: TextSpan(
@@ -514,7 +514,7 @@ class _ProfitChartPainter extends CustomPainter {
       );
       valueTp.paint(canvas, Offset(labelX + 5, 3));
 
-      // date label at bottom
+      // 底部日期标签
       final dateText = selectedRange == 0
           ? DateFormat('HH:mm').format(selSnapshot.time)
           : DateFormat('MM-dd').format(selSnapshot.time);
@@ -591,7 +591,7 @@ class _MiniChartPainter extends CustomPainter {
       return (index / (data.length - 1)) * paintWidth;
     }
 
-    // dashed zero line
+    // 零值基准虚线
     if (minVal < 0 && maxVal > 0) {
       final zeroY = scaleY(0);
       final dashPaint = Paint()
@@ -611,7 +611,7 @@ class _MiniChartPainter extends CustomPainter {
       }
     }
 
-    // fill
+    // 曲线区域填充
     final fillPaint = Paint()
       ..shader = LinearGradient(
         begin: Alignment.topCenter,
@@ -634,7 +634,7 @@ class _MiniChartPainter extends CustomPainter {
     path.close();
     canvas.drawPath(path, fillPaint);
 
-    // line
+    // 曲线
     final linePaint = Paint()
       ..color = color.withValues(alpha: 0.8)
       ..strokeWidth = 1.5

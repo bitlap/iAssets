@@ -44,7 +44,7 @@ class AppConfig {
   static const int httpTimeoutSec = 15;
   static const int searchDebounceMs = 1000;
 
-  // Toast 文案
+  // 轻提示文案
   static String get toastEmailCopied => L10n.t('toastEmailCopied');
   static String get toastWechatCopied => L10n.t('toastWechatCopied');
   static String get toastClipboardSuffix => L10n.t('toastClipboardSuffix');

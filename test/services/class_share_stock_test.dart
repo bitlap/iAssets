@@ -10,7 +10,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 
-// Search and Tencent fixtures were captured from public endpoints on 2026-10-23.
+// 搜索和腾讯行情测试数据采集自 2026-10-23 的公开接口。
 void main() {
   final searchFixture = File(
     'test/fixtures/stock_search_berkshire.json',
@@ -121,7 +121,7 @@ void main() {
             return http.Response('v_pv_none_match="1";', 200);
           }
           expect(request.url.queryParameters['secids'], '106.BRK_B');
-          // Simulated fallback: the live EastMoney quote endpoint was unavailable.
+          // 模拟回退场景：东方财富实时行情接口不可用。
           return http.Response(
             jsonEncode({
               'data': {

@@ -5,7 +5,7 @@ import '../../services/privacy_service.dart';
 import 'app_colors.dart';
 import 'app_ui.dart';
 
-/// Covers every route and dialog until local authentication completes.
+/// 本地身份验证完成前，遮盖所有页面和弹窗。
 class PrivacyGate extends StatefulWidget {
   const PrivacyGate({super.key, required this.child, this.authenticate});
   final Widget child;
@@ -36,8 +36,8 @@ class _PrivacyGateState extends State<PrivacyGate> with WidgetsBindingObserver {
 
   void _onSettingChanged() {
     if (!mounted) return;
-    // Enabling already required a successful biometric challenge. The next
-    // cold launch or return from background will lock this session.
+    // 启用时已完成生物识别验证；下次冷启动或从后台返回时，
+    // 再锁定当前会话。
     if (!PrivacyService.instance.biometricLock.value) {
       setState(() => _locked = false);
     }
@@ -49,8 +49,8 @@ class _PrivacyGateState extends State<PrivacyGate> with WidgetsBindingObserver {
         state == AppLifecycleState.hidden ||
         state == AppLifecycleState.paused) {
       if (!PrivacyService.instance.biometricLock.value) return;
-      // The system authentication prompt itself can make iOS inactive.
-      // Only invalidate that prompt when the app actually backgrounds.
+      // 系统身份验证弹窗本身就可能让 iOS 进入非活跃状态。
+      // 仅在应用确实进入后台时，才使本次验证失效。
       if (state != AppLifecycleState.inactive || !_authenticating) {
         _generation++;
         _resumeNeedsPrompt = true;
@@ -97,8 +97,8 @@ class _PrivacyGateState extends State<PrivacyGate> with WidgetsBindingObserver {
         if (_active) {
           setState(() => _locked = false);
         } else {
-          // LocalAuthentication can return before iOS reports `resumed`.
-          // Keep the cover up and apply the successful result on resume.
+          // LocalAuthentication 可能在 iOS 通知 resumed 状态前返回。
+          // 继续保留遮罩，待应用恢复前台后再应用验证成功的结果。
           _authenticatedWhileInactive = generation;
         }
       }

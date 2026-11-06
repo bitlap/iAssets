@@ -1,6 +1,6 @@
-/// 简体中文（默认语言）字符串表
+/// 简体中文字符串表
 const Map<String, String> stringsZh = {
-  // AppConfig
+  // 应用通用文案
   'appName': '股票',
   'btnClose': '确定',
   'btnCancel': '取消',
@@ -56,7 +56,7 @@ const Map<String, String> stringsZh = {
   'customStockInvalidPrice': '请输入有效的当前价格',
   'customStockImageFailed': '图片选择失败，请重试',
 
-  // SettingsConfig
+  // 设置文案
   'sectionCurrency': '本地货币',
   'sectionStock': '股票设置',
   'sectionSync': '数据同步',
@@ -124,7 +124,7 @@ const Map<String, String> stringsZh = {
   'dataSourceNameTencent': '腾讯股票行情',
   'dataSourceAuthorTencent': '腾讯',
 
-  // StockConfig - StockHeaderCard
+  // 股票顶部汇总卡片文案
   'assetTotalAssets': '总资产',
   'assetTodayProfit': '今日盈亏',
   'assetTodayProfitHelp':
@@ -193,13 +193,13 @@ const Map<String, String> stringsZh = {
   'homeHoldingHeader': '持仓',
   'homeProfitHeader': '盈亏',
 
-  // Tab
+  // 标签页
   'tabStock': '股票',
   'tabAsset': '资产',
   'assetComingSoon': '资产页面正在开发中',
   'assetComingSoonDesc': '敬请期待',
 
-  // StockCard
+  // 股票卡片
   'stockTotalValue': '总市值',
   'stockRecord': '记录',
   'stockMore': '更多',
@@ -348,7 +348,7 @@ const Map<String, String> stringsZh = {
   'dividendRecords': '派息记录',
   'dividendAllMarkets': '全部市场',
 
-  // AssetConfig
+  // 资产文案
   'cash': '现金',
   'timeDeposit': '定期存款',
   'wealthProduct': '理财',
@@ -464,7 +464,7 @@ const Map<String, String> stringsZh = {
   'fileBrowserSaveFail': '保存失败',
   'fileBrowserImportConfirm': '确定导入',
 
-  // Crypto exchange read-only assets
+  // 交易所只读数字币资产
   "cryptoAccountEquity": "账户权益",
   "cryptoBinanceOnly": "暂时仅支持币安",
   "cryptoRiskTestPassed": "账户查询测试成功；检测到交易权限，请确认风险后添加。",

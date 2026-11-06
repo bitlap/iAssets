@@ -4,8 +4,8 @@ import '../l10n/l10n.dart';
 import '../utils/currency_util.dart';
 import 'privacy_service.dart';
 
-/// Publishes only the four values already shown on the asset summary card.
-/// Exchange credentials, holdings, and account records never cross this bridge.
+/// 仅向小组件发布资产汇总卡片中已有的四项金额。
+/// 交易所凭证、持仓明细和账户记录均不通过此桥接传输。
 class WidgetSnapshotService {
   WidgetSnapshotService._();
 
@@ -43,7 +43,7 @@ class WidgetSnapshotService {
     try {
       await _channel.invokeMethod<void>('publish', payload);
     } on MissingPluginException {
-      // WidgetKit is iOS-only; other platforms can still run the Flutter app.
+      // WidgetKit 仅支持 iOS，其他平台仍可运行 Flutter 应用。
     }
   }
 }

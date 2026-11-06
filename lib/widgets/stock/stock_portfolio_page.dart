@@ -69,7 +69,7 @@ class StockPortfolioPageState extends State<StockPortfolioPage>
   double _todayBaseline = 0;
 
   // 排序状态
-  String _sortColumn = 'holdings'; // 'name', 'holdings', 'profit'
+  String _sortColumn = 'holdings'; // 排序字段：name（代码）、holdings（持仓价值）、profit（盈亏）。
   bool _sortAscending = false;
   // 市场筛选
   String? _filterMarket;
@@ -812,7 +812,7 @@ class StockPortfolioPageState extends State<StockPortfolioPage>
         onDataChanged: () {
           _syncStockData();
         },
-        // 传入页面 context（而非 dialog 自身的 context），
+        // 传入页面的 context（而非弹窗自身的 context），
         // 保证关闭备份弹窗后仍可用它打开文件浏览器等后续弹窗
         rootContext: context,
       ),
@@ -842,7 +842,7 @@ class StockPortfolioPageState extends State<StockPortfolioPage>
     });
   }
 
-  // 页面组装（仅股票内容，不含外壳/底部 Tab）
+  // 页面组装（仅股票内容，不含外壳和底部标签栏）
 
   String _buildSubtitle() {
     if (_lastRefreshTime == null) {
@@ -864,7 +864,7 @@ class StockPortfolioPageState extends State<StockPortfolioPage>
     );
   }
 
-  /// 股票 Tab 内容
+  /// 股票标签页内容
   Widget _buildStockTab() {
     return RefreshIndicator(
       onRefresh: _refreshAll,

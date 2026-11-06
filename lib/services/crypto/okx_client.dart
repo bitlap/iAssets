@@ -65,7 +65,7 @@ extension OkxExchangeClient on ExchangeClient {
       );
       prices = spotPrices(rows(ticker['data']), rates, okxStyle: true);
     } catch (_) {
-      /* Keep unknown values explicit. */
+      /* 明确保留未知数值的状态。 */
     }
     final balances = <CryptoBalance>[];
     final role = textField(config, 'spotRoleType');
@@ -78,7 +78,7 @@ extension OkxExchangeClient on ExchangeClient {
       final qty = requiredAmount(row['cashBal']);
       final isolated = amount(row['spotIsoBal']);
       final asset = textField(row, 'ccy');
-      // cashBal and spotIsoBal remain separate informational rows. Account equity is authoritative.
+      // cashBal 和 spotIsoBal 仅分别展示明细，资产总额以账户权益为准。
       if (qty != Decimal.zero) {
         balances.add(
           CryptoBalance(

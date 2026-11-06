@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Build and upload an App Store release using an App Store Connect team API key.
+# 使用 App Store Connect 团队 API 密钥构建并上传 App Store 发布包。
 set -euo pipefail
 
 usage() {
@@ -59,7 +59,7 @@ load_config() {
   for ((index = 0; index < ${#saved_names[@]}; index++)); do
     printf -v "${saved_names[index]}" '%s' "${saved_values[index]}"
   done
-  # Metadata is read by Python, so file defaults must also be exported.
+  # 元数据由 Python 读取，因此也需将配置文件中的默认值导出为环境变量。
   for name in "${names[@]}"; do
     export "$name"
   done
@@ -91,7 +91,7 @@ PY
 [[ "$ASC_ISSUER_ID" =~ ^[A-Fa-f0-9]{8}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{12}$ ]] || fail 'ASC_ISSUER_ID must be a UUID.'
 
 cd "$project_dir"
-# Read metadata without sourcing files as executable shell code.
+# 仅读取元数据，避免将文件内容作为命令行脚本执行。
 metadata="$(python3 - <<'PY'
 import os, pathlib, re
 text = pathlib.Path('pubspec.yaml').read_text()
@@ -119,7 +119,7 @@ fi
 
 output_dir="${RELEASE_OUTPUT_DIR:-$project_dir/build/ios/releases/$(date +%Y%m%d-%H%M%S)-$$}"
 [[ "$output_dir" = /* ]] || output_dir="$project_dir/$output_dir"
-# Never overwrite an earlier archive, IPA or upload log.
+# 不得覆盖已有归档、IPA 文件或上传日志。
 mkdir -p "$(dirname "$output_dir")"
 mkdir "$output_dir" || fail 'RELEASE_OUTPUT_DIR already exists; choose a new directory.'
 archive_path="$output_dir/Runner.xcarchive"
@@ -165,8 +165,8 @@ printf 'Release: %s (%s), team %s\nOutput: %s\n' "$build_name" "$build_number" "
 if "$internal_testflight"; then
   printf 'Distribution: TestFlight internal testing only\n'
 fi
-# Flutter prepares plugins, CocoaPods and generated build settings. The actual
-# archive and both exports explicitly authenticate with the API key.
+# Flutter 负责准备插件、CocoaPods 和生成的构建配置。
+# 实际归档及两次导出均显式使用 API 密钥进行身份验证。
 run_step configure flutter build ios --release --config-only \
   "--build-name=$build_name" "--build-number=$build_number" \
   "--dart-define=PRO_LEGACY_CUTOFF=$PRO_LEGACY_CUTOFF" \

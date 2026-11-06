@@ -330,7 +330,7 @@ class AssetsPageState extends State<AssetsPage> {
     );
   }
 
-  // Dialogs
+  // 弹窗
 
   void _onAddCash(String categoryId) => _openDialog<CashAccount>(
     showCashAssetDialog(
@@ -466,9 +466,9 @@ class AssetsPageState extends State<AssetsPage> {
 
   Future<bool> _createCategory(AssetCategory category) async {
     if (_categories.any((item) => item.id == category.id)) {
-      // The mainland-only built-in remains in storage for legacy accounts.
-      // Selecting it from the CN template on another device can still open
-      // the add-asset form without creating a duplicate category.
+      // 仅适用于中国大陆的内置分类仍保留在存储中，以兼容已有账户。
+      // 在其他地区的设备上选择中国大陆模板时，仍可打开添加资产表单，
+      // 无需重复创建该分类。
       return category.id == AssetType.providentFund.name &&
           !_assets.any((asset) => asset.categoryKey == category.id);
     }
@@ -519,7 +519,7 @@ class AssetsPageState extends State<AssetsPage> {
     return true;
   }
 
-  // Build
+  // 页面构建
 
   @override
   Widget build(BuildContext context) {
@@ -589,7 +589,7 @@ class AssetsPageState extends State<AssetsPage> {
     );
   }
 
-  // Section Header
+  // 分类标题
 
   Widget _buildSectionHeader(String categoryId, bool expanded, int index) {
     final category = _categories.firstWhere((item) => item.id == categoryId);
@@ -679,7 +679,7 @@ class AssetsPageState extends State<AssetsPage> {
     );
   }
 
-  // Asset Item
+  // 资产条目
 
   Widget _buildAssetCardItem(AssetBase asset, int index) {
     return ReorderableDelayedDragStartListener(

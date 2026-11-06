@@ -70,7 +70,7 @@ void main() {
       expect(
         snapshot.totalUsd,
         amount('3800'),
-      ); // .125 BTC * $30000 + 100 USDT * $0.50.
+      ); // 估值为 0.125 BTC × 30000 美元，加上 100 USDT × 0.50 美元。
       expect(snapshot.positions, isEmpty);
       expect(snapshot.wallets.single.unrealizedPnl, isNull);
       expect(snapshot.wallets.single.kind, CryptoWalletKind.lead);
@@ -194,7 +194,7 @@ void main() {
       expect(
         result.totalUsd,
         amount('525'),
-      ); // USDT quote is intentionally $0.50, not hardcoded $1.
+      ); // 特意将 USDT 报价设为 0.50 美元，验证没有硬编码为 1 美元。
       expect(result.wallets.single.walletBalance, amount('1000'));
       expect(result.wallets.single.unrealizedPnl, amount('50'));
       expect(result.notices, isNot(contains('permissionUnverified')));

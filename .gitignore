@@ -4,7 +4,7 @@
 # App Store 隐私政策（独立 git 仓库，不上传主仓库）
 /iAssets-privacy/
 
-# Miscellaneous
+# 杂项临时文件
 *.class
 *.log
 *.pyc
@@ -18,18 +18,16 @@
 .swiftpm/
 migrate_working_dir/
 
-# IntelliJ related
+# IntelliJ 开发工具配置
 *.iml
 *.ipr
 *.iws
 .idea/
 
-# The .vscode folder contains launch configuration and tasks you configure in
-# VS Code which you may wish to be included in version control, so this line
-# is commented out by default.
+# .vscode 中的启动配置和任务可能需要纳入版本控制，默认不忽略该目录。
 #.vscode/
 
-# Flutter/Dart/Pub related
+# Flutter、Dart 和 Pub 生成文件
 **/doc/api/
 **/ios/Flutter/.last_build_id
 .dart_tool/
@@ -39,17 +37,17 @@ migrate_working_dir/
 /build/
 /coverage/
 
-# Symbolication related
+# 符号化文件
 app.*.symbols
 
-# Obfuscation related
+# 混淆映射文件
 app.*.map.json
 
-# Android Studio will place build artifacts here
+# Android Studio 构建产物
 /android/app/debug
 /android/app/profile
 /android/app/release
 
-# Local App Store Connect release credentials
+# 本机 App Store Connect 发布凭证
 /scripts/release_ios.env
 *.p8

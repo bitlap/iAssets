@@ -1,7 +1,6 @@
-# This file tracks properties of this Flutter project.
-# Used by Flutter tool to assess capabilities and perform upgrades etc.
+# 本文件记录 Flutter 项目属性，供 Flutter 工具判断项目能力及执行升级。
 #
-# This file should be version controlled and should not be manually edited.
+# 本文件应纳入版本控制，其配置值由 Flutter 工具维护，不应手动修改。
 
 version:
   revision: "ad70ec4617166f1c38e5d2bfd388af71fda14f06"
@@ -9,7 +8,7 @@ version:
 
 project_type: app
 
-# Tracks metadata for the flutter migrate command
+# 记录 flutter migrate 命令使用的迁移元数据。
 migration:
   platforms:
     - platform: root
@@ -19,12 +18,11 @@ migration:
       create_revision: ad70ec4617166f1c38e5d2bfd388af71fda14f06
       base_revision: ad70ec4617166f1c38e5d2bfd388af71fda14f06
 
-  # User provided section
+  # 用户自定义配置
 
-  # List of Local paths (relative to this file) that should be
-  # ignored by the migrate tool.
+  # 迁移工具应忽略的本地路径，相对于本文件所在目录。
   #
-  # Files that are not part of the templates will be ignored by default.
+  # 不属于项目模板的文件默认会被忽略。
   unmanaged_files:
     - 'lib/main.dart'
     - 'ios/Runner.xcodeproj/project.pbxproj'

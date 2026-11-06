@@ -388,7 +388,7 @@ void main() {
 
           await store.add(await store.test(fixtures.connection()));
           await tester.pumpAndSettle();
-          // A missing spot quote affects spot and the total, while futures is known.
+          // 现货报价缺失会影响现货与总估值，但合约估值仍然已知。
           expect(summaryText(L10n.t('cryptoUnknown')), findsNWidgets(2));
           expect(summaryText('100.00'), findsOneWidget);
           expect(summaryText('0.00'), findsOneWidget);

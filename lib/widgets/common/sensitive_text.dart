@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../services/privacy_service.dart';
 
-/// Never builds the original value or exposes it to accessibility while hidden.
+/// 金额隐藏时，不构建原始数值，也不向无障碍服务暴露该数值。
 class SensitiveText extends StatelessWidget {
   const SensitiveText(
     this.value, {

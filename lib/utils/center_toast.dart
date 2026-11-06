@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../widgets/common/app_colors.dart';
 import '../widgets/common/app_ui.dart';
 
-/// 屏幕中间弹出的 Toast 提示
+/// 屏幕中间弹出的轻提示
 class CenterToast {
   /// 显示成功提示（绿色）
   static void success(BuildContext context, String message) {

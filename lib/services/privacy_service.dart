@@ -4,8 +4,8 @@ import 'package:local_auth/local_auth.dart';
 
 enum BiometricSetupResult { enabled, unavailable, canceled }
 
-/// Device-local presentation preferences. These never enter settings.json,
-/// app-managed backups or iCloud sync, and do not change the exchange Keychain policy.
+/// 仅在本机保存的展示偏好，不写入 settings.json、
+/// 应用备份或 iCloud 同步，也不改变交易所凭证的钥匙串存储策略。
 class PrivacyService {
   PrivacyService._();
 
@@ -33,8 +33,8 @@ class PrivacyService {
     hideAmounts.value = value;
   }
 
-  /// Enrollment is required before enabling; the system passcode remains an
-  /// unlock fallback if biometrics become unavailable later.
+  /// 启用前须已录入生物识别信息；后续生物识别不可用时，
+  /// 仍可使用系统密码解锁。
   Future<BiometricSetupResult> enableBiometricLock(String reason) async {
     if (!await authenticator.canCheckBiometrics ||
         (await authenticator.getAvailableBiometrics()).isEmpty) {

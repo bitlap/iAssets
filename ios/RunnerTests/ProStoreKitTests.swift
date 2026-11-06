@@ -4,8 +4,8 @@ import StoreKitTest
 import XCTest
 @testable import Runner
 
-/// Exercises the production StoreKit adapter against Apple's local test store.
-/// No Apple account, App Store server, or real payment is involved.
+/// 使用苹果本地测试商店验证生产环境的 StoreKit 适配器。
+/// 不依赖苹果账户或 App Store 服务端，也不会产生真实付款。
 final class ProStoreKitTests: XCTestCase {
   @MainActor
   private func withStore(_ body: (SKTestSession, ProStore) async throws -> Void) async throws {
@@ -47,7 +47,7 @@ final class ProStoreKitTests: XCTestCase {
 
   @MainActor
   private func waitForKind(_ store: ProStore, _ expected: String) async throws -> [String: Any] {
-    // StoreKit mutations return before the entitlement stream catches up.
+    // StoreKit 状态变更操作返回时，权益事件流可能尚未完成更新。
     for _ in 0..<50 {
       let value = try await status(store)
       if value["kind"] as? String == expected { return value }

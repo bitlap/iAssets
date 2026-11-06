@@ -69,8 +69,8 @@ void main() {
                   widget is CustomPaint &&
                   widget.painter.runtimeType.toString() == painterName,
             );
-            // Snapshot loading reads the test file asynchronously. Wait for
-            // the chart itself instead of assuming that 30 ms is enough.
+            // 快照加载会异步读取测试文件，应等待图表实际出现，
+            // 不能假设等待 30 毫秒就足够。
             for (
               var attempt = 0;
               attempt < 40 && finder.evaluate().isEmpty;

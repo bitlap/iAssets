@@ -62,7 +62,7 @@ class ExchangeConnection {
     accountReferences: List.unmodifiable(references),
   );
 
-  // Only persist this representation in the device-only Keychain.
+  // 此表示形式只能持久化到仅限本机访问的钥匙串。
   Map<String, dynamic> toSecureJson() => {
     'id': id,
     'exchange': exchange.name,
@@ -236,7 +236,7 @@ class CryptoSnapshot {
       coverageComplete &&
       wallets.every((w) => w.equityUsd != null) &&
       balances.every((b) => b.priceUsd != null);
-  // Account equity already includes collateral and P&L. Never sum positions here.
+  // 账户权益已包含保证金和盈亏，此处不得再次累加仓位价值。
   Decimal get totalUsd =>
       wallets.fold(Decimal.zero, (v, w) => v + (w.equityUsd ?? Decimal.zero));
   Decimal subtotal(CryptoWalletKind kind) => wallets
@@ -275,7 +275,7 @@ class CryptoSyncException implements Exception {
   final String? detail;
   final String? stage;
   const CryptoSyncException(this.code, [this.detail, this.stage]);
-  // Never include server response bodies, signed URLs or credentials in errors.
+  // 错误信息中不得包含服务端响应正文、带签名的网址或凭证。
   @override
   String toString() =>
       'CryptoSyncException($code${detail == null ? '' : ': $detail'})';

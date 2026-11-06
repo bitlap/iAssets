@@ -75,7 +75,7 @@ jobs:
       - name: Prepare simulator build
         run: |
           cp ios/Config.example.xcconfig ios/Config.xcconfig
-          # Align generated Swift packages with Runner's iOS 16 deployment target.
+          # 让生成的 Swift 包与主应用的 iOS 16 部署目标保持一致。
           flutter build ios --simulator --debug --config-only --no-codesign
 
       - name: Run native Pro tests

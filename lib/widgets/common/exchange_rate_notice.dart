@@ -5,7 +5,7 @@ import '../../services/exchange_rate_service.dart';
 import 'app_colors.dart';
 import 'app_ui.dart';
 
-/// Shows the provenance of displayed FX valuations and flags incomplete totals.
+/// 展示汇率估值的数据来源，并标记无法完整估值的总额。
 class ExchangeRateNotice extends StatelessWidget {
   final bool incomplete;
 

@@ -89,8 +89,8 @@ class CryptoPageState extends State<CryptoPage>
 
   String _money(Decimal? usd) {
     if (usd == null) return L10n.t('cryptoUnknown');
-    // Rates are quoted per USD. Keep the amount in Decimal through conversion
-    // and display, including values smaller than a cent.
+    // 汇率以美元为基准；换算和展示全过程均使用 Decimal，
+    // 包括不足一美分的金额。
     final rawRate = ExchangeRateService().cachedConversionRate(
       'USD',
       widget.currency,

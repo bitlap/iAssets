@@ -2,7 +2,7 @@ import 'dart:math';
 
 import 'asset_account.dart';
 
-/// A display category is independent of the asset's valuation model.
+/// 展示分类独立于资产的估值模型。
 class AssetCategory {
   final String id;
   final AssetType calculationType;
@@ -93,7 +93,7 @@ class AssetCategory {
     ],
   };
 
-  /// Templates follow the device region, independently of the app language.
+  /// 模板跟随设备地区，不受应用语言影响。
   static String defaultTemplateRegion(String? countryCode) {
     final region = countryCode?.toUpperCase();
     return regionTemplates.containsKey(region) ? region! : 'global';
@@ -102,7 +102,7 @@ class AssetCategory {
   static List<AssetCategory> templatesForRegion(String region) =>
       regionTemplates[region] ?? globalTemplates;
 
-  /// Keep legacy provident-fund holdings visible after a user changes region.
+  /// 用户切换地区后，仍保留已有公积金资产的展示。
   static bool availableInPicker(
     AssetCategory category,
     String region, {

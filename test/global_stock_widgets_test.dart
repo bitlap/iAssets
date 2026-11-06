@@ -100,7 +100,7 @@ void main() {
             );
             expect(resultLabel.style!.color, StockStyle.marketColor(entry.key));
             expect(tester.takeException(), isNull);
-            // A different market shows an empty state; switching back restores results.
+            // 切换到其他市场时显示空状态，切换回来后恢复搜索结果。
             await tester.tap(find.text(MarketUtil.marketLabel(otherMarket)));
             await tester.pump();
             expect(find.text(code), findsNothing);
@@ -133,7 +133,7 @@ void main() {
               tester.widget<TextField>(inputs.at(1)).controller!.text,
               '10.0000',
             );
-            // The search input remains behind the confirmation dialog.
+            // 搜索输入框仍保留在确认弹窗后方。
             await tester.enterText(inputs.at(1), '10');
             await tester.enterText(inputs.at(2), '2');
             await tester.tap(find.text(AppConfig.btnConfirmAdd));

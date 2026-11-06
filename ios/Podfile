@@ -1,7 +1,7 @@
-# Uncomment this line to define a global platform for your project
+# 统一设置项目最低支持的 iOS 版本。
 platform :ios, '16.0'
 
-# CocoaPods analytics sends network stats synchronously affecting flutter build latency.
+# 禁用 CocoaPods 同步发送统计数据，避免增加 Flutter 构建耗时。
 ENV['COCOAPODS_DISABLE_STATS'] = 'true'
 
 project 'Runner', {

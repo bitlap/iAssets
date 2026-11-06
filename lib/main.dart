@@ -227,7 +227,7 @@ class _AppShellState extends State<_AppShell> with WidgetsBindingObserver {
       );
       if (destination == 'assets') _openAssetsFromWidget();
     } on MissingPluginException {
-      // No native widget navigation on non-iOS platforms.
+      // 非 iOS 平台不处理原生小组件的页面跳转。
     }
   }
 
@@ -273,7 +273,7 @@ class _AppShellState extends State<_AppShell> with WidgetsBindingObserver {
         incomplete: ProService.instance.isPro && _crypto.incomplete,
       );
     } catch (error) {
-      // A failed local/iCloud read must never publish a misleading zero total.
+      // 本地或 iCloud 读取失败时，不得发布会误导用户的零资产总额。
       debugPrint('[WidgetSnapshot] Could not publish: $error');
     }
   }
