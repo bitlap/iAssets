@@ -382,7 +382,8 @@ const Map<String, String> stringsDe = {
   "toastInvalidNav": "Geben Sie einen gültigen NAV ein",
   "toastDeleted": "{name} gelöscht",
   "toastSaved": "Gespeichert",
-  "toastCrossSection": "Ein Wechsel in eine andere Kategorie ist nicht möglich",
+  "toastCrossSection":
+      "Verschieben in eine Kategorie mit anderer Eingabevorlage nicht möglich",
   "emptyTitle": "Noch kein Vermögen",
   "emptySubtitle":
       "Tippen Sie auf +, um Bargeld, Einlagen oder Investitionen hinzuzufügen",
@@ -401,7 +402,7 @@ const Map<String, String> stringsDe = {
   "depositWealthLabel": "Andere Vermögenswerte",
   "assetCategoryChoose": "Wählen Sie eine Kategorie",
   "assetCategoryManage": "Kategorie verwalten",
-  "assetCategoryMove": "Zur Kategorie wechseln",
+  "assetCategoryMove": "Kategorie ändern",
   "assetCategoryTemplates": "Vorlagen",
   "assetCategoryCustom": "Benutzerdefinierte Kategorie",
   "assetCategoryRename": "Kategorie umbenennen",
@@ -738,4 +739,10 @@ const Map<String, String> stringsDe = {
       "Schalten Sie iAssets frei und schützen Sie Ihre Finanzdaten.",
   "feedbackOpenSource":
       "Diese Software ist Open Source. Vorschläge und Fehlermeldungen sind auf GitHub willkommen.",
+  "assetActions": "Aktionen",
+  "depositRollover": "Kapital und Zinsen wiederanlegen",
+  "depositRolloverHint":
+      "Als neues Kapital wird der geschätzte Fälligkeitsbetrag eingetragen. Prüfen Sie den Bankbetrag. Die Bestätigung ersetzt den aktuellen Eintrag.",
+  "assetSaveFailed":
+      "Speichern fehlgeschlagen. Der ursprüngliche Eintrag bleibt unverändert. Erneut versuchen.",
 };

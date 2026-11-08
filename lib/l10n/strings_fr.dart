@@ -379,7 +379,8 @@ const Map<String, String> stringsFr = {
   "toastInvalidNav": "Entrez un NAV valide",
   "toastDeleted": "{name} supprimé",
   "toastSaved": "Enregistré",
-  "toastCrossSection": "Impossible de passer à une autre catégorie",
+  "toastCrossSection":
+      "Impossible de déplacer vers une catégorie avec un formulaire différent",
   "emptyTitle": "Aucun actif pour l'instant",
   "emptySubtitle":
       "Appuyez sur + pour ajouter des espèces, des dépôts ou des investissements",
@@ -398,7 +399,7 @@ const Map<String, String> stringsFr = {
   "depositWealthLabel": "Autres actifs",
   "assetCategoryChoose": "Choisissez une catégorie",
   "assetCategoryManage": "Gérer la catégorie",
-  "assetCategoryMove": "Déplacer vers la catégorie",
+  "assetCategoryMove": "Changer de catégorie",
   "assetCategoryTemplates": "Modèles",
   "assetCategoryCustom": "Catégorie personnalisée",
   "assetCategoryRename": "Renommer la catégorie",
@@ -732,4 +733,10 @@ const Map<String, String> stringsFr = {
       "Débloquez iAssets et protégez vos informations financières.",
   "feedbackOpenSource":
       "Ce logiciel est open source. Vous pouvez proposer des améliorations ou signaler des problèmes sur GitHub.",
+  "assetActions": "Actions",
+  "depositRollover": "Réinvestir capital et intérêts",
+  "depositRolloverHint":
+      "Le nouveau capital reprend le total estimé à échéance. Vérifiez le montant réel de la banque. La confirmation remplace l’enregistrement actuel.",
+  "assetSaveFailed":
+      "Échec de l’enregistrement. Les données initiales sont inchangées. Réessayez.",
 };

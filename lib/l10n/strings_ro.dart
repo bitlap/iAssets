@@ -375,7 +375,8 @@ const Map<String, String> stringsRo = {
   "toastInvalidNav": "Introduceți un NAV valid",
   "toastDeleted": "S-a șters {name}",
   "toastSaved": "Salvat",
-  "toastCrossSection": "Nu se poate trece la altă categorie",
+  "toastCrossSection":
+      "Nu se poate muta într-o categorie cu un formular diferit",
   "emptyTitle": "Nu există încă active",
   "emptySubtitle":
       "Atingeți + pentru a adăuga numerar, depozite sau investiții",
@@ -394,7 +395,7 @@ const Map<String, String> stringsRo = {
   "depositWealthLabel": "Alte Active",
   "assetCategoryChoose": "Alegeți o categorie",
   "assetCategoryManage": "Gestionați categoria",
-  "assetCategoryMove": "Mutați la categorie",
+  "assetCategoryMove": "Schimbă categoria",
   "assetCategoryTemplates": "Șabloane",
   "assetCategoryCustom": "Categorie personalizată",
   "assetCategoryRename": "Redenumiți categoria",
@@ -725,4 +726,10 @@ const Map<String, String> stringsRo = {
       "Deblocați iAssets și protejați-vă informațiile financiare.",
   "feedbackOpenSource":
       "Acest software are codul sursă deschis. Trimite sugestii sau raportează probleme pe GitHub.",
+  "assetActions": "Acțiuni",
+  "depositRollover": "Reînnoiește capitalul și dobânda",
+  "depositRolloverHint":
+      "Noul capital este totalul estimat la scadență. Verifică suma reală a băncii. Confirmarea înlocuiește înregistrarea curentă.",
+  "assetSaveFailed":
+      "Nu s-a putut salva. Înregistrarea inițială nu s-a schimbat. Încearcă din nou.",
 };

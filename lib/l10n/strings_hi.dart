@@ -373,7 +373,7 @@ const Map<String, String> stringsHi = {
   "toastInvalidNav": "वैध NAV दर्ज करें",
   "toastDeleted": "{name} हटा दिया गया",
   "toastSaved": "सहेजा गया",
-  "toastCrossSection": "दूसरी श्रेणी में नहीं जा सकते",
+  "toastCrossSection": "अलग इनपुट टेम्पलेट वाली श्रेणी में नहीं ले जा सकते",
   "emptyTitle": "अभी तक कोई संपत्ति नहीं",
   "emptySubtitle": "नकदी, जमा या निवेश जोड़ने के लिए + टैप करें",
   "defaultNameFallback": "यह वस्तु",
@@ -391,7 +391,7 @@ const Map<String, String> stringsHi = {
   "depositWealthLabel": "अन्य संपत्ति",
   "assetCategoryChoose": "एक श्रेणी चुनें",
   "assetCategoryManage": "श्रेणी प्रबंधित करें",
-  "assetCategoryMove": "श्रेणी में जाएँ",
+  "assetCategoryMove": "श्रेणी बदलें",
   "assetCategoryTemplates": "टेम्पलेट्स",
   "assetCategoryCustom": "कस्टम श्रेणी",
   "assetCategoryRename": "श्रेणी का नाम बदलें",
@@ -714,4 +714,10 @@ const Map<String, String> stringsHi = {
   "iosFaceIDUsage": "iAssets अनलॉक करें और अपनी वित्तीय जानकारी सुरक्षित रखें।",
   "feedbackOpenSource":
       "यह ओपन-सोर्स सॉफ़्टवेयर है। GitHub पर सुझाव दें या समस्याओं की रिपोर्ट करें।",
+  "assetActions": "कार्रवाइयाँ",
+  "depositRollover": "मूलधन और ब्याज फिर जमा करें",
+  "depositRolloverHint":
+      "नए मूलधन में अनुमानित परिपक्वता राशि भरी है। बैंक की वास्तविक राशि जाँचें। पुष्टि करने पर वर्तमान रिकॉर्ड बदल जाएगा।",
+  "assetSaveFailed":
+      "सहेजा नहीं जा सका। मूल रिकॉर्ड नहीं बदला है। फिर कोशिश करें।",
 };

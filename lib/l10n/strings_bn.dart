@@ -374,7 +374,7 @@ const Map<String, String> stringsBn = {
   "toastInvalidNav": "একটি বৈধ NAV লিখুন",
   "toastDeleted": "{name} মুছে ফেলা হয়েছে৷",
   "toastSaved": "সংরক্ষিত",
-  "toastCrossSection": "অন্য বিভাগে সরানো যাবে না",
+  "toastCrossSection": "ভিন্ন ইনপুট টেমপ্লেটের বিভাগে সরানো যাবে না",
   "emptyTitle": "এখনও কোন সম্পদ",
   "emptySubtitle": "নগদ, আমানত বা বিনিয়োগ যোগ করতে + আলতো চাপুন",
   "defaultNameFallback": "এই আইটেম",
@@ -392,7 +392,7 @@ const Map<String, String> stringsBn = {
   "depositWealthLabel": "অন্যান্য সম্পদ",
   "assetCategoryChoose": "একটি বিভাগ নির্বাচন করুন",
   "assetCategoryManage": "বিভাগ পরিচালনা করুন",
-  "assetCategoryMove": "শ্রেণীতে সরান",
+  "assetCategoryMove": "বিভাগ পরিবর্তন করুন",
   "assetCategoryTemplates": "টেমপ্লেট",
   "assetCategoryCustom": "কাস্টম বিভাগ",
   "assetCategoryRename": "বিভাগ পুনঃনামকরণ করুন",
@@ -711,4 +711,10 @@ const Map<String, String> stringsBn = {
   "iosFaceIDUsage": "iAssets আনলক করুন এবং আপনার আর্থিক তথ্য রক্ষা করুন।",
   "feedbackOpenSource":
       "এটি ওপেন-সোর্স সফটওয়্যার। GitHub-এ পরামর্শ দিন বা সমস্যার রিপোর্ট করুন।",
+  "assetActions": "পদক্ষেপ",
+  "depositRollover": "মূলধন ও সুদ পুনরায় জমা",
+  "depositRolloverHint":
+      "নতুন মূলধনে আনুমানিক মেয়াদপূর্তির মোট টাকা দেওয়া আছে। ব্যাংকের প্রকৃত অঙ্ক যাচাই করুন। নিশ্চিত করলে বর্তমান রেকর্ড বদলে যাবে।",
+  "assetSaveFailed":
+      "সংরক্ষণ করা যায়নি। মূল রেকর্ড অপরিবর্তিত আছে। আবার চেষ্টা করুন।",
 };

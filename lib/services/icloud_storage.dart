@@ -277,10 +277,25 @@ class IcloudStorage {
     return assetsFromJson(data);
   }
 
-  static Future<void> saveAssets(List<AssetBase> assets) async {
+  /// [requireSuccess] requires an atomic local save; cloud sync remains best effort.
+  static Future<void> saveAssets(
+    List<AssetBase> assets, {
+    bool requireSuccess = false,
+  }) async {
     await ensureInit();
-    await writeJson(_localPath!, assetsFile, assetsToJson(assets));
-    await _syncToCloud(assetsFile);
+    await writeJson(
+      _localPath!,
+      assetsFile,
+      assetsToJson(assets),
+      requireSuccess: requireSuccess,
+    );
+    try {
+      await _syncToCloud(assetsFile);
+    } catch (error) {
+      if (!requireSuccess) rethrow;
+      // A deferred cloud sync must not make a committed local replacement look failed.
+      debugPrint('Asset cloud sync deferred after local save: $error');
+    }
   }
 
   /// 强制同步收益快照到 iCloud

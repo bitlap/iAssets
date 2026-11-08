@@ -372,7 +372,8 @@ const Map<String, String> stringsCs = {
   "toastInvalidNav": "Zadejte platné NAV",
   "toastDeleted": "Smazáno {name}",
   "toastSaved": "Uloženo",
-  "toastCrossSection": "Nelze přejít do jiné kategorie",
+  "toastCrossSection":
+      "Nelze přesunout do kategorie s jiným vstupním formulářem",
   "emptyTitle": "Zatím žádná aktiva",
   "emptySubtitle": "Klepnutím na + přidáte hotovost, vklady nebo investice",
   "defaultNameFallback": "Tato položka",
@@ -390,7 +391,7 @@ const Map<String, String> stringsCs = {
   "depositWealthLabel": "Ostatní aktiva",
   "assetCategoryChoose": "Vyberte kategorii",
   "assetCategoryManage": "Spravovat kategorii",
-  "assetCategoryMove": "Přesunout do kategorie",
+  "assetCategoryMove": "Změnit kategorii",
   "assetCategoryTemplates": "Šablony",
   "assetCategoryCustom": "Vlastní kategorie",
   "assetCategoryRename": "Přejmenovat kategorii",
@@ -714,4 +715,10 @@ const Map<String, String> stringsCs = {
   "iosFaceIDUsage": "Odemkněte iAssets a chraňte své finanční informace.",
   "feedbackOpenSource":
       "Tento software má otevřený zdrojový kód. Návrhy a problémy můžete hlásit na GitHubu.",
+  "assetActions": "Akce",
+  "depositRollover": "Obnovit jistinu i úrok",
+  "depositRolloverHint":
+      "Nová jistina je odhadovaná částka při splatnosti. Ověřte skutečnou částku banky. Potvrzení nahradí aktuální záznam.",
+  "assetSaveFailed":
+      "Uložení se nezdařilo. Původní záznam se nezměnil. Zkuste to znovu.",
 };

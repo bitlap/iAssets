@@ -373,7 +373,7 @@ const Map<String, String> stringsVi = {
   "toastInvalidNav": "Nhập NAV hợp lệ",
   "toastDeleted": "Đã xóa {name}",
   "toastSaved": "Đã lưu",
-  "toastCrossSection": "Không thể chuyển sang danh mục khác",
+  "toastCrossSection": "Không thể chuyển sang danh mục có mẫu nhập khác",
   "emptyTitle": "Chưa có tài sản",
   "emptySubtitle": "Nhấn + để thêm tiền mặt, tiền gửi hoặc đầu tư",
   "defaultNameFallback": "Mục này",
@@ -391,7 +391,7 @@ const Map<String, String> stringsVi = {
   "depositWealthLabel": "Tài sản khác",
   "assetCategoryChoose": "Chọn một danh mục",
   "assetCategoryManage": "Quản lý danh mục",
-  "assetCategoryMove": "Chuyển đến danh mục",
+  "assetCategoryMove": "Đổi danh mục",
   "assetCategoryTemplates": "Mẫu",
   "assetCategoryCustom": "Danh mục tùy chỉnh",
   "assetCategoryRename": "Đổi tên danh mục",
@@ -714,4 +714,10 @@ const Map<String, String> stringsVi = {
   "iosFaceIDUsage": "Mở khóa iAssets và bảo vệ thông tin tài chính của bạn.",
   "feedbackOpenSource":
       "Đây là phần mềm mã nguồn mở. Bạn có thể gửi đề xuất hoặc báo cáo sự cố trên GitHub.",
+  "assetActions": "Thao tác",
+  "depositRollover": "Tái tục gốc và lãi",
+  "depositRolloverHint":
+      "Tiền gốc mới lấy tổng tiền đáo hạn ước tính. Hãy kiểm tra số tiền thực tế của ngân hàng. Xác nhận sẽ thay thế bản ghi hiện tại.",
+  "assetSaveFailed":
+      "Không lưu được. Bản ghi gốc không thay đổi. Vui lòng thử lại.",
 };

@@ -1,9 +1,9 @@
 Zakres testów
-• Zmień język i sprawdź lokalne cyfry, przecinki dziesiętne, układ RTL oraz zapis kwot i opłat. Przetestuj panele iPada przy obracaniu i w Split View, języki widżetów i kolejność aktywów.
+• Lokaty po terminie można odnowić z kapitałem i odsetkami, zmieniając kapitał, oprocentowanie i okres. Zmień kategorię z listy działań lub przeciągając między takimi samymi formularzami. Ikony i kolory odpowiadają kategorii docelowej.
 • Sprawdź dane po aktualizacji ze starszej wersji, limity darmowe/Pro, zakupy i przywracanie. Błędy lub utrata połączenia nie mogą nadpisywać istniejących aktywów.
 
 Znane ograniczenia
-Część tłumaczeń wymaga jeszcze sprawdzenia przez rodzimych użytkowników języka. TestFlight działa w piaskownicy i nie potwierdza uprawnień dawnych użytkowników w środowisku produkcyjnym.
+Część tłumaczeń wymaga jeszcze sprawdzenia przez rodzimych użytkowników języka. Nowy kapitał to szacowana kwota na koniec lokaty. Sprawdź faktyczną kwotę banku. Potwierdzenie zastąpi bieżący wpis. TestFlight działa w piaskownicy i nie potwierdza uprawnień dawnych użytkowników w środowisku produkcyjnym.
 
 Podaj język, urządzenie i kroki odtworzenia na GitHubie:
 https://github.com/bitlap/iAssets/issues

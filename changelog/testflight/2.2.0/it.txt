@@ -1,9 +1,9 @@
 Punti da testare
-• Cambia lingua e controlla cifre locali, virgole decimali, layout RTL e salvataggio di importi e commissioni. Prova i pannelli su iPad durante la rotazione e in Split View, le lingue dei widget e l’ordine dei beni.
+• I depositi scaduti possono essere rinnovati con capitale e interessi, modificando capitale, tasso e durata. Cambia categoria dall’elenco azioni o trascinando tra moduli uguali. Icone e colori seguono la categoria di destinazione.
 • Verifica i dati dopo l’aggiornamento da una versione precedente, i limiti gratis/Pro, gli acquisti e il ripristino. Errori o disconnessioni non devono sovrascrivere i beni esistenti.
 
 Limitazioni note
-Alcune traduzioni richiedono ancora una revisione madrelingua. TestFlight usa la sandbox e non può confermare l’idoneità dei vecchi utenti in produzione.
+Alcune traduzioni richiedono ancora una revisione madrelingua. Il nuovo capitale usa il totale stimato alla scadenza. Verifica l’importo effettivo della banca. La conferma sostituisce la voce attuale. TestFlight usa la sandbox e non può confermare l’idoneità dei vecchi utenti in produzione.
 
 Indica lingua, dispositivo e passaggi per riprodurre il problema su GitHub:
 https://github.com/bitlap/iAssets/issues

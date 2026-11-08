@@ -376,7 +376,8 @@ const Map<String, String> stringsMs = {
   "toastInvalidNav": "Masukkan NAV yang sah",
   "toastDeleted": "Dipadamkan {name}",
   "toastSaved": "Disimpan",
-  "toastCrossSection": "Tidak boleh beralih ke kategori lain",
+  "toastCrossSection":
+      "Tidak boleh dipindahkan ke kategori dengan borang berbeza",
   "emptyTitle": "Belum ada aset",
   "emptySubtitle": "Ketik + untuk menambah wang tunai, deposit atau pelaburan",
   "defaultNameFallback": "Item ini",
@@ -394,7 +395,7 @@ const Map<String, String> stringsMs = {
   "depositWealthLabel": "Aset Lain",
   "assetCategoryChoose": "Pilih satu Kategori",
   "assetCategoryManage": "Uruskan Kategori",
-  "assetCategoryMove": "Beralih ke Kategori",
+  "assetCategoryMove": "Tukar kategori",
   "assetCategoryTemplates": "templat",
   "assetCategoryCustom": "Kategori Tersuai",
   "assetCategoryRename": "Namakan semula Kategori",
@@ -718,4 +719,10 @@ const Map<String, String> stringsMs = {
   "iosFaceIDUsage": "Buka kunci iAssets dan lindungi maklumat kewangan anda.",
   "feedbackOpenSource":
       "Perisian ini ialah sumber terbuka. Hantar cadangan atau laporkan masalah di GitHub.",
+  "assetActions": "Tindakan",
+  "depositRollover": "Perbaharui prinsipal dan faedah",
+  "depositRolloverHint":
+      "Prinsipal baharu menggunakan anggaran jumlah matang. Semak amaun sebenar bank. Pengesahan menggantikan rekod semasa.",
+  "assetSaveFailed":
+      "Tidak dapat menyimpan. Rekod asal tidak berubah. Cuba lagi.",
 };

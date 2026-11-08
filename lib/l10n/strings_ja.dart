@@ -360,7 +360,7 @@ const Map<String, String> stringsJa = {
   "toastInvalidNav": "有効な NAV を入力してください",
   "toastDeleted": "{name}を削除しました",
   "toastSaved": "保存されました",
-  "toastCrossSection": "別のカテゴリに移動できません",
+  "toastCrossSection": "入力テンプレートが異なるカテゴリには移動できません",
   "emptyTitle": "まだ資産がありません",
   "emptySubtitle": "+ をタップして現金、預金、または投資を追加します",
   "defaultNameFallback": "このアイテム",
@@ -378,7 +378,7 @@ const Map<String, String> stringsJa = {
   "depositWealthLabel": "その他の資産",
   "assetCategoryChoose": "カテゴリを選択してください",
   "assetCategoryManage": "カテゴリの管理",
-  "assetCategoryMove": "カテゴリに移動",
+  "assetCategoryMove": "カテゴリを変更",
   "assetCategoryTemplates": "テンプレート",
   "assetCategoryCustom": "カスタムカテゴリ",
   "assetCategoryRename": "カテゴリの名前を変更",
@@ -662,4 +662,9 @@ const Map<String, String> stringsJa = {
   "iosPhotoLibraryUsage": "手動で追加した株式保有の会社イメージを選択します。",
   "iosFaceIDUsage": "iAssets のロックを解除して、財務情報を保護します。",
   "feedbackOpenSource": "このソフトウェアはオープンソースです。ご提案や不具合の報告は GitHub で受け付けています。",
+  "assetActions": "操作",
+  "depositRollover": "元利金を継続預入",
+  "depositRolloverHint":
+      "新元本には推定元利金が入ります。銀行の実際の満期金額を確認してください。確定すると現在の記録を置き換えます。",
+  "assetSaveFailed": "保存できませんでした。元の記録は変更されていません。再試行してください。",
 };

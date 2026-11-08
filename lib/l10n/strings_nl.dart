@@ -376,7 +376,8 @@ const Map<String, String> stringsNl = {
   "toastInvalidNav": "Voer een geldige NAV in",
   "toastDeleted": "{name} verwijderd",
   "toastSaved": "Opgeslagen",
-  "toastCrossSection": "Kan niet naar een andere categorie gaan",
+  "toastCrossSection":
+      "Kan niet worden verplaatst naar een categorie met een ander invoerformulier",
   "emptyTitle": "Nog geen activa",
   "emptySubtitle":
       "Tik op + om contant geld, stortingen of beleggingen toe te voegen",
@@ -395,7 +396,7 @@ const Map<String, String> stringsNl = {
   "depositWealthLabel": "Andere activa",
   "assetCategoryChoose": "Kies een categorie",
   "assetCategoryManage": "Categorie beheren",
-  "assetCategoryMove": "Verplaats naar categorie",
+  "assetCategoryMove": "Categorie wijzigen",
   "assetCategoryTemplates": "Sjablonen",
   "assetCategoryCustom": "Aangepaste categorie",
   "assetCategoryRename": "Categorie hernoemen",
@@ -723,4 +724,10 @@ const Map<String, String> stringsNl = {
   "iosFaceIDUsage": "Ontgrendel iAssets en bescherm uw financiële gegevens.",
   "feedbackOpenSource":
       "Deze software is opensource. Deel suggesties of meld problemen op GitHub.",
+  "assetActions": "Acties",
+  "depositRollover": "Hoofdsom en rente herbeleggen",
+  "depositRolloverHint":
+      "De nieuwe hoofdsom is het geschatte eindbedrag. Controleer het werkelijke bankbedrag. Bevestigen vervangt de huidige registratie.",
+  "assetSaveFailed":
+      "Opslaan mislukt. De oorspronkelijke registratie is ongewijzigd. Probeer opnieuw.",
 };

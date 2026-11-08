@@ -1,9 +1,9 @@
 Zaměření testů
-• Změňte jazyk a ověřte místní číslice, desetinné čárky, rozvržení RTL a ukládání částek a poplatků. Testujte panely iPadu při otáčení a ve Split View, jazyky widgetů a pořadí aktiv.
+• Splatné vklady lze obnovit s jistinou i úroky a upravit novou jistinu, sazbu a dobu trvání. Změňte kategorii ze seznamu akcí nebo přetažením mezi stejnými vstupními šablonami. Ikony a barvy se přizpůsobí cílové kategorii.
 • Ověřte data po aktualizaci ze starší verze, limity zdarma/Pro, nákupy a obnovení. Chyby nebo ztráta připojení nesmějí přepsat existující aktiva.
 
 Známá omezení
-Některé překlady čekají na kontrolu rodilými mluvčími. TestFlight používá sandbox a nemůže potvrdit nárok dřívějších uživatelů v produkci.
+Některé překlady čekají na kontrolu rodilými mluvčími. Nová jistina je odhadovaná částka při splatnosti. Ověřte skutečnou částku banky. Potvrzení nahradí aktuální záznam. TestFlight používá sandbox a nemůže potvrdit nárok dřívějších uživatelů v produkci.
 
 Uveďte jazyk, zařízení a kroky k reprodukci na GitHubu:
 https://github.com/bitlap/iAssets/issues

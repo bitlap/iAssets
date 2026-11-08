@@ -373,7 +373,8 @@ const Map<String, String> stringsNb = {
   "toastInvalidNav": "Skriv inn en gyldig NAV",
   "toastDeleted": "Slettet {name}",
   "toastSaved": "Lagret",
-  "toastCrossSection": "Kan ikke flytte til en annen kategori",
+  "toastCrossSection":
+      "Kan ikke flyttes til en kategori med et annet inndataskjema",
   "emptyTitle": "Ingen eiendeler ennå",
   "emptySubtitle":
       "Trykk på + for å legge til kontanter, innskudd eller investeringer",
@@ -392,7 +393,7 @@ const Map<String, String> stringsNb = {
   "depositWealthLabel": "Andre eiendeler",
   "assetCategoryChoose": "Velg en kategori",
   "assetCategoryManage": "Administrer kategori",
-  "assetCategoryMove": "Flytt til kategori",
+  "assetCategoryMove": "Endre kategori",
   "assetCategoryTemplates": "Maler",
   "assetCategoryCustom": "Egendefinert kategori",
   "assetCategoryRename": "Gi nytt navn til kategori",
@@ -719,4 +720,10 @@ const Map<String, String> stringsNb = {
   "iosFaceIDUsage": "Lås opp iAssets og beskytt din økonomiske informasjon.",
   "feedbackOpenSource":
       "Dette er programvare med åpen kildekode. Send forslag eller rapporter problemer på GitHub.",
+  "assetActions": "Handlinger",
+  "depositRollover": "Forny hovedstol og renter",
+  "depositRolloverHint":
+      "Ny hovedstol er anslått beløp ved forfall. Kontroller bankens faktiske beløp. Bekreftelsen erstatter gjeldende oppføring.",
+  "assetSaveFailed":
+      "Kunne ikke lagre. Den opprinnelige oppføringen er uendret. Prøv igjen.",
 };

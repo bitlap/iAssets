@@ -13,6 +13,7 @@ class AssetCardFrame extends StatelessWidget {
   final String amount;
   final String? detail;
   final Color? detailColor;
+  final Color? categoryColor;
   final DateTime? createdAt;
   final DateTime? updatedAt;
   final VoidCallback onTap;
@@ -28,6 +29,7 @@ class AssetCardFrame extends StatelessWidget {
     required this.amount,
     this.detail,
     this.detailColor,
+    this.categoryColor,
     this.createdAt,
     this.updatedAt,
     required this.onTap,
@@ -39,7 +41,7 @@ class AssetCardFrame extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final color = AssetStyle.nameColor(colorSeed);
+    final color = categoryColor ?? AssetStyle.nameColor(colorSeed);
     return Container(
       clipBehavior: Clip.antiAlias,
       decoration: BoxDecoration(

@@ -377,7 +377,7 @@ const Map<String, String> stringsRu = {
   "toastInvalidNav": "Введите действительный NAV",
   "toastDeleted": "Удален {name}",
   "toastSaved": "Сохранено",
-  "toastCrossSection": "Невозможно перейти в другую категорию",
+  "toastCrossSection": "Нельзя переместить в категорию с другим шаблоном ввода",
   "emptyTitle": "Пока нет активов",
   "emptySubtitle":
       "Нажмите +, чтобы добавить наличные, депозиты или инвестиции.",
@@ -396,7 +396,7 @@ const Map<String, String> stringsRu = {
   "depositWealthLabel": "Другие активы",
   "assetCategoryChoose": "Выберите категорию",
   "assetCategoryManage": "Управление категорией",
-  "assetCategoryMove": "Перейти в категорию",
+  "assetCategoryMove": "Изменить категорию",
   "assetCategoryTemplates": "Шаблоны",
   "assetCategoryCustom": "Пользовательская категория",
   "assetCategoryRename": "Переименовать категорию",
@@ -724,4 +724,10 @@ const Map<String, String> stringsRu = {
       "Разблокируйте iAssets и защитите свою финансовую информацию.",
   "feedbackOpenSource":
       "Это программное обеспечение с открытым исходным кодом. Предложения и сообщения о проблемах можно отправлять на GitHub.",
+  "assetActions": "Действия",
+  "depositRollover": "Продлить вклад с процентами",
+  "depositRolloverHint":
+      "Новая сумма вклада равна расчётной сумме к погашению. Сверьте её с фактической суммой банка. Подтверждение заменит текущую запись.",
+  "assetSaveFailed":
+      "Не удалось сохранить. Исходная запись не изменена. Повторите попытку.",
 };

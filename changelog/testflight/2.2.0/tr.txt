@@ -1,9 +1,9 @@
 Test odakları
-• Dili değiştirip yerel rakamları, ondalık virgülleri, RTL düzenlerini ve tutar/ücret kaydını kontrol edin. iPad dönüşü ve Split View sırasında alt panelleri, araç takımı dillerini ve varlık sıralamasını test edin.
+• Vadesi dolan mevduatlar anapara ve faizle yenilenebilir; yeni anapara, oran ve vade değiştirilebilir. İşlem listesinden veya aynı giriş şablonları arasında sürükleyerek kategoriyi değiştirin. Simgeler ve renkler hedef kategoriye uyar.
 • Eski sürümden güncelleme sonrası verileri, ücretsiz/Pro sınırlarını, satın alma ve geri yüklemeyi kontrol edin. Hatalar veya bağlantı kaybı mevcut varlıkların üzerine yazmamalıdır.
 
 Bilinen sınırlamalar
-Bazı çevirilerin ana dil incelemesi bekleniyor. TestFlight korumalı test ortamını kullanır ve üretimde eski kullanıcı uygunluğunu doğrulayamaz.
+Bazı çevirilerin ana dil incelemesi bekleniyor. Yeni anapara tahmini vade sonu tutarıdır. Bankanın gerçek tutarını kontrol edin. Onay, mevcut kaydın yerini alır. TestFlight korumalı test ortamını kullanır ve üretimde eski kullanıcı uygunluğunu doğrulayamaz.
 
 GitHub’da dil, cihaz ve sorunu yeniden oluşturma adımlarını bildirin:
 https://github.com/bitlap/iAssets/issues

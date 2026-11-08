@@ -375,7 +375,7 @@ const Map<String, String> stringsFi = {
   "toastInvalidNav": "Anna kelvollinen NAV",
   "toastDeleted": "Poistettu {name}",
   "toastSaved": "Tallennettu",
-  "toastCrossSection": "Ei voi siirtyä toiseen luokkaan",
+  "toastCrossSection": "Ei voi siirtää luokkaan, jossa on eri syöttölomake",
   "emptyTitle": "Ei vielä omaisuutta",
   "emptySubtitle":
       "Napauta + lisätäksesi käteistä, talletuksia tai sijoituksia",
@@ -394,7 +394,7 @@ const Map<String, String> stringsFi = {
   "depositWealthLabel": "Muut varat",
   "assetCategoryChoose": "Valitse luokka",
   "assetCategoryManage": "Hallinnoi luokkaa",
-  "assetCategoryMove": "Siirrä luokkaan",
+  "assetCategoryMove": "Vaihda luokkaa",
   "assetCategoryTemplates": "Mallit",
   "assetCategoryCustom": "Mukautettu luokka",
   "assetCategoryRename": "Nimeä luokka uudelleen",
@@ -717,4 +717,10 @@ const Map<String, String> stringsFi = {
   "iosFaceIDUsage": "Avaa iAssets ja suojaa taloustietosi.",
   "feedbackOpenSource":
       "Tämä on avoimen lähdekoodin ohjelmisto. Lähetä ehdotuksia tai ilmoita ongelmista GitHubissa.",
+  "assetActions": "Toiminnot",
+  "depositRollover": "Uudista pääoma ja korot",
+  "depositRolloverHint":
+      "Uusi pääoma on arvioitu erääntymissumma. Tarkista pankin todellinen summa. Vahvistus korvaa nykyisen merkinnän.",
+  "assetSaveFailed":
+      "Tallennus epäonnistui. Alkuperäinen merkintä ei muuttunut. Yritä uudelleen.",
 };

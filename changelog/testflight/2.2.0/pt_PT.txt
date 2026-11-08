@@ -1,9 +1,9 @@
 Foco dos testes
-• Mude o idioma e verifique algarismos locais, vírgulas decimais, disposições RTL e a gravação de valores e taxas. Teste os painéis do iPad ao rodar e em Split View, os idiomas dos widgets e a ordem dos ativos.
+• Depósitos vencidos podem ser renovados com capital e juros, ajustando o capital, a taxa e o prazo. Altere a categoria pela lista de ações ou arrastando entre formulários iguais. Ícones e cores acompanham a categoria de destino.
 • Confira os dados após atualizar de uma versão antiga, limites grátis/Pro, compras e restauro. Erros ou perda de ligação não devem substituir ativos existentes.
 
 Limitações conhecidas
-Algumas traduções ainda precisam de revisão por falantes nativos. O TestFlight usa o ambiente de testes e não comprova a elegibilidade de utilizadores antigos em produção.
+Algumas traduções ainda precisam de revisão por falantes nativos. O O novo capital usa o total estimado no vencimento. Confira o valor real do banco. A confirmação substitui o registo atual. TestFlight usa o ambiente de testes e não comprova a elegibilidade de utilizadores antigos em produção.
 
 Indique idioma, dispositivo e passos de reprodução no GitHub:
 https://github.com/bitlap/iAssets/issues

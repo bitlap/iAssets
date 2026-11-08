@@ -37,13 +37,34 @@ Future<List<Map<String, dynamic>>> readJson(
   }
 }
 
-Future<void> writeJson(String localPath, String name, List<Map> data) async {
+Future<void> writeJson(
+  String localPath,
+  String name,
+  List<Map> data, {
+  bool requireSuccess = false,
+}) async {
   final file = File(localFilePath(localPath, name));
   try {
-    await file.writeAsString(jsonEncode(data));
+    if (requireSuccess) {
+      // Stage destructive asset replacements before atomically replacing the file.
+      final pending = File(
+        '${file.path}.${DateTime.now().microsecondsSinceEpoch}.tmp',
+      );
+      var committed = false;
+      try {
+        await pending.writeAsString(jsonEncode(data), flush: true);
+        await pending.rename(file.path);
+        committed = true;
+      } finally {
+        if (!committed && await pending.exists()) await pending.delete();
+      }
+    } else {
+      await file.writeAsString(jsonEncode(data));
+    }
   } catch (e) {
     debugPrint(
       '[${DateTime.now().toString().substring(11, 19)}][本地] ===> 写入文件失败: $name - $e',
     );
+    if (requireSuccess) rethrow;
   }
 }

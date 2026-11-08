@@ -374,7 +374,8 @@ const Map<String, String> stringsUk = {
   "toastInvalidNav": "Введіть дійсний NAV",
   "toastDeleted": "Видалено {name}",
   "toastSaved": "Збережено",
-  "toastCrossSection": "Неможливо перейти до іншої категорії",
+  "toastCrossSection":
+      "Не можна перемістити до категорії з іншим шаблоном введення",
   "emptyTitle": "Активів ще немає",
   "emptySubtitle": "Торкніться +, щоб додати готівку, депозити чи інвестиції",
   "defaultNameFallback": "Цей предмет",
@@ -392,7 +393,7 @@ const Map<String, String> stringsUk = {
   "depositWealthLabel": "Інші активи",
   "assetCategoryChoose": "Виберіть категорію",
   "assetCategoryManage": "Керувати категорією",
-  "assetCategoryMove": "Перейти до категорії",
+  "assetCategoryMove": "Змінити категорію",
   "assetCategoryTemplates": "Шаблони",
   "assetCategoryCustom": "Спеціальна категорія",
   "assetCategoryRename": "Перейменувати категорію",
@@ -716,4 +717,10 @@ const Map<String, String> stringsUk = {
       "Розблокуйте iAssets і захистіть свою фінансову інформацію.",
   "feedbackOpenSource":
       "Це програмне забезпечення з відкритим вихідним кодом. Пропозиції та повідомлення про проблеми можна надсилати на GitHub.",
+  "assetActions": "Дії",
+  "depositRollover": "Продовжити вклад з відсотками",
+  "depositRolloverHint":
+      "Нова сума вкладу дорівнює розрахунковій сумі погашення. Звірте її з фактичною сумою банку. Підтвердження замінить поточний запис.",
+  "assetSaveFailed":
+      "Не вдалося зберегти. Початковий запис не змінено. Спробуйте ще раз.",
 };

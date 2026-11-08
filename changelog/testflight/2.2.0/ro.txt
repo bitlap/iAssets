@@ -1,9 +1,9 @@
 Aspecte de testat
-• Schimbă limba și verifică cifrele locale, virgulele zecimale, aspectul RTL și salvarea sumelor și comisioanelor. Testează panourile iPad la rotire și în Split View, limbile widgeturilor și ordinea activelor.
+• Depozitele ajunse la scadență pot fi reînnoite cu principalul și dobânda, ajustând principalul, rata și termenul. Schimbă categoria din lista de acțiuni sau prin tragere între formulare identice. Pictogramele și culorile urmează categoria de destinație.
 • Verifică datele după actualizarea de la o versiune veche, limitele gratuite/Pro, achizițiile și restaurarea. Erorile sau pierderea conexiunii nu trebuie să suprascrie activele existente.
 
 Limitări cunoscute
-Unele traduceri așteaptă încă verificarea vorbitorilor nativi. TestFlight folosește mediul de testare și nu poate confirma eligibilitatea utilizatorilor vechi în producție.
+Unele traduceri așteaptă încă verificarea vorbitorilor nativi. Noul capital este totalul estimat la scadență. Verifică suma reală a băncii. Confirmarea înlocuiește înregistrarea curentă. TestFlight folosește mediul de testare și nu poate confirma eligibilitatea utilizatorilor vechi în producție.
 
 Indică limba, dispozitivul și pașii de reproducere pe GitHub:
 https://github.com/bitlap/iAssets/issues

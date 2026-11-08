@@ -362,7 +362,7 @@ const Map<String, String> stringsKo = {
   "toastInvalidNav": "유효한 NAV를 입력하세요.",
   "toastDeleted": "{name}를 삭제했습니다.",
   "toastSaved": "저장됨",
-  "toastCrossSection": "다른 카테고리로 이동할 수 없습니다",
+  "toastCrossSection": "입력 양식이 다른 분류로 이동할 수 없습니다",
   "emptyTitle": "아직 애셋이 없습니다.",
   "emptySubtitle": "현금, 예금, 투자금을 추가하려면 +를 누르세요.",
   "defaultNameFallback": "이 항목",
@@ -380,7 +380,7 @@ const Map<String, String> stringsKo = {
   "depositWealthLabel": "기타 자산",
   "assetCategoryChoose": "카테고리를 선택하세요",
   "assetCategoryManage": "카테고리 관리",
-  "assetCategoryMove": "카테고리로 이동",
+  "assetCategoryMove": "분류 변경",
   "assetCategoryTemplates": "템플릿",
   "assetCategoryCustom": "맞춤 카테고리",
   "assetCategoryRename": "카테고리 이름 바꾸기",
@@ -661,4 +661,9 @@ const Map<String, String> stringsKo = {
   "iosPhotoLibraryUsage": "수동으로 추가된 주식 보유에 대한 회사 이미지를 선택합니다.",
   "iosFaceIDUsage": "iAssets를 잠금 해제하고 금융 정보를 보호하세요.",
   "feedbackOpenSource": "이 소프트웨어는 오픈 소스입니다. GitHub에서 제안하거나 문제를 신고해 주세요.",
+  "assetActions": "작업",
+  "depositRollover": "원리금 재예치",
+  "depositRolloverHint":
+      "새 원금에는 예상 만기 금액이 입력됩니다. 은행의 실제 만기 금액을 확인해 주세요. 확인하면 현재 기록이 대체됩니다.",
+  "assetSaveFailed": "저장하지 못했습니다. 기존 기록은 그대로입니다. 다시 시도해 주세요.",
 };

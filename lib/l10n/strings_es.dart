@@ -379,7 +379,8 @@ const Map<String, String> stringsEs = {
   "toastInvalidNav": "Ingrese un NAV válido",
   "toastDeleted": "Eliminado {name}",
   "toastSaved": "Guardado",
-  "toastCrossSection": "No puedo pasar a otra categoría",
+  "toastCrossSection":
+      "No se puede mover a una categoría con un formulario diferente",
   "emptyTitle": "Aún no hay activos",
   "emptySubtitle": "Toca + para agregar efectivo, depósitos o inversiones",
   "defaultNameFallback": "Este artículo",
@@ -397,7 +398,7 @@ const Map<String, String> stringsEs = {
   "depositWealthLabel": "Otros activos",
   "assetCategoryChoose": "Elige una categoría",
   "assetCategoryManage": "Administrar categoría",
-  "assetCategoryMove": "Mover a la categoría",
+  "assetCategoryMove": "Cambiar categoría",
   "assetCategoryTemplates": "Plantillas",
   "assetCategoryCustom": "Categoría personalizada",
   "assetCategoryRename": "Cambiar nombre de categoría",
@@ -729,4 +730,10 @@ const Map<String, String> stringsEs = {
   "iosFaceIDUsage": "Desbloquee iAssets y proteja su información financiera.",
   "feedbackOpenSource":
       "Este software es de código abierto. Puedes enviar sugerencias o informar de problemas en GitHub.",
+  "assetActions": "Acciones",
+  "depositRollover": "Reinvertir capital e intereses",
+  "depositRolloverHint":
+      "El nuevo capital toma el total estimado al vencimiento. Comprueba el importe real del banco. Al confirmar se sustituye el registro actual.",
+  "assetSaveFailed":
+      "No se pudo guardar. El registro original no ha cambiado. Inténtalo de nuevo.",
 };

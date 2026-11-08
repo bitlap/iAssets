@@ -368,11 +368,13 @@ Future<ProvidentFundAccount?> showProvidentFundAssetDialog(
 
 class _TimeDepositDialog extends StatefulWidget {
   final TimeDeposit? td;
+  final bool rollover;
   final String defaultCurrency;
   final int assetCount;
 
   const _TimeDepositDialog({
     this.td,
+    this.rollover = false,
     required this.defaultCurrency,
     required this.assetCount,
   });
@@ -395,12 +397,16 @@ class _TimeDepositDialogState extends State<_TimeDepositDialog> {
     final td = widget.td;
     nameCtrl = TextEditingController(text: td?.name ?? '');
     principalCtrl = TextEditingController(
-      text: td != null ? CurrencyUtil.formatInput(td.principal) : '',
+      text: td != null
+          ? CurrencyUtil.formatInput(
+              widget.rollover ? td.totalValue : td.principal,
+            )
+          : '',
     );
     rateCtrl = TextEditingController(
       text: td != null ? td.annualRate.toString() : '',
     );
-    startDate = td?.startDate ?? DateTime.now();
+    startDate = widget.rollover ? td!.endDate : td?.startDate ?? DateTime.now();
     durationMonths = td?.durationMonths ?? 12;
     currency = td?.currency ?? widget.defaultCurrency;
   }
@@ -424,11 +430,19 @@ class _TimeDepositDialogState extends State<_TimeDepositDialog> {
         children: [
           Center(
             child: Text(
-              isEdit ? AssetConfig.titleEditTD : AssetConfig.titleAddTD,
+              widget.rollover
+                  ? AssetConfig.depositRollover
+                  : isEdit
+                  ? AssetConfig.titleEditTD
+                  : AssetConfig.titleAddTD,
               style: TextStyles.dialogTitle,
             ),
           ),
           const SizedBox(height: 16),
+          if (widget.rollover) ...[
+            Text(AssetConfig.depositRolloverHint, style: TextStyles.body13),
+            const SizedBox(height: 12),
+          ],
           _label(AssetConfig.fieldName),
           const SizedBox(height: 6),
           _dialogTextField(nameCtrl, AssetConfig.hintTDName),
@@ -447,11 +461,14 @@ class _TimeDepositDialogState extends State<_TimeDepositDialog> {
                 ),
               ),
               const SizedBox(width: 8),
-              _currencySelector(
-                context,
-                currency,
-                (c) => setState(() => currency = c),
-              ),
+              if (widget.rollover)
+                Text(currency, style: TextStyles.body13)
+              else
+                _currencySelector(
+                  context,
+                  currency,
+                  (c) => setState(() => currency = c),
+                ),
             ],
           ),
           const SizedBox(height: 12),
@@ -462,33 +479,54 @@ class _TimeDepositDialogState extends State<_TimeDepositDialog> {
           const SizedBox(height: 6),
           AppNumberField(controller: rateCtrl, hintText: '2.5'),
           const SizedBox(height: 12),
-          Row(
-            children: [
-              Expanded(child: _label(AssetConfig.fieldStartDate)),
-              const SizedBox(width: 16),
-              Expanded(child: _label(AssetConfig.fieldDuration)),
-            ],
-          ),
-          const SizedBox(height: 6),
-          Row(
-            children: [
-              Expanded(
-                child: _dateButton(startDate, () async {
-                  final picked = await showDatePickerDialog(
-                    context,
-                    initialDate: startDate,
-                  );
-                  if (picked != null) setState(() => startDate = picked);
-                }),
-              ),
-              const SizedBox(width: 8),
-              Expanded(
-                child: _durationSelector(
-                  durationMonths,
-                  (v) => setState(() => durationMonths = v),
-                ),
-              ),
-            ],
+          LayoutBuilder(
+            builder: (context, constraints) {
+              final dateField = Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _label(AssetConfig.fieldStartDate),
+                  const SizedBox(height: 6),
+                  _dateButton(startDate, () async {
+                    final picked = await showDatePickerDialog(
+                      context,
+                      initialDate: startDate,
+                    );
+                    if (picked != null && mounted) {
+                      setState(() => startDate = picked);
+                    }
+                  }),
+                ],
+              );
+              final durationField = Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _label(AssetConfig.fieldDuration),
+                  const SizedBox(height: 6),
+                  _durationSelector(
+                    durationMonths,
+                    (v) => setState(() => durationMonths = v),
+                  ),
+                ],
+              );
+              if (constraints.maxWidth < 340 ||
+                  MediaQuery.textScalerOf(context).scale(1) > 1.2) {
+                return Column(
+                  children: [
+                    dateField,
+                    const SizedBox(height: 12),
+                    durationField,
+                  ],
+                );
+              }
+              return Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(child: dateField),
+                  const SizedBox(width: 12),
+                  Expanded(child: durationField),
+                ],
+              );
+            },
           ),
           const SizedBox(height: 16),
           actionButtonRow(
@@ -509,6 +547,7 @@ class _TimeDepositDialogState extends State<_TimeDepositDialog> {
                     widget.td?.id ??
                     DateTime.now().millisecondsSinceEpoch.toString(),
                 sortOrder: widget.td?.sortOrder ?? widget.assetCount,
+                categoryId: widget.td?.categoryId,
                 currency: currency,
                 name: nameCtrl.text.trim(),
                 principal: principal,
@@ -520,7 +559,11 @@ class _TimeDepositDialogState extends State<_TimeDepositDialog> {
               );
               Navigator.pop(context, updated);
             },
-            confirmText: isEdit ? AppConfig.btnClose : AppConfig.btnAdd,
+            confirmText: widget.rollover
+                ? AssetConfig.depositRollover
+                : isEdit
+                ? AppConfig.btnClose
+                : AppConfig.btnAdd,
             confirmGradient: const LinearGradient(
               colors: [AppColors.blueDark, AppColors.blueAccent],
             ),
@@ -534,13 +577,16 @@ class _TimeDepositDialogState extends State<_TimeDepositDialog> {
 Future<TimeDeposit?> showTimeDepositDialog(
   BuildContext context, {
   TimeDeposit? td,
+  bool rollover = false,
   required String defaultCurrency,
   required int assetCount,
 }) {
+  assert(!rollover || td != null);
   return showDialog<TimeDeposit>(
     context: context,
     builder: (_) => _TimeDepositDialog(
       td: td,
+      rollover: rollover,
       defaultCurrency: defaultCurrency,
       assetCount: assetCount,
     ),

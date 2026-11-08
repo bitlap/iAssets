@@ -378,7 +378,8 @@ const Map<String, String> stringsPtPt = {
   "toastInvalidNav": "Introduza um NAV válido",
   "toastDeleted": "{name} eliminado",
   "toastSaved": "Salvo",
-  "toastCrossSection": "Não é possível passar para outra categoria",
+  "toastCrossSection":
+      "Não é possível mover para uma categoria com um formulário diferente",
   "emptyTitle": "Ainda não há ativos",
   "emptySubtitle":
       "Toque em + para adicionar dinheiro, depósitos ou investimentos",
@@ -397,7 +398,7 @@ const Map<String, String> stringsPtPt = {
   "depositWealthLabel": "Outros ativos",
   "assetCategoryChoose": "Escolha uma categoria",
   "assetCategoryManage": "Gerir categoria",
-  "assetCategoryMove": "Mover para categoria",
+  "assetCategoryMove": "Alterar categoria",
   "assetCategoryTemplates": "Modelos",
   "assetCategoryCustom": "Categoria personalizada",
   "assetCategoryRename": "Renomear categoria",
@@ -727,4 +728,10 @@ const Map<String, String> stringsPtPt = {
       "Desbloqueie iAssets e proteja as suas informações financeiras.",
   "feedbackOpenSource":
       "Este software é de código aberto. Envie sugestões ou comunique problemas no GitHub.",
+  "assetActions": "Ações",
+  "depositRollover": "Reaplicar capital e juros",
+  "depositRolloverHint":
+      "O novo capital usa o total estimado no vencimento. Confira o valor real do banco. A confirmação substitui o registo atual.",
+  "assetSaveFailed":
+      "Não foi possível guardar. O registo original não mudou. Tente novamente.",
 };

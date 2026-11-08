@@ -375,7 +375,8 @@ const Map<String, String> stringsId = {
   "toastInvalidNav": "Masukkan NAV yang valid",
   "toastDeleted": "{name} dihapus",
   "toastSaved": "Disimpan",
-  "toastCrossSection": "Tidak dapat berpindah ke kategori lain",
+  "toastCrossSection":
+      "Tidak dapat dipindahkan ke kategori dengan formulir berbeda",
   "emptyTitle": "Belum ada aset",
   "emptySubtitle":
       "Ketuk + untuk menambahkan uang tunai, deposito, atau investasi",
@@ -394,7 +395,7 @@ const Map<String, String> stringsId = {
   "depositWealthLabel": "Aset Lainnya",
   "assetCategoryChoose": "Pilih Kategori",
   "assetCategoryManage": "Kelola Kategori",
-  "assetCategoryMove": "Pindah ke Kategori",
+  "assetCategoryMove": "Ubah kategori",
   "assetCategoryTemplates": "Templat",
   "assetCategoryCustom": "Kategori Khusus",
   "assetCategoryRename": "Ganti Nama Kategori",
@@ -719,4 +720,9 @@ const Map<String, String> stringsId = {
   "iosFaceIDUsage": "Buka kunci iAssets dan lindungi informasi keuangan Anda.",
   "feedbackOpenSource":
       "Perangkat lunak ini bersifat sumber terbuka. Kirim saran atau laporkan masalah di GitHub.",
+  "assetActions": "Tindakan",
+  "depositRollover": "Perpanjang pokok dan bunga",
+  "depositRolloverHint":
+      "Pokok baru memakai perkiraan total saat jatuh tempo. Periksa jumlah aktual dari bank. Konfirmasi akan mengganti catatan saat ini.",
+  "assetSaveFailed": "Gagal menyimpan. Catatan awal tidak berubah. Coba lagi.",
 };

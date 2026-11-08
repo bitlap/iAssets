@@ -375,7 +375,7 @@ const Map<String, String> stringsPl = {
   "toastInvalidNav": "Wprowadź prawidłowy kod NAV",
   "toastDeleted": "Usunięto {name}",
   "toastSaved": "Zapisano",
-  "toastCrossSection": "Nie można przejść do innej kategorii",
+  "toastCrossSection": "Nie można przenieść do kategorii z innym formularzem",
   "emptyTitle": "Nie ma jeszcze żadnych aktywów",
   "emptySubtitle": "Stuknij +, aby dodać gotówkę, depozyty lub inwestycje",
   "defaultNameFallback": "Ten przedmiot",
@@ -393,7 +393,7 @@ const Map<String, String> stringsPl = {
   "depositWealthLabel": "Inne aktywa",
   "assetCategoryChoose": "Wybierz kategorię",
   "assetCategoryManage": "Zarządzaj kategorią",
-  "assetCategoryMove": "Przejdź do kategorii",
+  "assetCategoryMove": "Zmień kategorię",
   "assetCategoryTemplates": "Szablony",
   "assetCategoryCustom": "Kategoria niestandardowa",
   "assetCategoryRename": "Zmień nazwę kategorii",
@@ -720,4 +720,10 @@ const Map<String, String> stringsPl = {
   "iosFaceIDUsage": "Odblokuj iAssets i chroń swoje informacje finansowe.",
   "feedbackOpenSource":
       "To oprogramowanie jest otwartoźródłowe. Sugestie i problemy można zgłaszać na GitHub.",
+  "assetActions": "Działania",
+  "depositRollover": "Odnów kapitał z odsetkami",
+  "depositRolloverHint":
+      "Nowy kapitał to szacowana kwota na koniec lokaty. Sprawdź faktyczną kwotę banku. Potwierdzenie zastąpi bieżący wpis.",
+  "assetSaveFailed":
+      "Nie udało się zapisać. Oryginalny wpis pozostał bez zmian. Spróbuj ponownie.",
 };

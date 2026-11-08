@@ -1,9 +1,9 @@
 Testauksen painopisteet
-• Vaihda kieltä ja tarkista paikalliset numerot, desimaalipilkut, RTL-asettelu sekä summien ja kulujen tallennus. Testaa iPad-paneelit käännettäessä ja Split View’ssä, widgetien kielet ja varojen järjestys.
+• Erääntyneet talletukset voi uusia pääomineen ja korkoineen. Pääomaa, korkoa ja talletusaikaa voi muuttaa. Vaihda luokkaa toimintoluettelosta tai vetämällä saman syöttölomakkeen luokkien välillä. Kuvakkeet ja värit mukautuvat kohdeluokkaan.
 • Tarkista tiedot vanhasta versiosta päivittämisen jälkeen, ilmais-/Pro-rajat, ostot ja palautus. Virheet tai yhteyden katkeaminen eivät saa korvata nykyisiä varoja.
 
 Tunnetut rajoitukset
-Osa käännöksistä odottaa vielä äidinkielistä tarkistusta. TestFlight käyttää testiympäristöä eikä voi vahvistaa vanhojen käyttäjien kelpoisuutta tuotannossa.
+Osa käännöksistä odottaa vielä äidinkielistä tarkistusta. Uusi pääoma on arvioitu erääntymissumma. Tarkista pankin todellinen summa. Vahvistus korvaa nykyisen merkinnän. TestFlight käyttää testiympäristöä eikä voi vahvistaa vanhojen käyttäjien kelpoisuutta tuotannossa.
 
 Ilmoita kieli, laite ja toistamisvaiheet GitHubissa:
 https://github.com/bitlap/iAssets/issues

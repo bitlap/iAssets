@@ -369,7 +369,7 @@ const Map<String, String> stringsTh = {
   "toastInvalidNav": "ป้อน NAV ที่ถูกต้อง",
   "toastDeleted": "ลบ {name} แล้ว",
   "toastSaved": "บันทึกแล้ว",
-  "toastCrossSection": "ไม่สามารถย้ายไปหมวดหมู่อื่นได้",
+  "toastCrossSection": "ไม่สามารถย้ายไปยังหมวดหมู่ที่ใช้แบบฟอร์มต่างกันได้",
   "emptyTitle": "ยังไม่มีทรัพย์สิน",
   "emptySubtitle": "แตะ + เพื่อเพิ่มเงินสด เงินฝาก หรือการลงทุน",
   "defaultNameFallback": "รายการนี้",
@@ -387,7 +387,7 @@ const Map<String, String> stringsTh = {
   "depositWealthLabel": "ทรัพย์สินอื่นๆ",
   "assetCategoryChoose": "เลือกหมวดหมู่",
   "assetCategoryManage": "จัดการหมวดหมู่",
-  "assetCategoryMove": "ย้ายไปที่หมวดหมู่",
+  "assetCategoryMove": "เปลี่ยนหมวดหมู่",
   "assetCategoryTemplates": "เทมเพลต",
   "assetCategoryCustom": "หมวดหมู่ที่กำหนดเอง",
   "assetCategoryRename": "เปลี่ยนชื่อหมวดหมู่",
@@ -706,4 +706,9 @@ const Map<String, String> stringsTh = {
   "iosFaceIDUsage": "ปลดล็อค iAssets และปกป้องข้อมูลทางการเงินของคุณ",
   "feedbackOpenSource":
       "ซอฟต์แวร์นี้เป็นโอเพนซอร์ส คุณสามารถเสนอแนะหรือรายงานปัญหาบน GitHub ได้",
+  "assetActions": "การดำเนินการ",
+  "depositRollover": "ต่ออายุเงินต้นพร้อมดอกเบี้ย",
+  "depositRolloverHint":
+      "เงินต้นใหม่ใช้ยอดครบกำหนดโดยประมาณ โปรดตรวจสอบยอดจริงของธนาคาร เมื่อยืนยันจะแทนที่รายการปัจจุบัน",
+  "assetSaveFailed": "บันทึกไม่สำเร็จ รายการเดิมไม่เปลี่ยนแปลง โปรดลองอีกครั้ง",
 };

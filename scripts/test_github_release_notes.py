@@ -29,7 +29,11 @@ class GitHubReleaseNotesTests(unittest.TestCase):
             expected = self.source.split(f'## {language}\n', 1)[1].split('\n## ', 1)[0].strip()
             actual = result.split(f'## {language}\n', 1)[1].split('\n## ', 1)[0].strip()
             self.assertEqual(actual, expected)
-        self.assertEqual(len(re.findall(r'^- ', result, re.M)), 24)
+        expected_count = sum(
+            len(re.findall(r'^- ', self.source.split(f'## {language}\n', 1)[1].split('\n## ', 1)[0], re.M))
+            for language in renderer.GITHUB_LANGUAGES
+        )
+        self.assertEqual(len(re.findall(r'^- ', result, re.M)), expected_count)
         self.assertEqual(self.path.read_text(), self.source)
 
     def test_missing_english_is_rejected(self):

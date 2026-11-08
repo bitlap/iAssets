@@ -106,8 +106,10 @@ class AssetDataManager {
     return (assets, savedOrder);
   }
 
-  static Future<void> saveAssets(List<AssetBase> assets) =>
-      IcloudStorage.saveAssets(assets);
+  static Future<void> saveAssets(
+    List<AssetBase> assets, {
+    bool requireSuccess = false,
+  }) => IcloudStorage.saveAssets(assets, requireSuccess: requireSuccess);
 
   static Future<void> saveSectionOrder(List<AssetType> order) =>
       SettingsService.setAssetSectionOrder(order.map((t) => t.name).toList());

@@ -382,7 +382,7 @@ const Map<String, String> stringsFil = {
   "toastInvalidNav": "Maglagay ng wastong NAV",
   "toastDeleted": "Tinanggal ang {name}",
   "toastSaved": "Nai-save",
-  "toastCrossSection": "Hindi makalipat sa ibang kategorya",
+  "toastCrossSection": "Hindi maililipat sa kategoryang may ibang form",
   "emptyTitle": "Wala pang asset",
   "emptySubtitle": "I-tap ang + para magdagdag ng cash, deposito, o investment",
   "defaultNameFallback": "Ang item na ito",
@@ -400,7 +400,7 @@ const Map<String, String> stringsFil = {
   "depositWealthLabel": "Iba pang mga Asset",
   "assetCategoryChoose": "Pumili ng Kategorya",
   "assetCategoryManage": "Pamahalaan ang Kategorya",
-  "assetCategoryMove": "Ilipat sa Kategorya",
+  "assetCategoryMove": "Baguhin ang kategorya",
   "assetCategoryTemplates": "Mga template",
   "assetCategoryCustom": "Custom na Kategorya",
   "assetCategoryRename": "Palitan ang Pangalan ng Kategorya",
@@ -731,4 +731,10 @@ const Map<String, String> stringsFil = {
       "I-unlock ang iAssets at protektahan ang iyong impormasyon sa pananalapi.",
   "feedbackOpenSource":
       "Open source ang software na ito. Magbigay ng mga mungkahi o mag-ulat ng mga problema sa GitHub.",
+  "assetActions": "Mga aksyon",
+  "depositRollover": "I-renew ang puhunan at interes",
+  "depositRolloverHint":
+      "Ang bagong puhunan ay tinatayang kabuuan sa maturity. Suriin ang aktuwal na halaga ng bangko. Papalitan ng pagkumpirma ang kasalukuyang tala.",
+  "assetSaveFailed":
+      "Hindi nai-save. Hindi nagbago ang orihinal na tala. Subukang muli.",
 };

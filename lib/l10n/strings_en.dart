@@ -399,7 +399,8 @@ const Map<String, String> stringsEn = {
   'toastInvalidNav': 'Enter a valid NAV',
   'toastDeleted': 'Deleted {name}',
   'toastSaved': 'Saved',
-  'toastCrossSection': 'Cannot move to another category',
+  "toastCrossSection":
+      "Cannot move to a category with a different input template",
   'emptyTitle': 'No assets yet',
   'emptySubtitle': 'Tap + to add cash, deposits, or investments',
   'defaultNameFallback': 'This item',
@@ -417,7 +418,7 @@ const Map<String, String> stringsEn = {
   'depositWealthLabel': 'Other Assets',
   'assetCategoryChoose': 'Choose a Category',
   'assetCategoryManage': 'Manage Category',
-  'assetCategoryMove': 'Move to Category',
+  "assetCategoryMove": "Change Category",
   'assetCategoryTemplates': 'Templates',
   'assetCategoryCustom': 'Custom Category',
   'assetCategoryRename': 'Rename Category',
@@ -742,4 +743,10 @@ const Map<String, String> stringsEn = {
   "iosFaceIDUsage": "Unlock iAssets and protect your financial information.",
   "feedbackOpenSource":
       "This is open-source software. Share suggestions or report issues on GitHub.",
+  "assetActions": "Actions",
+  "depositRollover": "Reinvest principal and interest",
+  "depositRolloverHint":
+      "The new principal defaults to the estimated maturity total. Check the actual bank amount. Confirming replaces the current record.",
+  "assetSaveFailed":
+      "Could not save. The original record is unchanged. Try again.",
 };

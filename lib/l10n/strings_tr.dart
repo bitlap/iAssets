@@ -377,7 +377,7 @@ const Map<String, String> stringsTr = {
   "toastInvalidNav": "Geçerli bir NAV girin",
   "toastDeleted": "{name} Silindi",
   "toastSaved": "Kaydedildi",
-  "toastCrossSection": "Başka bir kategoriye geçilemiyor",
+  "toastCrossSection": "Farklı giriş şablonu olan kategoriye taşınamaz",
   "emptyTitle": "Henüz öğe yok",
   "emptySubtitle": "Nakit, para yatırma veya yatırım eklemek için +'ya dokunun",
   "defaultNameFallback": "Bu öğe",
@@ -395,7 +395,7 @@ const Map<String, String> stringsTr = {
   "depositWealthLabel": "Diğer Varlıklar",
   "assetCategoryChoose": "Bir Kategori Seçin",
   "assetCategoryManage": "Kategoriyi Yönet",
-  "assetCategoryMove": "Kategoriye Taşı",
+  "assetCategoryMove": "Kategoriyi değiştir",
   "assetCategoryTemplates": "Şablonlar",
   "assetCategoryCustom": "Özel Kategori",
   "assetCategoryRename": "Kategoriyi Yeniden Adlandır",
@@ -722,4 +722,9 @@ const Map<String, String> stringsTr = {
       "iAssets'nin kilidini açın ve finansal bilgilerinizi koruyun.",
   "feedbackOpenSource":
       "Bu yazılım açık kaynaklıdır. GitHub üzerinden önerilerinizi paylaşabilir veya sorunları bildirebilirsiniz.",
+  "assetActions": "İşlemler",
+  "depositRollover": "Anapara ve faizi yenile",
+  "depositRolloverHint":
+      "Yeni anapara tahmini vade sonu tutarıdır. Bankanın gerçek tutarını kontrol edin. Onay, mevcut kaydın yerini alır.",
+  "assetSaveFailed": "Kaydedilemedi. İlk kayıt değişmedi. Yeniden deneyin.",
 };

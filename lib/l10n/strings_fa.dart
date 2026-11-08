@@ -374,7 +374,7 @@ const Map<String, String> stringsFa = {
   "toastInvalidNav": "یک NAV معتبر وارد کنید",
   "toastDeleted": "{name} حذف شد",
   "toastSaved": "ذخیره شد",
-  "toastCrossSection": "نمی توان به دسته دیگری منتقل شد",
+  "toastCrossSection": "انتقال به دسته با فرم ورودی متفاوت ممکن نیست",
   "emptyTitle": "هنوز دارایی نیست",
   "emptySubtitle":
       "برای افزودن پول نقد، سپرده‌ها یا سرمایه‌گذاری روی + ضربه بزنید",
@@ -393,7 +393,7 @@ const Map<String, String> stringsFa = {
   "depositWealthLabel": "سایر دارایی ها",
   "assetCategoryChoose": "یک دسته را انتخاب کنید",
   "assetCategoryManage": "مدیریت دسته",
-  "assetCategoryMove": "انتقال به دسته",
+  "assetCategoryMove": "تغییر دسته",
   "assetCategoryTemplates": "قالب ها",
   "assetCategoryCustom": "دسته بندی سفارشی",
   "assetCategoryRename": "تغییر نام دسته",
@@ -716,4 +716,9 @@ const Map<String, String> stringsFa = {
       "قفل iAssets را باز کنید و از اطلاعات مالی خود محافظت کنید.",
   "feedbackOpenSource":
       "این نرم‌افزار متن‌باز است. می‌توانید پیشنهادها یا مشکلات را در GitHub مطرح کنید.",
+  "assetActions": "عملیات",
+  "depositRollover": "تمدید اصل و سود سپرده",
+  "depositRolloverHint":
+      "اصل جدید برابر برآورد مبلغ سررسید است. مبلغ واقعی بانک را بررسی کنید. تأیید، رکورد فعلی را جایگزین می‌کند.",
+  "assetSaveFailed": "ذخیره نشد. رکورد اصلی تغییر نکرده است. دوباره تلاش کنید.",
 };

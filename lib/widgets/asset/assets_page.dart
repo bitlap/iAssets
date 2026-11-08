@@ -22,6 +22,8 @@ import 'asset_category_sheet.dart';
 import '../../services/pro_service.dart';
 import '../pro/pro_page.dart';
 
+enum _AssetCardAction { rollover, changeCategory }
+
 class AssetsPage extends StatefulWidget {
   final double stockTotalValue;
   final double cryptoTotalValue;
@@ -51,6 +53,7 @@ class AssetsPage extends StatefulWidget {
 class AssetsPageState extends State<AssetsPage> {
   List<AssetBase> _assets = [];
   bool _isLoading = false;
+  bool _rolloverOpen = false;
   Future<void>? _refreshInFlight;
   DateTime? _lastRefreshTime;
   final Set<String> _expandedCategories = {};
@@ -200,10 +203,98 @@ class AssetsPageState extends State<AssetsPage> {
     }
   }
 
+  List<AssetCategory> _moveDestinations(AssetBase asset) => _categories
+      .where(
+        (category) =>
+            category.id != asset.categoryKey && category.accepts(asset.type),
+      )
+      .toList();
+
+  Future<void> _onChangeCategory(AssetBase asset) async {
+    if (_isLoading) return;
+    final destinations = _moveDestinations(asset);
+    if (destinations.isEmpty) {
+      CenterToast.warning(context, AssetConfig.toastCrossSection);
+      return;
+    }
+    final target = await showModalBottomSheet<AssetCategory>(
+      context: context,
+      isScrollControlled: true,
+      useSafeArea: true,
+      constraints: const BoxConstraints(maxWidth: double.infinity),
+      backgroundColor: AppColors.surface,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(22)),
+      ),
+      builder: (sheetContext) => SafeArea(
+        top: false,
+        child: SizedBox(
+          width: double.infinity,
+          child: ConstrainedBox(
+            constraints: BoxConstraints(
+              maxHeight: MediaQuery.sizeOf(sheetContext).height * .7,
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Padding(
+                  padding: const EdgeInsetsDirectional.fromSTEB(20, 12, 8, 4),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          AssetConfig.categoryMove,
+                          style: Theme.of(sheetContext).textTheme.titleLarge,
+                        ),
+                      ),
+                      IconButton(
+                        tooltip: MaterialLocalizations.of(
+                          sheetContext,
+                        ).closeButtonTooltip,
+                        icon: const Icon(Icons.close),
+                        onPressed: () => Navigator.pop(sheetContext),
+                      ),
+                    ],
+                  ),
+                ),
+                Flexible(
+                  child: ListView(
+                    shrinkWrap: true,
+                    children: [
+                      for (final category in destinations)
+                        ListTile(
+                          key: ValueKey('move_category_${category.id}'),
+                          leading: Icon(
+                            assetCategoryIcon(category),
+                            color: assetCategoryColor(category),
+                          ),
+                          title: Text(AssetConfig.labelForCategory(category)),
+                          onTap: () => Navigator.pop(sheetContext, category),
+                        ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+    if (!mounted || target == null) return;
+    await _moveAssetToCategory(asset, target);
+  }
+
   Future<void> _moveAssetToCategory(
     AssetBase asset,
-    AssetCategory category,
-  ) async {
+    AssetCategory category, {
+    int? position,
+  }) async {
+    if (!mounted || _isLoading) return;
+    if (!_categories.any((item) => item.id == category.id) ||
+        !category.accepts(asset.type)) {
+      CenterToast.warning(context, AssetConfig.toastCrossSection);
+      return;
+    }
     if (asset.categoryKey == category.id) return;
     final remaining = _assets.where((item) => item.id != asset.id).toList();
     if (!ProService.instance.access.canAddAsset(
@@ -221,15 +312,40 @@ class AssetsPageState extends State<AssetsPage> {
       }
       return;
     }
-    setState(() {
-      asset.categoryId = category.id;
-      _rebuildFlatItems();
-    });
-    await _save();
-    if (mounted) CenterToast.success(context, AssetConfig.toastSaved);
+    final moved = category.moveAsset(asset);
+    final updated = List<AssetBase>.of(remaining);
+    final targetAssets = updated
+        .where((a) => a.categoryKey == category.id)
+        .toList();
+    final targetPosition = (position ?? targetAssets.length).clamp(
+      0,
+      targetAssets.length,
+    );
+    final insertAt = targetPosition < targetAssets.length
+        ? updated.indexOf(targetAssets[targetPosition])
+        : targetAssets.isEmpty
+        ? updated.length
+        : updated.indexOf(targetAssets.last) + 1;
+    updated.insert(insertAt, moved);
+    setState(() => _isLoading = true);
+    try {
+      await AssetDataManager.saveAssets(updated, requireSuccess: true);
+      if (!mounted) return;
+      setState(() {
+        _assets = updated;
+        _rebuildFlatItems();
+      });
+      widget.onHeaderChanged?.call();
+      CenterToast.success(context, AssetConfig.toastSaved);
+    } catch (_) {
+      if (mounted) CenterToast.error(context, AssetConfig.assetSaveFailed);
+    } finally {
+      if (mounted) setState(() => _isLoading = false);
+    }
   }
 
   Future<void> _onFlatReorder(int oldIndex, int newIndex) async {
+    if (_isLoading) return;
     try {
       final item = _flatItems[oldIndex];
 
@@ -274,8 +390,31 @@ class AssetsPageState extends State<AssetsPage> {
           adjEnd--;
         }
         if (newIndex <= sectionStart || newIndex > adjEnd) {
-          if (mounted) {
+          // Destination indices refer to the list after removing the dragged card.
+          final remainingItems = List<AssetFlatItem>.of(_flatItems)
+            ..removeAt(oldIndex);
+          String? targetId;
+          for (var i = 0; i < newIndex && i < remainingItems.length; i++) {
+            final entry = remainingItems[i];
+            if (entry is SectionHeader) targetId = entry.categoryId;
+          }
+          final targets = _categories.where(
+            (category) => category.id == targetId,
+          );
+          if (targets.isEmpty) {
             CenterToast.warning(context, AssetConfig.toastCrossSection);
+          } else {
+            final target = targets.first;
+            await _moveAssetToCategory(
+              item.asset,
+              target,
+              position: computeSameCategoryCount(
+                _flatItems,
+                target.id,
+                oldIndex,
+                newIndex,
+              ),
+            );
           }
           return;
         }
@@ -370,6 +509,42 @@ class AssetsPageState extends State<AssetsPage> {
     ),
     onUpdate: (r) => _updateAsset(td.id, r),
   );
+
+  Future<void> _onRolloverTD(TimeDeposit deposit) async {
+    if (_rolloverOpen || _isLoading) return;
+    _rolloverOpen = true;
+    try {
+      final result = await showTimeDepositDialog(
+        context,
+        td: deposit,
+        rollover: true,
+        defaultCurrency: deposit.currency,
+        assetCount: _assets.length,
+      );
+      if (!mounted || result == null) return;
+      final index = _assets.indexWhere((asset) => asset.id == deposit.id);
+      if (index < 0) return;
+      result.categoryId = _assets[index].categoryId;
+      final updated = List<AssetBase>.of(_assets)..[index] = result;
+      setState(() => _isLoading = true);
+      try {
+        await AssetDataManager.saveAssets(updated, requireSuccess: true);
+      } catch (_) {
+        if (mounted) CenterToast.error(context, AssetConfig.assetSaveFailed);
+        return;
+      }
+      if (!mounted) return;
+      setState(() {
+        _assets = updated;
+        _rebuildFlatItems();
+      });
+      widget.onHeaderChanged?.call();
+      CenterToast.success(context, AssetConfig.toastSaved);
+    } finally {
+      _rolloverOpen = false;
+      if (mounted && _isLoading) setState(() => _isLoading = false);
+    }
+  }
 
   void _onAddWP(String categoryId) => _openDialog<WealthProduct>(
     showWealthProductDialog(
@@ -720,9 +895,8 @@ class AssetsPageState extends State<AssetsPage> {
   }
 
   Widget _buildAssetCard(AssetBase asset, int index) {
-    final (icon, name, value, onTap) = switch (asset) {
+    final (name, value, onTap) = switch (asset) {
       CashAccount cash => (
-        Icons.payments,
         cash.name.isNotEmpty
             ? cash.name
             : AssetConfig.defaultNameCash.replaceAll(
@@ -733,19 +907,16 @@ class AssetsPageState extends State<AssetsPage> {
         () => _onEditCash(cash),
       ),
       TimeDeposit td => (
-        Icons.savings,
         td.name.isNotEmpty ? td.name : AssetConfig.defaultNameTD,
         td.totalValue,
         () => _onEditTD(td),
       ),
       WealthProduct wp => (
-        Icons.monetization_on,
         wp.name.isNotEmpty ? wp.name : AssetConfig.defaultNameWP,
         wp.totalValue,
         () => _onEditWP(wp),
       ),
       CurrentAccount account => (
-        Icons.account_balance,
         account.name.isNotEmpty
             ? account.name
             : AssetConfig.defaultNameCurrent.replaceAll(
@@ -756,7 +927,6 @@ class AssetsPageState extends State<AssetsPage> {
         () => _onEditCurrent(account),
       ),
       ProvidentFundAccount account => (
-        Icons.home_work,
         account.name.isNotEmpty
             ? account.name
             : AssetConfig.defaultNameProvidentFund.replaceAll(
@@ -770,7 +940,9 @@ class AssetsPageState extends State<AssetsPage> {
     String? detail;
     Color? detailColor;
     if (asset is TimeDeposit) {
-      final daysLeft = asset.endDate.difference(DateTime.now()).inDays;
+      final daysLeft = DateUtils.dateOnly(
+        asset.endDate,
+      ).difference(DateUtils.dateOnly(DateTime.now())).inDays;
       final term = daysLeft > 0
           ? AssetConfig.daysRemaining.replaceAll('{days}', '$daysLeft')
           : AssetConfig.expired;
@@ -781,6 +953,20 @@ class AssetsPageState extends State<AssetsPage> {
       detail =
           '${AssetConfig.fieldShares} ${CurrencyUtil.formatCompact(asset.shares)}\n${AssetConfig.fieldNav} ${CurrencyUtil.formatRate(asset.nav)}';
     }
+    final category = _categories.firstWhere(
+      (category) => category.id == asset.categoryKey,
+      orElse: () => AssetCategory(
+        id: asset.categoryKey,
+        calculationType: asset.type,
+        labelKey: asset.type.name,
+      ),
+    );
+    final canChangeCategory = _moveDestinations(asset).isNotEmpty;
+    final canRollover =
+        asset is TimeDeposit &&
+        !DateUtils.dateOnly(
+          asset.endDate,
+        ).isAfter(DateUtils.dateOnly(DateTime.now()));
     return AssetCardFrame(
       leading: ReorderableDragStartListener(
         index: index,
@@ -794,7 +980,8 @@ class AssetsPageState extends State<AssetsPage> {
           ),
         ),
       ),
-      icon: icon,
+      icon: assetCategoryIcon(category),
+      categoryColor: assetCategoryColor(category),
       name: name,
       colorSeed: asset.name.trim().isNotEmpty
           ? asset.name
@@ -807,23 +994,40 @@ class AssetsPageState extends State<AssetsPage> {
       createdAt: asset.createdAt,
       updatedAt: asset.updatedAt,
       onTap: onTap,
-      trailing: PopupMenuButton<AssetCategory>(
-        tooltip: AssetConfig.categoryMove,
-        color: AppColors.surface,
-        icon: Icon(Icons.more_horiz, size: 18, color: AppColors.textSecondary),
-        iconSize: 18,
-        padding: EdgeInsets.zero,
-        constraints: const BoxConstraints(minWidth: 36, minHeight: 36),
-        onSelected: (category) => _moveAssetToCategory(asset, category),
-        itemBuilder: (_) => [
-          for (final category in _categories)
-            if (category.id != asset.categoryKey)
-              PopupMenuItem(
-                value: category,
-                child: Text(AssetConfig.labelForCategory(category)),
+      trailing: !canRollover && !canChangeCategory
+          ? null
+          : PopupMenuButton<Object>(
+              tooltip: AssetConfig.assetActions,
+              color: AppColors.surface,
+              icon: Icon(
+                Icons.more_horiz,
+                size: 18,
+                color: AppColors.textSecondary,
               ),
-        ],
-      ),
+              iconSize: 18,
+              padding: EdgeInsets.zero,
+              constraints: const BoxConstraints(minWidth: 36, minHeight: 36),
+              onSelected: (action) {
+                if (action == _AssetCardAction.rollover &&
+                    asset is TimeDeposit) {
+                  _onRolloverTD(asset);
+                } else if (action == _AssetCardAction.changeCategory) {
+                  _onChangeCategory(asset);
+                }
+              },
+              itemBuilder: (_) => [
+                if (canRollover)
+                  PopupMenuItem<Object>(
+                    value: _AssetCardAction.rollover,
+                    child: Text(AssetConfig.depositRollover),
+                  ),
+                if (canChangeCategory)
+                  PopupMenuItem<Object>(
+                    value: _AssetCardAction.changeCategory,
+                    child: Text(AssetConfig.categoryMove),
+                  ),
+              ],
+            ),
     );
   }
 

@@ -1,9 +1,9 @@
 Mga dapat subukan
-• Magpalit ng wika at suriin ang lokal na mga digit, decimal comma, RTL layout at pag-save ng halaga at bayarin. Subukan ang mga panel ng iPad sa pag-ikot at Split View, wika ng mga widget at pagkakasunod ng mga asset.
+• Maaaring i-renew ang matured na deposito kasama ang puhunan at interes, at baguhin ang bagong puhunan, rate at termino. Baguhin ang kategorya mula sa listahan ng aksyon o sa pag-drag sa pagitan ng magkaparehong form. Susunod ang mga icon at kulay sa bagong kategorya.
 • Suriin ang data matapos mag-update mula sa lumang bersyon, libreng/Pro na limitasyon, pagbili at pag-restore. Hindi dapat mapatungan ang dating mga asset kapag may error o nawalan ng koneksyon.
 
 Mga kilalang limitasyon
-Kailangan pa ng ilang salin ang pagsusuri ng katutubong tagapagsalita. Sandbox ang gamit ng TestFlight at hindi nito mapapatunayan ang pagiging kwalipikado ng dating user sa production.
+Kailangan pa ng ilang salin ang pagsusuri ng katutubong tagapagsalita. Sandbox ang gamit ng Ang bagong puhunan ay tinatayang kabuuan sa maturity. Suriin ang aktuwal na halaga ng bangko. Papalitan ng pagkumpirma ang kasalukuyang tala. TestFlight at hindi nito mapapatunayan ang pagiging kwalipikado ng dating user sa production.
 
 Ibigay ang wika, device at mga hakbang sa pag-ulit ng problema sa GitHub:
 https://github.com/bitlap/iAssets/issues

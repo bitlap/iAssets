@@ -75,6 +75,10 @@ class AssetConfig {
   static String get daysRemaining => L10n.t('daysRemaining');
   static String get expired => L10n.t('expired');
   static String get durationMonths => L10n.t('durationMonths');
+  static String get depositRollover => L10n.t('depositRollover');
+  static String get depositRolloverHint => L10n.t('depositRolloverHint');
+  static String get assetActions => L10n.t('assetActions');
+  static String get assetSaveFailed => L10n.t('assetSaveFailed');
 
   // 头部/卡片
   static String get assetCountLabel => L10n.t('assetCountLabel');

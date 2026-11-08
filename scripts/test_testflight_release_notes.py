@@ -8,9 +8,9 @@ import testflight_release_notes as renderer
 
 
 class TestFlightReleaseNotesTests(unittest.TestCase):
-    def test_every_language_has_notes_for_both_current_builds(self):
+    def test_every_language_has_notes_for_current_build(self):
         for code, name in renderer.languages():
-            for build in ['10', '22']:
+            for build in ['23']:
                 with self.subTest(language=code, build=build):
                     result = renderer.render('2.2.0', build, code)
                     self.assertTrue(result.startswith(f'2.2.0 ({build})\n'))

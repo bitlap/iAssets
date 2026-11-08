@@ -373,7 +373,8 @@ const Map<String, String> stringsDa = {
   "toastInvalidNav": "Indtast en gyldig NAV",
   "toastDeleted": "Slettet {name}",
   "toastSaved": "Gemt",
-  "toastCrossSection": "Kan ikke flytte til en anden kategori",
+  "toastCrossSection":
+      "Kan ikke flyttes til en kategori med en anden indtastningsformular",
   "emptyTitle": "Ingen aktiver endnu",
   "emptySubtitle":
       "Tryk på + for at tilføje kontanter, indskud eller investeringer",
@@ -392,7 +393,7 @@ const Map<String, String> stringsDa = {
   "depositWealthLabel": "Andre aktiver",
   "assetCategoryChoose": "Vælg en kategori",
   "assetCategoryManage": "Administrer kategori",
-  "assetCategoryMove": "Flyt til kategori",
+  "assetCategoryMove": "Skift kategori",
   "assetCategoryTemplates": "Skabeloner",
   "assetCategoryCustom": "Brugerdefineret kategori",
   "assetCategoryRename": "Omdøb kategori",
@@ -714,4 +715,10 @@ const Map<String, String> stringsDa = {
   "iosFaceIDUsage": "Lås op for iAssets og beskyt dine økonomiske oplysninger.",
   "feedbackOpenSource":
       "Denne software er open source. Send forslag eller rapportér problemer på GitHub.",
+  "assetActions": "Handlinger",
+  "depositRollover": "Genindsæt kapital og renter",
+  "depositRolloverHint":
+      "Den nye hovedstol er det anslåede beløb ved udløb. Kontroller bankens faktiske beløb. Bekræftelse erstatter den aktuelle post.",
+  "assetSaveFailed":
+      "Kunne ikke gemme. Den oprindelige post er uændret. Prøv igen.",
 };

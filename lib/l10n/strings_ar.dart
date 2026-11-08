@@ -369,7 +369,7 @@ const Map<String, String> stringsAr = {
   "toastInvalidNav": "أدخل NAV صالحًا",
   "toastDeleted": "تم حذف {name}",
   "toastSaved": "تم الحفظ",
-  "toastCrossSection": "لا يمكن الانتقال إلى فئة أخرى",
+  "toastCrossSection": "لا يمكن النقل إلى فئة ذات نموذج إدخال مختلف",
   "emptyTitle": "لا توجد أصول حتى الآن",
   "emptySubtitle": "اضغط على + لإضافة النقود أو الودائع أو الاستثمارات",
   "defaultNameFallback": "هذا البند",
@@ -387,7 +387,7 @@ const Map<String, String> stringsAr = {
   "depositWealthLabel": "أصول أخرى",
   "assetCategoryChoose": "اختر فئة",
   "assetCategoryManage": "إدارة الفئة",
-  "assetCategoryMove": "انتقل إلى الفئة",
+  "assetCategoryMove": "تغيير الفئة",
   "assetCategoryTemplates": "قوالب",
   "assetCategoryCustom": "فئة مخصصة",
   "assetCategoryRename": "إعادة تسمية الفئة",
@@ -701,4 +701,9 @@ const Map<String, String> stringsAr = {
   "iosFaceIDUsage": "قم بفتح iAssets واحمي معلوماتك المالية.",
   "feedbackOpenSource":
       "هذا البرنامج مفتوح المصدر. يمكنك تقديم اقتراحات أو الإبلاغ عن مشكلات على GitHub.",
+  "assetActions": "إجراءات",
+  "depositRollover": "إعادة إيداع الأصل والفائدة",
+  "depositRolloverHint":
+      "يُملأ أصل المبلغ الجديد بإجمالي الاستحقاق التقديري. تحقق من مبلغ البنك الفعلي. سيستبدل التأكيد السجل الحالي.",
+  "assetSaveFailed": "تعذر الحفظ. السجل الأصلي لم يتغير. حاول مجددًا.",
 };

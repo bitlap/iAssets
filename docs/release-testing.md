@@ -18,7 +18,8 @@
 | --- | --- | --- |
 | 股票搜索与行情 | 各市场搜索、报价币种/单位、延迟/缺失、数据源隔离、失败重试 | `test/global_stock_widgets_test.dart`、`test/services/global_stock_search_test.dart`、`test/services/lse_currency_quote_test.dart`、`test/services/quote_source_isolation_test.dart` |
 | 交易与收益 | 买卖、部分卖出、平仓、费用、股息税率、历史记录和收益曲线 | `test/utils/stock_calculator_test.dart`、`test/services/stock_data_manager_test.dart`、`test/stock_close_widget_test.dart`、`test/profit_chart_test.dart` |
-| 资产分类与记录 | 内置/地区/自定义分类、增删改、排序、移动和金额汇总 | `test/asset_categories_test.dart`、`test/asset_category_sheet_test.dart`、`test/utils/asset_calculator_test.dart`、`test/utils/asset_reorder_test.dart`、`test/asset_reorder_widget_test.dart` |
+| 资产分类与记录 | 内置/地区/自定义分类、增删改、排序、移动和金额汇总 | `test/asset_categories_test.dart`、`test/asset_category_sheet_test.dart`、`test/utils/asset_calculator_test.dart`、`test/utils/asset_reorder_test.dart`、`test/asset_reorder_widget_test.dart`、`test/asset_move_test.dart`（同模板拖动/修改分类、选择取消、iPad 列表宽度、样式切换、错误提示与空菜单） |
+| 定期本息转存 | 33 语言预填、实际银行金额/新利率、到期限制、取消、免费超额记录更新、保存失败重试、单笔落盘与金额汇总 | `test/time_deposit_rollover_test.dart`；另做真机到期转存验收 |
 | 数字币 | 普通/带单账户、只读权限、现货/合约、估值不完整、断网和缓存保留 | `test/crypto/exchange_client_test.dart`、`test/crypto/crypto_store_test.dart`、`test/crypto/crypto_widgets_test.dart` |
 | 汇率与数字输入 | 币种换算、旧单位兼容、本地小数/数字、非法输入和回填后保存 | `test/utils/currency_profit_test.dart`、`test/native_currency_widgets_test.dart`、`test/localized_number_input_test.dart`、`test/localized_financial_forms_test.dart` |
 | 存储、同步与备份 | 旧数据读取、往返序列化、导入导出、冲突、损坏备份、恢复失败 | `test/services/serde_test.dart`、`test/services/backup_service_test.dart`；另做 iCloud 多设备实测 |

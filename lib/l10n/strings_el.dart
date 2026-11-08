@@ -376,7 +376,8 @@ const Map<String, String> stringsEl = {
   "toastInvalidNav": "Εισαγάγετε ένα έγκυρο NAV",
   "toastDeleted": "Διαγράφηκε το {name}",
   "toastSaved": "Αποθηκεύτηκε",
-  "toastCrossSection": "Δεν είναι δυνατή η μετάβαση σε άλλη κατηγορία",
+  "toastCrossSection":
+      "Δεν είναι δυνατή η μετακίνηση σε κατηγορία με διαφορετική φόρμα εισαγωγής",
   "emptyTitle": "Δεν υπάρχουν ακόμη περιουσιακά στοιχεία",
   "emptySubtitle":
       "Πατήστε + για να προσθέσετε μετρητά, καταθέσεις ή επενδύσεις",
@@ -395,7 +396,7 @@ const Map<String, String> stringsEl = {
   "depositWealthLabel": "Άλλα περιουσιακά στοιχεία",
   "assetCategoryChoose": "Επιλέξτε μια κατηγορία",
   "assetCategoryManage": "Διαχείριση Κατηγορίας",
-  "assetCategoryMove": "Μετακίνηση στην Κατηγορία",
+  "assetCategoryMove": "Αλλαγή κατηγορίας",
   "assetCategoryTemplates": "Πρότυπα",
   "assetCategoryCustom": "Προσαρμοσμένη κατηγορία",
   "assetCategoryRename": "Μετονομασία κατηγορίας",
@@ -731,4 +732,10 @@ const Map<String, String> stringsEl = {
       "Ξεκλειδώστε το iAssets και προστατέψτε τα οικονομικά σας στοιχεία.",
   "feedbackOpenSource":
       "Αυτό το λογισμικό είναι ανοικτού κώδικα. Μπορείτε να υποβάλετε προτάσεις ή να αναφέρετε προβλήματα στο GitHub.",
+  "assetActions": "Ενέργειες",
+  "depositRollover": "Ανανέωση κεφαλαίου και τόκων",
+  "depositRolloverHint":
+      "Το νέο κεφάλαιο είναι το εκτιμώμενο σύνολο στη λήξη. Ελέγξτε το πραγματικό ποσό της τράπεζας. Η επιβεβαίωση αντικαθιστά την τρέχουσα εγγραφή.",
+  "assetSaveFailed":
+      "Η αποθήκευση απέτυχε. Η αρχική εγγραφή δεν άλλαξε. Δοκιμάστε ξανά.",
 };

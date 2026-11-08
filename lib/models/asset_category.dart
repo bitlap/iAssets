@@ -16,6 +16,30 @@ class AssetCategory {
     this.customName,
   });
 
+  /// 现金、活期和公积金共用余额填写模板。
+  bool accepts(AssetType type) => _template(type) == _template(calculationType);
+
+  static AssetType _template(AssetType type) => switch (type) {
+    AssetType.timeDeposit => AssetType.timeDeposit,
+    AssetType.wealthProduct => AssetType.wealthProduct,
+    _ => AssetType.cash,
+  };
+
+  /// 返回新记录，校验失败时不修改原资产。
+  AssetBase moveAsset(AssetBase asset) {
+    if (!accepts(asset.type)) {
+      throw ArgumentError('Incompatible asset template');
+    }
+    final moved = AssetBase.fromJson({
+      ...asset.toJson(),
+      'type': calculationType.name,
+      'categoryId': id,
+      'updatedAt': DateTime.now().toIso8601String(),
+    });
+    moved.createdAt = asset.createdAt;
+    return moved;
+  }
+
   bool get isBuiltIn => AssetType.values.any((type) => type.name == id);
 
   AssetCategory renamed(String name) => AssetCategory(

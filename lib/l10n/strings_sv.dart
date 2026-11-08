@@ -373,7 +373,8 @@ const Map<String, String> stringsSv = {
   "toastInvalidNav": "Ange en giltig NAV",
   "toastDeleted": "Raderade {name}",
   "toastSaved": "Sparad",
-  "toastCrossSection": "Kan inte flytta till en annan kategori",
+  "toastCrossSection":
+      "Kan inte flyttas till en kategori med ett annat inmatningsformulär",
   "emptyTitle": "Inga tillgångar ännu",
   "emptySubtitle":
       "Tryck på + för att lägga till kontanter, insättningar eller investeringar",
@@ -392,7 +393,7 @@ const Map<String, String> stringsSv = {
   "depositWealthLabel": "Övriga tillgångar",
   "assetCategoryChoose": "Välj en kategori",
   "assetCategoryManage": "Hantera kategori",
-  "assetCategoryMove": "Flytta till kategori",
+  "assetCategoryMove": "Ändra kategori",
   "assetCategoryTemplates": "Mallar",
   "assetCategoryCustom": "Anpassad kategori",
   "assetCategoryRename": "Byt namn på kategori",
@@ -718,4 +719,10 @@ const Map<String, String> stringsSv = {
   "iosFaceIDUsage": "Lås upp iAssets och skydda din finansiella information.",
   "feedbackOpenSource":
       "Detta är programvara med öppen källkod. Lämna förslag eller rapportera problem på GitHub.",
+  "assetActions": "Åtgärder",
+  "depositRollover": "Återinvestera kapital och ränta",
+  "depositRolloverHint":
+      "Det nya kapitalet är det uppskattade beloppet vid förfall. Kontrollera bankens faktiska belopp. Bekräftelsen ersätter den aktuella posten.",
+  "assetSaveFailed":
+      "Kunde inte spara. Ursprungsposten är oförändrad. Försök igen.",
 };

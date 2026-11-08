@@ -369,7 +369,7 @@ const Map<String, String> stringsHe = {
   "toastInvalidNav": "הזן NAV חוקי",
   "toastDeleted": "נמחק {name}",
   "toastSaved": "נשמר",
-  "toastCrossSection": "לא ניתן לעבור לקטגוריה אחרת",
+  "toastCrossSection": "לא ניתן להעביר לקטגוריה עם טופס קלט שונה",
   "emptyTitle": "עדיין אין נכסים",
   "emptySubtitle": "הקש על + כדי להוסיף מזומנים, פיקדונות או השקעות",
   "defaultNameFallback": "פריט זה",
@@ -387,7 +387,7 @@ const Map<String, String> stringsHe = {
   "depositWealthLabel": "נכסים אחרים",
   "assetCategoryChoose": "בחר קטגוריה",
   "assetCategoryManage": "נהל קטגוריה",
-  "assetCategoryMove": "עבור לקטגוריה",
+  "assetCategoryMove": "שינוי קטגוריה",
   "assetCategoryTemplates": "תבניות",
   "assetCategoryCustom": "קטגוריה מותאמת אישית",
   "assetCategoryRename": "שנה את שם הקטגוריה",
@@ -692,4 +692,9 @@ const Map<String, String> stringsHe = {
   "iosFaceIDUsage": "פתח את הנעילה של iAssets והגן על המידע הפיננסי שלך.",
   "feedbackOpenSource":
       "זוהי תוכנה בקוד פתוח. אפשר להציע הצעות או לדווח על בעיות ב-GitHub.",
+  "assetActions": "פעולות",
+  "depositRollover": "חידוש הקרן והריבית",
+  "depositRolloverHint":
+      "הקרן החדשה היא הסכום המשוער לפדיון. בדקו את הסכום בפועל בבנק. האישור יחליף את הרשומה הנוכחית.",
+  "assetSaveFailed": "השמירה נכשלה. הרשומה המקורית לא השתנתה. נסו שוב.",
 };
