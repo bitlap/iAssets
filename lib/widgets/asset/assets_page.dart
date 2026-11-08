@@ -1051,7 +1051,7 @@ class AssetsPageState extends State<AssetsPage> with WidgetsBindingObserver {
       if (daysLeft <= 0) detailColor = AssetStyle.deposit;
     } else if (asset is WealthProduct) {
       detail =
-          '${AssetConfig.fieldShares} ${CurrencyUtil.formatCompact(asset.shares)}\n${AssetConfig.fieldNav} ${CurrencyUtil.formatRate(asset.nav)}';
+          '${AssetConfig.fieldNav} ${CurrencyUtil.formatRate(asset.nav)}\n${AssetConfig.fieldShares} ${CurrencyUtil.formatCompact(asset.shares)}';
     }
     final category = _categories.firstWhere(
       (category) => category.id == asset.categoryKey,
