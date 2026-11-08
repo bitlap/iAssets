@@ -22,24 +22,24 @@ Apple 的[可本地化语言列表](https://developer.apple.com/help/app-store-c
 | `ja` | 日本語 | `ja` | [文案](../changelog/app_store/ja.txt) |
 | `ko` | 한국어 | `ko` | [文案](../changelog/app_store/ko.txt) |
 | `fr` | Français | `fr-FR` | [文案](../changelog/app_store/fr.txt) |
-| `de` | Deutsch | `de` | [文案](../changelog/app_store/de.txt) |
+| `de` | Deutsch | `de-DE` | [文案](../changelog/app_store/de.txt) |
 | `es` | Español | `es-ES` | [文案](../changelog/app_store/es.txt) |
 | `pt_BR` | Português (Brasil) | `pt-BR` | [文案](../changelog/app_store/pt_BR.txt) |
 | `it` | Italiano | `it` | [文案](../changelog/app_store/it.txt) |
 | `ru` | Русский | `ru` | [文案](../changelog/app_store/ru.txt) |
-| `ar` | العربية | `ar` | [文案](../changelog/app_store/ar.txt) |
+| `ar` | العربية | `ar-SA` | [文案](../changelog/app_store/ar.txt) |
 | `hi` | हिन्दी | `hi` | [文案](../changelog/app_store/hi.txt) |
 | `id` | Bahasa Indonesia | `id` | [文案](../changelog/app_store/id.txt) |
 | `vi` | Tiếng Việt | `vi` | [文案](../changelog/app_store/vi.txt) |
 | `th` | ไทย | `th` | [文案](../changelog/app_store/th.txt) |
 | `tr` | Türkçe | `tr` | [文案](../changelog/app_store/tr.txt) |
-| `nl` | Nederlands | `nl` | [文案](../changelog/app_store/nl.txt) |
+| `nl` | Nederlands | `nl-NL` | [文案](../changelog/app_store/nl.txt) |
 | `pl` | Polski | `pl` | [文案](../changelog/app_store/pl.txt) |
 | `pt_PT` | Português (Portugal) | `pt-PT` | [文案](../changelog/app_store/pt_PT.txt) |
 | `uk` | Українська | `uk` | [文案](../changelog/app_store/uk.txt) |
 | `ms` | Bahasa Melayu | `ms` | [文案](../changelog/app_store/ms.txt) |
 | `fil` | Filipino | 未列专属语言；按平台回退 | [文案](../changelog/app_store/fil.txt) |
-| `bn` | বাংলা | `bn` | [文案](../changelog/app_store/bn.txt) |
+| `bn` | বাংলা | `bn-BD` | [文案](../changelog/app_store/bn.txt) |
 | `fa` | فارسی | 未列专属语言；按平台回退 | [文案](../changelog/app_store/fa.txt) |
 | `he` | עברית | `he` | [文案](../changelog/app_store/he.txt) |
 | `sv` | Svenska | `sv` | [文案](../changelog/app_store/sv.txt) |
@@ -50,7 +50,7 @@ Apple 的[可本地化语言列表](https://developer.apple.com/help/app-store-c
 | `ro` | Română | `ro` | [文案](../changelog/app_store/ro.txt) |
 | `el` | Ελληνικά | `el` | [文案](../changelog/app_store/el.txt) |
 
-最近一次已记录的后台回读仅覆盖 `zh-Hans`、`zh-Hant`、`en-US`，见 [2.2.0（10）发布记录](release-checks/2.2.0-10-testflight.md)。本次补齐本地文件没有上传其他语言；新增语言的后台发布、回读和人工校对仍需按发布清单执行。
+2.2.0 正式版准备阶段已保存并回读 32 个 App Store 版本语言条目：31 种平台支持的项目语言，加上保留的 `en-GB`；描述和更新说明均逐项一致。主语言为 `zh-Hans`，Filipino/波斯语使用平台回退，不能计为商店翻译。原有三语截图沿用，新增语言尚无单独翻译截图，按平台规则回退。后台保存不等于审核通过或上架，见 [2.2.0（22）正式发布记录](release-checks/2.2.0-22-app-store.md)。TestFlight 的最近一次记录仍仅覆盖三语，见 [内测记录](release-checks/2.2.0-10-testflight.md)。全部母语校对仍未完成。
 
 ## 更新与验证
 
