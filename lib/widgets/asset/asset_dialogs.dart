@@ -526,9 +526,11 @@ class _TimeDepositDialogState extends State<_TimeDepositDialog> {
             if (picked != null && mounted) setState(() => startDate = picked);
           }),
           const SizedBox(height: 12),
-          SwitchListTile.adaptive(
-            activeTrackColor: AppColors.accent.withValues(alpha: .45),
+          SwitchListTile(
+            activeTrackColor: AppColors.accent.withValues(alpha: .6),
             activeThumbColor: AppColors.accent,
+            inactiveThumbColor: AppColors.switchInactiveThumb,
+            inactiveTrackColor: AppColors.switchInactiveTrack,
             contentPadding: EdgeInsets.zero,
             title: Text(AssetConfig.depositAutoRenew, style: TextStyles.body13),
             subtitle: Text(

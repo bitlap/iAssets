@@ -1047,7 +1047,7 @@ class AssetsPageState extends State<AssetsPage> with WidgetsBindingObserver {
           ? AssetConfig.daysRemaining.replaceAll('{days}', '$daysLeft')
           : AssetConfig.expired;
       detail =
-          '${AssetConfig.fieldAnnualRate.replaceAll(' (%)', '')} ${CurrencyUtil.formatCompact(asset.annualRate)}%\n${AssetConfig.depositMaturityDate.replaceAll('{date}', DateFormat.yMd(L10n.intlLocale).format(asset.endDate))}${asset.autoRenew ? ' · ${AssetConfig.depositAutoRenew}' : ''}\n$term';
+          '$term\n${AssetConfig.fieldAnnualRate.replaceAll(' (%)', '')} ${CurrencyUtil.formatCompact(asset.annualRate)}%\n${AssetConfig.depositMaturityDate.replaceAll('{date}', DateFormat.yMd(L10n.intlLocale).format(asset.endDate))}${asset.autoRenew ? ' · ${AssetConfig.depositAutoRenew}' : ''}';
       if (daysLeft <= 0) detailColor = AssetStyle.deposit;
     } else if (asset is WealthProduct) {
       detail =

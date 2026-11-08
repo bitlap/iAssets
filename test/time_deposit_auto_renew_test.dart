@@ -339,7 +339,24 @@ void main() {
         );
         expect(card.detailMaxLines, 3);
         expect(card.fitDetailLines, isTrue);
-        expect(card.detail!.split('\n'), hasLength(3));
+        final detailLines = card.detail!.split('\n');
+        expect(detailLines, hasLength(3));
+        expect(
+          detailLines[2],
+          contains(L10n.t('depositAutoRenew')),
+          reason: language,
+        );
+        expect(
+          detailLines[2],
+          contains(DateFormat.yMd(L10n.intlLocale).format(sample().endDate)),
+          reason: language,
+        );
+        expect(
+          detailLines[0],
+          isNot(contains(L10n.t('depositAutoRenew'))),
+          reason: language,
+        );
+        expect(detailLines[1], endsWith('%'), reason: language);
         final detailText = find.text(card.detail!);
         expect(tester.widget<Text>(detailText).softWrap, isFalse);
         final detailRect = tester.getRect(detailText);
