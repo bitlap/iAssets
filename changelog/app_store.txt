@@ -11,7 +11,7 @@ iAssets — 看清资产，轻松记录
 【隐私与体验】
 • 支持 Face ID / Touch ID 应用锁和一键隐藏金额
 • 股票、手动资产和设置支持 iCloud 同步；数字币凭据仅保存在本机
-• 支持简体中文、繁体中文、英文和深浅主题
+• 支持包括简体中文、繁体中文、英文在内的 33 种语言，以及深浅主题
 • 免费使用基础功能，Pro 提供订阅或一次性买断
 
 使用条款（Apple 标准最终用户许可协议）：https://www.apple.com/legal/internet-services/itunes/dev/stdeula/

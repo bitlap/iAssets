@@ -119,7 +119,7 @@ class StockCard extends StatelessWidget {
                     ),
                     holdings: _buildSharesAndPrice(),
                     profit: Align(
-                      alignment: Alignment.centerRight,
+                      alignment: AlignmentDirectional.centerEnd,
                       child: _buildProfitLoss(),
                     ),
                   ),
@@ -250,14 +250,14 @@ class StockCard extends StatelessWidget {
   Widget _buildSharesAndPrice() {
     final changeColor = ProfitUtil.colorOf(stock.changePercent);
     return Align(
-      alignment: Alignment.centerLeft,
+      alignment: AlignmentDirectional.centerStart,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
           FittedBox(
             fit: BoxFit.scaleDown,
-            alignment: Alignment.centerLeft,
+            alignment: AlignmentDirectional.centerStart,
             child: SensitiveText(
               '${CurrencyUtil.formatRate(stock.shares)}${StockConfig.stockSharesSuffix}',
               style: TextStyles.smallBold.copyWith(fontWeight: FontWeight.bold),
@@ -266,7 +266,7 @@ class StockCard extends StatelessWidget {
           const SizedBox(height: 4),
           FittedBox(
             fit: BoxFit.scaleDown,
-            alignment: Alignment.centerLeft,
+            alignment: AlignmentDirectional.centerStart,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
@@ -303,7 +303,7 @@ class StockCard extends StatelessWidget {
         const SizedBox(height: 4),
         FittedBox(
           fit: BoxFit.scaleDown,
-          alignment: Alignment.centerRight,
+          alignment: AlignmentDirectional.centerEnd,
           child: SensitiveText(
             ProfitUtil.amount(stock.profitLossAmount),
             style: TextStyles.smallBold.copyWith(color: profitColor),
@@ -311,7 +311,7 @@ class StockCard extends StatelessWidget {
         ),
         FittedBox(
           fit: BoxFit.scaleDown,
-          alignment: Alignment.centerRight,
+          alignment: AlignmentDirectional.centerEnd,
           child: SensitiveText(
             ProfitUtil.percent(stock.profitLossPercent),
             style: TextStyles.smallBold.copyWith(color: profitColor),
@@ -459,14 +459,7 @@ class StockCard extends StatelessWidget {
               alignment: WrapAlignment.end,
               children: [
                 _buildTradeCount(StockConfig.opBuy, stats.buyCount),
-                Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text('·', style: TextStyles.caption),
-                    const SizedBox(width: 8),
-                    _buildTradeCount(StockConfig.opSell, stats.sellCount),
-                  ],
-                ),
+                _buildTradeCount(StockConfig.opSell, stats.sellCount),
               ],
             ),
           ),
@@ -489,7 +482,7 @@ class StockCard extends StatelessWidget {
         const SizedBox(height: 5),
         FittedBox(
           fit: BoxFit.scaleDown,
-          alignment: Alignment.centerLeft,
+          alignment: AlignmentDirectional.centerStart,
           child: SensitiveText(
             value,
             style: TextStyles.valueMedium.copyWith(

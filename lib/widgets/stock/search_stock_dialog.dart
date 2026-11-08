@@ -337,7 +337,7 @@ class _SearchStockDialogState extends State<SearchStockDialog> {
                       });
                     },
                     child: Padding(
-                      padding: const EdgeInsets.only(right: 12),
+                      padding: const EdgeInsetsDirectional.only(end: 12),
                       child: Icon(
                         Icons.clear,
                         color: AppColors.textSecondary,

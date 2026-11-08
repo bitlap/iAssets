@@ -1,3 +1,4 @@
+import 'package:intl/intl.dart';
 import 'package:assets/config/app_config.dart';
 import 'package:assets/l10n/l10n.dart';
 import 'package:assets/utils/market_util.dart';
@@ -27,16 +28,36 @@ class CurrencyUtil {
 
   /// 格式化价格显示（统一4位小数）
   static String formatRate(double? rate) {
-    return rate == null || !rate.isFinite ? '—' : rate.toStringAsFixed(4);
+    return rate == null || !rate.isFinite
+        ? '—'
+        : formatDecimal(rate, digits: 4);
   }
 
-  /// 紧凑格式化（简体中文超 100 万显示“万/亿”，其他语言用 K/M/B 缩写）
+  /// Locale-aware display only; persisted values and numeric inputs stay numeric.
+  static String formatDecimal(double value, {int digits = 2}) {
+    if (!value.isFinite) return '—';
+    final pattern = digits == 0 ? '0' : '0.${'0' * digits}';
+    return NumberFormat(pattern, L10n.intlLocale).format(value);
+  }
+
+  /// Keep existing Chinese/English thresholds; use local compact notation elsewhere.
   static String formatCompact(
     double value, {
     String Function(double)? formatBase,
   }) {
     if (!value.isFinite) return '—';
-    final fmt = formatBase ?? (v) => v.toStringAsFixed(2);
+    if (formatBase == null &&
+        !const {
+          L10n.langZh,
+          L10n.langZhHant,
+          L10n.langEn,
+        }.contains(L10n.currentLang)) {
+      if (value.abs() < 100000) return formatDecimal(value);
+      final formatter = NumberFormat.compact(locale: L10n.intlLocale)
+        ..maximumFractionDigits = 2;
+      return formatter.format(value);
+    }
+    final fmt = formatBase ?? (v) => formatDecimal(v);
     final fmtAbbr = formatBase ?? _fmtAbbr;
     if (L10n.currentLang == L10n.langZh) {
       if (value.abs() >= 100000000) {

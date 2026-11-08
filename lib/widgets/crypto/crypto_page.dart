@@ -285,7 +285,7 @@ class CryptoPageState extends State<CryptoPage>
                         (2, 'cryptoContracts'),
                       ])
                         Padding(
-                          padding: const EdgeInsets.only(right: 8),
+                          padding: const EdgeInsetsDirectional.only(end: 8),
                           child: FilterPill(
                             label: L10n.t(entry.$2),
                             selected: _tab == entry.$1,

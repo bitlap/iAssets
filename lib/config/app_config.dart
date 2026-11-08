@@ -18,6 +18,7 @@ class AppConfig {
   static const String defaultCurrency = 'USD';
 
   // 开发者信息
+  static const String repositoryUrl = 'https://github.com/bitlap/iAssets';
   static const String developerName = 'LI GUOBIN';
   static const String developerEmail = 'dreamylost@outlook.com';
   static const String developerWechat = 'naive_dddd';

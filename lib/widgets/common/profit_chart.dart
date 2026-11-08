@@ -222,7 +222,7 @@ class _ProfitChartWidgetState extends State<ProfitChartWidget> {
       children: _rangeOptions.map((option) {
         final isSelected = option.index == _selectedRange;
         return Padding(
-          padding: const EdgeInsets.only(right: 6),
+          padding: const EdgeInsetsDirectional.only(end: 6),
           child: GestureDetector(
             onTap: () => setState(() {
               _selectedRange = option.index;

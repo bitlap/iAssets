@@ -11,7 +11,7 @@ Key Features
 Privacy and Experience
 • Protect the app with Face ID / Touch ID and hide amounts with one tap
 • Sync stocks, manual assets and settings with iCloud; crypto credentials stay on your device
-• Choose Simplified Chinese, Traditional Chinese or English, with light and dark themes
+• Choose from 33 languages, including Simplified Chinese, Traditional Chinese and English, with light and dark themes
 • Use core features for free, or unlock Pro with a subscription or lifetime purchase
 
 Terms of Use (Apple Standard EULA): https://www.apple.com/legal/internet-services/itunes/dev/stdeula/

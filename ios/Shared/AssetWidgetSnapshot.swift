@@ -19,9 +19,15 @@ struct AssetWidgetSnapshot: Codable {
   func formattedUpdateTime(language: String, timeZone: TimeZone = .current) -> String {
     let formatter = DateFormatter()
     formatter.locale = Locale(identifier: language == "zh_Hant" ? "zh_TW" :
-                              language == "zh" ? "zh_CN" : "en_US")
+                              language == "zh" ? "zh_CN" : language)
     formatter.timeZone = timeZone
-    formatter.dateFormat = language == "en" ? "MMM d, HH:mm:ss" : "M月d日 HH:mm:ss"
+    if language == "en" {
+      formatter.dateFormat = "MMM d, HH:mm:ss"
+    } else if language == "zh" || language == "zh_Hant" {
+      formatter.dateFormat = "M月d日 HH:mm:ss"
+    } else {
+      formatter.setLocalizedDateFormatFromTemplate("MMMdHHmmss")
+    }
     return formatter.string(from: updatedAt)
   }
 

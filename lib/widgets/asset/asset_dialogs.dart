@@ -98,7 +98,9 @@ Future<AssetType?> showAddAssetSheet(BuildContext context) {
                       for (var i = 0; i < _assetOptions.length; i++) ...[
                         if (i > 0)
                           Padding(
-                            padding: const EdgeInsets.only(left: 62),
+                            padding: const EdgeInsetsDirectional.only(
+                              start: 62,
+                            ),
                             child: Divider(
                               thickness: 0.5,
                               height: 1,

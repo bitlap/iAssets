@@ -11,7 +11,7 @@ publish_to: 'none' # 如需发布到 pub.dev，可删除本行
 # iOS 版本说明：
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 # Windows 使用版本号作为产品和文件版本的前三段，构建号作为后缀。
-version: 2.1.0+9
+version: 2.2.0+9
 
 environment:
   sdk: ^3.12.2

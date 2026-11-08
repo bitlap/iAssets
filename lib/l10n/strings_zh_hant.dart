@@ -665,4 +665,18 @@ const Map<String, String> stringsZhHant = {
   "proUnlockLifetime": "永久解鎖 Pro",
   "proSubscribe": "解鎖 iAssets Pro",
   "proUpgradeLifetime": "升級為永久買斷",
+  // iOS permissions and widgets (also exported to native resources).
+  "widgetTotal": "總資產",
+  "widgetStocks": "股票",
+  "widgetCrypto": "數字幣",
+  "widgetOther": "其他資產",
+  "widgetUpdated": "更新於",
+  "widgetStale": "已過期",
+  "widgetIncomplete": "估值不完整",
+  "widgetEmpty": "開啟 App 更新",
+  "widgetHidden": "金額已隱藏",
+  "widgetDescription": "查看總資產、組合摘要及更新時間。",
+  "iosPhotoLibraryUsage": "選擇圖片作為自訂股票的顯示圖片。",
+  "iosFaceIDUsage": "解鎖 iAssets 並保護你的財務資訊。",
+  "feedbackOpenSource": "這是開源軟體，歡迎在 GitHub 提交建議或回報問題。",
 };

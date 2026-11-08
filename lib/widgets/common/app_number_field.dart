@@ -3,6 +3,29 @@ import 'package:flutter/services.dart';
 import 'app_colors.dart';
 import 'app_ui.dart';
 
+/// Normalize decimal keyboards to the canonical numeric text parsed by forms.
+class LocalizedDecimalInputFormatter extends TextInputFormatter {
+  const LocalizedDecimalInputFormatter();
+
+  @override
+  TextEditingValue formatEditUpdate(
+    TextEditingValue oldValue,
+    TextEditingValue newValue,
+  ) {
+    final normalized = String.fromCharCodes(
+      newValue.text.runes.map((rune) {
+        for (final zero in [0x0660, 0x06f0, 0x0966, 0x09e6, 0x0e50, 0xff10]) {
+          if (rune >= zero && rune <= zero + 9) return rune - zero + 0x30;
+        }
+        return rune == 0x2c || rune == 0x066b ? 0x2e : rune;
+      }),
+    );
+    return RegExp(r'^\d*\.?\d*$').hasMatch(normalized)
+        ? newValue.copyWith(text: normalized)
+        : oldValue;
+  }
+}
+
 /// 通用数字输入框 - 统一项目中所有数字输入框的样式
 class AppNumberField extends StatelessWidget {
   final TextEditingController controller;
@@ -60,9 +83,7 @@ class AppNumberField extends StatelessWidget {
         TextField(
           controller: controller,
           keyboardType: const TextInputType.numberWithOptions(decimal: true),
-          inputFormatters: [
-            FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d*$')),
-          ],
+          inputFormatters: [const LocalizedDecimalInputFormatter()],
           style: TextStyles.inputText,
           decoration: _decoration(hintText),
         ),

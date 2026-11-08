@@ -29,5 +29,5 @@ class ProfitUtil {
   /// 带符号的百分比（+1.23%）
   static String percent(double value, {int digits = 2}) => !value.isFinite
       ? '—'
-      : '${signOf(value)}${value.abs().toStringAsFixed(digits)}%';
+      : '${signOf(value)}${CurrencyUtil.formatDecimal(value.abs(), digits: digits)}%';
 }

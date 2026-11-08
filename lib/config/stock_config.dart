@@ -1,3 +1,4 @@
+import 'package:intl/intl.dart';
 import '../l10n/l10n.dart';
 
 class StockConfig {
@@ -190,8 +191,22 @@ class StockConfig {
   static String get recordsEditTitle => L10n.t('recordsEditTitle');
   static String get recordsEditPrice => L10n.t('recordsEditPrice');
   static String get recordsEditShares => L10n.t('recordsEditShares');
-  static const String recordsDatePattern = 'yyyy-MM-dd';
-  static const String recordsDateTimePattern = 'yyyy-MM-dd HH:mm';
+  static String get recordsDatePattern =>
+      const {
+        L10n.langZh,
+        L10n.langZhHant,
+        L10n.langEn,
+      }.contains(L10n.currentLang)
+      ? 'yyyy-MM-dd'
+      : DateFormat.yMd(L10n.intlLocale).pattern!;
+  static String get recordsDateTimePattern =>
+      const {
+        L10n.langZh,
+        L10n.langZhHant,
+        L10n.langEn,
+      }.contains(L10n.currentLang)
+      ? 'yyyy-MM-dd HH:mm'
+      : DateFormat.yMd(L10n.intlLocale).add_Hm().pattern!;
   static const String recordsTimesSign = ' × ';
 
   // 操作结果 文案

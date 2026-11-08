@@ -35,8 +35,7 @@ class AssetCardFrame extends StatelessWidget {
     this.trailing,
   });
 
-  String _f(DateTime d) =>
-      '${d.year}-${d.month.toString().padLeft(2, '0')}-${d.day.toString().padLeft(2, '0')} ${d.hour.toString().padLeft(2, '0')}:${d.minute.toString().padLeft(2, '0')}';
+  String _f(DateTime d) => formatRefreshTime(d);
 
   @override
   Widget build(BuildContext context) {
@@ -53,10 +52,10 @@ class AssetCardFrame extends StatelessWidget {
       ),
       child: Stack(
         children: [
-          Positioned(
+          PositionedDirectional(
             top: 0,
             bottom: 0,
-            left: 0,
+            start: 0,
             child: ColoredBox(
               color: color.withValues(alpha: .65),
               child: const SizedBox(width: 3),
@@ -72,7 +71,7 @@ class AssetCardFrame extends StatelessWidget {
                   leading ?? const SizedBox(width: 16),
                   Expanded(
                     child: Padding(
-                      padding: const EdgeInsets.only(right: 14),
+                      padding: const EdgeInsetsDirectional.only(end: 14),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisSize: MainAxisSize.min,
@@ -116,7 +115,7 @@ class AssetCardFrame extends StatelessWidget {
                                       1.2;
                               final amountText = FittedBox(
                                 fit: BoxFit.scaleDown,
-                                alignment: Alignment.centerLeft,
+                                alignment: AlignmentDirectional.centerStart,
                                 child: SensitiveText(
                                   amount,
                                   style: TextStyles.sectionTitle.copyWith(
@@ -131,8 +130,8 @@ class AssetCardFrame extends StatelessWidget {
                                 maxLines: 2,
                                 overflow: TextOverflow.ellipsis,
                                 textAlign: stacked
-                                    ? TextAlign.left
-                                    : TextAlign.right,
+                                    ? TextAlign.start
+                                    : TextAlign.end,
                                 style: TextStyles.caption.copyWith(
                                   color: detailColor ?? AppColors.textSecondary,
                                 ),
@@ -177,7 +176,7 @@ class AssetCardFrame extends StatelessWidget {
                                       style: TextStyles.caption.copyWith(
                                         color: AppColors.textSecondary,
                                       ),
-                                      textAlign: TextAlign.left,
+                                      textAlign: TextAlign.start,
                                     ),
                                   ),
                                 if (createdAt != null && updatedAt != null)
@@ -192,7 +191,7 @@ class AssetCardFrame extends StatelessWidget {
                                       style: TextStyles.caption.copyWith(
                                         color: AppColors.textSecondary,
                                       ),
-                                      textAlign: TextAlign.right,
+                                      textAlign: TextAlign.end,
                                     ),
                                   ),
                               ],

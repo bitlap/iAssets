@@ -1,3 +1,5 @@
+import '../../l10n/l10n.dart';
+import 'package:intl/intl.dart';
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'app_colors.dart';
@@ -180,10 +182,13 @@ class TextStyles {
 
 /// 格式化时间用于“最近更新”副标题
 String formatRefreshTime(DateTime t) {
-  return '${t.year}-${t.month.toString().padLeft(2, '0')}-'
-      '${t.day.toString().padLeft(2, '0')} '
-      '${t.hour.toString().padLeft(2, '0')}:'
-      '${t.minute.toString().padLeft(2, '0')}';
+  return const {
+        L10n.langZh,
+        L10n.langZhHant,
+        L10n.langEn,
+      }.contains(L10n.currentLang)
+      ? DateFormat('yyyy-MM-dd HH:mm').format(t)
+      : DateFormat.yMd(L10n.intlLocale).add_Hm().format(t);
 }
 
 // ═══════════════════════════════════════

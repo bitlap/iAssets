@@ -67,8 +67,8 @@ class _OperationRecordsTabState extends State<OperationRecordsTab> {
               borderRadius: BorderRadius.circular(12),
               border: Border.all(color: Colors.red.withValues(alpha: 0.4)),
             ),
-            alignment: Alignment.centerRight,
-            padding: const EdgeInsets.only(right: 16),
+            alignment: AlignmentDirectional.centerEnd,
+            padding: const EdgeInsetsDirectional.only(end: 16),
             child: Icon(Icons.delete, color: AppColors.redAccent, size: 20),
           ),
           confirmDismiss: (_) => ConfirmDeleteDialog.show(

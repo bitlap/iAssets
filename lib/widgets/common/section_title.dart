@@ -160,7 +160,7 @@ class AnimatedHomeHeader extends StatelessWidget {
             child: SizedBox(
               height: 54,
               child: Stack(
-                alignment: Alignment.topLeft,
+                alignment: AlignmentDirectional.topStart,
                 children: [
                   _buildTitle(
                     title: stockTitle,
@@ -233,7 +233,7 @@ class AnimatedHomeHeader extends StatelessWidget {
             SizedBox(
               height: 32,
               child: Align(
-                alignment: Alignment.centerLeft,
+                alignment: AlignmentDirectional.centerStart,
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [

@@ -266,79 +266,84 @@ class _SettingsPageState extends State<SettingsPage> {
       borderRadius: BorderRadius.circular(14),
       border: Border.all(color: AppColors.border, width: 0.5),
     ),
-    child: Column(
-      children: [
-        ValueListenableBuilder<bool>(
-          valueListenable: PrivacyService.instance.biometricLock,
-          builder: (context, enabled, _) => SwitchListTile(
-            secondary: Icon(Icons.fingerprint, color: AppColors.accent),
-            title: Text(L10n.t('privacyBiometricLock')),
-            subtitle: Text(L10n.t('privacyBiometricHint')),
-            value: enabled,
-            activeTrackColor: AppColors.accent.withValues(alpha: .45),
-            activeThumbColor: AppColors.accent,
-            onChanged: (value) async {
-              try {
-                if (value) {
-                  final result = await PrivacyService.instance
-                      .enableBiometricLock(L10n.t('privacyAuthReason'));
-                  if (result != BiometricSetupResult.enabled &&
-                      context.mounted) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text(
-                          L10n.t(
-                            result == BiometricSetupResult.unavailable
-                                ? 'privacyUnavailable'
-                                : 'privacyAuthCanceled',
+    child: Material(
+      color: Colors.transparent,
+      borderRadius: BorderRadius.circular(14),
+      clipBehavior: Clip.antiAlias,
+      child: Column(
+        children: [
+          ValueListenableBuilder<bool>(
+            valueListenable: PrivacyService.instance.biometricLock,
+            builder: (context, enabled, _) => SwitchListTile(
+              secondary: Icon(Icons.fingerprint, color: AppColors.accent),
+              title: Text(L10n.t('privacyBiometricLock')),
+              subtitle: Text(L10n.t('privacyBiometricHint')),
+              value: enabled,
+              activeTrackColor: AppColors.accent.withValues(alpha: .45),
+              activeThumbColor: AppColors.accent,
+              onChanged: (value) async {
+                try {
+                  if (value) {
+                    final result = await PrivacyService.instance
+                        .enableBiometricLock(L10n.t('privacyAuthReason'));
+                    if (result != BiometricSetupResult.enabled &&
+                        context.mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(
+                            L10n.t(
+                              result == BiometricSetupResult.unavailable
+                                  ? 'privacyUnavailable'
+                                  : 'privacyAuthCanceled',
+                            ),
                           ),
                         ),
-                      ),
+                      );
+                    }
+                  } else {
+                    await PrivacyService.instance.disableBiometricLock();
+                  }
+                } catch (_) {
+                  if (context.mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text(L10n.t('privacyAuthFailed'))),
                     );
                   }
-                } else {
-                  await PrivacyService.instance.disableBiometricLock();
                 }
-              } catch (_) {
-                if (context.mounted) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text(L10n.t('privacyAuthFailed'))),
-                  );
-                }
-              }
-            },
+              },
+            ),
           ),
-        ),
-        _buildGroupDivider(),
-        ValueListenableBuilder<bool>(
-          valueListenable: PrivacyService.instance.hideAmounts,
-          builder: (context, hidden, _) => SwitchListTile(
-            secondary: Icon(Icons.shield_outlined, color: AppColors.accent),
-            title: Text(L10n.t('privacyHideAmounts')),
-            subtitle: Text(L10n.t('privacyHideHint')),
-            value: hidden,
-            activeTrackColor: AppColors.accent.withValues(alpha: .45),
-            activeThumbColor: AppColors.accent,
-            onChanged: (value) async {
-              try {
-                await PrivacyService.instance.setHideAmounts(value);
-              } catch (_) {
-                if (context.mounted) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text(L10n.t('privacySaveFailed'))),
-                  );
+          _buildGroupDivider(),
+          ValueListenableBuilder<bool>(
+            valueListenable: PrivacyService.instance.hideAmounts,
+            builder: (context, hidden, _) => SwitchListTile(
+              secondary: Icon(Icons.shield_outlined, color: AppColors.accent),
+              title: Text(L10n.t('privacyHideAmounts')),
+              subtitle: Text(L10n.t('privacyHideHint')),
+              value: hidden,
+              activeTrackColor: AppColors.accent.withValues(alpha: .45),
+              activeThumbColor: AppColors.accent,
+              onChanged: (value) async {
+                try {
+                  await PrivacyService.instance.setHideAmounts(value);
+                } catch (_) {
+                  if (context.mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text(L10n.t('privacySaveFailed'))),
+                    );
+                  }
                 }
-              }
-            },
+              },
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     ),
   );
 
   Widget _buildMarketColorTile() {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(14, 10, 8, 10),
+      padding: const EdgeInsetsDirectional.fromSTEB(14, 10, 8, 10),
       child: Row(
         children: [
           Container(
@@ -413,7 +418,7 @@ class _SettingsPageState extends State<SettingsPage> {
       child: ExpansionTile(
         initiallyExpanded: isExpanded,
         onExpansionChanged: onExpansionChanged,
-        tilePadding: const EdgeInsets.fromLTRB(14, 0, 12, 0),
+        tilePadding: const EdgeInsetsDirectional.fromSTEB(14, 0, 12, 0),
         childrenPadding: EdgeInsets.zero,
         title: Row(
           children: [
@@ -427,7 +432,12 @@ class _SettingsPageState extends State<SettingsPage> {
               child: Icon(icon, size: 18, color: AppColors.accent),
             ),
             const SizedBox(width: 10),
-            Text(label, style: TextStyles.bodyMedium.copyWith(height: 1.2)),
+            Flexible(
+              child: Text(
+                label,
+                style: TextStyles.bodyMedium.copyWith(height: 1.2),
+              ),
+            ),
             const SizedBox(width: 8),
             Expanded(
               child: Text(
@@ -458,16 +468,18 @@ class _SettingsPageState extends State<SettingsPage> {
 
   Widget _buildSectionHeader(IconData icon, String title) {
     return Padding(
-      padding: const EdgeInsets.only(left: 6),
+      padding: const EdgeInsetsDirectional.only(start: 6),
       child: Row(
         children: [
           Icon(icon, size: 14, color: AppColors.accent),
           const SizedBox(width: 6),
-          Text(
-            title,
-            style: TextStyles.smallBold.copyWith(
-              fontWeight: FontWeight.w500,
-              letterSpacing: 0.5,
+          Expanded(
+            child: Text(
+              title,
+              style: TextStyles.smallBold.copyWith(
+                fontWeight: FontWeight.w500,
+                letterSpacing: 0.5,
+              ),
             ),
           ),
         ],
@@ -481,12 +493,8 @@ class _SettingsPageState extends State<SettingsPage> {
         value: SettingsService.languageSystem,
         label: SettingsConfig.languageAuto,
       ),
-      (value: SettingsService.languageZh, label: SettingsConfig.languageZh),
-      (
-        value: SettingsService.languageZhHant,
-        label: SettingsConfig.languageZhHant,
-      ),
-      (value: SettingsService.languageEn, label: SettingsConfig.languageEn),
+      for (final entry in L10n.languages.entries)
+        (value: entry.key, label: entry.value.name),
     ];
     return _buildExpansionSetting(
       icon: Icons.translate,
@@ -581,7 +589,7 @@ class _SettingsPageState extends State<SettingsPage> {
         initiallyExpanded: _isFeeExpanded,
         onExpansionChanged: (expanded) =>
             setState(() => _isFeeExpanded = expanded),
-        tilePadding: const EdgeInsets.fromLTRB(14, 0, 12, 0),
+        tilePadding: const EdgeInsetsDirectional.fromSTEB(14, 0, 12, 0),
         childrenPadding: EdgeInsets.zero,
         title: Row(
           children: [
@@ -598,7 +606,12 @@ class _SettingsPageState extends State<SettingsPage> {
             Expanded(
               child: Row(
                 children: [
-                  Text(SettingsConfig.sectionFee, style: TextStyles.bodyMedium),
+                  Flexible(
+                    child: Text(
+                      SettingsConfig.sectionFee,
+                      style: TextStyles.bodyMedium,
+                    ),
+                  ),
                   const SizedBox(width: 4),
                   GestureDetector(
                     onTap: _showFeeHelp,
@@ -722,7 +735,7 @@ class _SettingsPageState extends State<SettingsPage> {
 
   Widget _buildGroupDivider() {
     return Padding(
-      padding: const EdgeInsets.only(left: 48),
+      padding: const EdgeInsetsDirectional.only(start: 48),
       child: Divider(height: 1, color: AppColors.border, thickness: 0.5),
     );
   }
@@ -738,7 +751,7 @@ class _SettingsPageState extends State<SettingsPage> {
         initiallyExpanded: _isSortExpanded,
         onExpansionChanged: (expanded) =>
             setState(() => _isSortExpanded = expanded),
-        tilePadding: const EdgeInsets.fromLTRB(14, 0, 12, 0),
+        tilePadding: const EdgeInsetsDirectional.fromSTEB(14, 0, 12, 0),
         childrenPadding: EdgeInsets.zero,
         title: Row(
           children: [
@@ -752,11 +765,19 @@ class _SettingsPageState extends State<SettingsPage> {
               child: Icon(Icons.sort, size: 18, color: Colors.purpleAccent),
             ),
             const SizedBox(width: 10),
-            Text(SettingsConfig.sortLabel, style: TextStyles.bodyMedium),
-            const SizedBox(width: 8),
-            Text(
-              sortLabel,
-              style: TextStyles.body13.copyWith(color: AppColors.grey500),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(SettingsConfig.sortLabel, style: TextStyles.bodyMedium),
+                  Text(
+                    sortLabel,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyles.body13.copyWith(color: AppColors.grey500),
+                  ),
+                ],
+              ),
             ),
           ],
         ),
@@ -808,7 +829,7 @@ class _SettingsPageState extends State<SettingsPage> {
           }),
           // 排序方向切换
           Padding(
-            padding: const EdgeInsets.only(left: 56),
+            padding: const EdgeInsetsDirectional.only(start: 56),
             child: Divider(height: 1, color: AppColors.border, thickness: 0.5),
           ),
           Padding(
@@ -836,9 +857,10 @@ class _SettingsPageState extends State<SettingsPage> {
                           color: _isSortAscending
                               ? AppColors.accent.withValues(alpha: 0.25)
                               : AppColors.surface,
-                          borderRadius: const BorderRadius.horizontal(
-                            left: Radius.circular(8),
-                          ),
+                          borderRadius:
+                              const BorderRadiusDirectional.horizontal(
+                                start: Radius.circular(8),
+                              ),
                           border: Border.all(
                             color: _isSortAscending
                                 ? AppColors.accent.withValues(alpha: 0.5)
@@ -883,9 +905,10 @@ class _SettingsPageState extends State<SettingsPage> {
                           color: !_isSortAscending
                               ? AppColors.accent.withValues(alpha: 0.25)
                               : AppColors.surface,
-                          borderRadius: const BorderRadius.horizontal(
-                            right: Radius.circular(8),
-                          ),
+                          borderRadius:
+                              const BorderRadiusDirectional.horizontal(
+                                end: Radius.circular(8),
+                              ),
                           border: Border.all(
                             color: !_isSortAscending
                                 ? AppColors.accent.withValues(alpha: 0.5)
@@ -1003,7 +1026,7 @@ class _SettingsPageState extends State<SettingsPage> {
     VoidCallback? onHelp,
   }) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(14, 8, 8, 8),
+      padding: const EdgeInsetsDirectional.fromSTEB(14, 8, 8, 8),
       child: Row(
         children: [
           Container(
@@ -1266,6 +1289,28 @@ class _SettingsPageState extends State<SettingsPage> {
                 AppConfig.toastWechatCopied,
               ),
             ),
+            const SizedBox(height: 16),
+            Divider(height: 1, color: AppColors.border),
+            const SizedBox(height: 16),
+            Text(
+              L10n.t('feedbackOpenSource'),
+              style: TextStyles.body13.copyWith(
+                color: AppColors.grey400,
+                height: 1.4,
+              ),
+            ),
+            TextButton(
+              onPressed: _openGitHubRepository,
+              style: TextButton.styleFrom(
+                padding: EdgeInsets.zero,
+                alignment: AlignmentDirectional.centerStart,
+                foregroundColor: AppColors.accent,
+              ),
+              child: const Text(
+                AppConfig.repositoryUrl,
+                textDirection: TextDirection.ltr,
+              ),
+            ),
             const SizedBox(height: 20),
             cancelButton(
               onTap: () => Navigator.pop(ctx),
@@ -1293,15 +1338,29 @@ class _SettingsPageState extends State<SettingsPage> {
             '$label：',
             style: TextStyles.body13.copyWith(color: AppColors.grey400),
           ),
-          Text(
-            value,
-            style: TextStyles.body13.copyWith(
-              color: onTap != null ? AppColors.accent : AppColors.textPrimary,
+          Flexible(
+            child: Text(
+              value,
+              style: TextStyles.body13.copyWith(
+                color: onTap != null ? AppColors.accent : AppColors.textPrimary,
+              ),
             ),
           ),
         ],
       ),
     );
+  }
+
+  Future<void> _openGitHubRepository() async {
+    try {
+      if (await launchUrl(
+        Uri.parse(AppConfig.repositoryUrl),
+        mode: LaunchMode.externalApplication,
+      )) {
+        return;
+      }
+    } catch (_) {}
+    _copyToClipboard(AppConfig.repositoryUrl, 'GitHub ');
   }
 
   Future<void> _launchEmail(String email) async {

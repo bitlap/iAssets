@@ -6,7 +6,7 @@ void main() {
   tearDown(() => L10n.applyLanguage(L10n.langZh));
 
   test('unsupported system languages fall back to English', () {
-    for (final code in ['de', 'fr', 'ja', 'ko']) {
+    for (final code in ['zz', 'eo', 'sw']) {
       expect(L10n.resolveSystemLang(Locale(code)), L10n.langEn);
     }
   });
@@ -40,6 +40,6 @@ void main() {
     expect(L10n.currentLang, L10n.langZhHant);
     expect(L10n.t('assetTotalAssets'), isNotEmpty);
     L10n.applyLanguage(L10n.langSystem);
-    expect(L10n.currentLang, L10n.langEn);
+    expect(L10n.currentLang, 'de');
   });
 }

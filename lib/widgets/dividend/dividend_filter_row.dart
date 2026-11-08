@@ -57,8 +57,8 @@ class DividendFilterRow extends StatelessWidget {
               children: List.generate(marketLabels.length, (i) {
                 final selected = filterMarket == markets[i];
                 return Padding(
-                  padding: EdgeInsets.only(
-                    right: i < marketLabels.length - 1 ? 8 : 0,
+                  padding: EdgeInsetsDirectional.only(
+                    end: i < marketLabels.length - 1 ? 8 : 0,
                   ),
                   child: FilterPill(
                     label: marketLabels[i],
@@ -85,8 +85,8 @@ class DividendFilterRow extends StatelessWidget {
                           : Icons.arrow_downward)
                     : null;
                 return Padding(
-                  padding: EdgeInsets.only(
-                    right: i < sortOptions.length - 1 ? 8 : 0,
+                  padding: EdgeInsetsDirectional.only(
+                    end: i < sortOptions.length - 1 ? 8 : 0,
                   ),
                   child: FilterPill(
                     label: sortOptions[i],

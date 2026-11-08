@@ -119,7 +119,7 @@ class CurrencySelector {
                                     flex: 2,
                                     child: FittedBox(
                                       fit: BoxFit.scaleDown,
-                                      alignment: Alignment.centerRight,
+                                      alignment: AlignmentDirectional.centerEnd,
                                       child: Text(
                                         '$symbol ${CurrencyUtil.formatRate(rate)}',
                                         style: TextStyles.body13Grey,

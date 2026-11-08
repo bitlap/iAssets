@@ -72,17 +72,30 @@ class _StockHeaderCardState extends State<StockHeaderCard> {
           // 标题高度不随今日盈亏的数值变化。
           Row(
             children: [
-              Text(StockConfig.assetTotalAssets, style: TextStyles.body13),
-              const SizedBox(width: 4),
-              GestureDetector(
-                onTap: _showTotalAssetsHelpDialog,
-                child: Icon(
-                  Icons.help_outline,
-                  size: 13,
-                  color: AppColors.warning,
+              Expanded(
+                child: Row(
+                  children: [
+                    Flexible(
+                      child: Text(
+                        StockConfig.assetTotalAssets,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyles.body13,
+                      ),
+                    ),
+                    const SizedBox(width: 4),
+                    GestureDetector(
+                      onTap: _showTotalAssetsHelpDialog,
+                      child: Icon(
+                        Icons.help_outline,
+                        size: 13,
+                        color: AppColors.warning,
+                      ),
+                    ),
+                  ],
                 ),
               ),
-              const Spacer(),
+              const SizedBox(width: 8),
               _buildCurrencyButton(),
             ],
           ),
@@ -329,7 +342,7 @@ class _StockHeaderCardState extends State<StockHeaderCard> {
         Flexible(
           child: SensitiveText(
             value,
-            textAlign: TextAlign.right,
+            textAlign: TextAlign.end,
             style: TextStyles.valueMedium.copyWith(
               color: valueColor ?? AppColors.textPrimary,
             ),

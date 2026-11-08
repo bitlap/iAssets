@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:assets/services/settings_service.dart';
+import 'package:assets/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -14,6 +15,14 @@ void main() {
   setUp(() async {
     File('${dir.path}/settings.json').writeAsStringSync('{}');
     await SettingsService.reload();
+  });
+
+  test('all language preferences survive storage reload', () async {
+    for (final language in [L10n.langSystem, ...L10n.languages.keys]) {
+      await SettingsService.setPreferredLanguage(language);
+      await SettingsService.reload();
+      expect(await SettingsService.getPreferredLanguage(), language);
+    }
   });
 
   test(

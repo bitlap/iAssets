@@ -726,4 +726,20 @@ const Map<String, String> stringsEn = {
   "proUnlockLifetime": "Unlock lifetime Pro",
   "proSubscribe": "Unlock iAssets Pro",
   "proUpgradeLifetime": "Switch to lifetime access",
+  // iOS permissions and widgets (also exported to native resources).
+  "widgetTotal": "Total assets",
+  "widgetStocks": "Stocks",
+  "widgetCrypto": "Crypto",
+  "widgetOther": "Other",
+  "widgetUpdated": "Updated",
+  "widgetStale": "Stale",
+  "widgetIncomplete": "Incomplete",
+  "widgetEmpty": "Open app to update",
+  "widgetHidden": "Amounts hidden",
+  "widgetDescription":
+      "See your total assets, portfolio summary, and update time.",
+  "iosPhotoLibraryUsage": "Choose an image to display for a custom stock.",
+  "iosFaceIDUsage": "Unlock iAssets and protect your financial information.",
+  "feedbackOpenSource":
+      "This is open-source software. Share suggestions or report issues on GitHub.",
 };

@@ -43,8 +43,8 @@ class StockListHeader extends StatelessWidget {
               children: [
                 for (var i = 0; i < markets.length; i++)
                   Padding(
-                    padding: EdgeInsets.only(
-                      right: i < markets.length - 1 ? 8 : 0,
+                    padding: EdgeInsetsDirectional.only(
+                      end: i < markets.length - 1 ? 8 : 0,
                     ),
                     child: FilterPill(
                       label: MarketUtil.marketLabel(
@@ -69,7 +69,7 @@ class StockListHeader extends StatelessWidget {
                 behavior: HitTestBehavior.opaque,
                 child: FittedBox(
                   fit: BoxFit.scaleDown,
-                  alignment: Alignment.centerLeft,
+                  alignment: AlignmentDirectional.centerStart,
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -101,7 +101,7 @@ class StockListHeader extends StatelessWidget {
                 behavior: HitTestBehavior.opaque,
                 child: FittedBox(
                   fit: BoxFit.scaleDown,
-                  alignment: Alignment.centerLeft,
+                  alignment: AlignmentDirectional.centerStart,
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
@@ -122,7 +122,7 @@ class StockListHeader extends StatelessWidget {
               ),
               profit: FittedBox(
                 fit: BoxFit.scaleDown,
-                alignment: Alignment.centerRight,
+                alignment: AlignmentDirectional.centerEnd,
                 child: GestureDetector(
                   onTap: () => onColumnTap('profit'),
                   behavior: HitTestBehavior.opaque,
