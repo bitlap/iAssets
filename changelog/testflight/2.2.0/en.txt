@@ -1,5 +1,5 @@
 Test focus
-• Automatically renew deposits with principal and interest at the same rate and term; missed renewals are calculated when you next open the app. Deposit details show days remaining, rate and maturity date in order. Investments show NAV before units, and auto-renew switches match Settings colors. Matured deposits can be renewed with principal and interest, with editable principal, rate and term. Change asset categories from the action list or by dragging between matching input templates. Icons and colors follow the destination category.
+• Automatically renew deposits with principal and interest at the same rate and term; missed renewals are calculated when you next open the app. Deposit details show days remaining, rate and maturity date in order. Investments show NAV before units, and auto-renew switches match Settings colors. Matured deposits can be renewed with principal and interest, with editable principal, rate and term. Change asset categories from the action list or by dragging between matching input templates. Icons and colors follow the destination category. Reduced row height and padding in the Change Category and Renew Deposit menus.
 • Check data after upgrading from an older version. Test free/Pro limits, purchases and restore, and confirm errors or lost connectivity do not overwrite existing assets.
 
 Known limitations
