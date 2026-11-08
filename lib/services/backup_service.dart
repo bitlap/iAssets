@@ -8,13 +8,14 @@ import 'settings_service.dart';
 import 'pro_service.dart';
 import '../services/serde/converters.dart';
 
-/// 备份服务 - 将所有数据合并为单一 JSON 进行导入/导出
+/// 将股票、操作/股息记录、手动资产及设置合并为 JSON 备份。
+/// 不包含交易所凭据/余额、Pro 凭据或本机隐私偏好。
 class BackupService {
   BackupService._();
 
   static const int _backupVersion = 1;
 
-  /// 导出所有数据为统一 JSON Map
+  /// 导出支持备份的数据为统一 JSON Map，须先通过 Pro 权益检查。
   static Future<Map<String, dynamic>> exportAll() async {
     ProService.instance.requirePro();
     final (stocks, operationRecords, dividendRecords) =

@@ -35,7 +35,7 @@ class StockCalculator {
     if (currentShares < 0) currentShares = 0;
     if (minBuyPrice == double.infinity) minBuyPrice = 0.0;
 
-    // 持仓均价 = 净成本 ÷ 当前持股数（考虑卖出）
+    // 每股净投入 =（累计买入金额（含费）− 累计卖出净额）÷ 当前持股数。
     final avgBuyPrice = currentShares > 0
         ? (totalBuyAmount - totalSellAmount) / currentShares
         : 0.0;
@@ -52,7 +52,7 @@ class StockCalculator {
     );
   }
 
-  /// 从操作记录计算持仓均价（考虑卖出，净成本均摊到剩余股份）
+  /// 从操作记录计算每股净投入；扣除卖出净额，不是买入成交均价。
   static double calculateAvgBuyPrice(List<OperationRecord> records) {
     double totalBuyAmount = 0.0;
     double totalSellAmount = 0.0;
@@ -255,17 +255,17 @@ class StockCalculator {
       );
     }
 
-    // 持仓均价 = 净成本 ÷ 当前持股数（考虑卖出）
+    // 每股净投入包含历史卖出净额，与买入成交均价不同。
     final avgCost = stats.avgBuyPrice;
 
-    // 盈亏 = 当前总价值 - (持仓均价 × 当前持股数)
+    // 盈亏 = 当前总价值 −（每股净投入 × 当前持股数）。
     final profitLossAmount = totalValue - avgCost * stats.currentShares;
 
-    // 盈亏百分比 = (当前价 - 持仓均价) ÷ 持仓均价 × 100%
+    // 单只股票盈亏率以正的每股净投入为分母；非正时显示 0。
     final profitLossPercent = avgCost > 0
         ? ((stock.currentPrice - avgCost) / avgCost * 100.0)
         : 0.0;
-    // 盈亏方向：持仓均价 <= 当前价 = 盈利
+    // 盈亏方向：每股净投入 <= 当前价时视为盈利。
     final isPositive = avgCost <= stock.currentPrice;
 
     return stock.copyWith(

@@ -30,6 +30,8 @@ BUILD_NUMBER=2 ./scripts/release_ios.sh
 
 归档、IPA、导出配置及各阶段日志保存在 `build/ios/releases/` 的独立目录；可用 `RELEASE_OUTPUT_DIR` 指定一个尚不存在的目录。任何阶段失败立即停止，上传成功后仍需等待 Apple 处理，不会自动提交审核或发布。
 
+清理构建缓存时保留发布归档、IPA、dSYM 和验证日志。`flutter clean` 或整体删除 `build/` 会同时移除默认位置的发布证据；执行前先将需要保留的发布目录备份到 `build/` 之外，或在发布时用 `RELEASE_OUTPUT_DIR` 指定独立保存位置。编译缓存可重新生成，已上传包对应的签名归档与符号文件应单独保留。
+
 `--internal-testflight` 使用 Xcode 的内部测试专用标记。此类构建不能转为外部测试或正式上架；正式版必须以最终固定的 `PRO_LEGACY_CUTOFF` 重新构建并上传。内测时可通过环境变量临时覆盖该值，不要把测试分界时间写入正式发布配置。
 
 包含桌面和锁屏组件的版本需要主 App 与 Widget 扩展分别使用含 App Groups 权限的 App Store 描述文件。在 `release_ios.env` 中配置 `IOS_APP_PROFILE_NAME` 和 `IOS_WIDGET_PROFILE_NAME` 两个名称；脚本在导出和上传时会显式选用它们。

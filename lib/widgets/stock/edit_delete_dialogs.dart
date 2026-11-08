@@ -49,7 +49,7 @@ class _EditStockDialogState extends State<EditStockDialog> {
   String _feeType = SettingsService.feeTypePercentage;
   double _feeSettingValue = 0.0;
 
-  /// 从操作记录计算买入均价
+  /// 从操作记录计算每股净投入（包含历史卖出及手续费）。
   double get _avgBuyPrice =>
       StockCalculator.calculateAvgBuyPrice(widget.operationRecords);
 

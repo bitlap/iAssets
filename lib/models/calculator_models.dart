@@ -9,7 +9,7 @@ class RecordStats {
   final int sellCount; // 卖出次数
   final double maxBuyPrice; // 最高买入价
   final double minBuyPrice; // 最低买入价
-  final double avgBuyPrice; // 买入均价
+  final double avgBuyPrice; // 每股净投入，扣除累计卖出净额，不是买入成交均价
 
   const RecordStats({
     this.currentShares = 0,

@@ -64,7 +64,7 @@ class _ProfitChartWidgetState extends State<ProfitChartWidget> {
     setState(() => _intradaySnapshots = intraday);
   }
 
-  /// 今日盈亏曲线：日内快照 − 今日基线（昨收），返回相对基线的盈亏
+  /// 今日盈亏曲线：日内总盈亏快照减去当日保存的总盈亏基线。
   /// 以美东 9:00 日界筛选（覆盖美股开盘）
   Future<List<ProfitSnapshot>> _loadTodaySnapshots() async {
     final baseline = await StockDataManager.loadTodayBaseline();

@@ -119,36 +119,36 @@ class TextStyles {
   static TextStyle get body13Grey =>
       TextStyle(fontSize: 13, color: AppColors.grey, height: 1.2);
 
-  /// 15px 白色列表标题
+  /// 15px 主题主文字色列表标题
   static TextStyle get listTileTitle =>
       TextStyle(fontSize: 15, color: AppColors.textPrimary);
 
-  /// 16px 白色输入框文字
+  /// 16px 主题主文字色输入框文字
   static TextStyle get inputText =>
       TextStyle(fontSize: 16, color: AppColors.textPrimary);
 
-  /// 12px 白色加粗
+  /// 12px 主题主文字色加粗
   static TextStyle get whiteBold12 => TextStyle(
     fontSize: 12,
     fontWeight: FontWeight.bold,
     color: AppColors.textPrimary,
   );
 
-  /// 13px 白色加粗正文
+  /// 13px 主题主文字色加粗正文
   static TextStyle get body13Bold => TextStyle(
     fontSize: 13,
     fontWeight: FontWeight.bold,
     color: AppColors.textPrimary,
   );
 
-  /// 11px 白色加粗
+  /// 11px 主题主文字色半粗体
   static TextStyle get whiteBold11 => TextStyle(
     fontSize: 11,
     fontWeight: FontWeight.w600,
     color: AppColors.textPrimary,
   );
 
-  /// 34px 白色加粗（总资产金额）
+  /// 34px 主题主文字色加粗（总资产金额）
   static TextStyle get amountLarge => TextStyle(
     fontSize: 34,
     fontWeight: FontWeight.w700,
@@ -156,7 +156,7 @@ class TextStyles {
     height: 1.1,
   );
 
-  /// 17px 白色加粗（应用栏标题）
+  /// 17px 主题主文字色半粗体（应用栏标题）
   static TextStyle get appBarTitle => TextStyle(
     fontSize: 17,
     fontWeight: FontWeight.w600,
@@ -195,7 +195,7 @@ String formatRefreshTime(DateTime t) {
 //  标签组件
 // ═══════════════════════════════════════
 
-/// 收益率展示瓦片（深灰底，标签在上，大号值在下）
+/// 收益率展示瓦片（主题卡片底色，标签在上，大号值在下）
 class YieldTile extends StatelessWidget {
   final String label;
   final String value;
@@ -342,7 +342,7 @@ class FilterPill extends StatelessWidget {
 //  统计指标卡片
 // ═══════════════════════════════════════
 
-/// 通用统计指标卡片（圆角黑底，用于汇总展示）
+/// 通用统计指标卡片（圆角主题卡片底色，用于汇总展示）
 class StatMetricCard extends StatelessWidget {
   final String label;
   final String value;

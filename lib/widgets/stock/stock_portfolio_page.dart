@@ -353,7 +353,7 @@ class StockPortfolioPageState extends State<StockPortfolioPage>
     return totalProfit - baseline;
   }
 
-  /// 今日盈亏率 = 今日盈亏 / 昨收总资产
+  /// 今日盈亏率 = 今日盈亏 ÷（当前总资产 − 今日盈亏）；分母非正时为 0。
   double get todayProfitPercent {
     final baseAssets = totalAssets - todayProfit;
     if (baseAssets <= 0) return 0;

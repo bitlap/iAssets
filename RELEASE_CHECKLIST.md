@@ -94,7 +94,8 @@ flutter build ios --simulator --debug --no-codesign --no-pub
 - [ ] 检查远端 tag 和 Release；`v<版本>` 指向正确源码提交，补历史版本不能指向当前 HEAD，已发布 tag 不擅自移动或覆盖。
 - [ ] 草稿与正式 Release 正文均与对应版本 changelog 提取的中简、中繁和英文一致，不混入其他语言；本地 changelog 和 App Store 文案另外按语言注册表全量核对，无空白或 `No changes`；直接提交也包含在内，正文同步工作流成功后回读页面。
 - [ ] 核对标题、版本、源码/比较链接和可见状态；tag、草稿、已发布 Release 分别验证，不能相互替代。
-- [ ] 测试发布使用明确的预发布版本标识和 Pre-release；正式版才按实际情况标为 Latest，文案与 App Store/TestFlight 状态一致。
+- [ ] 新建 GitHub 测试 Release 时使用明确的预发布版本标识和 Pre-release；仅上传 TestFlight 不自动新建 GitHub 预发布。已有同版本 Release 时按用户明确授权决定是否更新原正文和 tag，不另造重复条目；获准移动 tag 时记录旧、新完整 SHA 并回读源码链接。
+- [ ] 核对 GitHub Latest 与实际发布范围；保留或更新既有 Latest 不代表 App Store 已上架，文案必须区分源码发布、TestFlight 可用、送审和正式可下载。
 - [ ] 有二进制附件时核对来源、版本、签名和校验值；仅提供源码时说明清楚，不能暗示提供可安装包。
 
 ## 7. 收尾

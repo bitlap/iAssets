@@ -26,7 +26,7 @@ class TradingDayUtil {
   }
 
   /// 交易日日键：以美东时间每天 9:00 为日界线
-  /// "当天" = [美东 D-1 9:00, 美东 D 9:00)，覆盖美股开盘（美东 9:30）
+  /// 日键 D 对应 [美东 D 9:00, 美东 D+1 9:00)，9:00 前归入前一日。
   static String tradingDayKey(DateTime local) {
     final et = toEastern(local);
     final shifted = et.subtract(const Duration(hours: 9));

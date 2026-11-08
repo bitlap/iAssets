@@ -5,9 +5,9 @@
 生成 What to Test：
 
 ```bash
-python3 scripts/testflight_release_notes.py --version 2.2.0 --build 22 --language zh
+python3 scripts/testflight_release_notes.py --version 2.2.0 --build 27 --language zh
 ```
 
-生成器依次输出实际版本/构建号、该语言 changelog、测试重点与已知限制，并检查 4000 字符上限。后台必须逐构建、逐平台语言保存和回读。不要把新修复复制到尚未包含相应代码的旧构建；平台不支持的语言仅保留本地文案并记录回退，不声称线上已翻译。
+生成器依次输出实际版本/构建号、该语言 changelog、测试重点与已知限制，并检查 4000 字符上限。`--build` 只写入构建号，不会自动读取该构建的历史文案；生成旧构建说明时，必须先切换到其对应源码提交或在独立检出目录运行。后台必须逐构建、逐平台语言保存和回读。不要把新修复复制到尚未包含相应代码的旧构建；平台不支持的语言仅保留本地文案并记录回退，不声称线上已翻译。
 
-本轮构建 10 和 22 的实际语言覆盖见 [同步记录](../../docs/release-checks/2.2.0-22-metadata-sync.md)。完整发布流程见 [发布指南](../../scripts/README.md)。
+构建 27 已同步 32 个平台 locale 的测试说明，结果与限制见 [内测记录](../../docs/release-checks/2.2.0-27-testflight.md)。构建 10 和 22 的历史覆盖见 [同步记录](../../docs/release-checks/2.2.0-22-metadata-sync.md)。完整发布流程见 [发布指南](../../scripts/README.md)。

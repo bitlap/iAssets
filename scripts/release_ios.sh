@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# 使用 App Store Connect 团队 API 密钥构建并上传 App Store 发布包。
+# 使用 App Store Connect 团队 API 密钥构建并上传 iOS 分发包，支持内部测试专用模式。
 set -euo pipefail
 
 usage() {
