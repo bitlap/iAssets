@@ -1108,6 +1108,7 @@ class AssetsPageState extends State<AssetsPage> with WidgetsBindingObserver {
               ),
               iconSize: 18,
               padding: EdgeInsets.zero,
+              menuPadding: const EdgeInsets.symmetric(vertical: 4),
               constraints: const BoxConstraints(minWidth: 36, minHeight: 36),
               onSelected: (action) {
                 if (action == _AssetCardAction.rollover &&
@@ -1121,11 +1122,13 @@ class AssetsPageState extends State<AssetsPage> with WidgetsBindingObserver {
                 if (canRollover)
                   PopupMenuItem<Object>(
                     value: _AssetCardAction.rollover,
+                    height: 36,
                     child: Text(AssetConfig.depositRollover),
                   ),
                 if (canChangeCategory)
                   PopupMenuItem<Object>(
                     value: _AssetCardAction.changeCategory,
+                    height: 36,
                     child: Text(AssetConfig.categoryMove),
                   ),
               ],
