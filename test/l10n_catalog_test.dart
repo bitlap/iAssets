@@ -7,10 +7,12 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart' hide TextDirection;
 import 'package:assets/widgets/asset/asset_card.dart';
+import 'package:assets/widgets/asset/asset_header.dart';
 import 'package:assets/widgets/stock/stock_header_card.dart';
 import 'package:assets/widgets/stock/stock_card.dart';
 import 'support/core_fixtures.dart';
 import 'package:assets/widgets/common/app_number_field.dart';
+import 'package:assets/widgets/common/section_title.dart';
 
 void main() {
   setUpAll(() => initializeDateFormatting());
@@ -105,6 +107,7 @@ void main() {
   test(
     'decimal keyboards accept commas and Arabic/Persian digits without changing stored format',
     () {
+      L10n.applyLanguage('de');
       const formatter = LocalizedDecimalInputFormatter();
       for (final text in [
         '12,34',
@@ -161,6 +164,19 @@ void main() {
             body: SingleChildScrollView(
               child: Column(
                 children: [
+                  AnimatedHomeHeader(
+                    page: 0,
+                    stockTitle: L10n.t('homeTitle'),
+                    stockSubtitle: 'Updated',
+                    cryptoTitle: L10n.t('cryptoTitle'),
+                    cryptoSubtitle: 'Updated',
+                    assetTitle: L10n.t('tabAsset'),
+                    assetSubtitle: 'Updated',
+                    onDividendOverview: () {},
+                    onBackup: () {},
+                    onSettings: () {},
+                    onPrivacy: () {},
+                  ),
                   StockHeaderCard(
                     selectedCurrency: 'USD',
                     totalAssets: 100,
@@ -174,6 +190,13 @@ void main() {
                     totalAfterTaxDividends: 0,
                     totalSellAmount: 0,
                     onCurrencyChanged: (_) {},
+                  ),
+                  AssetHeader(
+                    totalAssets: 100,
+                    stockTotalValue: 50,
+                    currency: 'USD',
+                    onCurrencyTap: () {},
+                    totalsByType: const {},
                   ),
                   StockCard(
                     stock: stock(),

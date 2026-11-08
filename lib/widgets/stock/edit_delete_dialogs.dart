@@ -53,15 +53,13 @@ class _EditStockDialogState extends State<EditStockDialog> {
   double get _avgBuyPrice =>
       StockCalculator.calculateAvgBuyPrice(widget.operationRecords);
 
-  double? get _feeValue => double.tryParse(_feeController.text);
-
   @override
   void initState() {
     super.initState();
     _sharesController = TextEditingController();
     _priceController = TextEditingController(
       text: widget.stock.currentPrice > 0
-          ? CurrencyUtil.formatRate(widget.stock.currentPrice)
+          ? CurrencyUtil.formatInput(widget.stock.currentPrice)
           : '',
     );
     _feeController = TextEditingController();
@@ -76,11 +74,11 @@ class _EditStockDialogState extends State<EditStockDialog> {
         _feeSettingValue <= 0) {
       return;
     }
-    final price = double.tryParse(_priceController.text);
-    final shares = double.tryParse(_sharesController.text);
+    final price = CurrencyUtil.parseInput(_priceController.text);
+    final shares = CurrencyUtil.parseInput(_sharesController.text);
     if (price == null || shares == null || price <= 0 || shares <= 0) return;
     final fee = price * shares * _feeSettingValue / 100;
-    _feeController.text = CurrencyUtil.formatRate(fee);
+    _feeController.text = CurrencyUtil.formatInput(fee);
     setState(() {});
   }
 
@@ -92,7 +90,7 @@ class _EditStockDialogState extends State<EditStockDialog> {
     _feeSettingValue = feeValue;
     if (feeValue <= 0) return;
     if (feeType == SettingsService.feeTypeFixed) {
-      _feeController.text = CurrencyUtil.formatRate(feeValue);
+      _feeController.text = CurrencyUtil.formatInput(feeValue);
       return;
     }
     _updateFeeFromInput();
@@ -118,7 +116,7 @@ class _EditStockDialogState extends State<EditStockDialog> {
             rates.cachedConversionRate(quote.currency, widget.stock.currency) ??
             await rates.conversionRate(quote.currency, widget.stock.currency);
         if (!mounted || rate == null) return;
-        _priceController.text = CurrencyUtil.formatRate(
+        _priceController.text = CurrencyUtil.formatInput(
           quote.currentPrice * rate,
         );
       }
@@ -215,13 +213,21 @@ class _EditStockDialogState extends State<EditStockDialog> {
   }
 
   Future<void> _onConfirm() async {
-    final diffShares = double.tryParse(_sharesController.text);
-    final newPrice = double.tryParse(_priceController.text);
+    final diffShares = CurrencyUtil.parseInput(_sharesController.text);
+    final newPrice = CurrencyUtil.parseInput(_priceController.text);
     if (diffShares == null ||
         diffShares <= 0 ||
         newPrice == null ||
         newPrice <= 0) {
       CenterToast.error(context, StockConfig.editInvalidInput);
+      return;
+    }
+
+    final fee = _feeController.text.isEmpty
+        ? 0.0
+        : CurrencyUtil.parseInput(_feeController.text);
+    if (fee == null || fee < 0) {
+      CenterToast.error(context, AssetConfig.toastInvalidBalance);
       return;
     }
 
@@ -277,9 +283,16 @@ class _EditStockDialogState extends State<EditStockDialog> {
       date: DateTime.now(),
       type: recordType,
       description: description,
+      action: isClosePosition
+          ? TradeAction.close
+          : widget.operationRecords.isEmpty
+          ? TradeAction.open
+          : widget.isAdd
+          ? TradeAction.add
+          : TradeAction.reduce,
       amount: newPrice,
       shares: diffShares,
-      fee: _feeValue ?? 0.0,
+      fee: fee,
     );
 
     widget.onSave(updatedStock, record, isClosePosition);
@@ -557,7 +570,7 @@ class _DividendDialogState extends State<DividendDialog> {
           actionButtonRow(
             onCancel: () => Navigator.pop(context),
             onConfirm: () {
-              final amount = double.tryParse(_amountController.text);
+              final amount = CurrencyUtil.parseInput(_amountController.text);
               if (amount == null || amount <= 0) {
                 CenterToast.error(context, StockConfig.dividendInvalidAmount);
                 return;

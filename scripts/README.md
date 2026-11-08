@@ -1,5 +1,7 @@
 # iOS Release 编译与上传
 
+每次发布前先执行 [发布前检查清单](../RELEASE_CHECKLIST.md)，记录检查证据、问题和修复结果；上传、送审和正式发布分别核验。
+
 使用 App Store Connect **团队 API Key**，从 App Store Connect 获取 Key ID、Issuer ID 和 `.p8` 私钥；账号/API Key 需要具有该 App 的上传权限。私钥保存在仓库外，本机需安装 Flutter、完整 Xcode、CocoaPods，并准备签名证书或启用 Xcode 自动签名。
 
 以下命令均在项目根目录执行。

@@ -1,3 +1,4 @@
+import '../../utils/currency_util.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -235,8 +236,8 @@ class _CustomStockSheetState extends State<_CustomStockSheet> {
   void _submit() {
     final name = _nameController.text.trim();
     final code = _codeController.text.trim().toUpperCase();
-    final shares = double.tryParse(_sharesController.text);
-    final price = double.tryParse(_priceController.text);
+    final shares = CurrencyUtil.parseInput(_sharesController.text);
+    final price = CurrencyUtil.parseInput(_priceController.text);
     if (name.isEmpty) {
       CenterToast.warning(context, StockConfig.customStockNameRequired);
       return;

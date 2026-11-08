@@ -1,3 +1,5 @@
+import '../models/trade_action.dart';
+import '../l10n/legacy_trade_actions.dart';
 import 'package:intl/intl.dart';
 import '../l10n/l10n.dart';
 
@@ -286,35 +288,57 @@ class StockConfig {
   static String get fileBrowserImportConfirm =>
       L10n.t('fileBrowserImportConfirm');
 
-  /// 将记录 description 中的操作词（可能为创建时语言的任意一种）替换为当前语言
-  static String localizeRecordDescription(String description) {
-    const map = {
-      '开仓': 'opOpenPosition',
-      '加仓': 'opAddPosition',
-      '减仓': 'opReducePosition',
-      '平仓': 'opClosePosition',
-      '開倉': 'opOpenPosition',
-      '加倉': 'opAddPosition',
-      '減倉': 'opReducePosition',
-      '平倉': 'opClosePosition',
-      'Open': 'opOpenPosition',
-      'Add': 'opAddPosition',
-      'Reduce': 'opReducePosition',
-      'Close': 'opClosePosition',
-    };
-    for (final entry in map.entries) {
-      if (description.startsWith(entry.key)) {
-        final rest = description.substring(entry.key.length);
-        return '${L10n.t(entry.value)}$rest';
+  static String actionKey(TradeAction action) => switch (action) {
+    TradeAction.open => 'opOpenPosition',
+    TradeAction.add => 'opAddPosition',
+    TradeAction.reduce => 'opReducePosition',
+    TradeAction.close => 'opClosePosition',
+  };
+
+  static final _actionPrefixes = <String, TradeAction>{
+    ...legacyTradeActions,
+    for (final table in L10n.translations.values)
+      for (final action in TradeAction.values)
+        table[actionKey(action)]!: action,
+  }.entries.toList()..sort((a, b) => b.key.length.compareTo(a.key.length));
+
+  static ({TradeAction action, String suffix})? _matchLegacyAction(
+    String description,
+  ) {
+    for (final entry in _actionPrefixes) {
+      if (description == entry.key || description.startsWith('${entry.key} ')) {
+        return (
+          action: entry.value,
+          suffix: description.substring(entry.key.length),
+        );
       }
     }
-    return description;
+    return null;
   }
 
-  /// 记录列表始终使用当前股票代码，兼容旧记录中保存名称或旧代码的情况。
-  static String recordTitle(String description, String symbol) {
-    final localized = localizeRecordDescription(description);
-    final operation = localized.split(RegExp(r'\s+')).first;
-    return '$operation $symbol';
+  /// Legacy descriptions keep their suffix; operation words use the current language.
+  static String localizeRecordDescription(String description) {
+    final match = _matchLegacyAction(description);
+    return match == null
+        ? description
+        : '${L10n.t(actionKey(match.action))}${match.suffix}';
+  }
+
+  /// New records use a stable action; legacy records match the longest known prefix.
+  static String recordTitle(
+    String description,
+    String symbol, {
+    TradeAction? action,
+    String? type,
+  }) {
+    final effective = action ?? _matchLegacyAction(description)?.action;
+    final label = effective != null
+        ? L10n.t(actionKey(effective))
+        : type == opBuyType
+        ? opBuy
+        : type == opSellType
+        ? opSell
+        : description;
+    return label.isEmpty ? symbol : '$label $symbol';
   }
 }

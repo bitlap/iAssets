@@ -1,3 +1,5 @@
+import 'package:intl/intl.dart';
+import '../../l10n/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'app_colors.dart';
@@ -12,14 +14,28 @@ class LocalizedDecimalInputFormatter extends TextInputFormatter {
     TextEditingValue oldValue,
     TextEditingValue newValue,
   ) {
-    final normalized = String.fromCharCodes(
+    if (newValue.composing.isValid && !newValue.composing.isCollapsed) {
+      return newValue;
+    }
+    final symbols = NumberFormat.decimalPattern(L10n.intlLocale).symbols;
+    final digits = String.fromCharCodes(
       newValue.text.runes.map((rune) {
         for (final zero in [0x0660, 0x06f0, 0x0966, 0x09e6, 0x0e50, 0xff10]) {
           if (rune >= zero && rune <= zero + 9) return rune - zero + 0x30;
         }
-        return rune == 0x2c || rune == 0x066b ? 0x2e : rune;
+        return rune == 0x066b ? 0x2e : rune;
       }),
     );
+    // Group separators are never stripped: a pasted amount must not change scale.
+    if (digits.contains(',') && symbols.DECIMAL_SEP != ',') return oldValue;
+    final normalized = digits.replaceAll(',', '.');
+    final inserted = newValue.text.length - oldValue.text.length;
+    final replacesSelection = !oldValue.selection.isCollapsed;
+    if (symbols.GROUP_SEP == '.' &&
+        (oldValue.text.isEmpty || inserted > 1 || replacesSelection) &&
+        RegExp(r'^\d{1,3}(?:\.\d{3})+$').hasMatch(digits)) {
+      return oldValue;
+    }
     return RegExp(r'^\d*\.?\d*$').hasMatch(normalized)
         ? newValue.copyWith(text: normalized)
         : oldValue;

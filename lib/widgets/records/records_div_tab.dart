@@ -191,10 +191,10 @@ class _DividendRecordsTabState extends State<DividendRecordsTab> {
     DividendRecord record,
   ) {
     final amountCtrl = TextEditingController(
-      text: CurrencyUtil.formatRate(record.amount),
+      text: CurrencyUtil.formatInput(record.amount),
     );
     final sharesCtrl = TextEditingController(
-      text: CurrencyUtil.formatRate(record.shares),
+      text: CurrencyUtil.formatInput(record.shares),
     );
     DateTime selectedDate = record.date;
     double editTaxRate = record.taxRate * 100;
@@ -290,8 +290,8 @@ class _DividendRecordsTabState extends State<DividendRecordsTab> {
               actionButtonRow(
                 onCancel: () => Navigator.pop(ctx),
                 onConfirm: () {
-                  final newAmount = double.tryParse(amountCtrl.text);
-                  final newShares = double.tryParse(sharesCtrl.text);
+                  final newAmount = CurrencyUtil.parseInput(amountCtrl.text);
+                  final newShares = CurrencyUtil.parseInput(sharesCtrl.text);
                   if (newAmount == null ||
                       newAmount <= 0 ||
                       newShares == null ||

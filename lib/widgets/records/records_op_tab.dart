@@ -1,3 +1,4 @@
+import '../common/app_number_field.dart';
 import 'package:flutter/material.dart';
 import '../common/sensitive_text.dart';
 import 'package:intl/intl.dart';
@@ -144,7 +145,12 @@ class _OperationRecordsTabState extends State<OperationRecordsTab> {
       children: [
         Expanded(
           child: Text(
-            StockConfig.recordTitle(record.description, widget.stock.symbol),
+            StockConfig.recordTitle(
+              record.description,
+              widget.stock.symbol,
+              action: record.action,
+              type: record.type,
+            ),
             style: TextStyles.body13.copyWith(fontWeight: FontWeight.w600),
             overflow: TextOverflow.ellipsis,
           ),
@@ -187,10 +193,10 @@ class _OperationRecordsTabState extends State<OperationRecordsTab> {
     OperationRecord record,
   ) {
     final priceCtrl = TextEditingController(
-      text: CurrencyUtil.formatRate(record.amount),
+      text: CurrencyUtil.formatInput(record.amount),
     );
     final sharesCtrl = TextEditingController(
-      text: CurrencyUtil.formatRate(record.shares),
+      text: CurrencyUtil.formatInput(record.shares),
     );
 
     showDialog(
@@ -205,7 +211,12 @@ class _OperationRecordsTabState extends State<OperationRecordsTab> {
               child: Text(
                 StockConfig.recordsEditTitle.replaceAll(
                   '{desc}',
-                  StockConfig.localizeRecordDescription(record.description),
+                  StockConfig.recordTitle(
+                    record.description,
+                    widget.stock.symbol,
+                    action: record.action,
+                    type: record.type,
+                  ),
                 ),
                 style: TextStyles.dialogTitle,
               ),
@@ -222,8 +233,8 @@ class _OperationRecordsTabState extends State<OperationRecordsTab> {
             actionButtonRow(
               onCancel: () => Navigator.pop(ctx),
               onConfirm: () {
-                final newPrice = double.tryParse(priceCtrl.text);
-                final newShares = double.tryParse(sharesCtrl.text);
+                final newPrice = CurrencyUtil.parseInput(priceCtrl.text);
+                final newShares = CurrencyUtil.parseInput(sharesCtrl.text);
                 if (newPrice == null ||
                     newPrice <= 0 ||
                     newShares == null ||
@@ -251,6 +262,7 @@ class _OperationRecordsTabState extends State<OperationRecordsTab> {
   Widget _buildTextField(TextEditingController controller) {
     return TextField(
       controller: controller,
+      inputFormatters: [const LocalizedDecimalInputFormatter()],
       keyboardType: const TextInputType.numberWithOptions(decimal: true),
       style: TextStyles.inputText,
       decoration: InputDecoration(

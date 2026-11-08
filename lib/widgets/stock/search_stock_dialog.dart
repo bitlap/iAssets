@@ -230,6 +230,7 @@ class _SearchStockDialogState extends State<SearchStockDialog> {
       date: DateTime.now(),
       type: StockConfig.opBuyType,
       description: '${StockConfig.opOpenPosition} ${stock.code}',
+      action: TradeAction.open,
       amount: price,
       shares: shares,
       fee: fee,
@@ -287,8 +288,15 @@ class _SearchStockDialogState extends State<SearchStockDialog> {
         children: [
           Row(
             children: [
-              Text(StockConfig.searchTitle, style: TextStyles.dialogTitle),
-              const Spacer(),
+              Expanded(
+                child: Text(
+                  StockConfig.searchTitle,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyles.dialogTitle,
+                ),
+              ),
+              const SizedBox(width: 8),
               GestureDetector(
                 onTap: () => Navigator.of(context).pop(),
                 child: Icon(
@@ -639,16 +647,14 @@ class _SearchStockDialogState extends State<SearchStockDialog> {
                 ],
               ),
             ),
-            // 行情数据 + 添加按钮（右侧固定区域，限制最大宽度防溢出）
-            ConstrainedBox(
-              constraints: BoxConstraints(
-                maxWidth: MediaQuery.of(context).size.width * 0.35,
-              ),
-              child: Row(
+            // Keep quote and action readable when translated labels are longer.
+            SizedBox(
+              width: MediaQuery.of(context).size.width * 0.35,
+              child: Column(
                 mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  // 行情数据
-                  if (isLoadingQuote)
+                  if (isLoadingQuote || (!isFailedQuote && quote == null))
                     SizedBox(
                       width: 16,
                       height: 16,
@@ -658,83 +664,57 @@ class _SearchStockDialogState extends State<SearchStockDialog> {
                       ),
                     )
                   else if (isFailedQuote)
-                    Flexible(
-                      child: Text(
-                        StockConfig.searchQuoteUnavailable,
-                        style: TextStyles.caption.copyWith(
-                          color: AppColors.textTertiary,
-                        ),
-                        overflow: TextOverflow.ellipsis,
+                    Text(
+                      StockConfig.searchQuoteUnavailable,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyles.caption.copyWith(
+                        color: AppColors.textTertiary,
                       ),
                     )
                   else if (quote != null)
-                    Flexible(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          FittedBox(
-                            fit: BoxFit.scaleDown,
-                            child: Text(
-                              '$priceLabel ${quote.currency}',
-                              style: TextStyles.subtitle.copyWith(
-                                fontWeight: FontWeight.w500,
-                              ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        FittedBox(
+                          fit: BoxFit.scaleDown,
+                          child: Text(
+                            '$priceLabel ${quote.currency}',
+                            style: TextStyles.subtitle.copyWith(
+                              fontWeight: FontWeight.w500,
                             ),
-                          ),
-                          const SizedBox(height: 2),
-                          Text(
-                            '${isPositive ? '+' : '-'}${changePercent.abs().toStringAsFixed(2)}%',
-                            style: TextStyles.smallBold.copyWith(
-                              color: priceColor,
-                            ),
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ],
-                      ),
-                    )
-                  else
-                    SizedBox(
-                      width: 16,
-                      height: 16,
-                      child: CircularProgressIndicator(
-                        strokeWidth: 2,
-                        color: AppColors.textSecondary,
-                      ),
-                    ),
-                  // 添加按钮
-                  const SizedBox(width: 12),
-                  if (isExisting)
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 10,
-                        vertical: 5,
-                      ),
-                      decoration: BoxDecoration(
-                        color: AppColors.border,
-                        borderRadius: BorderRadius.circular(6),
-                      ),
-                      child: Text(
-                        AppConfig.btnAdded,
-                        style: TextStyles.bodySmall,
-                      ),
-                    )
-                  else
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 10,
-                        vertical: 5,
-                      ),
-                      decoration: BoxDecoration(
-                        color: AppColors.surfaceElevated.withValues(alpha: 0.5),
-                        borderRadius: BorderRadius.circular(6),
-                        border: Border.all(
-                          color: AppColors.surfaceElevated.withValues(
-                            alpha: 0.5,
                           ),
                         ),
-                      ),
-                      child: Text(AppConfig.btnAdd, style: TextStyles.body13),
+                        const SizedBox(height: 2),
+                        Text(
+                          '${isPositive ? '+' : '-'}${changePercent.abs().toStringAsFixed(2)}%',
+                          style: TextStyles.smallBold.copyWith(
+                            color: priceColor,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ],
                     ),
+                  const SizedBox(height: 6),
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 10,
+                      vertical: 5,
+                    ),
+                    decoration: BoxDecoration(
+                      color: isExisting
+                          ? AppColors.border
+                          : AppColors.surfaceElevated.withValues(alpha: 0.5),
+                      borderRadius: BorderRadius.circular(6),
+                    ),
+                    child: Text(
+                      isExisting ? AppConfig.btnAdded : AppConfig.btnAdd,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyles.body13,
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -800,7 +780,7 @@ class _AddStockConfirmDialogState extends State<_AddStockConfirmDialog> {
     _currency = widget.currency;
     _priceController = TextEditingController(
       text: widget.defaultPrice > 0
-          ? CurrencyUtil.formatRate(widget.defaultPrice)
+          ? CurrencyUtil.formatInput(widget.defaultPrice)
           : '',
     );
     _sharesController = TextEditingController();
@@ -815,11 +795,11 @@ class _AddStockConfirmDialogState extends State<_AddStockConfirmDialog> {
         _feeSettingValue <= 0) {
       return;
     }
-    final price = double.tryParse(_priceController.text);
-    final shares = double.tryParse(_sharesController.text);
+    final price = CurrencyUtil.parseInput(_priceController.text);
+    final shares = CurrencyUtil.parseInput(_sharesController.text);
     if (price == null || shares == null || price <= 0 || shares <= 0) return;
     final fee = price * shares * _feeSettingValue / 100;
-    _feeController.text = CurrencyUtil.formatRate(fee);
+    _feeController.text = CurrencyUtil.formatInput(fee);
     setState(() {});
   }
 
@@ -831,7 +811,7 @@ class _AddStockConfirmDialogState extends State<_AddStockConfirmDialog> {
     _feeSettingValue = feeValue;
     if (feeValue <= 0) return;
     if (feeType == SettingsService.feeTypeFixed) {
-      _feeController.text = CurrencyUtil.formatRate(feeValue);
+      _feeController.text = CurrencyUtil.formatInput(feeValue);
       return;
     }
     _updateFeeFromInput();
@@ -959,9 +939,11 @@ class _AddStockConfirmDialogState extends State<_AddStockConfirmDialog> {
   }
 
   void _onConfirm() {
-    final price = double.tryParse(_priceController.text);
-    final shares = double.tryParse(_sharesController.text);
-    final fee = double.tryParse(_feeController.text) ?? 0.0;
+    final price = CurrencyUtil.parseInput(_priceController.text);
+    final shares = CurrencyUtil.parseInput(_sharesController.text);
+    final fee = _feeController.text.isEmpty
+        ? 0.0
+        : CurrencyUtil.parseInput(_feeController.text);
 
     if (price == null || price <= 0) {
       CenterToast.error(context, StockConfig.searchInvalidPrice);
@@ -969,6 +951,11 @@ class _AddStockConfirmDialogState extends State<_AddStockConfirmDialog> {
     }
     if (shares == null || shares <= 0) {
       CenterToast.error(context, StockConfig.searchInvalidShares);
+      return;
+    }
+
+    if (fee == null || fee < 0) {
+      CenterToast.error(context, AssetConfig.toastInvalidBalance);
       return;
     }
 

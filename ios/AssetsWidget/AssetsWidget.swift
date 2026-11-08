@@ -48,7 +48,7 @@ private enum WidgetWords {
   static let words: [String: [String: String]] = [
     "total": ["ar": "إجمالي الأصول", "bn": "মোট সম্পদ", "cs": "Celková aktiva", "da": "Samlede aktiver", "de": "Gesamtvermögen", "el": "Σύνολο ενεργητικού", "en": "Total assets", "es": "Activos totales", "fa": "کل دارایی ها", "fi": "Varat yhteensä", "fil": "Kabuuang mga asset", "fr": "Actif total", "he": "סך הנכסים", "hi": "कुल संपत्ति", "id": "Jumlah aset", "it": "Patrimonio totale", "ja": "総資産", "ko": "총자산", "ms": "Jumlah aset", "nb": "Totale eiendeler", "nl": "Totaal activa", "pl": "Aktywa ogółem", "pt_BR": "Ativos totais", "pt_PT": "Ativos totais", "ro": "Total active", "ru": "Всего активов", "sv": "Totala tillgångar", "th": "สินทรัพย์รวม", "tr": "Toplam varlıklar", "uk": "Загальні активи", "vi": "Tổng tài sản", "zh": "总资产", "zh_Hant": "總資產"],
     "stocks": ["ar": "الأسهم", "bn": "শেয়ার", "cs": "Akcie", "da": "Aktier", "de": "Aktien", "el": "Μετοχές", "en": "Stocks", "es": "Acciones", "fa": "سهام", "fi": "Osakkeet", "fil": "Mga stock", "fr": "Actions", "he": "מניות", "hi": "शेयर", "id": "Saham", "it": "Azioni", "ja": "株式", "ko": "주식", "ms": "Saham", "nb": "Aksjer", "nl": "Aandelen", "pl": "Akcje", "pt_BR": "Ações", "pt_PT": "Ações", "ro": "Acțiuni", "ru": "Акции", "sv": "Aktier", "th": "หุ้น", "tr": "Hisseler", "uk": "Акції", "vi": "Cổ phiếu", "zh": "股票", "zh_Hant": "股票"],
-    "crypto": ["ar": "تشفير", "bn": "ক্রিপ্টো", "cs": "Krypto", "da": "Krypto", "de": "Krypto", "el": "Crypto", "en": "Crypto", "es": "Cripto", "fa": "رمزنگاری", "fi": "Krypto", "fil": "Crypto", "fr": "Cryptomonnaie", "he": "קריפטו", "hi": "क्रिप्टो", "id": "kripto", "it": "Criptovaluta", "ja": "暗号", "ko": "암호화폐", "ms": "Kripto", "nb": "Krypto", "nl": "Crypto", "pl": "Krypto", "pt_BR": "Criptografia", "pt_PT": "Criptografia", "ro": "Cripto", "ru": "Крипто", "sv": "Krypto", "th": "การเข้ารหัสลับ", "tr": "Kripto", "uk": "Крипто", "vi": "Tiền điện tử", "zh": "数字币", "zh_Hant": "數字幣"],
+    "crypto": ["ar": "عملات مشفرة", "bn": "ক্রিপ্টো", "cs": "Krypto", "da": "Krypto", "de": "Krypto", "el": "Κρύπτο", "en": "Crypto", "es": "Cripto", "fa": "رمزارز", "fi": "Krypto", "fil": "Crypto", "fr": "Crypto", "he": "קריפטו", "hi": "क्रिप्टो", "id": "Kripto", "it": "Cripto", "ja": "暗号資産", "ko": "암호화폐", "ms": "Kripto", "nb": "Krypto", "nl": "Crypto", "pl": "Krypto", "pt_BR": "Cripto", "pt_PT": "Cripto", "ro": "Cripto", "ru": "Крипто", "sv": "Krypto", "th": "คริปโท", "tr": "Kripto", "uk": "Крипто", "vi": "Tiền mã hóa", "zh": "数字币", "zh_Hant": "數字幣"],
     "other": ["ar": "أخرى", "bn": "অন্যান্য", "cs": "Jiné", "da": "Andet", "de": "Andere", "el": "Άλλο", "en": "Other", "es": "Otro", "fa": "دیگر", "fi": "muu", "fil": "Iba pa", "fr": "Autre", "he": "אחר", "hi": "अन्य", "id": "Lainnya", "it": "Altro", "ja": "その他", "ko": "기타", "ms": "Lain-lain", "nb": "Annet", "nl": "Anders", "pl": "Inne", "pt_BR": "Outro", "pt_PT": "Outro", "ro": "Altele", "ru": "Другое", "sv": "Annat", "th": "อื่นๆ", "tr": "Diğer", "uk": "інше", "vi": "Khác", "zh": "其他资产", "zh_Hant": "其他資產"],
     "updated": ["ar": "تم التحديث", "bn": "আপডেট করা হয়েছে", "cs": "Aktualizováno", "da": "Opdateret", "de": "Aktualisiert", "el": "Ενημερώθηκε", "en": "Updated", "es": "Actualizado", "fa": "به روز شد", "fi": "Päivitetty", "fil": "Na-update", "fr": "Mis à jour", "he": "עודכן", "hi": "अद्यतन किया गया", "id": "Diperbarui", "it": "Aggiornato", "ja": "更新されました", "ko": "업데이트됨", "ms": "dikemas kini", "nb": "Oppdatert", "nl": "Bijgewerkt", "pl": "Zaktualizowano", "pt_BR": "Atualizado", "pt_PT": "Atualizado", "ro": "Actualizat", "ru": "Обновлено", "sv": "Uppdaterad", "th": "อัปเดตแล้ว", "tr": "Güncellendi", "uk": "Оновлено", "vi": "Đã cập nhật", "zh": "更新于", "zh_Hant": "更新於"],
     "stale": ["ar": "قديمة", "bn": "বাসি", "cs": "Zatuchlý", "da": "Forældet", "de": "Abgestanden", "el": "μπαγιάτικο", "en": "Stale", "es": "rancio", "fa": "کهنه", "fi": "Vanhentunut", "fil": "lipas na", "fr": "périmé", "he": "מעופש", "hi": "बासी", "id": "Basi", "it": "Stanco", "ja": "古い", "ko": "부실", "ms": "basi", "nb": "Foreldet", "nl": "Oud", "pl": "Nieświeży", "pt_BR": "Obsoleto", "pt_PT": "Obsoleto", "ro": "Învechit", "ru": "Несвежий", "sv": "Inaktuella", "th": "ค้าง", "tr": "Bayat", "uk": "Несвіжий", "vi": "Cũ", "zh": "已过期", "zh_Hant": "已過期"],
@@ -58,9 +58,8 @@ private enum WidgetWords {
     "description": ["ar": "اطلع على إجمالي أصولك وملخص المحفظة ووقت التحديث.", "bn": "আপনার মোট সম্পদ, পোর্টফোলিও সারাংশ এবং আপডেট সময় দেখুন।", "cs": "Podívejte se na vaše celková aktiva, souhrn portfolia a čas aktualizace.", "da": "Se dine samlede aktiver, porteføljeoversigt og opdateringstid.", "de": "Sehen Sie sich Ihr Gesamtvermögen, Ihre Portfolioübersicht und die Aktualisierungszeit an.", "el": "Δείτε τα συνολικά περιουσιακά σας στοιχεία, τη σύνοψη του χαρτοφυλακίου και τον χρόνο ενημέρωσης.", "en": "See your total assets, portfolio summary, and update time.", "es": "Vea sus activos totales, resumen de cartera y tiempo de actualización.", "fa": "کل دارایی‌ها، خلاصه نمونه کارها و زمان به‌روزرسانی را ببینید.", "fi": "Katso kokonaisvarallisuutesi, salkun yhteenveto ja päivitysaika.", "fil": "Tingnan ang iyong kabuuang mga asset, buod ng portfolio, at oras ng pag-update.", "fr": "Consultez le total de vos actifs, le résumé de votre portefeuille et l'heure de mise à jour.", "he": "ראה את סך הנכסים שלך, סיכום תיקים וזמן עדכון.", "hi": "अपनी कुल संपत्ति, पोर्टफोलियो सारांश और अद्यतन समय देखें।", "id": "Lihat total aset Anda, ringkasan portofolio, dan waktu pembaruan.", "it": "Visualizza le tue risorse totali, il riepilogo del portafoglio e l'ora di aggiornamento.", "ja": "総資産、ポートフォリオの概要、更新時間を確認します。", "ko": "총 자산, 포트폴리오 요약 및 업데이트 시간을 확인하세요.", "ms": "Lihat jumlah aset anda, ringkasan portfolio dan masa kemas kini.", "nb": "Se totale eiendeler, porteføljesammendrag og oppdateringstid.", "nl": "Bekijk uw totale vermogen, portfoliooverzicht en updatetijd.", "pl": "Zobacz swoje aktywa ogółem, podsumowanie portfela i czas aktualizacji.", "pt_BR": "Veja seu total de ativos, resumo do portfólio e tempo de atualização.", "pt_PT": "Veja o seu total de ativos, resumo da carteira e tempo de atualização.", "ro": "Vedeți activele totale, rezumatul portofoliului și timpul de actualizare.", "ru": "Просматривайте свои общие активы, сводку портфеля и время обновления.", "sv": "Se dina totala tillgångar, portföljsammanfattning och uppdateringstid.", "th": "ดูสินทรัพย์รวม สรุปพอร์ตโฟลิโอ และเวลาอัปเดต", "tr": "Toplam varlıklarınızı, portföy özetinizi ve güncelleme zamanını görün.", "uk": "Перегляньте свої загальні активи, підсумок портфоліо та час оновлення.", "vi": "Xem tổng tài sản, tóm tắt danh mục đầu tư và thời gian cập nhật của bạn.", "zh": "查看总资产、组合摘要及更新时间。", "zh_Hant": "查看總資產、組合摘要及更新時間。"],
   ]
 
-  static func language(_ snapshot: AssetWidgetSnapshot?) -> String {
+  static func language(_ snapshot: AssetWidgetSnapshot?, locale: Locale = .current) -> String {
     if let language = snapshot?.language, words["total"]?[language] != nil { return language }
-    let locale = Locale.current
     var code = locale.language.languageCode?.identifier ?? "en"
     code = ["tl": "fil", "no": "nb", "iw": "he", "in": "id"][code] ?? code
     if code == "zh" {
@@ -88,7 +87,10 @@ private struct AssetWidgetView: View {
   private var biometricLock = false
   let entry: AssetWidgetEntry
 
-  private var language: String { WidgetWords.language(entry.snapshot) }
+  // 组件预览不展示资产快照，但仍沿用 App 选择的语言。
+  private var language: String {
+    WidgetWords.language(entry.snapshot ?? AssetWidgetSnapshotStore.read())
+  }
   private func word(_ key: String) -> String { WidgetWords.text(key, language) }
   private var isHidden: Bool {
     (entry.snapshot?.hidden ?? false) || hideAmounts || biometricLock
@@ -217,6 +219,8 @@ private struct AssetWidgetView: View {
       Text(word("total"))
         .font(.system(size: 15, weight: .medium))
         .foregroundStyle(.secondary)
+        .lineLimit(1)
+        .minimumScaleFactor(0.7)
       Text(total)
         .font(.system(size: size == .small ? 32 : 36,
                       weight: .bold, design: .rounded))
@@ -230,7 +234,7 @@ private struct AssetWidgetView: View {
   private func statusRow(size: HomeSize) -> some View {
     if size == .small {
       VStack(spacing: 1) {
-        if status != word("updated") { Text(status) }
+        if updateLine != nil && status != word("updated") { Text(status) }
         Text(updateLine ?? status)
       }
       .frame(maxWidth: .infinity, alignment: .center)
@@ -240,10 +244,9 @@ private struct AssetWidgetView: View {
       .lineLimit(1)
       .minimumScaleFactor(0.7)
     } else {
-      ZStack(alignment: .leading) {
+      VStack(spacing: 1) {
         if updateLine != nil && status != word("updated") {
           Text(status)
-            .frame(maxWidth: 80, alignment: .leading)
             .font(.system(size: 10, weight: .medium))
             .lineLimit(1)
             .minimumScaleFactor(0.7)
@@ -257,7 +260,7 @@ private struct AssetWidgetView: View {
       .foregroundStyle(.secondary)
       .lineLimit(1)
       .minimumScaleFactor(0.8)
-      .accessibilityLabel(status == word("updated") ? updateLine ?? status : "\(status)，\(updateLine ?? "")")
+      .accessibilityElement(children: .combine)
     }
   }
 
@@ -295,7 +298,7 @@ private struct AssetSummaryWidget: Widget {
       AssetWidgetView(entry: $0)
     }
     .configurationDisplayName("iAssets")
-    .description(WidgetWords.text("description", WidgetWords.language(nil)))
+    .description(WidgetWords.text("description", WidgetWords.language(AssetWidgetSnapshotStore.read())))
     .supportedFamilies([.systemSmall, .systemMedium, .accessoryRectangular,
                         .accessoryInline])
     .contentMarginsDisabled()

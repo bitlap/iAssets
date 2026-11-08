@@ -188,7 +188,7 @@ class _BalanceDialogState extends State<_BalanceDialog> {
     nameCtrl = TextEditingController(text: a?.name ?? '');
     balanceCtrl = TextEditingController(
       text: a != null
-          ? CurrencyUtil.formatRate((a as dynamic).balance ?? 0)
+          ? CurrencyUtil.formatInput((a as dynamic).balance ?? 0)
           : '',
     );
     currency = a?.currency ?? widget.defaultCurrency;
@@ -287,7 +287,7 @@ class _BalanceDialogState extends State<_BalanceDialog> {
           actionButtonRow(
             onCancel: () => Navigator.pop(context),
             onConfirm: () {
-              final balance = double.tryParse(balanceCtrl.text);
+              final balance = CurrencyUtil.parseInput(balanceCtrl.text);
               if (balance == null || balance < 0) {
                 CenterToast.error(context, AssetConfig.toastInvalidBalance);
                 return;
@@ -396,7 +396,7 @@ class _TimeDepositDialogState extends State<_TimeDepositDialog> {
     final td = widget.td;
     nameCtrl = TextEditingController(text: td?.name ?? '');
     principalCtrl = TextEditingController(
-      text: td != null ? CurrencyUtil.formatRate(td.principal) : '',
+      text: td != null ? CurrencyUtil.formatInput(td.principal) : '',
     );
     rateCtrl = TextEditingController(
       text: td != null ? td.annualRate.toString() : '',
@@ -495,8 +495,8 @@ class _TimeDepositDialogState extends State<_TimeDepositDialog> {
           actionButtonRow(
             onCancel: () => Navigator.pop(context),
             onConfirm: () {
-              final principal = double.tryParse(principalCtrl.text);
-              final rate = double.tryParse(rateCtrl.text);
+              final principal = CurrencyUtil.parseInput(principalCtrl.text);
+              final rate = CurrencyUtil.parseInput(rateCtrl.text);
               if (principal == null || principal <= 0) {
                 CenterToast.error(context, AssetConfig.toastInvalidPrincipal);
                 return;
@@ -577,10 +577,10 @@ class _WealthProductDialogState extends State<_WealthProductDialog> {
     final wp = widget.wp;
     nameCtrl = TextEditingController(text: wp?.name ?? '');
     sharesCtrl = TextEditingController(
-      text: wp != null ? CurrencyUtil.formatRate(wp.shares) : '',
+      text: wp != null ? CurrencyUtil.formatInput(wp.shares) : '',
     );
     navCtrl = TextEditingController(
-      text: wp != null ? CurrencyUtil.formatRate(wp.nav) : '',
+      text: wp != null ? CurrencyUtil.formatInput(wp.nav) : '',
     );
     currency = wp?.currency ?? widget.defaultCurrency;
   }
@@ -642,8 +642,8 @@ class _WealthProductDialogState extends State<_WealthProductDialog> {
           actionButtonRow(
             onCancel: () => Navigator.pop(context),
             onConfirm: () {
-              final shares = double.tryParse(sharesCtrl.text);
-              final nav = double.tryParse(navCtrl.text);
+              final shares = CurrencyUtil.parseInput(sharesCtrl.text);
+              final nav = CurrencyUtil.parseInput(navCtrl.text);
               if (shares == null || shares <= 0) {
                 CenterToast.error(context, AssetConfig.toastInvalidShares);
                 return;

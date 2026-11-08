@@ -237,11 +237,15 @@ class AnimatedHomeHeader extends StatelessWidget {
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Text(
-                      title,
-                      style: TextStyles.headline.copyWith(
-                        fontSize: 22,
-                        height: 1.2,
+                    Flexible(
+                      child: Text(
+                        title,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyles.headline.copyWith(
+                          fontSize: 22,
+                          height: 1.2,
+                        ),
                       ),
                     ),
                     if (showDividend) ...[

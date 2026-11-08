@@ -53,17 +53,30 @@ class AssetHeader extends StatelessWidget {
         children: [
           Row(
             children: [
-              Text(StockConfig.assetTotalAssets, style: TextStyles.body13),
-              const SizedBox(width: 4),
-              GestureDetector(
-                onTap: () => _showRatioHelpDialog(context),
-                child: Icon(
-                  Icons.help_outline,
-                  size: 13,
-                  color: AppColors.warning,
+              Expanded(
+                child: Row(
+                  children: [
+                    Flexible(
+                      child: Text(
+                        StockConfig.assetTotalAssets,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyles.body13,
+                      ),
+                    ),
+                    const SizedBox(width: 4),
+                    GestureDetector(
+                      onTap: () => _showRatioHelpDialog(context),
+                      child: Icon(
+                        Icons.help_outline,
+                        size: 13,
+                        color: AppColors.warning,
+                      ),
+                    ),
+                  ],
                 ),
               ),
-              const Spacer(),
+              const SizedBox(width: 8),
               CurrencySelectorButton(currency: currency, onTap: onCurrencyTap),
             ],
           ),

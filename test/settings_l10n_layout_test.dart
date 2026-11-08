@@ -1,6 +1,8 @@
 import 'dart:io';
 
 import 'package:assets/l10n/l10n.dart';
+import 'package:assets/config/app_config.dart';
+import 'package:assets/widgets/common/app_number_field.dart';
 import 'package:assets/widgets/settings_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -48,6 +50,61 @@ void main() {
         await tester.drag(find.byType(ListView).first, const Offset(0, -600));
         await tester.pumpAndSettle();
         expect(tester.takeException(), isNull, reason: language);
+      }
+      for (final key in ['sectionFee', 'sortLabel', 'feedbackLabel']) {
+        tester
+            .state<ScrollableState>(find.byType(Scrollable).first)
+            .position
+            .jumpTo(0);
+        await tester.pumpAndSettle();
+        final header = find.text(L10n.t(key));
+        await tester.scrollUntilVisible(
+          header,
+          200,
+          scrollable: find.byType(Scrollable).first,
+        );
+        await tester.ensureVisible(header);
+        await tester.pumpAndSettle();
+        await tester.tap(header);
+        await tester.pumpAndSettle();
+        expect(
+          tester.takeException(),
+          isNull,
+          reason: '$language/$key expanded',
+        );
+        if (key == 'feedbackLabel') {
+          expect(find.text(AppConfig.repositoryUrl), findsOneWidget);
+          Navigator.of(
+            tester.element(find.text(AppConfig.repositoryUrl)),
+          ).pop();
+        } else {
+          if (key == 'sectionFee') {
+            expect(find.byType(AppNumberField), findsOneWidget);
+          } else {
+            expect(find.byType(ChoiceChip), findsNWidgets(2));
+            final ascending = find.widgetWithText(
+              ChoiceChip,
+              L10n.t('sortAscending'),
+            );
+            final descending = find.widgetWithText(
+              ChoiceChip,
+              L10n.t('sortDescending'),
+            );
+            final target = tester.widget<ChoiceChip>(ascending).selected
+                ? descending
+                : ascending;
+            await tester.ensureVisible(target);
+            await tester.pumpAndSettle();
+            await tester.tap(target);
+            await tester.pumpAndSettle();
+            expect(tester.widget<ChoiceChip>(target).selected, isTrue);
+          }
+          await tester.ensureVisible(header);
+          await tester.pumpAndSettle();
+          await tester.tap(header);
+        }
+        await tester.pumpAndSettle();
+        expect(tester.takeException(), isNull, reason: '$language/$key');
       }
     }
   });

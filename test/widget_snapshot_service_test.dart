@@ -8,6 +8,7 @@ import 'package:assets/services/crypto/exchange_client.dart';
 import 'package:assets/services/privacy_service.dart';
 import 'package:assets/services/pro_service.dart';
 import 'package:assets/services/widget_snapshot_service.dart';
+import 'package:assets/utils/currency_util.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
@@ -62,6 +63,27 @@ void main() {
     expect(captured?['updatedAtMillis'], 1234567890000);
     expect(captured?['incomplete'], false);
   });
+
+  test(
+    'all 33 languages publish localized amounts and their language',
+    () async {
+      final previousLocale = L10n.deviceLocale;
+      addTearDown(() {
+        L10n.deviceLocale = previousLocale;
+        L10n.applyLanguage(L10n.langZh);
+      });
+      for (final entry in L10n.languages.entries) {
+        for (final followSystem in [false, true]) {
+          L10n.deviceLocale = entry.value.locale;
+          L10n.applyLanguage(followSystem ? L10n.langSystem : entry.key);
+          await publish();
+          expect(captured?['language'], entry.key);
+          expect(captured?['total'], '\$${CurrencyUtil.formatCompact(150)}');
+          expect(captured?['updatedAtMillis'], 1234567890000);
+        }
+      }
+    },
+  );
 
   test('privacy modes never send amounts to the widget extension', () async {
     for (final mode in ['hidden', 'locked']) {

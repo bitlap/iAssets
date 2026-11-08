@@ -33,6 +33,15 @@ class CurrencyUtil {
         : formatDecimal(rate, digits: 4);
   }
 
+  /// Form controllers use ungrouped ASCII numbers, independent of UI language.
+  static String formatInput(double value, {int digits = 4}) =>
+      value.isFinite ? value.toStringAsFixed(digits) : '';
+
+  static double? parseInput(String text) {
+    final value = double.tryParse(text);
+    return value != null && value.isFinite ? value : null;
+  }
+
   /// Locale-aware display only; persisted values and numeric inputs stay numeric.
   static String formatDecimal(double value, {int digits = 2}) {
     if (!value.isFinite) return '—';

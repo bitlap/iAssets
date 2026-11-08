@@ -82,7 +82,7 @@ class _SettingsPageState extends State<SettingsPage> {
   Future<void> _saveFeeValue() async {
     final text = _feeValueController.text;
     if (text.isEmpty) return;
-    final value = double.tryParse(text);
+    final value = CurrencyUtil.parseInput(text);
     if (value == null) return;
     await SettingsService.setDefaultFeeValue(value);
     widget.onSettingsChanged?.call();
@@ -104,7 +104,7 @@ class _SettingsPageState extends State<SettingsPage> {
         _syncSettings = syncSettings;
         _selectedFeeType = feeType;
         _feeValueController.text = feeValue > 0
-            ? CurrencyUtil.formatRate(feeValue)
+            ? CurrencyUtil.formatInput(feeValue)
             : '';
         _selectedLanguage = language;
         _selectedTheme = theme;
@@ -641,13 +641,14 @@ class _SettingsPageState extends State<SettingsPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // 类型选择
-                Row(
+                Wrap(
+                  spacing: 8,
+                  runSpacing: 8,
                   children: [
                     _buildFeeTypeChip(
                       SettingsConfig.feeTypePercentage,
                       SettingsService.feeTypePercentage,
                     ),
-                    const SizedBox(width: 8),
                     _buildFeeTypeChip(
                       SettingsConfig.feeTypeFixed,
                       SettingsService.feeTypeFixed,
@@ -834,113 +835,39 @@ class _SettingsPageState extends State<SettingsPage> {
           ),
           Padding(
             padding: const EdgeInsets.fromLTRB(14, 8, 14, 12),
-            child: Row(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const SizedBox(width: 42),
                 Text(
                   SettingsConfig.sortDirectionLabel,
-                  style: TextStyles.subtitleRegular.copyWith(
-                    color: AppColors.grey,
-                  ),
+                  style: TextStyles.body13Grey,
                 ),
-                const Spacer(),
-                Row(
+                const SizedBox(height: 8),
+                Wrap(
+                  spacing: 8,
+                  runSpacing: 8,
                   children: [
-                    GestureDetector(
-                      onTap: _isSortAscending ? null : _toggleSortDirection,
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 14,
-                          vertical: 7,
-                        ),
-                        decoration: BoxDecoration(
-                          color: _isSortAscending
-                              ? AppColors.accent.withValues(alpha: 0.25)
-                              : AppColors.surface,
-                          borderRadius:
-                              const BorderRadiusDirectional.horizontal(
-                                start: Radius.circular(8),
-                              ),
-                          border: Border.all(
-                            color: _isSortAscending
-                                ? AppColors.accent.withValues(alpha: 0.5)
-                                : AppColors.border,
-                            width: 0.5,
-                          ),
-                        ),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Icon(
-                              Icons.arrow_upward,
-                              size: 14,
-                              color: _isSortAscending
-                                  ? AppColors.accent
-                                  : AppColors.grey400,
-                            ),
-                            const SizedBox(width: 4),
-                            Text(
-                              SettingsConfig.sortAscending,
-                              style: TextStyles.body13.copyWith(
-                                color: _isSortAscending
-                                    ? AppColors.accent
-                                    : Colors.grey[300],
-                                fontWeight: _isSortAscending
-                                    ? FontWeight.w600
-                                    : FontWeight.normal,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
+                    ChoiceChip(
+                      avatar: const Icon(Icons.arrow_upward, size: 16),
+                      label: Text(SettingsConfig.sortAscending),
+                      selected: _isSortAscending,
+                      showCheckmark: false,
+                      onSelected: (selected) {
+                        if (selected && !_isSortAscending) {
+                          _toggleSortDirection();
+                        }
+                      },
                     ),
-                    GestureDetector(
-                      onTap: _isSortAscending ? _toggleSortDirection : null,
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 14,
-                          vertical: 7,
-                        ),
-                        decoration: BoxDecoration(
-                          color: !_isSortAscending
-                              ? AppColors.accent.withValues(alpha: 0.25)
-                              : AppColors.surface,
-                          borderRadius:
-                              const BorderRadiusDirectional.horizontal(
-                                end: Radius.circular(8),
-                              ),
-                          border: Border.all(
-                            color: !_isSortAscending
-                                ? AppColors.accent.withValues(alpha: 0.5)
-                                : AppColors.border,
-                            width: 0.5,
-                          ),
-                        ),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Icon(
-                              Icons.arrow_downward,
-                              size: 14,
-                              color: !_isSortAscending
-                                  ? AppColors.accent
-                                  : AppColors.grey400,
-                            ),
-                            const SizedBox(width: 4),
-                            Text(
-                              SettingsConfig.sortDescending,
-                              style: TextStyles.body13.copyWith(
-                                color: !_isSortAscending
-                                    ? AppColors.accent
-                                    : Colors.grey[300],
-                                fontWeight: !_isSortAscending
-                                    ? FontWeight.w600
-                                    : FontWeight.normal,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
+                    ChoiceChip(
+                      avatar: const Icon(Icons.arrow_downward, size: 16),
+                      label: Text(SettingsConfig.sortDescending),
+                      selected: !_isSortAscending,
+                      showCheckmark: false,
+                      onSelected: (selected) {
+                        if (selected && _isSortAscending) {
+                          _toggleSortDirection();
+                        }
+                      },
                     ),
                   ],
                 ),
@@ -1331,19 +1258,29 @@ class _SettingsPageState extends State<SettingsPage> {
     return GestureDetector(
       onTap: onTap,
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Icon(icon, size: 18, color: AppColors.grey500),
           const SizedBox(width: 8),
-          Text(
-            '$label：',
-            style: TextStyles.body13.copyWith(color: AppColors.grey400),
-          ),
-          Flexible(
-            child: Text(
-              value,
-              style: TextStyles.body13.copyWith(
-                color: onTap != null ? AppColors.accent : AppColors.textPrimary,
-              ),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  label,
+                  style: TextStyles.body13.copyWith(color: AppColors.grey400),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  value,
+                  textDirection: TextDirection.ltr,
+                  style: TextStyles.body13.copyWith(
+                    color: onTap != null
+                        ? AppColors.accent
+                        : AppColors.textPrimary,
+                  ),
+                ),
+              ],
             ),
           ),
         ],

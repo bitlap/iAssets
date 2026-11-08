@@ -1,3 +1,5 @@
+import 'trade_action.dart';
+export 'trade_action.dart';
 import 'package:assets/utils/currency_util.dart';
 
 import '../utils/market_util.dart';
@@ -83,6 +85,7 @@ class OperationRecord {
   final DateTime operationTime; // 操作时间（含时分秒，编辑时更新）
   final String type;
   final String description;
+  final TradeAction? action;
   final double amount;
   final double shares;
   final double fee; // 交易手续费（可选，默认0）
@@ -92,6 +95,7 @@ class OperationRecord {
     DateTime? operationTime,
     required this.type,
     required this.description,
+    this.action,
     required this.amount,
     required this.shares,
     this.fee = 0.0,
@@ -103,6 +107,7 @@ class OperationRecord {
     DateTime? operationTime,
     String? type,
     String? description,
+    TradeAction? action,
     double? amount,
     double? shares,
     double? fee,
@@ -112,6 +117,7 @@ class OperationRecord {
       operationTime: operationTime ?? DateTime.now(),
       type: type ?? this.type,
       description: description ?? this.description,
+      action: action ?? this.action,
       amount: amount ?? this.amount,
       shares: shares ?? this.shares,
       fee: fee ?? this.fee,

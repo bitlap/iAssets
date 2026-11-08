@@ -707,6 +707,7 @@ class StockPortfolioPageState extends State<StockPortfolioPage>
       date: DateTime.now(),
       type: StockConfig.opBuyType,
       description: '${StockConfig.opOpenPosition} $id',
+      action: TradeAction.open,
       amount: draft.currentPrice,
       shares: draft.shares,
     );

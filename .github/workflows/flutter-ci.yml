@@ -27,6 +27,9 @@ jobs:
       
       - name: Verify formatting
         run: dart format --output=none --set-exit-if-changed .
+
+      - name: Verify native widget languages
+        run: python3 scripts/test_native_l10n.py
       
       - name: Analyze project source
         run: flutter analyze --no-pub 2>&1 | grep -E "(^Analyzing|error)" || true

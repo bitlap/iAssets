@@ -5,6 +5,7 @@ import 'dart:io';
 
 import 'package:assets/config/app_config.dart';
 import 'package:assets/l10n/l10n.dart';
+import 'package:assets/utils/currency_util.dart';
 import 'package:assets/models/stock_model.dart';
 import 'package:assets/services/exchange_rate_service.dart';
 import 'package:assets/services/settings_service.dart';
@@ -34,7 +35,7 @@ void main() {
     L10n.applyLanguage(L10n.langZh);
   });
 
-  for (final language in [L10n.langZh, L10n.langZhHant, L10n.langEn]) {
+  for (final language in [L10n.langZh, L10n.langZhHant, L10n.langEn, 'de']) {
     for (final row in [
       ('0HCX', 'CHF', 24.565),
       ('0RUQ', 'SEK', .16),
@@ -49,6 +50,7 @@ void main() {
         addTearDown(tester.view.resetDevicePixelRatio);
         L10n.applyLanguage(language);
         StockModel? added;
+        OperationRecord? addedRecord;
         await http.runWithClient(
           () async {
             await tester.pumpWidget(
@@ -60,7 +62,10 @@ void main() {
                         context: context,
                         isScrollControlled: true,
                         builder: (_) => SearchStockDialog(
-                          onStockAdded: (stock, _) => added = stock,
+                          onStockAdded: (stock, record) {
+                            added = stock;
+                            addedRecord = record;
+                          },
                         ),
                       ),
                       child: const Text('Search'),
@@ -81,7 +86,7 @@ void main() {
             await tester.pumpAndSettle();
             if (row.$3 > 0) {
               expect(
-                find.text('${row.$3.toStringAsFixed(4)} ${row.$2}'),
+                find.text('${CurrencyUtil.formatRate(row.$3)} ${row.$2}'),
                 findsOneWidget,
               );
             }
@@ -115,10 +120,14 @@ void main() {
               expect(currency.value, row.$2);
             }
             final fields = find.byType(TextField);
-            await tester.enterText(fields.at(1), '10');
+            if (row.$3 == 0) {
+              await tester.enterText(fields.at(1), '10');
+            }
             await tester.enterText(fields.at(2), '2');
             await tester.tap(find.text(AppConfig.btnConfirmAdd));
             await tester.pumpAndSettle();
+            expect(addedRecord!.amount, row.$3 > 0 ? row.$3 : 10);
+            expect(addedRecord!.action, TradeAction.open);
             expect(added!.currency, row.$2);
             expect(added!.currentPrice, row.$3 > 0 ? row.$3 : 10);
             final restored = stocksFromJson(stocksToJson([added!])).single;

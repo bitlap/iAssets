@@ -58,6 +58,10 @@ class AppTheme {
         backgroundColor: surfaceElevated,
         surfaceTintColor: Colors.transparent,
       ),
+      // 底部弹窗使用当前窗口的可用宽度，包括 iPad 横屏和分屏。
+      bottomSheetTheme: const BottomSheetThemeData(
+        constraints: BoxConstraints(maxWidth: double.infinity),
+      ),
       switchTheme: const SwitchThemeData(
         trackOutlineColor: WidgetStatePropertyAll(Colors.transparent),
         trackOutlineWidth: WidgetStatePropertyAll(0),

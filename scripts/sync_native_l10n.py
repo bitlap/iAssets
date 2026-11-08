@@ -59,9 +59,8 @@ def main():
 ''' + '\n'.join(words) + '''
   ]
 
-  static func language(_ snapshot: AssetWidgetSnapshot?) -> String {
+  static func language(_ snapshot: AssetWidgetSnapshot?, locale: Locale = .current) -> String {
     if let language = snapshot?.language, words["total"]?[language] != nil { return language }
-    let locale = Locale.current
     var code = locale.language.languageCode?.identifier ?? "en"
     code = ["tl": "fil", "no": "nb", "iw": "he", "in": "id"][code] ?? code
     if code == "zh" {
@@ -85,6 +84,21 @@ def main():
     end = source.index('private struct AssetWidgetView:', start)
     source = source[:start] + generated + source[end:]
     widget.write_text(source)
+
+    # The extension has no .lproj resources: declare the languages supplied by
+    # WidgetWords so iOS also recognizes them when presenting the widget gallery.
+    widget_plist = ROOT / 'ios/AssetsWidget/Info.plist'
+    source = widget_plist.read_text()
+    source = re.sub(r'  <key>CFBundleLocalizations</key>\n  <array>.*?</array>\n', '', source, flags=re.S)
+    regions = [
+        {'zh': 'zh-Hans', 'zh_Hant': 'zh-Hant'}.get(code, code.replace('_', '-'))
+        for code in catalogs
+    ]
+    localized = '  <key>CFBundleLocalizations</key>\n  <array>\n'
+    localized += ''.join(f'    <string>{region}</string>\n' for region in regions)
+    localized += '  </array>\n'
+    source = source.replace('  <key>NSExtension</key>', localized + '  <key>NSExtension</key>')
+    widget_plist.write_text(source)
 
     project = ROOT / 'ios/Runner.xcodeproj/project.pbxproj'
     source = project.read_text()
