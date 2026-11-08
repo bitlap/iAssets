@@ -1,5 +1,5 @@
 /// 开发者配置信息 - 集中管理全局常量
-library app_config;
+library;
 
 export 'settings_config.dart';
 export 'stock_config.dart';

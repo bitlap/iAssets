@@ -463,7 +463,6 @@ class _ProfitChartPainter extends CustomPainter {
     // 选中指示器：垂直虚线、数值和日期
     if (selectedIndex != null && selectedIndex! < data.length) {
       final selX = scaleX(selectedIndex!);
-      final selY = scaleY(data[selectedIndex!]);
       final selSnapshot = snapshots[selectedIndex!];
 
       // 贯穿图表容器顶部与底部的垂直虚线

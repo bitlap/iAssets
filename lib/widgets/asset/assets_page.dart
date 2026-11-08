@@ -229,9 +229,8 @@ class AssetsPageState extends State<AssetsPage> {
     if (mounted) CenterToast.success(context, AssetConfig.toastSaved);
   }
 
-  void _onFlatReorder(int oldIndex, int newIndex) {
+  Future<void> _onFlatReorder(int oldIndex, int newIndex) async {
     try {
-      if (newIndex > oldIndex) newIndex--;
       final item = _flatItems[oldIndex];
 
       if (item is SectionHeader) {
@@ -300,8 +299,8 @@ class AssetsPageState extends State<AssetsPage> {
       }
 
       _rebuildFlatItems();
-      _saveSectionOrder();
-      _save();
+      await _saveSectionOrder();
+      await _save();
     } catch (_) {
       _rebuildFlatItems();
     }
@@ -562,7 +561,7 @@ class AssetsPageState extends State<AssetsPage> {
               else
                 SliverReorderableList(
                   itemCount: _flatItems.length,
-                  onReorder: _onFlatReorder,
+                  onReorderItem: _onFlatReorder,
                   itemBuilder: (context, index) {
                     final item = _flatItems[index];
                     return switch (item) {

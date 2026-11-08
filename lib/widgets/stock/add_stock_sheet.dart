@@ -226,8 +226,9 @@ class _CustomStockSheetState extends State<_CustomStockSheet> {
       final bytes = await pick();
       if (bytes != null && mounted) setState(() => _imageBytes = bytes);
     } catch (_) {
-      if (mounted)
+      if (mounted) {
         CenterToast.error(context, StockConfig.customStockImageFailed);
+      }
     } finally {
       if (mounted) setState(() => _pickingImage = false);
     }

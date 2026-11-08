@@ -238,8 +238,9 @@ class _OperationRecordsTabState extends State<OperationRecordsTab> {
                 if (newPrice == null ||
                     newPrice <= 0 ||
                     newShares == null ||
-                    newShares <= 0)
+                    newShares <= 0) {
                   return;
+                }
                 final updated = record.copyWith(
                   amount: newPrice,
                   shares: newShares,

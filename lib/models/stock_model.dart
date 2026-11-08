@@ -35,13 +35,12 @@ class StockModel {
     this.logoUrl,
     String marketType = MarketUtil.searchMarketUS,
     this.changePercent = 0.0,
-    String? currency,
+    this._currency,
     required this.secid,
     this.isCustom = false,
   }) : marketType = isCustom
            ? marketType
-           : MarketUtil.marketFromProvider(marketType, secid: secid),
-       _currency = currency;
+           : MarketUtil.marketFromProvider(marketType, secid: secid);
 
   /// 复制并修改
   StockModel copyWith({

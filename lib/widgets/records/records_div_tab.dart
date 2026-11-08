@@ -295,8 +295,9 @@ class _DividendRecordsTabState extends State<DividendRecordsTab> {
                   if (newAmount == null ||
                       newAmount <= 0 ||
                       newShares == null ||
-                      newShares <= 0)
+                      newShares <= 0) {
                     return;
+                  }
                   final updated = record.copyWith(
                     date: selectedDate,
                     amount: newAmount,
