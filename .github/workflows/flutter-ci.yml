@@ -28,6 +28,11 @@ jobs:
       - name: Verify formatting
         run: dart format --output=none --set-exit-if-changed .
 
+      - name: Verify release documentation
+        run: |
+          python3 scripts/check_release_notes.py
+          python3 scripts/test_release_notes.py
+
       - name: Verify native widget languages
         run: python3 scripts/test_native_l10n.py
       

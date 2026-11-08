@@ -1,0 +1,24 @@
+iAssets
+
+Se dina totala tillgångar, portföljsammanfattning och uppdateringstid.
+
+Gratis: upp till 3 aktier och 3 tillgångstyper, med upp till 3 poster per typ. Befintlig data bevaras när ett abonnemang löper ut.
+
+Face ID / Touch ID lås · Dölj belopp
+
+Pro
+• Obegränsade tillgångar: Fler aktier, alla tillgångstyper, obegränsade poster
+• Kryptokonton: Visa börssaldon och positioner med skrivskyddad synkronisering
+• Import & export: Säkerhetskopiera, flytta och återställ dina tillgångsposter
+• Anpassade lager: Lägg till dina egna namn, innehav och priser
+
+Månatlig · förnyas automatiskt varje månad
+Årlig · förnyas automatiskt varje år
+Livstid · engångsköp
+Ett livstidsköp avbryter inte automatiskt ett befintligt abonnemang. Avbryt det i Hantera prenumerationer för att undvika ytterligare avgifter.
+
+Användarvillkor: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
+Sekretesspolicy: https://bitlap.org/iAssets-privacy/
+
+Detta är programvara med öppen källkod. Lämna förslag eller rapportera problem på GitHub.
+https://github.com/bitlap/iAssets

@@ -7,9 +7,11 @@
 | Flutter 权益与配额 | `test/services/pro_service_test.dart` | 免费上限、永久权益、验证失败、到期锁定、导入导出拦截 |
 | Flutter 购买流程 | `test/services/pro_purchase_test.dart` | 月/年/买断商品、重复点击、取消、待批准、异常重试、恢复失败、续订、精确到期、交易更新并发、当地价格及配置校验 |
 | 购买页交互 | `test/pro_purchase_page_test.dart` | 默认年付、选择月付/买断后实际商品 ID、商品缺失与身份未验证时禁用付款、订阅转买断确认与取消 |
-| 界面与功能限制 | `test/pro_page_test.dart`、`test/pro_limits_widget_test.dart`、`test/crypto/` | 三语言深浅主题、受限入口、免费状态不查询交易所、同步过程中失去权益 |
+| 界面与功能限制 | `test/pro_page_test.dart`、`test/pro_limits_widget_test.dart`、`test/crypto/` | 现有购买页用例覆盖中简/中繁/英的深浅主题、受限入口、免费状态不查询交易所、同步过程中失去权益 |
 | iOS 原生判定 | `ios/RunnerTests/RunnerTests.swift` | 老用户严格分界、生产/沙盒与 Bundle ID、商品 ID/类型匹配、撤销/升级、订阅与宽限期截止时间、永久权益优先级 |
 | Xcode 本地 StoreKit | `ios/RunnerTests/ProStoreKitTests.swift`、`ios/RunnerTests/Pro.storekit` | 通过原生 `ProStore` 加载真实 StoreKit 测试商品，验证购买、恢复、重复购买、退款、续订、到期与 Ask to Buy |
+
+购买页现有三语布局测试不代表全部 33 种语言已完成视觉验收；完整语言范围及待测项按 [多语言维护说明](localization.md) 和 [发布测试索引](release-testing.md) 核对。
 
 StoreKit 适配器先检查 `VerificationResult.verified`，再将事实交给 `ProEntitlementPolicy`。原生测试直接覆盖生产代码使用的判定规则，不构造或伪造 Apple 签名交易。Flutter 测试模拟平台通道，验证购买结果字符串本身不能解锁权益，必须在后续权益快照中确认。
 
@@ -58,7 +60,7 @@ xcodebuild test \
   CODE_SIGNING_ALLOWED=YES CODE_SIGN_IDENTITY=-
 ```
 
-以上使用模拟器临时签名，不需要分发证书。设备名称和系统版本需替换为本机已安装的运行时。部分 iOS 26.5 运行时存在命令行无法加载 StoreKit 配置的已知问题，表现为 `SKInternalErrorDomain Code=3`；请选用兼容运行时或已修复该问题的 Xcode/运行时组合，参见 [Apple 开发者论坛](https://developer.apple.com/forums/thread/826971)。测试商品加载失败会直接报告失败，不能把它当作交易用例通过。
+以上使用模拟器临时签名，不需要分发证书。设备名称和系统版本需替换为本机已安装的运行时。若出现 `SKInternalErrorDomain Code=3` 或商品加载失败，先核对测试 scheme、StoreKit 配置和已安装的运行时，再检查对应 Xcode/运行时的兼容性；不能仅凭错误码认定为特定系统版本的问题。测试商品加载失败会直接报告失败，不能把它当作交易用例通过。
 
 这层测试使用生产原生适配器与 StoreKit 的本地交易环境，比 Flutter 平台通道模拟更接近实际运行，但仍不能验证商店商品是否可售、真实 Apple 账户恢复或生产老用户凭据。Apple 真实沙盒需要先在 App Store Connect 创建商品和沙盒测试账户，再按下节验收。
 

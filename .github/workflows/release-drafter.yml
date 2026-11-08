@@ -1,6 +1,6 @@
 name: Release Drafter
 
-# master 更新时创建/更新 Release 草稿，正文使用对应版本的三语 changelog。
+# master 更新时创建/更新 Release 草稿，正文使用对应版本的多语言 changelog。
 # 版本号直接取自 pubspec.yaml（如 1.5.0 → v1.5.0），无需给 PR 打标签
 # 配置见 .github/release-drafter.yml
 on:
@@ -28,7 +28,7 @@ jobs:
         id: version
         run: |
           VERSION=$(grep -E '^version:' pubspec.yaml | awk '{print $2}' | cut -d'+' -f1)
-          test -s "changelog/$VERSION.md"
+          python3 scripts/check_release_notes.py --version "$VERSION"
           echo "version=$VERSION" >> "$GITHUB_OUTPUT"
           echo "tag=v$VERSION" >> "$GITHUB_OUTPUT"
 
@@ -55,12 +55,6 @@ jobs:
               throw new Error('Invalid release version or draft ID');
             }
             const body = fs.readFileSync(`changelog/${version}.md`, 'utf8').trim();
-            for (const heading of ['简体中文', '繁體中文', 'English']) {
-              const section = body.split(`## ${heading}\n`)[1]?.split('\n## ')[0];
-              if (!section || !/^[-*] .+/m.test(section)) {
-                throw new Error(`Missing release notes: ${heading}`);
-              }
-            }
             const {data: release} = await github.rest.repos.getRelease({
               ...context.repo, release_id: releaseId,
             });

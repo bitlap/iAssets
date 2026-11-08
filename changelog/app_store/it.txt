@@ -1,0 +1,24 @@
+iAssets
+
+Visualizza le tue risorse totali, il riepilogo del portafoglio e l'ora di aggiornamento.
+
+Gratuito: fino a 3 azioni e 3 tipi di asset, con un massimo di 3 record per tipo. I dati esistenti vengono conservati alla scadenza dell'abbonamento.
+
+Serratura Face ID / Touch ID · Nascondi importi
+
+Pro
+• Risorse illimitate: Più azioni, ogni tipo di asset, record illimitati
+• Conti crittografici: Visualizza i saldi e le posizioni di cambio con la sincronizzazione di sola lettura
+• Importazione ed esportazione: Esegui il backup, sposta e ripristina i record delle tue risorse
+• Scorte personalizzate: Aggiungi i tuoi nomi, partecipazioni e prezzi
+
+Mensile · si rinnova automaticamente ogni mese
+Annuale · si rinnova automaticamente ogni anno
+A vita · acquisto una tantum
+Un acquisto a vita non annulla automaticamente un abbonamento esistente. Annullalo in Gestisci abbonamenti per evitare ulteriori addebiti.
+
+Condizioni d'uso: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
+Informativa sulla privacy: https://bitlap.org/iAssets-privacy/
+
+Questo software è open source. Puoi inviare suggerimenti o segnalare problemi su GitHub.
+https://github.com/bitlap/iAssets

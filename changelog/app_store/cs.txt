@@ -1,0 +1,24 @@
+iAssets
+
+Podívejte se na vaše celková aktiva, souhrn portfolia a čas aktualizace.
+
+Zdarma: až 3 akcie a 3 typy majetku s až 3 záznamy na typ. Stávající data jsou uchována, když předplatné vyprší.
+
+Zámek Face ID / Touch ID · Skrýt částky
+
+Pro
+• Neomezený majetek: Více zásob, každý typ majetku, neomezené záznamy
+• Krypto účty: Zobrazte směnné zůstatky a pozice se synchronizací pouze pro čtení
+• Import a export: Zálohujte, přesouvejte a obnovujte své záznamy o majetku
+• Vlastní zásoby: Přidejte vlastní jména, podíly a ceny
+
+Měsíčně · automaticky se obnovuje každý měsíc
+Roční · každý rok se automaticky obnovuje
+Doživotní · jednorázový nákup
+Doživotní nákup automaticky nezruší stávající předplatné. Chcete-li se vyhnout dalším poplatkům, zrušte jej v části Správa předplatných.
+
+Podmínky použití: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
+Zásady ochrany osobních údajů: https://bitlap.org/iAssets-privacy/
+
+Tento software má otevřený zdrojový kód. Návrhy a problémy můžete hlásit na GitHubu.
+https://github.com/bitlap/iAssets

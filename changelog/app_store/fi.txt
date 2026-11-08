@@ -1,0 +1,24 @@
+iAssets
+
+Katso kokonaisvarallisuutesi, salkun yhteenveto ja päivitysaika.
+
+Ilmainen: enintään 3 osaketta ja 3 omaisuustyyppiä, enintään 3 tietuetta tyyppiä kohden. Olemassa olevat tiedot säilytetään, kun tilaus päättyy.
+
+Face ID / Touch ID lukko · Piilota määrät
+
+Pro
+• Rajoittamaton omaisuus: Enemmän osakkeita, jokainen omaisuustyyppi, rajattomasti tietueita
+• Kryptotilit: Tarkastele vaihtosaldot ja positiot vain luku -synkronoinnin avulla
+• Tuonti ja vienti: Varmuuskopioi, siirrä ja palauta omaisuustietueesi
+• Mukautetut osakkeet: Lisää omat nimesi, omistusosuutesi ja hinnat
+
+Kuukausittain · uusiutuu automaattisesti joka kuukausi
+Vuosittain · uusiutuu automaattisesti joka vuosi
+Elinikäinen · kertaostos
+Elinikäinen ostos ei peruuta automaattisesti olemassa olevaa tilausta. Peruuta se Hallinnoi tilauksia -kohdassa lisäkulujen välttämiseksi.
+
+Käyttöehdot: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
+Tietosuojakäytäntö: https://bitlap.org/iAssets-privacy/
+
+Tämä on avoimen lähdekoodin ohjelmisto. Lähetä ehdotuksia tai ilmoita ongelmista GitHubissa.
+https://github.com/bitlap/iAssets

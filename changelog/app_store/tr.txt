@@ -1,0 +1,24 @@
+iAssets
+
+Toplam varlıklarınızı, portföy özetinizi ve güncelleme zamanını görün.
+
+Ücretsiz: En fazla 3 hisse senedi ve 3 varlık türü, tür başına en fazla 3 kayıt. Aboneliğin süresi dolduğunda mevcut veriler korunur.
+
+Face ID / Touch ID kilidi · Tutarları gizle
+
+Pro
+• Sınırsız varlık: Daha fazla hisse senedi, her varlık türü, sınırsız kayıt
+• Kripto hesapları: Salt okunur senkronizasyonla döviz bakiyelerini ve pozisyonlarını görüntüleyin
+• İthalat ve ihracat: Varlık kayıtlarınızı yedekleyin, taşıyın ve geri yükleyin
+• Özel stoklar: Kendi adlarınızı, varlıklarınızı ve fiyatlarınızı ekleyin
+
+Aylık · her ay otomatik olarak yenilenir
+Yıllık · her yıl otomatik olarak yenilenir
+Ömür boyu · tek seferlik satın alma
+Ömür boyu satın alma, mevcut bir aboneliği otomatik olarak iptal etmez. Daha fazla ücretlendirmeyi önlemek için Abonelikleri Yönet bölümünden iptal edin.
+
+Kullanım şartları: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
+Gizlilik politikası: https://bitlap.org/iAssets-privacy/
+
+Bu yazılım açık kaynaklıdır. GitHub üzerinden önerilerinizi paylaşabilir veya sorunları bildirebilirsiniz.
+https://github.com/bitlap/iAssets

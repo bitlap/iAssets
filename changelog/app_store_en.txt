@@ -15,3 +15,6 @@ Privacy and Experience
 • Use core features for free, or unlock Pro with a subscription or lifetime purchase
 
 Terms of Use (Apple Standard EULA): https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
+
+This is open-source software. Share suggestions or report issues on GitHub.
+https://github.com/bitlap/iAssets

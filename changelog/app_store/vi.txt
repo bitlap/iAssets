@@ -1,0 +1,24 @@
+iAssets
+
+Xem tổng tài sản, tóm tắt danh mục đầu tư và thời gian cập nhật của bạn.
+
+Miễn phí: tối đa 3 cổ phiếu và 3 loại tài sản, với tối đa 3 bản ghi cho mỗi loại. Dữ liệu hiện có được lưu giữ khi đăng ký hết hạn.
+
+Khóa Face ID / Touch ID · Ẩn số tiền
+
+Pro
+• Tài sản không giới hạn: Nhiều cổ phiếu hơn, mọi loại tài sản, hồ sơ không giới hạn
+• Tài khoản tiền điện tử: Xem số dư và vị thế trao đổi với đồng bộ hóa chỉ đọc
+• Xuất nhập khẩu: Sao lưu, di chuyển và khôi phục hồ sơ tài sản của bạn
+• Cổ phiếu tùy chỉnh: Thêm tên, cổ phần và giá của riêng bạn
+
+Hàng tháng · tự động gia hạn hàng tháng
+Hàng năm · tự động gia hạn hàng năm
+Trọn đời · mua một lần
+Giao dịch mua trọn đời không tự động hủy đăng ký hiện có. Hãy hủy nó trong phần Quản lý đăng ký để tránh phải trả thêm phí.
+
+Điều khoản sử dụng: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
+Chính sách bảo mật: https://bitlap.org/iAssets-privacy/
+
+Đây là phần mềm mã nguồn mở. Bạn có thể gửi đề xuất hoặc báo cáo sự cố trên GitHub.
+https://github.com/bitlap/iAssets

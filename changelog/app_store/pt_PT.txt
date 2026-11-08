@@ -1,0 +1,24 @@
+iAssets
+
+Veja o seu total de ativos, resumo da carteira e tempo de atualização.
+
+Gratuito: até 3 ações e 3 tipos de ativos, com até 3 registos por tipo. Os dados existentes são mantidos quando uma subscrição expira.
+
+Bloqueio Face ID/Touch ID · Ocultar valores
+
+Pro
+• Ativos ilimitados: Mais ações, todos os tipos de ativos, registos ilimitados
+• Contas criptográficas: Visualize saldos e posições cambiais com sincronização de leitura apenas
+• Importar e exportar: Faça cópias de segurança, mova e restaure os seus registos de ativos
+• Estoques personalizados: Adicione os seus próprios nomes, participações e preços
+
+Mensalmente · renovação automática todos os meses
+Anual · renovação automática todos os anos
+Vitalício · compra única
+Uma compra vitalícia não cancela automaticamente uma subscrição existente. Cancele em Gerir subscrições para evitar mais cobranças.
+
+Termos de utilização: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
+Política de privacidade: https://bitlap.org/iAssets-privacy/
+
+Este software é de código aberto. Envie sugestões ou comunique problemas no GitHub.
+https://github.com/bitlap/iAssets

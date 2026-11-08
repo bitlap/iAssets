@@ -1,0 +1,24 @@
+iAssets
+
+Vedeți activele totale, rezumatul portofoliului și timpul de actualizare.
+
+Gratuit: până la 3 stocuri și 3 tipuri de active, cu până la 3 înregistrări per tip. Datele existente sunt păstrate atunci când un abonament expiră.
+
+Face ID / Touch ID blocare · Ascundeți sumele
+
+Pro
+• Active nelimitate: Mai multe stocuri, fiecare tip de activ, înregistrări nelimitate
+• Conturi cripto: Vizualizați soldurile și pozițiile valutare cu sincronizare numai în citire
+• Import și export: Faceți backup, mutați și restaurați înregistrările dvs. de active
+• Stocuri personalizate: Adăugați propriile nume, exploatații și prețuri
+
+Lunar · se reînnoiește automat în fiecare lună
+Anual · se reînnoiește automat în fiecare an
+Viață · achiziție unică
+O achiziție pe viață nu anulează automat un abonament existent. Anulați-l în Gestionați abonamente pentru a evita alte taxe.
+
+Condiții de utilizare: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
+Politica de confidențialitate: https://bitlap.org/iAssets-privacy/
+
+Acest software are codul sursă deschis. Trimite sugestii sau raportează probleme pe GitHub.
+https://github.com/bitlap/iAssets

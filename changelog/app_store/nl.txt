@@ -1,0 +1,24 @@
+iAssets
+
+Bekijk uw totale vermogen, portfoliooverzicht en updatetijd.
+
+Gratis: maximaal 3 aandelen en 3 activatypen, met maximaal 3 records per type. Bestaande gegevens worden bewaard wanneer een abonnement afloopt.
+
+Face ID / Touch ID-slot · Verberg bedragen
+
+Pro
+• Onbeperkte activa: Meer aandelen, elk type activa, onbeperkte records
+• Crypto-accounts: Bekijk wisselsaldi en -posities met alleen-lezen synchronisatie
+• Importeren en exporteren: Maak een back-up van uw activarecords, verplaats ze en herstel ze
+• Aangepaste aandelen: Voeg uw eigen namen, bedrijven en prijzen toe
+
+Maandelijks · wordt elke maand automatisch verlengd
+Jaarlijks · Wordt elk jaar automatisch verlengd
+Levenslang · eenmalige aankoop
+Een levenslange aankoop annuleert niet automatisch een bestaand abonnement. Annuleer het in Abonnementen beheren om verdere kosten te voorkomen.
+
+Gebruiksvoorwaarden: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
+Privacybeleid: https://bitlap.org/iAssets-privacy/
+
+Deze software is opensource. Deel suggesties of meld problemen op GitHub.
+https://github.com/bitlap/iAssets

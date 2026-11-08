@@ -1,0 +1,24 @@
+iAssets
+
+Se dine samlede aktiver, porteføljeoversigt og opdateringstid.
+
+Gratis: op til 3 aktier og 3 aktivtyper med op til 3 poster pr. type. Eksisterende data opbevares, når et abonnement udløber.
+
+Face ID / Touch ID lås · Skjul beløb
+
+Pro
+• Ubegrænsede aktiver: Flere aktier, hver aktivtype, ubegrænsede registreringer
+• Krypto-konti: Se udvekslingssaldi og -positioner med skrivebeskyttet synkronisering
+• Import & eksport: Sikkerhedskopier, flyt og gendan dine aktivregistreringer
+• Brugerdefinerede lagre: Tilføj dine egne navne, beholdninger og priser
+
+Månedlig · fornyes automatisk hver måned
+Årlig · automatisk fornyes hvert år
+Levetid · engangskøb
+Et livstidskøb annullerer ikke automatisk et eksisterende abonnement. Annuller det i Administrer abonnementer for at undgå yderligere gebyrer.
+
+Vilkår for brug: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
+Privatlivspolitik: https://bitlap.org/iAssets-privacy/
+
+Denne software er open source. Send forslag eller rapportér problemer på GitHub.
+https://github.com/bitlap/iAssets

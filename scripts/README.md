@@ -37,7 +37,7 @@ TestFlight 使用 Apple 沙盒：可以测试订阅、买断及其恢复，但�
 
 ## GitHub Release 草稿
 
-`master` 更新后，Release Drafter 工作流按 `pubspec.yaml` 的版本创建或更新草稿，再从 `changelog/<版本>.md` 同步简体中文、繁体中文和英文正文，包含直接提交的改动。缺少任一语言内容或草稿版本不匹配时工作流失败，不将空说明视为成功。
+`master` 更新后，Release Drafter 工作流按 `pubspec.yaml` 的版本创建或更新草稿，再从 `changelog/<版本>.md` 同步全部已注册语言的正文，包含直接提交的改动。运行 `python3 scripts/check_release_notes.py` 核对语言、条目数量及产品描述文件；缺少任一语言内容或草稿版本不匹配时工作流失败，不将空说明视为成功。语言与平台文案映射见 [多语言维护说明](../docs/localization.md)。
 
 该流程只维护草稿，不自动发布、创建正式 tag 或改变 Latest。正式发布前仍需按检查清单核对正文、源码版本及实际 App Store/TestFlight 状态。
 

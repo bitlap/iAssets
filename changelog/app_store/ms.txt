@@ -1,0 +1,24 @@
+iAssets
+
+Lihat jumlah aset anda, ringkasan portfolio dan masa kemas kini.
+
+Percuma: sehingga 3 stok dan 3 jenis aset, dengan sehingga 3 rekod setiap jenis. Data sedia ada disimpan apabila langganan tamat tempoh.
+
+Kunci Face ID / Touch ID · Sembunyikan jumlah
+
+Pro
+• Aset tanpa had: Lebih banyak stok, setiap jenis aset, rekod tanpa had
+• Akaun Crypto: Lihat baki dan kedudukan pertukaran dengan penyegerakan baca sahaja
+• Import & eksport: Sandarkan, alihkan dan pulihkan rekod aset anda
+• Stok tersuai: Tambah nama, pegangan dan harga anda sendiri
+
+Bulanan · diperbaharui secara automatik setiap bulan
+Tahunan · diperbaharui secara automatik setiap tahun
+Seumur hidup · pembelian sekali sahaja
+Pembelian seumur hidup tidak membatalkan langganan sedia ada secara automatik. Batalkannya dalam Urus Langganan untuk mengelakkan caj lanjut.
+
+Syarat penggunaan: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
+Dasar privasi: https://bitlap.org/iAssets-privacy/
+
+Perisian ini ialah sumber terbuka. Hantar cadangan atau laporkan masalah di GitHub.
+https://github.com/bitlap/iAssets

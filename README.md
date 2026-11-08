@@ -318,7 +318,7 @@ flutter run
 
 在 `ios/Config.xcconfig` 中填写 `DEVELOPMENT_TEAM`。如需使用自己的应用标识与 iCloud 配置，请打开 `ios/Runner.xcworkspace`，同步调整签名、Bundle Identifier 和 iCloud 容器。
 
-构建与上传说明见 [iOS 发布指南](scripts/README.md)；每次发布前执行 [发布前检查清单](RELEASE_CHECKLIST.md)。
+构建与上传说明见 [iOS 发布指南](scripts/README.md)；每次发布前执行 [发布前检查清单](RELEASE_CHECKLIST.md)。功能与多语言说明见 [文档索引](docs/README.md)。
 
 ## 参与贡献
 

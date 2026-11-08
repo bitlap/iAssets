@@ -1,0 +1,24 @@
+iAssets
+
+Sehen Sie sich Ihr Gesamtvermögen, Ihre Portfolioübersicht und die Aktualisierungszeit an.
+
+Kostenlos: bis zu 3 Aktien und 3 Anlagetypen, mit bis zu 3 Datensätzen pro Typ. Vorhandene Daten bleiben erhalten, wenn ein Abonnement abläuft.
+
+Face ID / Touch ID-Sperre · Beträge ausblenden
+
+Pro
+• Unbegrenzte Vermögenswerte: Mehr Aktien, jede Vermögensart, unbegrenzte Datensätze
+• Krypto-Konten: Zeigen Sie Börsensalden und -positionen mit schreibgeschützter Synchronisierung an
+• Importieren und exportieren: Sichern, verschieben und wiederherstellen Sie Ihre Asset-Datensätze
+• Benutzerdefinierte Aktien: Fügen Sie Ihre eigenen Namen, Bestände und Preise hinzu
+
+Monatlich · erneuert sich jeden Monat automatisch
+Jährlich · erneuert sich jedes Jahr automatisch
+Lebenslang · einmaliger Kauf
+Ein lebenslanger Kauf führt nicht automatisch zur Kündigung eines bestehenden Abonnements. Kündigen Sie es unter „Abonnements verwalten“, um weitere Kosten zu vermeiden.
+
+Nutzungsbedingungen: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
+Datenschutzrichtlinie: https://bitlap.org/iAssets-privacy/
+
+Diese Software ist Open Source. Vorschläge und Fehlermeldungen sind auf GitHub willkommen.
+https://github.com/bitlap/iAssets

@@ -1,0 +1,24 @@
+iAssets
+
+Tingnan ang iyong kabuuang mga asset, buod ng portfolio, at oras ng pag-update.
+
+Libre: hanggang 3 stock at 3 uri ng asset, na may hanggang 3 record bawat uri. Pinapanatili ang kasalukuyang data kapag nag-expire ang isang subscription.
+
+Face ID / Touch ID lock · Itago ang mga halaga
+
+Pro
+• Walang limitasyong mga asset: Higit pang mga stock, bawat uri ng asset, walang limitasyong mga tala
+• Mga Crypto account: Tingnan ang mga balanse at posisyon ng palitan na may read-only na pag-sync
+• Mag-import at mag-export: I-back up, ilipat at i-restore ang iyong mga rekord ng asset
+• Mga custom na stock: Idagdag ang iyong sariling mga pangalan, hawak at presyo
+
+Buwan-buwan · awtomatikong nagre-renew bawat buwan
+Taunang · awtomatikong nagre-renew bawat taon
+Panghabambuhay · isang beses na pagbili
+Ang isang panghabambuhay na pagbili ay hindi awtomatikong makakakansela ng isang umiiral nang subscription. Kanselahin ito sa Pamahalaan ang Mga Subscription para maiwasan ang mga karagdagang singil.
+
+Mga tuntunin sa paggamit: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
+Patakaran sa privacy: https://bitlap.org/iAssets-privacy/
+
+Open source ang software na ito. Magbigay ng mga mungkahi o mag-ulat ng mga problema sa GitHub.
+https://github.com/bitlap/iAssets
