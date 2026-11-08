@@ -1,4 +1,4 @@
-Testfokus
+Testfokus Förnya insättningar automatiskt med kapital och ränta till samma räntesats och löptid. Missade förnyelser beräknas nästa gång du öppnar appen.
 • Förfallna insättningar kan förnyas med kapital och ränta. Kapital, räntesats och löptid kan ändras. Byt kategori via åtgärdslistan eller genom att dra mellan samma inmatningsmallar. Ikoner och färger följer målkategorin.
 • Kontrollera data efter uppdatering från en äldre version, gratis-/Pro-gränser, köp och återställning. Fel eller tappad anslutning får inte skriva över befintliga tillgångar.
 

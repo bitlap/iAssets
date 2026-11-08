@@ -726,4 +726,8 @@ const Map<String, String> stringsPl = {
       "Nowy kapitał to szacowana kwota na koniec lokaty. Sprawdź faktyczną kwotę banku. Potwierdzenie zastąpi bieżący wpis.",
   "assetSaveFailed":
       "Nie udało się zapisać. Oryginalny wpis pozostał bez zmian. Spróbuj ponownie.",
+  "depositAutoRenew": "Automatyczne odnowienie",
+  "depositAutoRenewHint":
+      "W terminie zapadalności kapitał i odsetki są odnawiane na ten sam okres i z tym samym oprocentowaniem. Pominięte odnowienia są naliczane przy następnym otwarciu aplikacji. Kwoty są szacunkowe; sprawdź je w banku.",
+  "depositMaturityDate": "Zapadalność {date}",
 };

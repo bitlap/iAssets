@@ -390,6 +390,7 @@ class _TimeDepositDialogState extends State<_TimeDepositDialog> {
   late DateTime startDate;
   late int durationMonths;
   late String currency;
+  late bool autoRenew;
 
   @override
   void initState() {
@@ -408,6 +409,7 @@ class _TimeDepositDialogState extends State<_TimeDepositDialog> {
     );
     startDate = widget.rollover ? td!.endDate : td?.startDate ?? DateTime.now();
     durationMonths = td?.durationMonths ?? 12;
+    autoRenew = td?.autoRenew ?? false;
     currency = td?.currency ?? widget.defaultCurrency;
   }
 
@@ -472,29 +474,14 @@ class _TimeDepositDialogState extends State<_TimeDepositDialog> {
             ],
           ),
           const SizedBox(height: 12),
-          Text(
-            AssetConfig.fieldAnnualRate,
-            style: TextStyles.body13.copyWith(color: AppColors.textSecondary),
-          ),
-          const SizedBox(height: 6),
-          AppNumberField(controller: rateCtrl, hintText: '2.5'),
-          const SizedBox(height: 12),
           LayoutBuilder(
             builder: (context, constraints) {
-              final dateField = Column(
+              final rateField = Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  _label(AssetConfig.fieldStartDate),
+                  _label(AssetConfig.fieldAnnualRate),
                   const SizedBox(height: 6),
-                  _dateButton(startDate, () async {
-                    final picked = await showDatePickerDialog(
-                      context,
-                      initialDate: startDate,
-                    );
-                    if (picked != null && mounted) {
-                      setState(() => startDate = picked);
-                    }
-                  }),
+                  AppNumberField(controller: rateCtrl, hintText: '2.5'),
                 ],
               );
               final durationField = Column(
@@ -508,11 +495,11 @@ class _TimeDepositDialogState extends State<_TimeDepositDialog> {
                   ),
                 ],
               );
-              if (constraints.maxWidth < 340 ||
+              if (constraints.maxWidth < 180 ||
                   MediaQuery.textScalerOf(context).scale(1) > 1.2) {
                 return Column(
                   children: [
-                    dateField,
+                    rateField,
                     const SizedBox(height: 12),
                     durationField,
                   ],
@@ -521,12 +508,35 @@ class _TimeDepositDialogState extends State<_TimeDepositDialog> {
               return Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Expanded(child: dateField),
+                  Expanded(child: rateField),
                   const SizedBox(width: 12),
                   Expanded(child: durationField),
                 ],
               );
             },
+          ),
+          const SizedBox(height: 12),
+          _label(AssetConfig.fieldStartDate),
+          const SizedBox(height: 6),
+          _dateButton(startDate, () async {
+            final picked = await showDatePickerDialog(
+              context,
+              initialDate: startDate,
+            );
+            if (picked != null && mounted) setState(() => startDate = picked);
+          }),
+          const SizedBox(height: 12),
+          SwitchListTile.adaptive(
+            activeTrackColor: AppColors.accent.withValues(alpha: .45),
+            activeThumbColor: AppColors.accent,
+            contentPadding: EdgeInsets.zero,
+            title: Text(AssetConfig.depositAutoRenew, style: TextStyles.body13),
+            subtitle: Text(
+              AssetConfig.depositAutoRenewHint,
+              style: TextStyles.caption,
+            ),
+            value: autoRenew,
+            onChanged: (value) => setState(() => autoRenew = value),
           ),
           const SizedBox(height: 16),
           actionButtonRow(
@@ -554,6 +564,7 @@ class _TimeDepositDialogState extends State<_TimeDepositDialog> {
                 annualRate: rate,
                 startDate: startDate,
                 durationMonths: durationMonths,
+                autoRenew: autoRenew,
                 createdAt: widget.td?.createdAt ?? DateTime.now(),
                 updatedAt: DateTime.now(),
               );
@@ -787,8 +798,8 @@ Widget _dateButton(DateTime date, VoidCallback onTap) {
   return GestureDetector(
     onTap: onTap,
     child: Container(
-      height: 48,
-      padding: const EdgeInsets.symmetric(horizontal: 12),
+      constraints: const BoxConstraints(minHeight: 48),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
       decoration: BoxDecoration(
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(12),
@@ -796,11 +807,17 @@ Widget _dateButton(DateTime date, VoidCallback onTap) {
       ),
       child: Row(
         children: [
-          Text(
-            '${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}',
-            style: TextStyles.subtitleRegular,
+          Expanded(
+            child: FittedBox(
+              fit: BoxFit.scaleDown,
+              alignment: AlignmentDirectional.centerStart,
+              child: Text(
+                '${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}',
+                style: TextStyles.subtitleRegular,
+              ),
+            ),
           ),
-          const Spacer(),
+          const SizedBox(width: 8),
           Icon(Icons.calendar_today, size: 16, color: AppColors.textTertiary),
         ],
       ),
@@ -862,8 +879,8 @@ Widget _durationSelector(int selected, ValueChanged<int> onChanged) {
           if (result != null) onChanged(result);
         },
         child: Container(
-          height: 48,
-          padding: const EdgeInsets.symmetric(horizontal: 8),
+          constraints: const BoxConstraints(minHeight: 48),
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
           alignment: Alignment.center,
           decoration: BoxDecoration(
             color: AppColors.surface,
@@ -873,9 +890,11 @@ Widget _durationSelector(int selected, ValueChanged<int> onChanged) {
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text(
-                AssetConfig.durationMonths.replaceAll('{m}', '$selected'),
-                style: TextStyles.subtitleRegular,
+              Flexible(
+                child: Text(
+                  AssetConfig.durationMonths.replaceAll('{m}', '$selected'),
+                  style: TextStyles.subtitleRegular,
+                ),
               ),
               const SizedBox(width: 4),
               Icon(Icons.expand_more, color: AppColors.textSecondary, size: 20),

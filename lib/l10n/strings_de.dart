@@ -745,4 +745,8 @@ const Map<String, String> stringsDe = {
       "Als neues Kapital wird der geschätzte Fälligkeitsbetrag eingetragen. Prüfen Sie den Bankbetrag. Die Bestätigung ersetzt den aktuellen Eintrag.",
   "assetSaveFailed":
       "Speichern fehlgeschlagen. Der ursprüngliche Eintrag bleibt unverändert. Erneut versuchen.",
+  "depositAutoRenew": "Automatische Verlängerung",
+  "depositAutoRenewHint":
+      "Bei Fälligkeit werden Kapital und Zinsen zum gleichen Satz und für die gleiche Laufzeit erneut angelegt. Verpasste Verlängerungen werden beim nächsten Öffnen nachgeholt. Beträge sind geschätzt; bitte mit der Bank abgleichen.",
+  "depositMaturityDate": "Fällig {date}",
 };

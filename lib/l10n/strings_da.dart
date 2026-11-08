@@ -721,4 +721,8 @@ const Map<String, String> stringsDa = {
       "Den nye hovedstol er det anslåede beløb ved udløb. Kontroller bankens faktiske beløb. Bekræftelse erstatter den aktuelle post.",
   "assetSaveFailed":
       "Kunne ikke gemme. Den oprindelige post er uændret. Prøv igen.",
+  "depositAutoRenew": "Automatisk fornyelse",
+  "depositAutoRenewHint":
+      "Ved udløb fornyes hovedstol og renter med samme rente og løbetid. Manglende fornyelser beregnes næste gang appen åbnes. Beløb er skøn; kontrollér dem hos banken.",
+  "depositMaturityDate": "Udløber {date}",
 };

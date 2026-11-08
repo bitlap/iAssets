@@ -1,4 +1,4 @@
-Punti da testare
+Punti da testare Rinnova automaticamente i depositi con capitale e interessi allo stesso tasso e per la stessa durata. I rinnovi mancati vengono calcolati alla successiva apertura dell’app.
 • I depositi scaduti possono essere rinnovati con capitale e interessi, modificando capitale, tasso e durata. Cambia categoria dall’elenco azioni o trascinando tra moduli uguali. Icone e colori seguono la categoria di destinazione.
 • Verifica i dati dopo l’aggiornamento da una versione precedente, i limiti gratis/Pro, gli acquisti e il ripristino. Errori o disconnessioni non devono sovrascrivere i beni esistenti.
 

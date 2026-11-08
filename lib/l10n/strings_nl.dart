@@ -730,4 +730,8 @@ const Map<String, String> stringsNl = {
       "De nieuwe hoofdsom is het geschatte eindbedrag. Controleer het werkelijke bankbedrag. Bevestigen vervangt de huidige registratie.",
   "assetSaveFailed":
       "Opslaan mislukt. De oorspronkelijke registratie is ongewijzigd. Probeer opnieuw.",
+  "depositAutoRenew": "Automatisch verlengen",
+  "depositAutoRenewHint":
+      "Op de vervaldatum worden hoofdsom en rente tegen dezelfde rente en looptijd verlengd. Gemiste verlengingen worden bij de volgende keer openen verwerkt. Bedragen zijn schattingen; controleer ze bij de bank.",
+  "depositMaturityDate": "Vervalt {date}",
 };

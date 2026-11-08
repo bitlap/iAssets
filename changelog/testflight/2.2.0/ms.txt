@@ -1,4 +1,4 @@
-Fokus ujian
+Fokus ujian Perbaharui deposit secara automatik bersama prinsipal dan faedah pada kadar dan tempoh yang sama. Pembaharuan yang terlepas dikira apabila aplikasi dibuka semula.
 • Deposit matang boleh diperbaharui bersama prinsipal dan faedah, dengan prinsipal, kadar dan tempoh yang boleh diubah. Tukar kategori melalui senarai tindakan atau seret antara borang input yang sama. Ikon dan warna mengikut kategori destinasi.
 • Semak data selepas mengemas kini daripada versi lama, had percuma/Pro, pembelian dan pemulihan. Ralat atau sambungan terputus tidak boleh menulis ganti aset sedia ada.
 

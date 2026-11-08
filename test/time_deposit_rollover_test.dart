@@ -205,7 +205,7 @@ void main() {
         await openCardMenu(tester, 'deposit');
         final actions = tester
             .widgetList<PopupMenuItem<Object>>(
-              find.byType(PopupMenuItem<Object>),
+              find.byWidgetPredicate((w) => w is PopupMenuItem<Object>),
             )
             .toList();
         expect(actions, hasLength(2));

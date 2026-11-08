@@ -683,4 +683,7 @@ const Map<String, String> stringsZhHant = {
   "depositRollover": "本息轉存",
   "depositRolloverHint": "新本金預填估算本息，請按銀行實際到期金額核對。確認後取代目前記錄。",
   "assetSaveFailed": "儲存失敗，原記錄未變，請重試。",
+  "depositAutoRenew": "自動轉存",
+  "depositAutoRenewHint": "到期後按原利率和期限自動本息轉存。App 未執行時會在下次開啟時補算；金額為估算，請核對銀行實際金額。",
+  "depositMaturityDate": "到期 {date}",
 };

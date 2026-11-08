@@ -725,4 +725,8 @@ const Map<String, String> stringsSv = {
       "Det nya kapitalet är det uppskattade beloppet vid förfall. Kontrollera bankens faktiska belopp. Bekräftelsen ersätter den aktuella posten.",
   "assetSaveFailed":
       "Kunde inte spara. Ursprungsposten är oförändrad. Försök igen.",
+  "depositAutoRenew": "Automatisk förnyelse",
+  "depositAutoRenewHint":
+      "Vid förfall förnyas kapital och ränta med samma räntesats och löptid. Missade förnyelser beräknas nästa gång appen öppnas. Beloppen är uppskattningar; kontrollera dem mot banken.",
+  "depositMaturityDate": "Förfaller {date}",
 };

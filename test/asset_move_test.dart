@@ -325,21 +325,24 @@ void main() {
     await tester.pumpWidget(const SizedBox.shrink());
   });
 
-  testWidgets('no action hides dots; matured deposits still offer rollover', (
-    tester,
-  ) async {
-    await load(tester, [
-      WealthProduct(id: 'w'),
-      TimeDeposit(id: 'future', startDate: DateTime.now()),
-    ]);
-    expect(find.byType(PopupMenuButton<Object>), findsNothing);
-    await tester.pump(const Duration(seconds: 4));
-    await tester.pumpAndSettle();
-    await tester.pumpWidget(const SizedBox.shrink());
-    await load(tester, [TimeDeposit(id: 'matured', startDate: DateTime(2020))]);
-    expect(find.byType(PopupMenuButton<Object>), findsOneWidget);
-    await tester.pump(const Duration(seconds: 4));
-    await tester.pumpAndSettle();
-    await tester.pumpWidget(const SizedBox.shrink());
-  });
+  testWidgets(
+    'cards without actions hide dots; matured deposits offer rollover',
+    (tester) async {
+      await load(tester, [
+        WealthProduct(id: 'w'),
+        TimeDeposit(id: 'future', startDate: DateTime.now()),
+      ]);
+      expect(find.byType(PopupMenuButton<Object>), findsNothing);
+      await tester.pump(const Duration(seconds: 4));
+      await tester.pumpAndSettle();
+      await tester.pumpWidget(const SizedBox.shrink());
+      await load(tester, [
+        TimeDeposit(id: 'matured', startDate: DateTime(2020)),
+      ]);
+      expect(find.byType(PopupMenuButton<Object>), findsOneWidget);
+      await tester.pump(const Duration(seconds: 4));
+      await tester.pumpAndSettle();
+      await tester.pumpWidget(const SizedBox.shrink());
+    },
+  );
 }

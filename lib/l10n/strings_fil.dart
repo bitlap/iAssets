@@ -737,4 +737,8 @@ const Map<String, String> stringsFil = {
       "Ang bagong puhunan ay tinatayang kabuuan sa maturity. Suriin ang aktuwal na halaga ng bangko. Papalitan ng pagkumpirma ang kasalukuyang tala.",
   "assetSaveFailed":
       "Hindi nai-save. Hindi nagbago ang orihinal na tala. Subukang muli.",
+  "depositAutoRenew": "Awtomatikong pag-renew",
+  "depositAutoRenewHint":
+      "Sa maturity, ire-renew ang puhunan at interes sa parehong rate at termino. Ilalapat ang mga nalampasang renewal sa susunod na pagbukas ng app. Tantiya ang mga halaga; ihambing sa aktuwal na halaga ng bangko.",
+  "depositMaturityDate": "Maturity {date}",
 };

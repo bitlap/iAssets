@@ -734,4 +734,8 @@ const Map<String, String> stringsPtPt = {
       "O novo capital usa o total estimado no vencimento. Confira o valor real do banco. A confirmação substitui o registo atual.",
   "assetSaveFailed":
       "Não foi possível guardar. O registo original não mudou. Tente novamente.",
+  "depositAutoRenew": "Renovação automática",
+  "depositAutoRenewHint":
+      "No vencimento, renova o capital e os juros com a mesma taxa e prazo. As renovações pendentes são aplicadas na próxima abertura da app. Os valores são estimados; confirme com o banco.",
+  "depositMaturityDate": "Vencimento {date}",
 };

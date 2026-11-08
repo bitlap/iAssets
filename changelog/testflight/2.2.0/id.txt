@@ -1,4 +1,4 @@
-Fokus pengujian
+Fokus pengujian Perpanjang deposito otomatis beserta pokok dan bunga dengan suku bunga dan jangka waktu yang sama. Perpanjangan yang terlewat dihitung saat aplikasi dibuka kembali.
 • Deposito jatuh tempo dapat diperpanjang dengan pokok dan bunga, dengan pokok, suku bunga, dan tenor yang dapat diubah. Ubah kategori dari daftar tindakan atau dengan menyeret antarformulir yang sama. Ikon dan warna mengikuti kategori tujuan.
 • Periksa data setelah memperbarui dari versi lama, batas gratis/Pro, pembelian dan pemulihan. Kesalahan atau putusnya koneksi tidak boleh menimpa aset yang ada.
 

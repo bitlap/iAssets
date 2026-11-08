@@ -723,4 +723,8 @@ const Map<String, String> stringsFi = {
       "Uusi pääoma on arvioitu erääntymissumma. Tarkista pankin todellinen summa. Vahvistus korvaa nykyisen merkinnän.",
   "assetSaveFailed":
       "Tallennus epäonnistui. Alkuperäinen merkintä ei muuttunut. Yritä uudelleen.",
+  "depositAutoRenew": "Automaattinen uusiminen",
+  "depositAutoRenewHint":
+      "Eräpäivänä pääoma ja korot uusitaan samalla korolla ja ajalla. Väliin jääneet uusimiset lasketaan, kun sovellus seuraavan kerran avataan. Summat ovat arvioita; tarkista ne pankista.",
+  "depositMaturityDate": "Erääntyy {date}",
 };

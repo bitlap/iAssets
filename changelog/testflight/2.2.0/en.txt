@@ -1,4 +1,4 @@
-Test focus
+Test focus Automatically renew deposits with principal and interest at the same rate and term; missed renewals are calculated when you next open the app.
 • Matured deposits can be renewed with principal and interest, with editable principal, rate and term. Change asset categories from the action list or by dragging between matching input templates. Icons and colors follow the destination category.
 • Check data after upgrading from an older version. Test free/Pro limits, purchases and restore, and confirm errors or lost connectivity do not overwrite existing assets.
 

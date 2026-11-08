@@ -749,4 +749,8 @@ const Map<String, String> stringsEn = {
       "The new principal defaults to the estimated maturity total. Check the actual bank amount. Confirming replaces the current record.",
   "assetSaveFailed":
       "Could not save. The original record is unchanged. Try again.",
+  "depositAutoRenew": "Auto-renew",
+  "depositAutoRenewHint":
+      "At maturity, renew principal and interest at the same rate and term. Missed renewals are applied when the app next opens. Amounts are estimates; check bank totals.",
+  "depositMaturityDate": "Matures {date}",
 };

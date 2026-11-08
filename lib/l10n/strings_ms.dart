@@ -725,4 +725,8 @@ const Map<String, String> stringsMs = {
       "Prinsipal baharu menggunakan anggaran jumlah matang. Semak amaun sebenar bank. Pengesahan menggantikan rekod semasa.",
   "assetSaveFailed":
       "Tidak dapat menyimpan. Rekod asal tidak berubah. Cuba lagi.",
+  "depositAutoRenew": "Pembaharuan automatik",
+  "depositAutoRenewHint":
+      "Pada tarikh matang, prinsipal dan faedah diperbaharui pada kadar dan tempoh yang sama. Pembaharuan tertunggak digunakan apabila aplikasi dibuka semula. Amaun ialah anggaran; semak dengan bank.",
+  "depositMaturityDate": "Matang {date}",
 };

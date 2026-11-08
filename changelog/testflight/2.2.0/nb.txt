@@ -1,4 +1,4 @@
-Testfokus
+Testfokus Forny innskudd automatisk med hovedstol og renter til samme rente og løpetid. Manglende fornyelser beregnes neste gang du åpner appen.
 • Forfalte innskudd kan fornyes med hovedstol og renter. Hovedstol, rente og løpetid kan endres. Bytt kategori via handlingslisten eller ved å dra mellom like inndataskjemaer. Ikoner og farger følger målkategorien.
 • Kontroller data etter oppdatering fra en eldre versjon, gratis-/Pro-grenser, kjøp og gjenoppretting. Feil eller mistet forbindelse skal ikke overskrive eksisterende eiendeler.
 

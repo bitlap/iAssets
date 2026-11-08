@@ -1,4 +1,4 @@
-Test odakları
+Test odakları Mevduatı anapara ve faiziyle aynı oran ve vadede otomatik yenileyin. Kaçırılan yenilemeler uygulamayı bir sonraki açışınızda hesaplanır.
 • Vadesi dolan mevduatlar anapara ve faizle yenilenebilir; yeni anapara, oran ve vade değiştirilebilir. İşlem listesinden veya aynı giriş şablonları arasında sürükleyerek kategoriyi değiştirin. Simgeler ve renkler hedef kategoriye uyar.
 • Eski sürümden güncelleme sonrası verileri, ücretsiz/Pro sınırlarını, satın alma ve geri yüklemeyi kontrol edin. Hatalar veya bağlantı kaybı mevcut varlıkların üzerine yazmamalıdır.
 

@@ -727,4 +727,8 @@ const Map<String, String> stringsTr = {
   "depositRolloverHint":
       "Yeni anapara tahmini vade sonu tutarıdır. Bankanın gerçek tutarını kontrol edin. Onay, mevcut kaydın yerini alır.",
   "assetSaveFailed": "Kaydedilemedi. İlk kayıt değişmedi. Yeniden deneyin.",
+  "depositAutoRenew": "Otomatik yenileme",
+  "depositAutoRenewHint":
+      "Vadede anapara ve faiz aynı oran ve vadeyle yenilenir. Kaçırılan yenilemeler uygulama yeniden açıldığında uygulanır. Tutarlar tahminidir; banka tutarlarıyla karşılaştırın.",
+  "depositMaturityDate": "Vade {date}",
 };

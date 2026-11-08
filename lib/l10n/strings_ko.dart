@@ -666,4 +666,8 @@ const Map<String, String> stringsKo = {
   "depositRolloverHint":
       "새 원금에는 예상 만기 금액이 입력됩니다. 은행의 실제 만기 금액을 확인해 주세요. 확인하면 현재 기록이 대체됩니다.",
   "assetSaveFailed": "저장하지 못했습니다. 기존 기록은 그대로입니다. 다시 시도해 주세요.",
+  "depositAutoRenew": "자동 재예치",
+  "depositAutoRenewHint":
+      "만기 시 같은 금리와 기간으로 원리금을 재예치합니다. 앱이 실행되지 않은 동안의 재예치는 다음 실행 시 반영합니다. 예상 금액이므로 은행의 실제 금액을 확인하세요.",
+  "depositMaturityDate": "만기 {date}",
 };

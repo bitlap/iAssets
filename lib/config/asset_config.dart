@@ -75,6 +75,9 @@ class AssetConfig {
   static String get daysRemaining => L10n.t('daysRemaining');
   static String get expired => L10n.t('expired');
   static String get durationMonths => L10n.t('durationMonths');
+  static String get depositAutoRenew => L10n.t('depositAutoRenew');
+  static String get depositAutoRenewHint => L10n.t('depositAutoRenewHint');
+  static String get depositMaturityDate => L10n.t('depositMaturityDate');
   static String get depositRollover => L10n.t('depositRollover');
   static String get depositRolloverHint => L10n.t('depositRolloverHint');
   static String get assetActions => L10n.t('assetActions');

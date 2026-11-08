@@ -739,4 +739,8 @@ const Map<String, String> stringsFr = {
       "Le nouveau capital reprend le total estimé à échéance. Vérifiez le montant réel de la banque. La confirmation remplace l’enregistrement actuel.",
   "assetSaveFailed":
       "Échec de l’enregistrement. Les données initiales sont inchangées. Réessayez.",
+  "depositAutoRenew": "Renouvellement automatique",
+  "depositAutoRenewHint":
+      "À échéance, le capital et les intérêts sont renouvelés au même taux et pour la même durée. Les échéances manquées sont appliquées à la prochaine ouverture. Les montants sont estimés : vérifiez ceux de la banque.",
+  "depositMaturityDate": "Échéance {date}",
 };

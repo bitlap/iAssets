@@ -736,4 +736,8 @@ const Map<String, String> stringsEs = {
       "El nuevo capital toma el total estimado al vencimiento. Comprueba el importe real del banco. Al confirmar se sustituye el registro actual.",
   "assetSaveFailed":
       "No se pudo guardar. El registro original no ha cambiado. Inténtalo de nuevo.",
+  "depositAutoRenew": "Renovación automática",
+  "depositAutoRenewHint":
+      "Al vencimiento se renuevan capital e intereses con la misma tasa y plazo. Las renovaciones pendientes se aplican al volver a abrir la app. Los importes son estimados; compáralos con los del banco.",
+  "depositMaturityDate": "Vence {date}",
 };

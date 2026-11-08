@@ -1,4 +1,4 @@
-Points à tester
+Points à tester Renouvelez automatiquement les dépôts, capital et intérêts compris, au même taux et pour la même durée. Les renouvellements manqués sont calculés à la prochaine ouverture de l’app.
 • Les dépôts à échéance peuvent être renouvelés avec capital et intérêts, en ajustant le capital, le taux et la durée. Changez de catégorie depuis la liste des actions ou par glisser-déposer entre formulaires identiques. Icônes et couleurs suivent la catégorie de destination.
 • Vérifiez les données après une mise à jour depuis une ancienne version, les limites gratuites/Pro, les achats et la restauration. Une erreur ou une perte de connexion ne doit pas écraser les actifs existants.
 

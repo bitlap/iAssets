@@ -1,4 +1,4 @@
-Testauksen painopisteet
+Testauksen painopisteet Uudista talletukset automaattisesti pääomineen ja korkoineen samalla korolla ja talletusajalla. Väliin jääneet uusinnat lasketaan, kun avaat sovelluksen seuraavan kerran.
 • Erääntyneet talletukset voi uusia pääomineen ja korkoineen. Pääomaa, korkoa ja talletusaikaa voi muuttaa. Vaihda luokkaa toimintoluettelosta tai vetämällä saman syöttölomakkeen luokkien välillä. Kuvakkeet ja värit mukautuvat kohdeluokkaan.
 • Tarkista tiedot vanhasta versiosta päivittämisen jälkeen, ilmais-/Pro-rajat, ostot ja palautus. Virheet tai yhteyden katkeaminen eivät saa korvata nykyisiä varoja.
 

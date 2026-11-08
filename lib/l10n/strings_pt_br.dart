@@ -732,4 +732,8 @@ const Map<String, String> stringsPtBr = {
       "O novo principal usa o total estimado no vencimento. Confira o valor real do banco. Ao confirmar, o registro atual será substituído.",
   "assetSaveFailed":
       "Não foi possível salvar. O registro original não mudou. Tente novamente.",
+  "depositAutoRenew": "Renovação automática",
+  "depositAutoRenewHint":
+      "No vencimento, reaplica o principal e os juros com a mesma taxa e prazo. Renovações pendentes são aplicadas na próxima abertura do app. Os valores são estimados; confira com o banco.",
+  "depositMaturityDate": "Vencimento {date}",
 };

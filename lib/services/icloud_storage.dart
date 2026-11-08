@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/foundation.dart';
@@ -269,18 +270,103 @@ class IcloudStorage {
     await _syncToCloud(intradayProfitFile);
   }
 
-  // 资产持久化
-  static Future<List<AssetBase>> loadAssets() async {
+  // Serialize asset reads, automatic renewal and saves within this isolate.
+  static bool _assetBusy = false;
+  static final List<void Function()> _assetJobs = [];
+
+  static Future<T> _withAssetLock<T>(Future<T> Function() action) {
+    final completion = Completer<T>();
+    void execute() async {
+      try {
+        completion.complete(await action());
+      } catch (error, stack) {
+        completion.completeError(error, stack);
+      } finally {
+        if (_assetJobs.isEmpty) {
+          _assetBusy = false;
+        } else {
+          _assetJobs.removeAt(0)();
+        }
+      }
+    }
+
+    final run = Zone.current.bindCallback(execute);
+    if (_assetBusy) {
+      _assetJobs.add(run);
+    } else {
+      _assetBusy = true;
+      run();
+    }
+    return completion.future;
+  }
+
+  static List<AssetBase> _renewDeposits(List<AssetBase> assets, DateTime now) =>
+      [
+        for (final asset in assets)
+          asset is TimeDeposit ? asset.renewedThrough(now) : asset,
+      ];
+
+  static Future<List<AssetBase>> _readAssets() async {
     await ensureInit();
     await _syncFromCloud(assetsFile);
-    final data = await readJson(_localPath!, assetsFile);
-    return assetsFromJson(data);
+    return assetsFromJson(await readJson(_localPath!, assetsFile));
   }
+
+  /// Auto-renewals are committed before returning updated balances to any caller.
+  static Future<List<AssetBase>> loadAssets({
+    bool renewDeposits = true,
+    DateTime? asOf,
+  }) => _withAssetLock(() async {
+    final assets = await _readAssets();
+    if (!renewDeposits) return assets;
+    final updated = _renewDeposits(assets, asOf ?? DateTime.now());
+    if (List.generate(
+      assets.length,
+      (i) => !identical(assets[i], updated[i]),
+    ).any((changed) => changed)) {
+      await _writeAssets(updated, requireSuccess: true);
+    }
+    return updated;
+  });
+
+  static Future<List<AssetBase>> setDepositAutoRenew(String id, bool enabled) =>
+      _withAssetLock(() async {
+        final now = DateTime.now();
+        final assets = await _readAssets();
+        final index = assets.indexWhere((asset) => asset.id == id);
+        if (index < 0 || assets[index] is! TimeDeposit) {
+          throw StateError('Deposit not found');
+        }
+        final original = assets[index] as TimeDeposit;
+        final deposit = TimeDeposit.fromJson({
+          ...original.toJson(),
+          'autoRenew': enabled,
+          'updatedAt': now.toIso8601String(),
+        });
+        deposit.createdAt = original.createdAt;
+        assets[index] = enabled ? deposit.renewedThrough(now) : deposit;
+        final updated = enabled ? _renewDeposits(assets, now) : assets;
+        await _writeAssets(updated, requireSuccess: true);
+        return updated;
+      });
 
   /// [requireSuccess] requires an atomic local save; cloud sync remains best effort.
   static Future<void> saveAssets(
     List<AssetBase> assets, {
     bool requireSuccess = false,
+  }) => _withAssetLock(() async {
+    final updated = _renewDeposits(assets, DateTime.now());
+    await _writeAssets(
+      updated,
+      requireSuccess:
+          requireSuccess ||
+          updated.any((asset) => asset is TimeDeposit && asset.autoRenew),
+    );
+  });
+
+  static Future<void> _writeAssets(
+    List<AssetBase> assets, {
+    required bool requireSuccess,
   }) async {
     await ensureInit();
     await writeJson(
@@ -293,7 +379,6 @@ class IcloudStorage {
       await _syncToCloud(assetsFile);
     } catch (error) {
       if (!requireSuccess) rethrow;
-      // A deferred cloud sync must not make a committed local replacement look failed.
       debugPrint('Asset cloud sync deferred after local save: $error');
     }
   }

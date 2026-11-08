@@ -1,4 +1,4 @@
-Testschwerpunkte
+Testschwerpunkte Festgelder samt Zinsen automatisch zum bisherigen Zinssatz und mit gleicher Laufzeit verlängern. Verpasste Verlängerungen werden beim nächsten Öffnen der App berechnet.
 • Fällige Festgelder lassen sich samt Zinsen erneut anlegen. Kapital, Zinssatz und Laufzeit sind anpassbar. Die Kategorie lässt sich über die Aktionsliste oder per Ziehen zwischen gleichen Eingabevorlagen ändern. Symbole und Farben passen sich der Zielkategorie an.
 • Prüfen Sie Daten nach einem Update von einer älteren Version, Gratis-/Pro-Limits, Käufe und Wiederherstellung. Fehler oder Verbindungsabbrüche dürfen vorhandene Werte nicht überschreiben.
 

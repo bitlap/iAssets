@@ -729,4 +729,8 @@ const Map<String, String> stringsIt = {
       "Il nuovo capitale usa il totale stimato alla scadenza. Verifica l’importo effettivo della banca. La conferma sostituisce la voce attuale.",
   "assetSaveFailed":
       "Salvataggio non riuscito. La voce originale è invariata. Riprova.",
+  "depositAutoRenew": "Rinnovo automatico",
+  "depositAutoRenewHint":
+      "Alla scadenza reinveste capitale e interessi allo stesso tasso e per la stessa durata. I rinnovi mancati vengono applicati alla successiva apertura. Gli importi sono stimati: verifica quelli della banca.",
+  "depositMaturityDate": "Scadenza {date}",
 };

@@ -732,4 +732,8 @@ const Map<String, String> stringsRo = {
       "Noul capital este totalul estimat la scadență. Verifică suma reală a băncii. Confirmarea înlocuiește înregistrarea curentă.",
   "assetSaveFailed":
       "Nu s-a putut salva. Înregistrarea inițială nu s-a schimbat. Încearcă din nou.",
+  "depositAutoRenew": "Reînnoire automată",
+  "depositAutoRenewHint":
+      "La scadență, principalul și dobânda se reînnoiesc cu aceeași rată și perioadă. Reînnoirile omise se calculează la următoarea deschidere a aplicației. Sumele sunt estimative; verifică-le cu banca.",
+  "depositMaturityDate": "Scadență {date}",
 };

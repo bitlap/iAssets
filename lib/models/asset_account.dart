@@ -165,6 +165,7 @@ class TimeDeposit extends AssetBase {
   double annualRate;
   DateTime startDate;
   int durationMonths;
+  bool autoRenew;
 
   TimeDeposit({
     required super.id,
@@ -178,11 +179,60 @@ class TimeDeposit extends AssetBase {
     this.annualRate = 0,
     DateTime? startDate,
     this.durationMonths = 12,
+    this.autoRenew = false,
   }) : startDate = startDate ?? DateTime.now(),
        super(type: AssetType.timeDeposit);
 
-  DateTime get endDate =>
-      DateTime(startDate.year, startDate.month + durationMonths, startDate.day);
+  static DateTime _maturity(DateTime start, int months) {
+    final month = DateTime(start.year, start.month + months);
+    final lastDay = DateTime(month.year, month.month + 1, 0).day;
+    return DateTime(month.year, month.month, start.day.clamp(1, lastDay));
+  }
+
+  DateTime get endDate => _maturity(startDate, durationMonths);
+
+  /// Capitalize each completed term once, leaving the original record untouched.
+  TimeDeposit renewedThrough(DateTime asOf) {
+    if (!autoRenew) return this;
+    if (durationMonths <= 0 ||
+        !principal.isFinite ||
+        principal <= 0 ||
+        !annualRate.isFinite ||
+        annualRate < 0 ||
+        !totalValue.isFinite) {
+      throw StateError('Invalid automatic deposit renewal parameters');
+    }
+    final today = DateTime(asOf.year, asOf.month, asOf.day);
+    var start = startDate;
+    var maturity = endDate;
+    var amount = principal;
+    while (!maturity.isAfter(today)) {
+      if (!maturity.isAfter(start)) throw StateError('Invalid deposit term');
+      amount += amount * annualRate / 100 * durationMonths / 12;
+      if (!amount.isFinite) throw StateError('Deposit renewal amount overflow');
+      start = maturity;
+      maturity = _maturity(start, durationMonths);
+    }
+    if (start == startDate) return this;
+    if (!(amount + amount * annualRate / 100 * durationMonths / 12).isFinite) {
+      throw StateError('Deposit maturity amount overflow');
+    }
+    return TimeDeposit(
+      id: id,
+      sortOrder: sortOrder,
+      currency: currency,
+      name: name,
+      categoryId: categoryId,
+      createdAt: createdAt,
+      updatedAt: asOf,
+      principal: amount,
+      annualRate: annualRate,
+      startDate: start,
+      durationMonths: durationMonths,
+      autoRenew: true,
+    );
+  }
+
   double get interest => principal * annualRate / 100 * durationMonths / 12;
   double get totalValue => principal + interest;
 
@@ -193,6 +243,7 @@ class TimeDeposit extends AssetBase {
     'annualRate': annualRate,
     'startDate': startDate.toIso8601String(),
     'durationMonths': durationMonths,
+    'autoRenew': autoRenew,
   };
 
   static TimeDeposit fromJson(Map<String, dynamic> json) => TimeDeposit(
@@ -207,6 +258,7 @@ class TimeDeposit extends AssetBase {
         ? DateTime.parse(json['startDate'] as String)
         : DateTime.now(),
     durationMonths: (json['durationMonths'] as num?)?.toInt() ?? 12,
+    autoRenew: json['autoRenew'] == true,
     createdAt: json['createdAt'] != null
         ? DateTime.parse(json['createdAt'] as String)
         : DateTime.now(),

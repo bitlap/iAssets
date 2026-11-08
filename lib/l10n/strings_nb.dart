@@ -726,4 +726,8 @@ const Map<String, String> stringsNb = {
       "Ny hovedstol er anslått beløp ved forfall. Kontroller bankens faktiske beløp. Bekreftelsen erstatter gjeldende oppføring.",
   "assetSaveFailed":
       "Kunne ikke lagre. Den opprinnelige oppføringen er uendret. Prøv igjen.",
+  "depositAutoRenew": "Automatisk fornyelse",
+  "depositAutoRenewHint":
+      "Ved forfall fornyes hovedstol og renter med samme rente og løpetid. Manglende fornyelser beregnes neste gang appen åpnes. Beløpene er anslag; kontroller dem mot banken.",
+  "depositMaturityDate": "Forfaller {date}",
 };

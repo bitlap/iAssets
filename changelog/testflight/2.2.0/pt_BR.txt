@@ -1,4 +1,4 @@
-Foco dos testes
+Foco dos testes Renove depósitos automaticamente com principal e juros, mantendo a taxa e o prazo. As renovações pendentes são calculadas ao abrir o app novamente.
 • Depósitos vencidos podem ser reaplicados com principal e juros, ajustando o principal, a taxa e o prazo. Altere a categoria pela lista de ações ou arrastando entre formulários iguais. Ícones e cores acompanham a categoria de destino.
 • Confira os dados após atualizar de uma versão antiga, limites grátis/Pro, compras e restauração. Erros ou perda de conexão não devem sobrescrever ativos existentes.
 

@@ -721,4 +721,8 @@ const Map<String, String> stringsCs = {
       "Nová jistina je odhadovaná částka při splatnosti. Ověřte skutečnou částku banky. Potvrzení nahradí aktuální záznam.",
   "assetSaveFailed":
       "Uložení se nezdařilo. Původní záznam se nezměnil. Zkuste to znovu.",
+  "depositAutoRenew": "Automatické obnovení",
+  "depositAutoRenewHint":
+      "Při splatnosti se jistina a úroky obnoví se stejnou sazbou a dobou. Zmeškaná obnovení se dopočítají při příštím otevření aplikace. Částky jsou odhady; ověřte je u banky.",
+  "depositMaturityDate": "Splatnost {date}",
 };

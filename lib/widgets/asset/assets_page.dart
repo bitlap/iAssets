@@ -1,4 +1,8 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import '../../l10n/l10n.dart';
+import '../../services/icloud_storage.dart';
 import '../../models/asset_account.dart';
 import '../../models/asset_category.dart';
 import '../../models/asset_flat_item.dart';
@@ -50,10 +54,12 @@ class AssetsPage extends StatefulWidget {
   State<AssetsPage> createState() => AssetsPageState();
 }
 
-class AssetsPageState extends State<AssetsPage> {
+class AssetsPageState extends State<AssetsPage> with WidgetsBindingObserver {
   List<AssetBase> _assets = [];
   bool _isLoading = false;
   bool _rolloverOpen = false;
+  bool _assetDialogOpen = false;
+  Timer? _autoRenewTimer;
   Future<void>? _refreshInFlight;
   DateTime? _lastRefreshTime;
   final Set<String> _expandedCategories = {};
@@ -98,24 +104,90 @@ class AssetsPageState extends State<AssetsPage> {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     _load();
   }
 
-  Future<void> _load({bool showOverlay = true}) async {
-    if (showOverlay) setState(() => _isLoading = true);
-    final (assets, categories, order) =
-        await AssetDataManager.loadCategoryState();
+  @override
+  void dispose() {
+    _autoRenewTimer?.cancel();
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) _checkAutoRenewals();
+  }
+
+  void _scheduleAutoRenewals() {
+    _autoRenewTimer?.cancel();
+    final deposits = _assets.whereType<TimeDeposit>().where(
+      (td) => td.autoRenew,
+    );
+    if (deposits.isEmpty) return;
+    final end = deposits
+        .map((td) => td.endDate)
+        .reduce((a, b) => a.isBefore(b) ? a : b);
+    final delay = end.difference(DateTime.now());
+    _autoRenewTimer = Timer(
+      delay.isNegative ? Duration.zero : delay,
+      _checkAutoRenewals,
+    );
+  }
+
+  void _checkAutoRenewals() {
     if (!mounted) return;
-    setState(() {
-      _assets = assets;
-      _categories = categories;
-      _expandedCategories.clear();
-      _sectionOrder = order;
-      if (showOverlay) _isLoading = false;
-      _lastRefreshTime = DateTime.now();
-      _rebuildFlatItems();
-    });
-    widget.onHeaderChanged?.call();
+    if (_isLoading || _assetDialogOpen || _rolloverOpen) {
+      _autoRenewTimer?.cancel();
+      _autoRenewTimer = Timer(const Duration(minutes: 1), _checkAutoRenewals);
+      return;
+    }
+    final now = DateTime.now();
+    if (_assets.whereType<TimeDeposit>().any(
+      (td) => td.autoRenew && !td.endDate.isAfter(now),
+    )) {
+      unawaited(_load(preserveExpansion: true));
+    } else {
+      _scheduleAutoRenewals();
+    }
+  }
+
+  Future<void> _load({
+    bool showOverlay = true,
+    bool preserveExpansion = false,
+  }) async {
+    if (showOverlay) setState(() => _isLoading = true);
+    var renewalFailed = false;
+    try {
+      late (List<AssetBase>, List<AssetCategory>, List<String>) state;
+      try {
+        state = await AssetDataManager.loadCategoryState();
+      } catch (_) {
+        renewalFailed = true;
+        state = await AssetDataManager.loadCategoryState(renewDeposits: false);
+      }
+      if (!mounted) return;
+      final (assets, categories, order) = state;
+      setState(() {
+        _assets = assets;
+        _categories = categories;
+        if (!preserveExpansion) _expandedCategories.clear();
+        _sectionOrder = order;
+        _lastRefreshTime = DateTime.now();
+        _rebuildFlatItems();
+      });
+      widget.onHeaderChanged?.call();
+      if (!renewalFailed) _scheduleAutoRenewals();
+    } catch (_) {
+      renewalFailed = true;
+    } finally {
+      if (mounted && showOverlay) setState(() => _isLoading = false);
+    }
+    if (mounted && renewalFailed) {
+      _autoRenewTimer?.cancel();
+      CenterToast.error(context, AssetConfig.assetSaveFailed);
+    }
   }
 
   Future<void> _refreshAssets() {
@@ -132,6 +204,14 @@ class AssetsPageState extends State<AssetsPage> {
 
   Future<void> _save() async {
     await AssetDataManager.saveAssets(_assets);
+    final saved = await IcloudStorage.loadAssets();
+    if (mounted) {
+      setState(() {
+        _assets = saved;
+        _rebuildFlatItems();
+      });
+    }
+    _scheduleAutoRenewals();
     widget.onHeaderChanged?.call();
   }
 
@@ -153,36 +233,43 @@ class AssetsPageState extends State<AssetsPage> {
     return false;
   }
 
-  Future<bool> _addAsset(AssetBase asset) async {
-    if (!mounted || !_canAddAsset(asset.type, asset.categoryKey)) return false;
-    setState(() {
-      _assets.add(asset);
-      if (!_sectionOrder.contains(asset.categoryKey)) {
-        _sectionOrder.add(asset.categoryKey);
-      }
-    });
-    _rebuildFlatItems();
+  Future<bool> _persistAssets(List<AssetBase> updated) async {
+    setState(() => _isLoading = true);
     try {
-      await _save();
-    } catch (_) {}
-    return true;
+      await AssetDataManager.saveAssets(updated, requireSuccess: true);
+      final saved = await IcloudStorage.loadAssets(renewDeposits: false);
+      if (!mounted) return false;
+      setState(() {
+        _assets = saved;
+        for (final asset in saved) {
+          if (!_sectionOrder.contains(asset.categoryKey)) {
+            _sectionOrder.add(asset.categoryKey);
+          }
+        }
+        _rebuildFlatItems();
+      });
+      _scheduleAutoRenewals();
+      widget.onHeaderChanged?.call();
+      return true;
+    } catch (_) {
+      if (mounted) CenterToast.error(context, AssetConfig.assetSaveFailed);
+      return false;
+    } finally {
+      if (mounted) setState(() => _isLoading = false);
+    }
   }
 
-  Future<void> _updateAsset(String id, AssetBase asset) async {
-    if (!mounted) return;
+  Future<bool> _addAsset(AssetBase asset) async {
+    if (!mounted || !_canAddAsset(asset.type, asset.categoryKey)) return false;
+    return _persistAssets([..._assets, asset]);
+  }
+
+  Future<bool> _updateAsset(String id, AssetBase asset) async {
+    if (!mounted || _isLoading) return false;
     final idx = _assets.indexWhere((a) => a.id == id);
-    if (idx == -1) return;
-    setState(() {
-      asset.categoryId = _assets[idx].categoryId;
-      _assets[idx] = asset;
-      if (!_sectionOrder.contains(asset.categoryKey)) {
-        _sectionOrder.add(asset.categoryKey);
-      }
-    });
-    _rebuildFlatItems();
-    try {
-      await _save();
-    } catch (_) {}
+    if (idx == -1) return false;
+    asset.categoryId = _assets[idx].categoryId;
+    return _persistAssets(List<AssetBase>.of(_assets)..[idx] = asset);
   }
 
   Future<void> _deleteAsset(String id) async {
@@ -190,11 +277,8 @@ class AssetsPageState extends State<AssetsPage> {
     final idx = _assets.indexWhere((a) => a.id == id);
     if (idx == -1) return;
     final name = _assets[idx].name;
-    setState(() => _assets.removeAt(idx));
-    _rebuildFlatItems();
-    try {
-      await _save();
-    } catch (_) {}
+    final updated = List<AssetBase>.of(_assets)..removeAt(idx);
+    if (!await _persistAssets(updated)) return;
     if (mounted) {
       CenterToast.success(
         context,
@@ -330,11 +414,13 @@ class AssetsPageState extends State<AssetsPage> {
     setState(() => _isLoading = true);
     try {
       await AssetDataManager.saveAssets(updated, requireSuccess: true);
+      final saved = await IcloudStorage.loadAssets(renewDeposits: false);
       if (!mounted) return;
       setState(() {
-        _assets = updated;
+        _assets = saved;
         _rebuildFlatItems();
       });
+      _scheduleAutoRenewals();
       widget.onHeaderChanged?.call();
       CenterToast.success(context, AssetConfig.toastSaved);
     } catch (_) {
@@ -533,11 +619,13 @@ class AssetsPageState extends State<AssetsPage> {
         if (mounted) CenterToast.error(context, AssetConfig.assetSaveFailed);
         return;
       }
+      final saved = await IcloudStorage.loadAssets(renewDeposits: false);
       if (!mounted) return;
       setState(() {
-        _assets = updated;
+        _assets = saved;
         _rebuildFlatItems();
       });
+      _scheduleAutoRenewals();
       widget.onHeaderChanged?.call();
       CenterToast.success(context, AssetConfig.toastSaved);
     } finally {
@@ -611,15 +699,21 @@ class AssetsPageState extends State<AssetsPage> {
   void _openDialog<T extends AssetBase>(
     Future<T?> dialog, {
     Future<bool> Function(T)? onAdd,
-    Future<void> Function(T)? onUpdate,
+    Future<bool> Function(T)? onUpdate,
     String? categoryId,
   }) async {
-    final result = await dialog;
-    if (result != null && mounted) {
-      if (categoryId != null) result.categoryId = categoryId;
-      if (onAdd != null && !await onAdd(result)) return;
-      if (onUpdate != null) await onUpdate(result);
-      if (mounted) CenterToast.success(context, AssetConfig.toastSaved);
+    _assetDialogOpen = true;
+    try {
+      final result = await dialog;
+      if (result != null && mounted) {
+        if (categoryId != null) result.categoryId = categoryId;
+        if (onAdd != null && !await onAdd(result)) return;
+        if (onUpdate != null && !await onUpdate(result)) return;
+        if (mounted) CenterToast.success(context, AssetConfig.toastSaved);
+      }
+    } finally {
+      _assetDialogOpen = false;
+      if (mounted) _checkAutoRenewals();
     }
   }
 
@@ -873,8 +967,14 @@ class AssetsPageState extends State<AssetsPage> {
           padding: const EdgeInsetsDirectional.only(end: 20),
           child: Icon(Icons.delete, color: AppColors.danger, size: 22),
         ),
-        confirmDismiss: (_) => _confirmDelete(asset),
-        onDismissed: (_) => _deleteAsset(asset.id),
+        confirmDismiss: (_) async {
+          if (_isLoading || !await _confirmDelete(asset) || !mounted) {
+            return false;
+          }
+          // Keep the card until the transaction commits; failed saves can undo the swipe.
+          await _deleteAsset(asset.id);
+          return false;
+        },
         child: Container(
           margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
           child: _buildAssetCard(asset, index),
@@ -947,7 +1047,7 @@ class AssetsPageState extends State<AssetsPage> {
           ? AssetConfig.daysRemaining.replaceAll('{days}', '$daysLeft')
           : AssetConfig.expired;
       detail =
-          '${AssetConfig.fieldAnnualRate.replaceAll(' (%)', '')} ${CurrencyUtil.formatCompact(asset.annualRate)}%\n$term';
+          '${AssetConfig.fieldAnnualRate.replaceAll(' (%)', '')} ${CurrencyUtil.formatCompact(asset.annualRate)}%\n${AssetConfig.depositMaturityDate.replaceAll('{date}', DateFormat.yMd(L10n.intlLocale).format(asset.endDate))}${asset.autoRenew ? ' · ${AssetConfig.depositAutoRenew}' : ''}\n$term';
       if (daysLeft <= 0) detailColor = AssetStyle.deposit;
     } else if (asset is WealthProduct) {
       detail =
@@ -991,6 +1091,8 @@ class AssetsPageState extends State<AssetsPage> {
           '${CurrencyUtil.getSymbol(asset.currency)}${CurrencyUtil.formatCompact(value)}',
       detail: detail,
       detailColor: detailColor,
+      detailMaxLines: asset is TimeDeposit ? 3 : 2,
+      fitDetailLines: asset is TimeDeposit,
       createdAt: asset.createdAt,
       updatedAt: asset.updatedAt,
       onTap: onTap,

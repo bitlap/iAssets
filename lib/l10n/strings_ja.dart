@@ -667,4 +667,8 @@ const Map<String, String> stringsJa = {
   "depositRolloverHint":
       "新元本には推定元利金が入ります。銀行の実際の満期金額を確認してください。確定すると現在の記録を置き換えます。",
   "assetSaveFailed": "保存できませんでした。元の記録は変更されていません。再試行してください。",
+  "depositAutoRenew": "自動継続",
+  "depositAutoRenewHint":
+      "満期に同じ金利・期間で元利継続します。アプリ終了中の分は次回起動時に反映します。金額は概算のため、銀行の実際の金額を確認してください。",
+  "depositMaturityDate": "満期 {date}",
 };

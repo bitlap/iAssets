@@ -6,10 +6,10 @@ import '../../services/settings_service.dart';
 
 class AssetDataManager {
   static Future<(List<AssetBase>, List<AssetCategory>, List<String>)>
-  loadCategoryState() async {
+  loadCategoryState({bool renewDeposits = true}) async {
     await IcloudStorage.loadSettings();
     final results = await Future.wait([
-      IcloudStorage.loadAssets(),
+      IcloudStorage.loadAssets(renewDeposits: renewDeposits),
       SettingsService.getAssetCategories(),
       SettingsService.getAssetSectionOrder(),
     ]);

@@ -725,4 +725,8 @@ const Map<String, String> stringsId = {
   "depositRolloverHint":
       "Pokok baru memakai perkiraan total saat jatuh tempo. Periksa jumlah aktual dari bank. Konfirmasi akan mengganti catatan saat ini.",
   "assetSaveFailed": "Gagal menyimpan. Catatan awal tidak berubah. Coba lagi.",
+  "depositAutoRenew": "Perpanjangan otomatis",
+  "depositAutoRenewHint":
+      "Saat jatuh tempo, pokok dan bunga diperpanjang dengan suku bunga dan tenor yang sama. Perpanjangan tertunda diterapkan saat aplikasi dibuka kembali. Nilainya perkiraan; cocokkan dengan bank.",
+  "depositMaturityDate": "Jatuh tempo {date}",
 };

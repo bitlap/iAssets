@@ -1,4 +1,4 @@
-Trọng tâm kiểm thử
+Trọng tâm kiểm thử Tự động tái tục cả gốc và lãi với lãi suất và kỳ hạn cũ. Các lần tái tục bị bỏ lỡ sẽ được tính khi mở lại ứng dụng.
 • Tiền gửi đáo hạn có thể tái tục cả gốc lẫn lãi, với số gốc mới, lãi suất và kỳ hạn có thể điều chỉnh. Đổi danh mục từ danh sách thao tác hoặc kéo giữa các mẫu nhập giống nhau. Biểu tượng và màu sắc theo danh mục đích.
 • Kiểm tra dữ liệu sau khi cập nhật từ bản cũ, giới hạn miễn phí/Pro, mua hàng và khôi phục. Lỗi hoặc mất mạng không được ghi đè tài sản hiện có.
 

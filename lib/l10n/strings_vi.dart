@@ -720,4 +720,8 @@ const Map<String, String> stringsVi = {
       "Tiền gốc mới lấy tổng tiền đáo hạn ước tính. Hãy kiểm tra số tiền thực tế của ngân hàng. Xác nhận sẽ thay thế bản ghi hiện tại.",
   "assetSaveFailed":
       "Không lưu được. Bản ghi gốc không thay đổi. Vui lòng thử lại.",
+  "depositAutoRenew": "Tự động tái tục",
+  "depositAutoRenewHint":
+      "Khi đáo hạn, tái tục cả gốc lẫn lãi với lãi suất và kỳ hạn cũ. Các kỳ bị bỏ lỡ được tính khi mở lại ứng dụng. Số tiền là ước tính; hãy đối chiếu với ngân hàng.",
+  "depositMaturityDate": "Đáo hạn {date}",
 };

@@ -1,4 +1,4 @@
-Testpunten
+Testpunten Verleng deposito’s automatisch met hoofdsom en rente tegen dezelfde rente en looptijd. Gemiste verlengingen worden berekend zodra je de app opnieuw opent.
 • Vervallen deposito’s kunnen met hoofdsom en rente worden verlengd. Hoofdsom, rente en looptijd zijn aanpasbaar. Wijzig de categorie via de actielijst of sleep tussen dezelfde invoersjablonen. Pictogrammen en kleuren volgen de doelcategorie.
 • Controleer gegevens na een update vanaf een oudere versie, gratis-/Pro-limieten, aankopen en herstel. Fouten of verbindingsverlies mogen bestaande bezittingen niet overschrijven.
 

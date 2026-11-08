@@ -12,6 +12,8 @@ class AssetCardFrame extends StatelessWidget {
   final String currency;
   final String amount;
   final String? detail;
+  final int? detailMaxLines;
+  final bool fitDetailLines;
   final Color? detailColor;
   final Color? categoryColor;
   final DateTime? createdAt;
@@ -28,6 +30,8 @@ class AssetCardFrame extends StatelessWidget {
     required this.currency,
     required this.amount,
     this.detail,
+    this.detailMaxLines = 2,
+    this.fitDetailLines = false,
     this.detailColor,
     this.categoryColor,
     this.createdAt,
@@ -112,9 +116,12 @@ class AssetCardFrame extends StatelessWidget {
                           LayoutBuilder(
                             builder: (context, constraints) {
                               final stacked =
-                                  constraints.maxWidth < 310 ||
-                                  MediaQuery.textScalerOf(context).scale(1) >
-                                      1.2;
+                                  !fitDetailLines &&
+                                  (constraints.maxWidth < 310 ||
+                                      MediaQuery.textScalerOf(
+                                            context,
+                                          ).scale(1) >
+                                          1.2);
                               final amountText = FittedBox(
                                 fit: BoxFit.scaleDown,
                                 alignment: AlignmentDirectional.centerStart,
@@ -129,8 +136,11 @@ class AssetCardFrame extends StatelessWidget {
                               if (detail == null) return amountText;
                               final detailText = SensitiveText(
                                 detail!,
-                                maxLines: 2,
-                                overflow: TextOverflow.ellipsis,
+                                maxLines: detailMaxLines,
+                                softWrap: !fitDetailLines,
+                                overflow: detailMaxLines == null
+                                    ? TextOverflow.visible
+                                    : TextOverflow.ellipsis,
                                 textAlign: stacked
                                     ? TextAlign.start
                                     : TextAlign.end,
@@ -153,7 +163,17 @@ class AssetCardFrame extends StatelessWidget {
                                 children: [
                                   Expanded(flex: 3, child: amountText),
                                   const SizedBox(width: 12),
-                                  Expanded(flex: 2, child: detailText),
+                                  Expanded(
+                                    flex: 2,
+                                    child: fitDetailLines
+                                        ? FittedBox(
+                                            fit: BoxFit.scaleDown,
+                                            alignment:
+                                                AlignmentDirectional.centerEnd,
+                                            child: detailText,
+                                          )
+                                        : detailText,
+                                  ),
                                 ],
                               );
                             },
