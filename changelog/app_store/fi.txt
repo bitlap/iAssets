@@ -1,24 +1,21 @@
-iAssets
+iAssets — Selkeä kokonaiskuva, helppo kirjanpito
 
-Katso kokonaisvarallisuutesi, salkun yhteenveto ja päivitysaika.
+Näe osakkeet, kryptovarat ja muu omaisuus yhdessä sovelluksessa sekä selkeä yhteenveto kokonaisarvosta, jakaumasta ja tuotoista.
 
-Ilmainen: enintään 3 osaketta ja 3 omaisuustyyppiä, enintään 3 tietuetta tyyppiä kohden. Olemassa olevat tiedot säilytetään, kun tilaus päättyy.
+Tärkeimmät ominaisuudet
+• Seuraa osakeomistuksia eri markkinoilla, kirjaa ostot, myynnit ja osingot ja tarkastele markkina-arvoja ja tuottoja
+• Tarkastele Binancen spot-, futuuri- ja johtavan kaupankävijän varoja vain luku -oikeuksin toimivan API-yhteyden kautta
+• Hallitse käteistä, talletuksia, sijoituksia ja omia omaisuusluokkia ja kokoa yhteen eri valuuttojen varat
+• Katso omaisuuden yhteenveto Koti-valikon ja lukitusnäytön widgeteistä
 
-Face ID / Touch ID lukko · Piilota määrät
+Tietosuoja ja käyttö
+• Lukitse sovellus Face ID / Touch ID -tunnistuksella ja piilota summat yhdellä napautuksella
+• Synkronoi osakkeet, käsin syötetyt varat ja asetukset iCloudissa; kryptopalvelujen tunnistetiedot säilyvät vain laitteessa
+• Valitse 33 kielestä, kuten yksinkertaistettu kiina, perinteinen kiina ja englanti, sekä vaalea tai tumma teema
+• Käytä perustoimintoja ilmaiseksi tai avaa Pro tilauksella tai kertamaksulla pysyvään käyttöön
 
-Pro
-• Rajoittamaton omaisuus: Enemmän osakkeita, jokainen omaisuustyyppi, rajattomasti tietueita
-• Kryptotilit: Tarkastele vaihtosaldot ja positiot vain luku -synkronoinnin avulla
-• Tuonti ja vienti: Varmuuskopioi, siirrä ja palauta omaisuustietueesi
-• Mukautetut osakkeet: Lisää omat nimesi, omistusosuutesi ja hinnat
-
-Kuukausittain · uusiutuu automaattisesti joka kuukausi
-Vuosittain · uusiutuu automaattisesti joka vuosi
-Elinikäinen · kertaostos
-Elinikäinen ostos ei peruuta automaattisesti olemassa olevaa tilausta. Peruuta se Hallinnoi tilauksia -kohdassa lisäkulujen välttämiseksi.
-
-Käyttöehdot: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
+Käyttöehdot (Applen vakio-EULA): https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
 Tietosuojakäytäntö: https://bitlap.org/iAssets-privacy/
 
-Tämä on avoimen lähdekoodin ohjelmisto. Lähetä ehdotuksia tai ilmoita ongelmista GitHubissa.
+Ohjelmisto on avointa lähdekoodia. Lähetä ehdotuksia tai ilmoita ongelmista GitHubissa.
 https://github.com/bitlap/iAssets

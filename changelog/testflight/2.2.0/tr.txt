@@ -1,0 +1,9 @@
+Test odakları
+• Dili değiştirip yerel rakamları, ondalık virgülleri, RTL düzenlerini ve tutar/ücret kaydını kontrol edin. iPad dönüşü ve Split View sırasında alt panelleri, araç takımı dillerini ve varlık sıralamasını test edin.
+• Eski sürümden güncelleme sonrası verileri, ücretsiz/Pro sınırlarını, satın alma ve geri yüklemeyi kontrol edin. Hatalar veya bağlantı kaybı mevcut varlıkların üzerine yazmamalıdır.
+
+Bilinen sınırlamalar
+Bazı çevirilerin ana dil incelemesi bekleniyor. TestFlight korumalı test ortamını kullanır ve üretimde eski kullanıcı uygunluğunu doğrulayamaz.
+
+GitHub’da dil, cihaz ve sorunu yeniden oluşturma adımlarını bildirin:
+https://github.com/bitlap/iAssets/issues

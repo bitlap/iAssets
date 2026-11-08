@@ -1,0 +1,9 @@
+Test focus
+• Switch languages and check local digits, decimal commas, RTL layouts, amount and fee saving; test iPad bottom sheets during rotation and Split View, widget languages and asset reordering.
+• Check data after upgrading from an older version. Test free/Pro limits, purchases and restore, and confirm errors or lost connectivity do not overwrite existing assets.
+
+Known limitations
+Some translations still need native-speaker review. TestFlight uses the sandbox and cannot establish legacy-user eligibility in production.
+
+Report your language, device and reproduction steps on GitHub:
+https://github.com/bitlap/iAssets/issues

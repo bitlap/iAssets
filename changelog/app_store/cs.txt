@@ -1,24 +1,21 @@
-iAssets
+iAssets — Jasný přehled, snadné záznamy
 
-Podívejte se na vaše celková aktiva, souhrn portfolia a čas aktualizace.
+Sledujte akcie, kryptoměny a další aktiva v jedné aplikaci s přehledným souhrnem hodnoty, rozložení a výnosů.
 
-Zdarma: až 3 akcie a 3 typy majetku s až 3 záznamy na typ. Stávající data jsou uchována, když předplatné vyprší.
+Hlavní funkce
+• Sledujte akciové pozice na více trzích, zaznamenávejte nákupy, prodeje a dividendy a zobrazujte tržní hodnotu a výnosy
+• Prohlížejte spotová, futures a lead trader aktiva Binance přes API pouze pro čtení
+• Spravujte hotovost, vklady, investice a vlastní kategorie a shrnujte aktiva v různých měnách
+• Prohlížejte přehled aktiv pomocí widgetů na ploše a zamčené obrazovce
 
-Zámek Face ID / Touch ID · Skrýt částky
+Soukromí a používání
+• Chraňte aplikaci pomocí Face ID / Touch ID a skryjte částky jedním klepnutím
+• Synchronizujte akcie, ručně zadaná aktiva a nastavení přes iCloud; přihlašovací údaje ke kryptoslužbám zůstávají jen v zařízení
+• Vyberte si z 33 jazyků, včetně zjednodušené a tradiční čínštiny a angličtiny, se světlým a tmavým motivem
+• Používejte základní funkce zdarma nebo odemkněte Pro předplatným či jednorázovým nákupem na doživotí
 
-Pro
-• Neomezený majetek: Více zásob, každý typ majetku, neomezené záznamy
-• Krypto účty: Zobrazte směnné zůstatky a pozice se synchronizací pouze pro čtení
-• Import a export: Zálohujte, přesouvejte a obnovujte své záznamy o majetku
-• Vlastní zásoby: Přidejte vlastní jména, podíly a ceny
+Podmínky použití (standardní EULA Apple): https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
+Zásady ochrany soukromí: https://bitlap.org/iAssets-privacy/
 
-Měsíčně · automaticky se obnovuje každý měsíc
-Roční · každý rok se automaticky obnovuje
-Doživotní · jednorázový nákup
-Doživotní nákup automaticky nezruší stávající předplatné. Chcete-li se vyhnout dalším poplatkům, zrušte jej v části Správa předplatných.
-
-Podmínky použití: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
-Zásady ochrany osobních údajů: https://bitlap.org/iAssets-privacy/
-
-Tento software má otevřený zdrojový kód. Návrhy a problémy můžete hlásit na GitHubu.
+Tento software má otevřený zdrojový kód. Návrhy a hlášení problémů přijímáme na GitHubu.
 https://github.com/bitlap/iAssets

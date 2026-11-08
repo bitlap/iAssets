@@ -1,24 +1,21 @@
-iAssets
+iAssets — Active clare, evidență simplă
 
-Vedeți activele totale, rezumatul portofoliului și timpul de actualizare.
+Vezi acțiunile, criptomonedele și alte active într-o singură aplicație, cu o imagine clară a totalului, distribuției și randamentelor.
 
-Gratuit: până la 3 stocuri și 3 tipuri de active, cu până la 3 înregistrări per tip. Datele existente sunt păstrate atunci când un abonament expiră.
+Funcții principale
+• Urmărește deținerile de acțiuni pe mai multe piețe, înregistrează cumpărări, vânzări și dividende și vezi valoarea de piață și randamentele
+• Vezi activele Binance spot, futures și ale traderului principal prin acces API doar pentru citire
+• Organizează numerarul, depozitele, investițiile și categoriile personalizate și reunește active în mai multe monede
+• Consultă rapid activele cu widgeturi pe ecranul principal și pe ecranul blocat
 
-Face ID / Touch ID blocare · Ascundeți sumele
+Confidențialitate și utilizare
+• Protejează aplicația cu Face ID / Touch ID și ascunde sumele cu o atingere
+• Sincronizează acțiunile, activele introduse manual și configurările prin iCloud; datele de autentificare cripto rămân doar pe dispozitiv
+• Alege dintre 33 de limbi, inclusiv chineza simplificată, chineza tradițională și engleza, cu teme deschise și întunecate
+• Folosește gratuit funcțiile de bază sau deblochează Pro prin abonament ori achiziție unică pe viață
 
-Pro
-• Active nelimitate: Mai multe stocuri, fiecare tip de activ, înregistrări nelimitate
-• Conturi cripto: Vizualizați soldurile și pozițiile valutare cu sincronizare numai în citire
-• Import și export: Faceți backup, mutați și restaurați înregistrările dvs. de active
-• Stocuri personalizate: Adăugați propriile nume, exploatații și prețuri
-
-Lunar · se reînnoiește automat în fiecare lună
-Anual · se reînnoiește automat în fiecare an
-Viață · achiziție unică
-O achiziție pe viață nu anulează automat un abonament existent. Anulați-l în Gestionați abonamente pentru a evita alte taxe.
-
-Condiții de utilizare: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
+Condiții de utilizare (EULA standard Apple): https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
 Politica de confidențialitate: https://bitlap.org/iAssets-privacy/
 
-Acest software are codul sursă deschis. Trimite sugestii sau raportează probleme pe GitHub.
+Acest software are sursă deschisă. Trimite sugestii sau raportează probleme pe GitHub.
 https://github.com/bitlap/iAssets

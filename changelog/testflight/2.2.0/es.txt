@@ -1,0 +1,9 @@
+Aspectos a probar
+• Cambia de idioma y comprueba los dígitos locales, comas decimales, diseños RTL y el guardado de importes y comisiones. Prueba los paneles de iPad al girar y en Split View, los idiomas de los widgets y el orden de los activos.
+• Revisa los datos tras actualizar desde una versión anterior, los límites gratis/Pro, las compras y la restauración. Los errores o la pérdida de conexión no deben sobrescribir los activos existentes.
+
+Limitaciones conocidas
+Algunas traducciones aún necesitan revisión nativa. TestFlight usa el entorno de pruebas y no puede confirmar la condición de usuario antiguo en producción.
+
+Indica el idioma, el dispositivo y los pasos de reproducción en GitHub:
+https://github.com/bitlap/iAssets/issues

@@ -1,0 +1,9 @@
+Testfokus
+• Skift sprog og kontroller lokale cifre, decimalkommaer, RTL-layout og lagring af beløb og gebyrer. Test iPad-paneler ved rotation og Split View, widgetsprog og rækkefølgen af aktiver.
+• Kontroller data efter opdatering fra en ældre version, gratis-/Pro-grænser, køb og gendannelse. Fejl eller mistet forbindelse må ikke overskrive eksisterende aktiver.
+
+Kendte begrænsninger
+Nogle oversættelser afventer kontrol af modersmålstalere. TestFlight bruger sandkassen og kan ikke bekræfte tidligere brugeres berettigelse i produktion.
+
+Angiv sprog, enhed og trin til at genskabe problemet på GitHub:
+https://github.com/bitlap/iAssets/issues

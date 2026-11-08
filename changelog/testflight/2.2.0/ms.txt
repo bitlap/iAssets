@@ -1,0 +1,9 @@
+Fokus ujian
+• Tukar bahasa dan semak digit setempat, koma perpuluhan, susun atur RTL serta simpanan amaun dan fi. Uji panel iPad ketika putaran dan Split View, bahasa widget dan susunan aset.
+• Semak data selepas mengemas kini daripada versi lama, had percuma/Pro, pembelian dan pemulihan. Ralat atau sambungan terputus tidak boleh menulis ganti aset sedia ada.
+
+Batasan diketahui
+Sesetengah terjemahan masih menunggu semakan penutur asli. TestFlight menggunakan kotak pasir dan tidak dapat mengesahkan kelayakan pengguna lama dalam persekitaran pengeluaran.
+
+Sertakan bahasa, peranti dan langkah menghasilkan semula masalah di GitHub:
+https://github.com/bitlap/iAssets/issues

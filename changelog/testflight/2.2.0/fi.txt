@@ -1,0 +1,9 @@
+Testauksen painopisteet
+• Vaihda kieltä ja tarkista paikalliset numerot, desimaalipilkut, RTL-asettelu sekä summien ja kulujen tallennus. Testaa iPad-paneelit käännettäessä ja Split View’ssä, widgetien kielet ja varojen järjestys.
+• Tarkista tiedot vanhasta versiosta päivittämisen jälkeen, ilmais-/Pro-rajat, ostot ja palautus. Virheet tai yhteyden katkeaminen eivät saa korvata nykyisiä varoja.
+
+Tunnetut rajoitukset
+Osa käännöksistä odottaa vielä äidinkielistä tarkistusta. TestFlight käyttää testiympäristöä eikä voi vahvistaa vanhojen käyttäjien kelpoisuutta tuotannossa.
+
+Ilmoita kieli, laite ja toistamisvaiheet GitHubissa:
+https://github.com/bitlap/iAssets/issues

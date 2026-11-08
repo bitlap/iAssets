@@ -15,6 +15,7 @@ iAssets — 看清资产，轻松记录
 • 免费使用基础功能，Pro 提供订阅或一次性买断
 
 使用条款（Apple 标准最终用户许可协议）：https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
+隐私政策: https://bitlap.org/iAssets-privacy/
 
 这是开源软件，欢迎在 GitHub 提交建议或报告问题。
 https://github.com/bitlap/iAssets

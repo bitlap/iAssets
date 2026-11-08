@@ -1,24 +1,21 @@
-iAssets
+iAssets — Vos actifs en un coup d’œil, un suivi simplifié
 
-Consultez le total de vos actifs, le résumé de votre portefeuille et l'heure de mise à jour.
+Retrouvez vos actions, cryptomonnaies et autres actifs dans une seule app, avec une vue claire du total, de la répartition et des rendements.
 
-Gratuit : jusqu'à 3 actions et 3 types d'actifs, avec jusqu'à 3 enregistrements par type. Les données existantes sont conservées à l'expiration d'un abonnement.
+Fonctionnalités principales
+• Suivez vos positions sur plusieurs marchés boursiers, enregistrez achats, ventes et dividendes, et consultez leur valeur et leurs rendements
+• Consultez vos actifs Binance au comptant, à terme et de lead trader grâce à un accès API en lecture seule
+• Organisez espèces, dépôts, placements et catégories personnalisées, et regroupez vos actifs dans plusieurs devises
+• Consultez vos actifs avec les widgets de l’écran d’accueil et de l’écran verrouillé
 
-Serrure Face ID / Touch ID · Masquer les montants
+Confidentialité et utilisation
+• Verrouillez l’app avec Face ID / Touch ID et masquez les montants d’un geste
+• Synchronisez actions, actifs saisis manuellement et réglages avec iCloud ; les identifiants crypto restent sur votre appareil
+• Choisissez parmi 33 langues, dont le chinois simplifié, le chinois traditionnel et l’anglais, avec des thèmes clair et sombre
+• Utilisez les fonctions de base gratuitement ou débloquez Pro par abonnement ou achat à vie
 
-Pro
-• Actifs illimités: Plus d'actions, tous les types d'actifs, des enregistrements illimités
-• Comptes cryptographiques: Afficher les soldes et les positions d'échange avec une synchronisation en lecture seule
-• Importer et exporter: Sauvegardez, déplacez et restaurez vos enregistrements d'actifs
-• Stocks personnalisés: Ajoutez vos propres noms, titres et prix
-
-Mensuel · se renouvelle automatiquement chaque mois
-Annuel · se renouvelle automatiquement chaque année
-À vie · achat unique
-Un achat à vie n’annule pas automatiquement un abonnement existant. Annulez-le dans Gérer les abonnements pour éviter des frais supplémentaires.
-
-Conditions d'utilisation: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
+Conditions d’utilisation (CLUF standard Apple): https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
 Politique de confidentialité: https://bitlap.org/iAssets-privacy/
 
-Ce logiciel est open source. Vous pouvez proposer des améliorations ou signaler des problèmes sur GitHub.
+Ce logiciel est open source. Envoyez vos suggestions ou signalez des problèmes sur GitHub.
 https://github.com/bitlap/iAssets

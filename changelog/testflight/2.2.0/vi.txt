@@ -1,0 +1,9 @@
+Trọng tâm kiểm thử
+• Đổi ngôn ngữ và kiểm tra chữ số địa phương, dấu phẩy thập phân, bố cục RTL và việc lưu số tiền, phí. Kiểm tra bảng dưới trên iPad khi xoay và dùng Split View, ngôn ngữ tiện ích và thứ tự tài sản.
+• Kiểm tra dữ liệu sau khi cập nhật từ bản cũ, giới hạn miễn phí/Pro, mua hàng và khôi phục. Lỗi hoặc mất mạng không được ghi đè tài sản hiện có.
+
+Giới hạn đã biết
+Một số bản dịch vẫn cần người bản ngữ rà soát. TestFlight dùng môi trường thử nghiệm và không thể xác nhận tư cách người dùng cũ trong môi trường chính thức.
+
+Gửi ngôn ngữ, thiết bị và các bước tái hiện trên GitHub:
+https://github.com/bitlap/iAssets/issues

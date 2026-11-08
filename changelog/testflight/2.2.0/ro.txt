@@ -1,0 +1,9 @@
+Aspecte de testat
+• Schimbă limba și verifică cifrele locale, virgulele zecimale, aspectul RTL și salvarea sumelor și comisioanelor. Testează panourile iPad la rotire și în Split View, limbile widgeturilor și ordinea activelor.
+• Verifică datele după actualizarea de la o versiune veche, limitele gratuite/Pro, achizițiile și restaurarea. Erorile sau pierderea conexiunii nu trebuie să suprascrie activele existente.
+
+Limitări cunoscute
+Unele traduceri așteaptă încă verificarea vorbitorilor nativi. TestFlight folosește mediul de testare și nu poate confirma eligibilitatea utilizatorilor vechi în producție.
+
+Indică limba, dispozitivul și pașii de reproducere pe GitHub:
+https://github.com/bitlap/iAssets/issues

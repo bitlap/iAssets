@@ -1,6 +1,6 @@
 name: Release Drafter
 
-# master 更新时创建/更新 Release 草稿，正文使用对应版本的多语言 changelog。
+# master 更新时创建/更新 Release 草稿，正文从对应版本的全语言 changelog 提取中简、中繁和英文。
 # 版本号直接取自 pubspec.yaml（如 1.5.0 → v1.5.0），无需给 PR 打标签
 # 配置见 .github/release-drafter.yml
 on:
@@ -29,6 +29,7 @@ jobs:
         run: |
           VERSION=$(grep -E '^version:' pubspec.yaml | awk '{print $2}' | cut -d'+' -f1)
           python3 scripts/check_release_notes.py --version "$VERSION"
+          python3 scripts/github_release_notes.py --version "$VERSION" --output "$RUNNER_TEMP/github-release-notes.md"
           echo "version=$VERSION" >> "$GITHUB_OUTPUT"
           echo "tag=v$VERSION" >> "$GITHUB_OUTPUT"
 
@@ -36,6 +37,7 @@ jobs:
         id: published
         uses: actions/github-script@v7
         env:
+          RELEASE_NOTES_PATH: ${{ runner.temp }}/github-release-notes.md
           RELEASE_TAG: ${{ steps.version.outputs.tag }}
           RELEASE_VERSION: ${{ steps.version.outputs.version }}
         with:
@@ -57,7 +59,7 @@ jobs:
             core.notice(`${tag} is published; skipping draft creation`);
             // Remove only an identical, empty-asset bot draft left by the old workflow.
             // Its full notes remain in both the published release and versioned changelog.
-            const body = fs.readFileSync(`changelog/${process.env.RELEASE_VERSION}.md`, 'utf8').trim();
+            const body = fs.readFileSync(process.env.RELEASE_NOTES_PATH, 'utf8').trim();
             const normalize = text => (text || '').replace(/\r\n/g, '\n').trim();
             if (normalize(publishedRelease.body) !== normalize(body)) return;
             const releases = await github.paginate(github.rest.repos.listReleases, {...context.repo, per_page: 100});
@@ -87,6 +89,7 @@ jobs:
         if: steps.published.outputs.exists != 'true'
         uses: actions/github-script@v7
         env:
+          RELEASE_NOTES_PATH: ${{ runner.temp }}/github-release-notes.md
           RELEASE_ID: ${{ steps.drafter.outputs.id }}
           RELEASE_VERSION: ${{ steps.version.outputs.version }}
         with:
@@ -97,7 +100,7 @@ jobs:
             if (!/^\d+\.\d+\.\d+$/.test(version) || !Number.isSafeInteger(releaseId) || releaseId <= 0) {
               throw new Error('Invalid release version or draft ID');
             }
-            const body = fs.readFileSync(`changelog/${version}.md`, 'utf8').trim();
+            const body = fs.readFileSync(process.env.RELEASE_NOTES_PATH, 'utf8').trim();
             const {data: release} = await github.rest.repos.getRelease({
               ...context.repo, release_id: releaseId,
             });
@@ -111,4 +114,4 @@ jobs:
             await github.rest.repos.updateRelease({
               ...context.repo, release_id: releaseId, body,
             });
-            core.notice(`Updated draft v${version} from changelog/${version}.md`);
+            core.notice(`Updated draft v${version} with Chinese and English sections from changelog/${version}.md`);

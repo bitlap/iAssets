@@ -1,24 +1,21 @@
-iAssets
+iAssets — Ativos com clareza, registos sem esforço
 
-Veja o seu total de ativos, resumo da carteira e tempo de atualização.
+Veja ações, criptomoedas e outros ativos numa só app, com uma visão clara do total, da distribuição e dos retornos.
 
-Gratuito: até 3 ações e 3 tipos de ativos, com até 3 registos por tipo. Os dados existentes são mantidos quando uma subscrição expira.
+Funcionalidades principais
+• Acompanhe posições em vários mercados de ações, registe compras, vendas e dividendos e consulte valores e retornos
+• Consulte ativos spot, de futuros e de lead trader da Binance através de acesso à API apenas de leitura
+• Organize dinheiro, depósitos, investimentos e categorias personalizadas e reúna ativos em várias moedas
+• Consulte os seus ativos com widgets no ecrã principal e no ecrã bloqueado
 
-Bloqueio Face ID/Touch ID · Ocultar valores
+Privacidade e experiência
+• Proteja a app com Face ID / Touch ID e oculte os valores com um toque
+• Sincronize ações, ativos introduzidos manualmente e definições através do iCloud; as credenciais de cripto ficam apenas no dispositivo
+• Escolha entre 33 idiomas, incluindo chinês simplificado, chinês tradicional e inglês, com temas claro e escuro
+• Use as funcionalidades básicas gratuitamente ou desbloqueie o Pro com uma assinatura ou compra vitalícia
 
-Pro
-• Ativos ilimitados: Mais ações, todos os tipos de ativos, registos ilimitados
-• Contas criptográficas: Visualize saldos e posições cambiais com sincronização de leitura apenas
-• Importar e exportar: Faça cópias de segurança, mova e restaure os seus registos de ativos
-• Estoques personalizados: Adicione os seus próprios nomes, participações e preços
-
-Mensalmente · renovação automática todos os meses
-Anual · renovação automática todos os anos
-Vitalício · compra única
-Uma compra vitalícia não cancela automaticamente uma subscrição existente. Cancele em Gerir subscrições para evitar mais cobranças.
-
-Termos de utilização: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
-Política de privacidade: https://bitlap.org/iAssets-privacy/
+Termos de Utilização (EULA padrão da Apple): https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
+Política de Privacidade: https://bitlap.org/iAssets-privacy/
 
 Este software é de código aberto. Envie sugestões ou comunique problemas no GitHub.
 https://github.com/bitlap/iAssets

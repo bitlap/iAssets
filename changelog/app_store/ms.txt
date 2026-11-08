@@ -1,24 +1,21 @@
-iAssets
+iAssets — Aset jelas, catatan mudah
 
-Lihat jumlah aset anda, ringkasan portfolio dan masa kemas kini.
+Lihat saham, kripto dan aset lain dalam satu aplikasi, dengan gambaran jelas tentang jumlah, agihan dan pulangan.
 
-Percuma: sehingga 3 stok dan 3 jenis aset, dengan sehingga 3 rekod setiap jenis. Data sedia ada disimpan apabila langganan tamat tempoh.
+Ciri Utama
+• Jejaki pegangan saham di pelbagai pasaran, catat pembelian, jualan dan dividen, serta lihat nilai pasaran dan pulangan
+• Lihat aset spot, niaga hadapan dan pedagang utama Binance melalui akses API baca sahaja
+• Urus wang tunai, deposit, pelaburan dan kategori aset tersuai serta gabungkan aset dalam pelbagai mata wang
+• Semak gambaran keseluruhan aset dengan widget Skrin Utama dan Skrin Kunci
 
-Kunci Face ID / Touch ID · Sembunyikan jumlah
+Privasi dan Pengalaman
+• Lindungi aplikasi dengan Face ID / Touch ID dan sembunyikan amaun dengan satu ketikan
+• Segerakkan saham, aset yang dimasukkan secara manual dan tetapan melalui iCloud; bukti kelayakan kripto kekal pada peranti sahaja
+• Pilih daripada 33 bahasa, termasuk Cina Ringkas, Cina Tradisional dan Inggeris, dengan tema cerah dan gelap
+• Gunakan ciri asas secara percuma atau buka Pro melalui langganan atau pembelian sekali seumur hidup
 
-Pro
-• Aset tanpa had: Lebih banyak stok, setiap jenis aset, rekod tanpa had
-• Akaun Crypto: Lihat baki dan kedudukan pertukaran dengan penyegerakan baca sahaja
-• Import & eksport: Sandarkan, alihkan dan pulihkan rekod aset anda
-• Stok tersuai: Tambah nama, pegangan dan harga anda sendiri
+Syarat Penggunaan (EULA Standard Apple): https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
+Dasar Privasi: https://bitlap.org/iAssets-privacy/
 
-Bulanan · diperbaharui secara automatik setiap bulan
-Tahunan · diperbaharui secara automatik setiap tahun
-Seumur hidup · pembelian sekali sahaja
-Pembelian seumur hidup tidak membatalkan langganan sedia ada secara automatik. Batalkannya dalam Urus Langganan untuk mengelakkan caj lanjut.
-
-Syarat penggunaan: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
-Dasar privasi: https://bitlap.org/iAssets-privacy/
-
-Perisian ini ialah sumber terbuka. Hantar cadangan atau laporkan masalah di GitHub.
+Perisian ini bersumber terbuka. Hantar cadangan atau laporkan masalah di GitHub.
 https://github.com/bitlap/iAssets

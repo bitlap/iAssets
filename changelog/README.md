@@ -1,6 +1,6 @@
 # 更新日志与产品描述
 
-[2.2.0](2.2.0.md) 为当前开发及 TestFlight 版本，更新说明覆盖语言注册表中的全部 33 种语言；TestFlight 构建及实际发布状态见 [发布记录](../docs/release-checks/2.2.0-10-testflight.md)。更新日志存在不代表 App Store 已上架。
+[2.2.0](2.2.0.md) 已完成正式送审（构建 22），更新说明覆盖语言注册表中的全部 33 种语言；TestFlight 构建及实际发布状态见 [发布记录](../docs/release-checks/2.2.0-22-app-store.md)。GitHub Release 仅显示简体中文、繁体中文和英文；本地更新日志保留全部语言。送审不代表 App Store 已上架。
 
 ## 版本记录
 
@@ -22,13 +22,18 @@
 
 ## 产品描述
 
-原有 [简体中文](app_store.txt)、[繁體中文](app_store_hant.txt)、[英文](app_store_en.txt) 文件路径保持不变，其余语言在 `app_store/`。完整文件与平台语言映射见 [多语言维护说明](../docs/localization.md)。
+全部语言的产品描述统一放在 `app_store/<App 语言代码>.txt`，例如 [简体中文](app_store/zh.txt)、[繁體中文](app_store/zh_Hant.txt)、[英文](app_store/en.txt)。完整文件与平台语言映射见 [多语言维护说明](../docs/localization.md)。
 
 这些文件是本地文案来源，不等于后台已经保存或正式上线。使用前核对对应版本、语言、功能限制、Pro 规则和条款链接；元数据发布后逐语言回读。
+
+## TestFlight 测试说明
+
+[测试重点与已知限制](testflight/README.md) 按版本及 App 语言代码保存，与对应语言 changelog 组合后生成每个构建的 What to Test。产品描述仍使用 `app_store/`，GitHub 的中英文范围不影响这两类全语言文案。
 
 ## 维护与检查
 
 - 按 [Changelog 写作规则](../RELEASE_CHECKLIST.md#changelog-写作规则) 简述用户能感知的变化，保持各语言主题及顺序一致。
 - `python3 scripts/check_release_notes.py` 核对当前版本的全量语言、条目数量和产品描述源文件。
 - `python3 scripts/test_release_notes.py` 验证缺失语言、英文回退及缺失产品文案等情况会被拒绝。
+- `python3 scripts/github_release_notes.py --version 2.2.0` 提取 GitHub 使用的中简、中繁和英文；`python3 scripts/test_github_release_notes.py` 验证筛选及缺失语言检查。
 - 自动化不代替母语校对、真机测试或后台发布验证；实现、测试日志和提交记录写入发布检查记录。

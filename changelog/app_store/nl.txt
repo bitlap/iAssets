@@ -1,24 +1,21 @@
-iAssets
+iAssets — Helder inzicht, eenvoudig bijhouden
 
-Bekijk uw totale vermogen, portfoliooverzicht en updatetijd.
+Bekijk aandelen, crypto en andere bezittingen in één app, met een helder overzicht van totalen, verdeling en rendement.
 
-Gratis: maximaal 3 aandelen en 3 activatypen, met maximaal 3 records per type. Bestaande gegevens worden bewaard wanneer een abonnement afloopt.
+Belangrijkste functies
+• Volg aandelenposities op meerdere markten, leg aankopen, verkopen en dividenden vast en bekijk marktwaarden en rendement
+• Bekijk Binance-spot-, futures- en lead-traderbezittingen via API-toegang met alleen leesrechten
+• Beheer contant geld, deposito’s, beleggingen en eigen vermogenscategorieën en bundel bezittingen in meerdere valuta’s
+• Bekijk je vermogen met widgets op het beginscherm en toegangsscherm
 
-Face ID / Touch ID-slot · Verberg bedragen
+Privacy en gebruik
+• Beveilig de app met Face ID / Touch ID en verberg bedragen met één tik
+• Synchroniseer aandelen, handmatig ingevoerde bezittingen en instellingen via iCloud; cryptogegevens voor toegang blijven op je apparaat
+• Kies uit 33 talen, waaronder vereenvoudigd Chinees, traditioneel Chinees en Engels, met lichte en donkere thema’s
+• Gebruik basisfuncties gratis of ontgrendel Pro met een abonnement of een eenmalige aankoop voor levenslang gebruik
 
-Pro
-• Onbeperkte activa: Meer aandelen, elk type activa, onbeperkte records
-• Crypto-accounts: Bekijk wisselsaldi en -posities met alleen-lezen synchronisatie
-• Importeren en exporteren: Maak een back-up van uw activarecords, verplaats ze en herstel ze
-• Aangepaste aandelen: Voeg uw eigen namen, bedrijven en prijzen toe
-
-Maandelijks · wordt elke maand automatisch verlengd
-Jaarlijks · Wordt elk jaar automatisch verlengd
-Levenslang · eenmalige aankoop
-Een levenslange aankoop annuleert niet automatisch een bestaand abonnement. Annuleer het in Abonnementen beheren om verdere kosten te voorkomen.
-
-Gebruiksvoorwaarden: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
+Gebruiksvoorwaarden (standaard-EULA van Apple): https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
 Privacybeleid: https://bitlap.org/iAssets-privacy/
 
-Deze software is opensource. Deel suggesties of meld problemen op GitHub.
+Deze software is open source. Deel suggesties of meld problemen op GitHub.
 https://github.com/bitlap/iAssets

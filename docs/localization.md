@@ -6,7 +6,7 @@
 
 [2.2.0 更新日志](../changelog/2.2.0.md) 已提供全部 33 种语言，每种 8 条且主题顺序一致。新增译文已做结构、数量和术语一致性检查，尚未经过全部母语人工校对，结构校验不代表翻译质量验收。
 
-产品描述的本地源文件也覆盖全部语言。[搜索关键词源文件](../changelog/app_store/keywords.json) 按 App 代码保存；发布时沿用既有平台关键词并补齐新语言的必填项，逐条核对 100 字符上限及后台回读。原有三份文件保留路径；新增描述复用对应语言目录中的功能、隐私和 Pro 文案，不自动修改后台。TestFlight 的 What to Test 应在更新说明之外补充本构建的测试重点和已知限制。
+产品描述的本地源文件也覆盖全部语言。[搜索关键词源文件](../changelog/app_store/keywords.json) 按 App 代码保存；发布时沿用既有平台关键词并补齐新语言的必填项，逐条核对 100 字符上限及后台回读。全部产品描述统一放在 `changelog/app_store/<App 语言代码>.txt`；各语言描述以中英文为基准，对应 4 项主要功能、4 项隐私与体验说明，并保持相同的 EULA、隐私政策及反馈链接。逐条检查含义，不以相同条数代替语义核对；本地修改不自动代表后台已更新。TestFlight 的 What to Test 应在更新说明之外补充本构建的测试重点和已知限制。
 
 ## 平台语言映射
 
@@ -16,9 +16,9 @@ Apple 的[可本地化语言列表](https://developer.apple.com/help/app-store-c
 
 | App 代码 | 更新日志标题 | App Store 参考 locale | 本地产品描述 |
 | --- | --- | --- | --- |
-| `zh` | 简体中文 | `zh-Hans` | [文案](../changelog/app_store.txt) |
-| `zh_Hant` | 繁體中文 | `zh-Hant` | [文案](../changelog/app_store_hant.txt) |
-| `en` | English | `en-US` | [文案](../changelog/app_store_en.txt) |
+| `zh` | 简体中文 | `zh-Hans` | [文案](../changelog/app_store/zh.txt) |
+| `zh_Hant` | 繁體中文 | `zh-Hant` | [文案](../changelog/app_store/zh_Hant.txt) |
+| `en` | English | `en-US` | [文案](../changelog/app_store/en.txt) |
 | `ja` | 日本語 | `ja` | [文案](../changelog/app_store/ja.txt) |
 | `ko` | 한국어 | `ko` | [文案](../changelog/app_store/ko.txt) |
 | `fr` | Français | `fr-FR` | [文案](../changelog/app_store/fr.txt) |
@@ -50,7 +50,7 @@ Apple 的[可本地化语言列表](https://developer.apple.com/help/app-store-c
 | `ro` | Română | `ro` | [文案](../changelog/app_store/ro.txt) |
 | `el` | Ελληνικά | `el` | [文案](../changelog/app_store/el.txt) |
 
-2.2.0 正式版准备阶段已保存并回读 32 个 App Store 版本语言条目：31 种平台支持的项目语言，加上保留的 `en-GB`；描述和更新说明均逐项一致。主语言为 `zh-Hans`，Filipino/波斯语使用平台回退，不能计为商店翻译。原有三语截图沿用，新增语言尚无单独翻译截图，按平台规则回退。后台保存不等于审核通过或上架，见 [2.2.0（22）正式发布记录](release-checks/2.2.0-22-app-store.md)。TestFlight 的最近一次记录仍仅覆盖三语，见 [内测记录](release-checks/2.2.0-10-testflight.md)。全部母语校对仍未完成。
+2.2.0 正式版准备阶段已保存并回读 32 个 App Store 版本语言条目：31 种平台支持的项目语言，加上保留的 `en-GB`；描述和更新说明均逐项一致。主语言为 `zh-Hans`，Filipino/波斯语使用平台回退，不能计为商店翻译。原有三语截图沿用，新增语言尚无单独翻译截图，按平台规则回退。后台保存不等于审核通过或上架，见 [2.2.0（22）正式发布记录](release-checks/2.2.0-22-app-store.md)。最初 TestFlight 内测仅回读三语，见 [内测记录](release-checks/2.2.0-10-testflight.md)；本轮按平台可用语言同步 Beta 产品描述及构建 10、22 的测试说明，实际结果见 [文案同步记录](release-checks/2.2.0-22-metadata-sync.md)。全部母语校对仍未完成。
 
 ## 更新与验证
 
@@ -62,4 +62,8 @@ Apple 的[可本地化语言列表](https://developer.apple.com/help/app-store-c
 
 检查脚本默认使用 `pubspec.yaml` 的当前版本；`--version` 可指定需按当前语言范围校验的版本，不用于把旧版本自动补成新版本的语言范围。历史更新日志保留当时的功能、语言及发布事实，见 [更新日志索引](../changelog/README.md)。
 
-GitHub 草稿工作流在创建草稿前执行语言覆盖检查，再同步完整 changelog；公开发表仍需单独确认版本、tag、发布类型和实际 App Store/TestFlight 状态。
+GitHub 草稿工作流在创建草稿前执行全量语言覆盖检查，再由 `scripts/github_release_notes.py` 仅提取简体中文、繁体中文和英文。完整 changelog 及 App Store 文案仍保留全部语言；公开发表仍需单独确认版本、tag、发布类型和实际 App Store/TestFlight 状态。
+
+最新描述一致性审查及 GitHub 显示规则调整见 [文案对齐记录](release-checks/2.2.0-22-copy-parity.md)。
+
+TestFlight 测试重点与已知限制按 33 种 App 语言保存于 `changelog/testflight/2.2.0/`，用 `scripts/testflight_release_notes.py` 与全语言 changelog 组合并写入实际构建号；商店/TestFlight 保持平台支持的全量语言，不使用 GitHub 的三段筛选结果。

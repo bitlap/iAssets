@@ -32,6 +32,8 @@ jobs:
         run: |
           python3 scripts/check_release_notes.py
           python3 scripts/test_release_notes.py
+          python3 scripts/test_github_release_notes.py
+          python3 scripts/test_testflight_release_notes.py
 
       - name: Verify native widget languages
         run: python3 scripts/test_native_l10n.py

@@ -1,0 +1,9 @@
+Testpunten
+• Wissel van taal en controleer lokale cijfers, decimale komma’s, RTL-indeling en het opslaan van bedragen en kosten. Test iPad-panelen bij draaien en Split View, widgettalen en de volgorde van bezittingen.
+• Controleer gegevens na een update vanaf een oudere versie, gratis-/Pro-limieten, aankopen en herstel. Fouten of verbindingsverlies mogen bestaande bezittingen niet overschrijven.
+
+Bekende beperkingen
+Sommige vertalingen wachten nog op beoordeling door moedertaalsprekers. TestFlight gebruikt de sandbox en kan de status van bestaande gebruikers in productie niet bevestigen.
+
+Vermeld taal, apparaat en stappen om het probleem te reproduceren op GitHub:
+https://github.com/bitlap/iAssets/issues

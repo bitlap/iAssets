@@ -19,9 +19,7 @@ def languages():
 
 
 def product_path(code):
-    names = {'zh': 'app_store.txt', 'zh_Hant': 'app_store_hant.txt',
-             'en': 'app_store_en.txt'}
-    return ROOT / 'changelog' / names.get(code, f'app_store/{code}.txt')
+    return ROOT / 'changelog' / 'app_store' / f'{code}.txt'
 
 
 def validate(version):
@@ -53,6 +51,19 @@ def validate(version):
         copy = product.read_text().strip()
         if not copy.startswith('iAssets') or len(copy) > 4000:
             raise ValueError(f'{product.relative_to(ROOT)}: invalid/oversized product copy')
+        if code != 'en' and copy == product_path('en').read_text().strip():
+            raise ValueError(f'{product.relative_to(ROOT)}: copied English product description')
+        bullets = re.findall(r'^• (.+)$', copy, re.M)
+        if len(bullets) != 8:
+            raise ValueError(f'{product.relative_to(ROOT)}: expected 8 aligned product features')
+        for index, markers in {1: ('API',), 4: ('Face ID', 'Touch ID'),
+                               5: ('iCloud',), 6: (str(len(expected)),), 7: ('Pro',)}.items():
+            if any(marker not in bullets[index] for marker in markers):
+                raise ValueError(f'{product.relative_to(ROOT)}: missing product topic at entry {index + 1}')
+        if not any(name in bullets[1] for name in ('Binance', '币安', '幣安')):
+            raise ValueError(f'{product.relative_to(ROOT)}: missing Binance topic')
+        if 'https://bitlap.org/iAssets-privacy/' not in copy:
+            raise ValueError(f'{product.relative_to(ROOT)}: missing privacy link')
         if 'https://www.apple.com/legal/internet-services/itunes/dev/stdeula/' not in copy:
             raise ValueError(f'{product.relative_to(ROOT)}: missing EULA link')
         if 'https://github.com/bitlap/iAssets' not in copy:

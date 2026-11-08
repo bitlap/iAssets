@@ -1,0 +1,9 @@
+Foco dos testes
+• Troque o idioma e verifique dígitos locais, vírgulas decimais, layouts RTL e o salvamento de valores e taxas. Teste painéis do iPad ao girar e em Split View, idiomas dos widgets e a ordem dos ativos.
+• Confira os dados após atualizar de uma versão antiga, limites grátis/Pro, compras e restauração. Erros ou perda de conexão não devem sobrescrever ativos existentes.
+
+Limitações conhecidas
+Algumas traduções ainda precisam de revisão por falantes nativos. O TestFlight usa o ambiente de testes e não comprova a elegibilidade de usuários antigos em produção.
+
+Informe idioma, dispositivo e passos para reproduzir no GitHub:
+https://github.com/bitlap/iAssets/issues

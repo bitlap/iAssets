@@ -1,24 +1,21 @@
-iAssets
+iAssets — Tài sản rõ ràng, ghi chép dễ dàng
 
-Xem tổng tài sản, tóm tắt danh mục đầu tư và thời gian cập nhật của bạn.
+Xem cổ phiếu, tiền mã hóa và các tài sản khác trong một ứng dụng, với tổng giá trị, phân bổ và lợi nhuận rõ ràng.
 
-Miễn phí: tối đa 3 cổ phiếu và 3 loại tài sản, với tối đa 3 bản ghi cho mỗi loại. Dữ liệu hiện có được lưu giữ khi đăng ký hết hạn.
+Tính năng chính
+• Theo dõi cổ phiếu trên nhiều thị trường, ghi lại giao dịch mua bán và cổ tức, xem giá trị thị trường và lợi nhuận
+• Xem tài sản giao ngay, hợp đồng tương lai và nhà giao dịch dẫn dắt trên Binance qua API chỉ đọc
+• Quản lý tiền mặt, tiền gửi, khoản đầu tư và danh mục tài sản tùy chỉnh, tổng hợp tài sản bằng nhiều loại tiền tệ
+• Xem nhanh tổng quan tài sản bằng tiện ích trên Màn hình chính và Màn hình khóa
 
-Khóa Face ID / Touch ID · Ẩn số tiền
+Quyền riêng tư và trải nghiệm
+• Khóa ứng dụng bằng Face ID / Touch ID và ẩn số tiền bằng một lần chạm
+• Đồng bộ cổ phiếu, tài sản nhập thủ công và cài đặt qua iCloud; thông tin xác thực tiền mã hóa chỉ lưu trên thiết bị
+• Chọn trong 33 ngôn ngữ, gồm tiếng Trung giản thể, tiếng Trung phồn thể và tiếng Anh, với giao diện sáng và tối
+• Dùng miễn phí các tính năng cơ bản hoặc mở khóa Pro bằng gói đăng ký hay mua trọn đời
 
-Pro
-• Tài sản không giới hạn: Nhiều cổ phiếu hơn, mọi loại tài sản, hồ sơ không giới hạn
-• Tài khoản tiền điện tử: Xem số dư và vị thế trao đổi với đồng bộ hóa chỉ đọc
-• Xuất nhập khẩu: Sao lưu, di chuyển và khôi phục hồ sơ tài sản của bạn
-• Cổ phiếu tùy chỉnh: Thêm tên, cổ phần và giá của riêng bạn
+Điều khoản sử dụng (EULA tiêu chuẩn của Apple): https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
+Chính sách quyền riêng tư: https://bitlap.org/iAssets-privacy/
 
-Hàng tháng · tự động gia hạn hàng tháng
-Hàng năm · tự động gia hạn hàng năm
-Trọn đời · mua một lần
-Giao dịch mua trọn đời không tự động hủy đăng ký hiện có. Hãy hủy nó trong phần Quản lý đăng ký để tránh phải trả thêm phí.
-
-Điều khoản sử dụng: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
-Chính sách bảo mật: https://bitlap.org/iAssets-privacy/
-
-Đây là phần mềm mã nguồn mở. Bạn có thể gửi đề xuất hoặc báo cáo sự cố trên GitHub.
+Đây là phần mềm mã nguồn mở. Gửi đề xuất hoặc báo cáo vấn đề trên GitHub.
 https://github.com/bitlap/iAssets

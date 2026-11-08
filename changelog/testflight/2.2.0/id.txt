@@ -1,0 +1,9 @@
+Fokus pengujian
+• Ganti bahasa dan periksa digit lokal, koma desimal, tata letak RTL serta penyimpanan nominal dan biaya. Uji panel iPad saat rotasi dan Split View, bahasa widget dan urutan aset.
+• Periksa data setelah memperbarui dari versi lama, batas gratis/Pro, pembelian dan pemulihan. Kesalahan atau putusnya koneksi tidak boleh menimpa aset yang ada.
+
+Batasan yang diketahui
+Beberapa terjemahan masih perlu ditinjau penutur asli. TestFlight memakai sandbox dan tidak dapat membuktikan kelayakan pengguna lama di lingkungan produksi.
+
+Sertakan bahasa, perangkat dan langkah reproduksi di GitHub:
+https://github.com/bitlap/iAssets/issues

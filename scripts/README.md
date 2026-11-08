@@ -37,9 +37,22 @@ TestFlight 使用 Apple 沙盒：可以测试订阅、买断及其恢复，但�
 
 ## GitHub Release 草稿
 
-`master` 更新后，Release Drafter 工作流按 `pubspec.yaml` 的版本创建或更新草稿，再从 `changelog/<版本>.md` 同步全部已注册语言的正文，包含直接提交的改动。运行 `python3 scripts/check_release_notes.py` 核对语言、条目数量及产品描述文件；缺少任一语言内容或草稿版本不匹配时工作流失败，不将空说明视为成功。语言与平台文案映射见 [多语言维护说明](../docs/localization.md)。
+`master` 更新后，Release Drafter 工作流按 `pubspec.yaml` 的版本创建或更新草稿，再用 `scripts/github_release_notes.py` 从 `changelog/<版本>.md` 提取简体中文、繁体中文和英文作为正文，包含直接提交的改动。本地 changelog 及 App Store 产品描述仍覆盖全部项目语言。运行 `python3 scripts/check_release_notes.py` 核对语言、条目数量及产品描述文件；缺少任一语言内容或草稿版本不匹配时工作流失败，不将空说明视为成功。语言与平台文案映射见 [多语言维护说明](../docs/localization.md)。
 
 该流程只维护草稿，不自动发布、创建正式 tag 或改变 Latest。已公开的同版本会在草稿动作前跳过；仅清理旧工作流遗留、正文完全一致且无附件的同版本机器人重复草稿。正式发布前仍需按检查清单核对正文、源码版本及实际 App Store/TestFlight 状态。
+
+## App Store 与 TestFlight 文案
+
+App Store 产品描述和 TestFlight Beta 产品描述使用 `changelog/app_store/<App 语言代码>.txt`。App Store 更新说明取 `changelog/<版本>.md` 的对应语言段，仍覆盖平台支持的全部语言；GitHub 的中英文显示规则不适用于商店或 TestFlight。
+
+TestFlight 的 What to Test 在对应语言更新说明后追加测试重点与已知限制。源文件位于 `changelog/testflight/<版本>/<App 语言代码>.txt`，按实际构建号生成，例如：
+
+```bash
+python3 scripts/testflight_release_notes.py --version 2.2.0 --build 22 --language en
+python3 scripts/test_testflight_release_notes.py
+```
+
+按后台实际可用的 locale 保存并回读每个字段，不能用本地翻译代表线上成功。Beta 产品描述是 App 级共享字段；测试说明绑定构建，更新旧构建前先核对其实际源码，不能把后续修复写成旧构建已有功能。2.2.0（10）及（22）本轮均已同步；构建 9 保留原测试说明。平台未接受的语言需记录实际错误与回退，不伪造语言支持。
 
 ## Pro 发布配置
 
@@ -61,7 +74,7 @@ TestFlight 使用 Apple 沙盒：可以测试订阅、买断及其恢复，但�
 
 `PRO_PRIVACY_URL` 默认使用现有的 `https://bitlap.org/iAssets-privacy/`，可覆盖为其他已发布的 HTTPS 隐私政策，购买页同时提供 Apple 标准 EULA、恢复购买与管理订阅。分界时间缺失或隐私政策链接无效时购买按钮不可用，发布脚本会停止。
 
-自动续期订阅的 App Store 产品页也必须显示使用条款链接。提交审核前，核对 `changelog/app_store.txt`、`changelog/app_store_hant.txt` 和 `changelog/app_store_en.txt` 对应的每一种 App Store 语言描述均包含 Apple 标准 EULA 链接：`https://www.apple.com/legal/internet-services/itunes/dev/stdeula/`。应用内购买页的链接不能替代商店描述中的链接。
+自动续期订阅的 App Store 产品页也必须显示使用条款链接。提交审核前，核对 `changelog/app_store/<App 语言代码>.txt` 中对应平台支持语言的每份产品描述均包含 Apple 标准 EULA 链接：`https://www.apple.com/legal/internet-services/itunes/dev/stdeula/`。应用内购买页的链接不能替代商店描述中的链接。
 
 本机调试可通过 `flutter run --dart-define=PRO_LEGACY_CUTOFF=<UTC时间> --dart-define=PRO_PRIVACY_URL=<HTTPS地址>` 传入同样配置。请勿把示例时间当成正式分界时间。
 

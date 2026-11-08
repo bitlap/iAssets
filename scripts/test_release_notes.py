@@ -55,6 +55,29 @@ class ReleaseNotesTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'missing EULA'):
             checker.validate('2.2.0')
 
+    def test_copied_english_product_description_is_rejected(self):
+        checker.product_path('ja').write_text(checker.product_path('en').read_text())
+        with self.assertRaisesRegex(ValueError, 'copied English product description'):
+            checker.validate('2.2.0')
+
+    def test_incomplete_product_template_is_rejected(self):
+        path = checker.product_path('ja')
+        path.write_text(path.read_text().replace('• ', '', 1))
+        with self.assertRaisesRegex(ValueError, '8 aligned product features'):
+            checker.validate('2.2.0')
+
+    def test_missing_sync_topic_is_rejected(self):
+        path = checker.product_path('ja')
+        path.write_text(path.read_text().replace('iCloud', 'Cloud'))
+        with self.assertRaisesRegex(ValueError, 'missing product topic'):
+            checker.validate('2.2.0')
+
+    def test_missing_privacy_link_is_rejected(self):
+        path = checker.product_path('ja')
+        path.write_text(path.read_text().replace('https://bitlap.org/iAssets-privacy/', ''))
+        with self.assertRaisesRegex(ValueError, 'missing privacy link'):
+            checker.validate('2.2.0')
+
     def test_mismatched_entry_count_is_rejected(self):
         source = self.notes.read_text().replace('## 日本語\n', '## 日本語\n\n- 追加項目\n', 1)
         self.notes.write_text(source)

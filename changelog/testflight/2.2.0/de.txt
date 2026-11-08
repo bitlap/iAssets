@@ -1,0 +1,9 @@
+Testschwerpunkte
+• Wechseln Sie die Sprache und prüfen Sie lokale Ziffern, Dezimalkommas, RTL-Layouts sowie das Speichern von Beträgen und Gebühren. Testen Sie iPad-Dialoge bei Drehung und Split View, Widget-Sprachen und die Reihenfolge der Vermögenswerte.
+• Prüfen Sie Daten nach einem Update von einer älteren Version, Gratis-/Pro-Limits, Käufe und Wiederherstellung. Fehler oder Verbindungsabbrüche dürfen vorhandene Werte nicht überschreiben.
+
+Bekannte Einschränkungen
+Einige Übersetzungen benötigen noch eine muttersprachliche Prüfung. TestFlight verwendet die Sandbox und kann die Berechtigung bestehender Nutzer in der Produktionsumgebung nicht bestätigen.
+
+Melden Sie Sprache, Gerät und Schritte zur Reproduktion auf GitHub:
+https://github.com/bitlap/iAssets/issues

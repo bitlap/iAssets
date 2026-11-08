@@ -1,0 +1,9 @@
+Mga dapat subukan
+• Magpalit ng wika at suriin ang lokal na mga digit, decimal comma, RTL layout at pag-save ng halaga at bayarin. Subukan ang mga panel ng iPad sa pag-ikot at Split View, wika ng mga widget at pagkakasunod ng mga asset.
+• Suriin ang data matapos mag-update mula sa lumang bersyon, libreng/Pro na limitasyon, pagbili at pag-restore. Hindi dapat mapatungan ang dating mga asset kapag may error o nawalan ng koneksyon.
+
+Mga kilalang limitasyon
+Kailangan pa ng ilang salin ang pagsusuri ng katutubong tagapagsalita. Sandbox ang gamit ng TestFlight at hindi nito mapapatunayan ang pagiging kwalipikado ng dating user sa production.
+
+Ibigay ang wika, device at mga hakbang sa pag-ulit ng problema sa GitHub:
+https://github.com/bitlap/iAssets/issues

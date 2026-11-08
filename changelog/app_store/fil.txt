@@ -1,24 +1,21 @@
-iAssets
+iAssets — Malinaw ang mga asset, madaling itala
 
-Tingnan ang iyong kabuuang mga asset, buod ng portfolio, at oras ng pag-update.
+Tingnan ang mga stock, crypto at iba pang asset sa iisang app, na may malinaw na kabuuan, alokasyon at kita.
 
-Libre: hanggang 3 stock at 3 uri ng asset, na may hanggang 3 record bawat uri. Pinapanatili ang kasalukuyang data kapag nag-expire ang isang subscription.
+Mga Pangunahing Tampok
+• Subaybayan ang mga hawak na stock sa maraming merkado, itala ang pagbili, pagbenta at dibidendo, at tingnan ang halaga sa merkado at kita
+• Tingnan ang mga asset sa Binance spot, futures at lead trader sa pamamagitan ng read-only na access sa API
+• Ayusin ang cash, deposito, pamumuhunan at sariling mga kategorya, at pagsamahin ang mga asset sa iba’t ibang pera
+• Tingnan agad ang buod ng mga asset gamit ang mga widget sa Home Screen at Lock Screen
 
-Face ID / Touch ID lock · Itago ang mga halaga
+Pagkapribado at Karanasan
+• I-lock ang app gamit ang Face ID / Touch ID at itago ang mga halaga sa isang tap
+• I-sync ang mga stock, mano-manong inilagay na asset at setting sa iCloud; sa device lamang nakaimbak ang mga kredensyal ng crypto
+• Pumili sa 33 wika, kabilang ang Simplified Chinese, Traditional Chinese at English, na may light at dark na tema
+• Gamitin nang libre ang mga pangunahing tampok o i-unlock ang Pro sa subscription o minsanang pagbili para sa panghabambuhay na paggamit
 
-Pro
-• Walang limitasyong mga asset: Higit pang mga stock, bawat uri ng asset, walang limitasyong mga tala
-• Mga Crypto account: Tingnan ang mga balanse at posisyon ng palitan na may read-only na pag-sync
-• Mag-import at mag-export: I-back up, ilipat at i-restore ang iyong mga rekord ng asset
-• Mga custom na stock: Idagdag ang iyong sariling mga pangalan, hawak at presyo
+Mga Tuntunin ng Paggamit (Apple Standard EULA): https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
+Patakaran sa Pagkapribado: https://bitlap.org/iAssets-privacy/
 
-Buwan-buwan · awtomatikong nagre-renew bawat buwan
-Taunang · awtomatikong nagre-renew bawat taon
-Panghabambuhay · isang beses na pagbili
-Ang isang panghabambuhay na pagbili ay hindi awtomatikong makakakansela ng isang umiiral nang subscription. Kanselahin ito sa Pamahalaan ang Mga Subscription para maiwasan ang mga karagdagang singil.
-
-Mga tuntunin sa paggamit: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
-Patakaran sa privacy: https://bitlap.org/iAssets-privacy/
-
-Open source ang software na ito. Magbigay ng mga mungkahi o mag-ulat ng mga problema sa GitHub.
+Open-source ang software na ito. Magpadala ng mungkahi o mag-ulat ng problema sa GitHub.
 https://github.com/bitlap/iAssets

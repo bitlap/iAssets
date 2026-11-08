@@ -1,0 +1,9 @@
+Punti da testare
+• Cambia lingua e controlla cifre locali, virgole decimali, layout RTL e salvataggio di importi e commissioni. Prova i pannelli su iPad durante la rotazione e in Split View, le lingue dei widget e l’ordine dei beni.
+• Verifica i dati dopo l’aggiornamento da una versione precedente, i limiti gratis/Pro, gli acquisti e il ripristino. Errori o disconnessioni non devono sovrascrivere i beni esistenti.
+
+Limitazioni note
+Alcune traduzioni richiedono ancora una revisione madrelingua. TestFlight usa la sandbox e non può confermare l’idoneità dei vecchi utenti in produzione.
+
+Indica lingua, dispositivo e passaggi per riprodurre il problema su GitHub:
+https://github.com/bitlap/iAssets/issues
