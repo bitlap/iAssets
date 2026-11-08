@@ -65,7 +65,7 @@ jobs:
               if (release.draft && (release.tag_name === tag || release.name === tag)) {
                 core.notice(JSON.stringify({draftId: release.id, tag: release.tag_name, name: release.name, author: release.author?.login, assets: release.assets.length, notesMatch: normalize(release.body) === normalize(body)}));
               }
-              if (release.draft && release.tag_name === tag && release.name === tag &&
+              if (release.draft && (release.tag_name === tag || /^untagged-[0-9a-f]+$/.test(release.tag_name)) && release.name === tag &&
                   release.author?.login === 'github-actions[bot]' && release.assets.length === 0 &&
                   normalize(release.body) === normalize(body)) {
                 await github.rest.repos.deleteRelease({...context.repo, release_id: release.id});
