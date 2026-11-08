@@ -1,5 +1,5 @@
-Aspectos a probar Renueva automáticamente los depósitos con capital e intereses al mismo tipo y plazo. Las renovaciones pendientes se calculan al volver a abrir la app.
-• Los depósitos vencidos pueden renovarse con capital e intereses, ajustando el capital, la tasa y el plazo. Cambia la categoría desde la lista de acciones o arrastrando entre plantillas iguales. Los iconos y colores se adaptan a la categoría de destino.
+Aspectos a probar
+• Renueva automáticamente los depósitos con capital e intereses al mismo tipo y plazo. Las renovaciones pendientes se calculan al volver a abrir la app. Los depósitos muestran días restantes, tipo y vencimiento, en ese orden. Las inversiones muestran el valor liquidativo antes de las participaciones; el interruptor de renovación automática usa los colores de Ajustes. Los depósitos vencidos pueden renovarse con capital e intereses, ajustando el capital, la tasa y el plazo. Cambia la categoría desde la lista de acciones o arrastrando entre plantillas iguales. Los iconos y colores se adaptan a la categoría de destino.
 • Revisa los datos tras actualizar desde una versión anterior, los límites gratis/Pro, las compras y la restauración. Los errores o la pérdida de conexión no deben sobrescribir los activos existentes.
 
 Limitaciones conocidas

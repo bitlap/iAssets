@@ -1,5 +1,5 @@
-Zakres testów Automatycznie odnawiaj lokaty wraz z odsetkami przy tym samym oprocentowaniu i okresie. Pominięte odnowienia są obliczane przy kolejnym otwarciu aplikacji.
-• Lokaty po terminie można odnowić z kapitałem i odsetkami, zmieniając kapitał, oprocentowanie i okres. Zmień kategorię z listy działań lub przeciągając między takimi samymi formularzami. Ikony i kolory odpowiadają kategorii docelowej.
+Zakres testów
+• Automatycznie odnawiaj lokaty wraz z odsetkami przy tym samym oprocentowaniu i okresie. Pominięte odnowienia są obliczane przy kolejnym otwarciu aplikacji. Lokaty pokazują kolejno pozostałe dni, oprocentowanie i termin zapadalności. Inwestycje pokazują wartość jednostki przed liczbą jednostek; przełącznik automatycznego odnawiania ma kolory zgodne z ustawieniami. Lokaty po terminie można odnowić z kapitałem i odsetkami, zmieniając kapitał, oprocentowanie i okres. Zmień kategorię z listy działań lub przeciągając między takimi samymi formularzami. Ikony i kolory odpowiadają kategorii docelowej.
 • Sprawdź dane po aktualizacji ze starszej wersji, limity darmowe/Pro, zakupy i przywracanie. Błędy lub utrata połączenia nie mogą nadpisywać istniejących aktywów.
 
 Znane ograniczenia

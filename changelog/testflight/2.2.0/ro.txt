@@ -1,5 +1,5 @@
-Aspecte de testat Reînnoiește automat depozitele cu principal și dobândă, la aceeași rată și pe aceeași durată. Reînnoirile omise se calculează la următoarea deschidere a aplicației.
-• Depozitele ajunse la scadență pot fi reînnoite cu principalul și dobânda, ajustând principalul, rata și termenul. Schimbă categoria din lista de acțiuni sau prin tragere între formulare identice. Pictogramele și culorile urmează categoria de destinație.
+Aspecte de testat
+• Reînnoiește automat depozitele cu principal și dobândă, la aceeași rată și pe aceeași durată. Reînnoirile omise se calculează la următoarea deschidere a aplicației. Depozitele afișează zilele rămase, rata și scadența în această ordine. Investițiile afișează valoarea unității înaintea numărului de unități; comutatorul de reînnoire automată folosește culorile din Setări. Depozitele ajunse la scadență pot fi reînnoite cu principalul și dobânda, ajustând principalul, rata și termenul. Schimbă categoria din lista de acțiuni sau prin tragere între formulare identice. Pictogramele și culorile urmează categoria de destinație.
 • Verifică datele după actualizarea de la o versiune veche, limitele gratuite/Pro, achizițiile și restaurarea. Erorile sau pierderea conexiunii nu trebuie să suprascrie activele existente.
 
 Limitări cunoscute

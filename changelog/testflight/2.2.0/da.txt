@@ -1,5 +1,5 @@
-Testfokus Forny indlån automatisk med hovedstol og renter til samme rente og løbetid. Manglende fornyelser beregnes, næste gang du åbner appen.
-• Udløbne indskud kan fornyes med hovedstol og renter. Hovedstol, rente og løbetid kan ændres. Skift kategori via handlingslisten eller ved at trække mellem ens indtastningsskabeloner. Ikoner og farver følger målkategorien.
+Testfokus
+• Forny indlån automatisk med hovedstol og renter til samme rente og løbetid. Manglende fornyelser beregnes, næste gang du åbner appen. Indlån viser resterende dage, rente og udløbsdato i den rækkefølge. Investeringer viser indre værdi før antal enheder, og automatisk fornyelse bruger samme kontaktfarver som Indstillinger. Udløbne indskud kan fornyes med hovedstol og renter. Hovedstol, rente og løbetid kan ændres. Skift kategori via handlingslisten eller ved at trække mellem ens indtastningsskabeloner. Ikoner og farver følger målkategorien.
 • Kontroller data efter opdatering fra en ældre version, gratis-/Pro-grænser, køb og gendannelse. Fejl eller mistet forbindelse må ikke overskrive eksisterende aktiver.
 
 Kendte begrænsninger

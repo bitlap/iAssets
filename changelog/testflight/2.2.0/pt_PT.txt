@@ -1,5 +1,5 @@
-Foco dos testes Renove depósitos automaticamente com capital e juros, mantendo a taxa e o prazo. As renovações pendentes são calculadas ao voltar a abrir a app.
-• Depósitos vencidos podem ser renovados com capital e juros, ajustando o capital, a taxa e o prazo. Altere a categoria pela lista de ações ou arrastando entre formulários iguais. Ícones e cores acompanham a categoria de destino.
+Foco dos testes
+• Renove depósitos automaticamente com capital e juros, mantendo a taxa e o prazo. As renovações pendentes são calculadas ao voltar a abrir a app. Os depósitos mostram dias restantes, taxa e vencimento, por esta ordem. Os investimentos mostram o valor da unidade antes da quantidade; o interruptor de renovação automática usa as cores das Definições. Depósitos vencidos podem ser renovados com capital e juros, ajustando o capital, a taxa e o prazo. Altere a categoria pela lista de ações ou arrastando entre formulários iguais. Ícones e cores acompanham a categoria de destino.
 • Confira os dados após atualizar de uma versão antiga, limites grátis/Pro, compras e restauro. Erros ou perda de ligação não devem substituir ativos existentes.
 
 Limitações conhecidas

@@ -1,5 +1,5 @@
-Zaměření testů Automaticky obnovujte vklady včetně úroků se stejnou sazbou a dobou trvání. Zmeškané obnovy se vypočítají při příštím otevření aplikace.
-• Splatné vklady lze obnovit s jistinou i úroky a upravit novou jistinu, sazbu a dobu trvání. Změňte kategorii ze seznamu akcí nebo přetažením mezi stejnými vstupními šablonami. Ikony a barvy se přizpůsobí cílové kategorii.
+Zaměření testů
+• Automaticky obnovujte vklady včetně úroků se stejnou sazbou a dobou trvání. Zmeškané obnovy se vypočítají při příštím otevření aplikace. Vklady zobrazují zbývající dny, sazbu a splatnost v tomto pořadí. Investice zobrazují hodnotu podílu před počtem podílů; přepínač automatického obnovení má stejné barvy jako v nastavení. Splatné vklady lze obnovit s jistinou i úroky a upravit novou jistinu, sazbu a dobu trvání. Změňte kategorii ze seznamu akcí nebo přetažením mezi stejnými vstupními šablonami. Ikony a barvy se přizpůsobí cílové kategorii.
 • Ověřte data po aktualizaci ze starší verze, limity zdarma/Pro, nákupy a obnovení. Chyby nebo ztráta připojení nesmějí přepsat existující aktiva.
 
 Známá omezení
