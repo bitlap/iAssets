@@ -35,6 +35,12 @@ BUILD_NUMBER=2 ./scripts/release_ios.sh
 包含桌面和锁屏组件的版本需要主 App 与 Widget 扩展分别使用含 App Groups 权限的 App Store 描述文件。在 `release_ios.env` 中配置 `IOS_APP_PROFILE_NAME` 和 `IOS_WIDGET_PROFILE_NAME` 两个名称；脚本在导出和上传时会显式选用它们。
 TestFlight 使用 Apple 沙盒：可以测试订阅、买断及其恢复，但沙盒中的 App 首次获取日期不能证明旧版付费下载，旧用户永久 Pro 必须在正式版通过生产环境 AppTransaction 验证。
 
+## GitHub Release 草稿
+
+`master` 更新后，Release Drafter 工作流按 `pubspec.yaml` 的版本创建或更新草稿，再从 `changelog/<版本>.md` 同步简体中文、繁体中文和英文正文，包含直接提交的改动。缺少任一语言内容或草稿版本不匹配时工作流失败，不将空说明视为成功。
+
+该流程只维护草稿，不自动发布、创建正式 tag 或改变 Latest。正式发布前仍需按检查清单核对正文、源码版本及实际 App Store/TestFlight 状态。
+
 ## Pro 发布配置
 
 免费版最多 3 只股票、3 种资产类型，每种类型最多 3 条记录；数字币、导入导出（含备份回滚）和自定义股票需要 Pro。Pro 订阅到期不会删除或截断已有数据，超额记录仍可查看、编辑和删除；已有自定义股票保留展示，相关操作需要恢复 Pro。

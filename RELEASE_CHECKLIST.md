@@ -131,6 +131,7 @@ flutter build ios --simulator --debug --no-codesign --no-pub
 - [ ] 沿用 `v<版本>` 命名；tag 指向该版本的正确提交。补历史 tag 时核对历史源码版本，不能直接指向当前 HEAD。
 - [ ] 已发布 tag 不擅自移动、覆盖或删除；发现对应错误先报告，再明确处理方式。
 - [ ] tag 与 Release 分别核验：推送 tag 不代表已发布 Release，Release Drafter 草稿也不代表正式发布。
+- [ ] Release 草稿正文与 `changelog/<版本>.md` 的三语内容一致，没有空白或 `No changes`；直接提交到 master 的修改也须包含，核对正文同步工作流成功完成。
 - [ ] Release 标题、版本、三语说明、比较链接及源码引用正确；发布后打开页面核对 tag 对应 SHA 和可见状态。
 - [ ] 测试版使用明确的预发布版本标识并标为 Pre-release；正式版才按实际情况标为 Latest，避免让测试版替代最新正式版。
 - [ ] 上传二进制附件时，确认来自对应提交、版本和签名配置，提供校验值；源码 Release 没有二进制时不暗示提供了安装包。

@@ -1,6 +1,6 @@
 name: Release Drafter
 
-# 每次有 PR 合并到 master，自动创建/更新 Release 草稿
+# master 更新时创建/更新 Release 草稿，正文使用对应版本的三语 changelog。
 # 版本号直接取自 pubspec.yaml（如 1.5.0 → v1.5.0），无需给 PR 打标签
 # 配置见 .github/release-drafter.yml
 on:
@@ -13,6 +13,10 @@ permissions:
   contents: write
   pull-requests: write
 
+concurrency:
+  group: release-drafter
+  cancel-in-progress: false
+
 jobs:
   update_release_draft:
     runs-on: ubuntu-latest
@@ -24,12 +28,50 @@ jobs:
         id: version
         run: |
           VERSION=$(grep -E '^version:' pubspec.yaml | awk '{print $2}' | cut -d'+' -f1)
+          test -s "changelog/$VERSION.md"
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
           echo "tag=v$VERSION" >> "$GITHUB_OUTPUT"
 
       - name: Update Release Draft
+        id: drafter
         uses: release-drafter/release-drafter@v6
         with:
           name: ${{ steps.version.outputs.tag }}
           tag: ${{ steps.version.outputs.tag }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Sync release notes from changelog
+        uses: actions/github-script@v7
+        env:
+          RELEASE_ID: ${{ steps.drafter.outputs.id }}
+          RELEASE_VERSION: ${{ steps.version.outputs.version }}
+        with:
+          script: |
+            const fs = require('node:fs');
+            const version = process.env.RELEASE_VERSION;
+            const releaseId = Number(process.env.RELEASE_ID);
+            if (!/^\d+\.\d+\.\d+$/.test(version) || !Number.isSafeInteger(releaseId) || releaseId <= 0) {
+              throw new Error('Invalid release version or draft ID');
+            }
+            const body = fs.readFileSync(`changelog/${version}.md`, 'utf8').trim();
+            for (const heading of ['简体中文', '繁體中文', 'English']) {
+              const section = body.split(`## ${heading}\n`)[1]?.split('\n## ')[0];
+              if (!section || !/^[-*] .+/m.test(section)) {
+                throw new Error(`Missing release notes: ${heading}`);
+              }
+            }
+            const {data: release} = await github.rest.repos.getRelease({
+              ...context.repo, release_id: releaseId,
+            });
+            if (!release.draft) {
+              core.notice('Release already published; keeping its notes unchanged');
+              return;
+            }
+            if (release.tag_name !== `v${version}`) {
+              throw new Error('Draft tag does not match changelog version');
+            }
+            await github.rest.repos.updateRelease({
+              ...context.repo, release_id: releaseId, body,
+            });
+            core.notice(`Updated draft v${version} from changelog/${version}.md`);
