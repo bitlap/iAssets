@@ -38,7 +38,7 @@ App 只在中国大陆以外的地区上架。
 
 Pro 权益、老用户升级规则及验证说明见 [Pro 使用与开发说明](docs/pro.md)。
 
-2.2.0 当前内测为构建 **27**，包含下述转存、分类操作及布局调整；对应 [发布记录](docs/release-checks/2.2.0-27-testflight.md)。截至该次发布回读，App Store 待审版本仍为构建 22，GitHub Release 的 Latest 标记不代表商店版本已经更新。各阶段状态见 [发布记录索引](docs/release-checks/README.md)。
+2.2.0 当前内测为构建 **27**，包含下述转存、分类操作及布局调整；对应 [内测记录](docs/release-checks/2.2.0-27-testflight.md)。该构建已替换原构建 22 并[重新送审](docs/release-checks/2.2.0-27-app-store.md)，最新回读为等待审核，审核通过后自动发布。GitHub Release 的 Latest 标记不代表商店版本已经更新。各阶段状态见 [发布记录索引](docs/release-checks/README.md)。
 
 资产支持退休金、房产、其他资产及地区模板，也可以自定义分类。分类名称与估值方式分开保存，重命名或同模板移动资产不会改变原有金额；本轮内测支持到期定期本息转存，可核对银行实际金额后调整新本金、利率和期限。可开启自动转存，按原利率和期限将估算本息续存，未运行期间在下次打开时补算。详见 [资产分类说明](docs/asset-categories.md)。
 

@@ -1,6 +1,6 @@
 # 更新日志与产品描述
 
-[2.2.0](2.2.0.md) 的更新说明覆盖语言注册表中的全部 33 种语言，当前源码和内测说明对应 [TestFlight 构建 27](../docs/release-checks/2.2.0-27-testflight.md)。截至该构建的发布回读，App Store 待审版本仍关联 [构建 22](../docs/release-checks/2.2.0-22-app-store.md)，其文案保留对应源码的功能范围。GitHub Release 仅显示简体中文、繁体中文和英文；本地更新日志保留全部语言。GitHub Latest、内测可用和商店上架是不同状态，完整时序见 [发布记录索引](../docs/release-checks/README.md)。
+[2.2.0](2.2.0.md) 的更新说明覆盖语言注册表中的全部 33 种语言，当前源码和内测说明对应 [TestFlight 构建 27](../docs/release-checks/2.2.0-27-testflight.md)。App Store 已从原构建 22 替换为 [构建 27 并重新送审](../docs/release-checks/2.2.0-27-app-store.md)，32 个平台语言条目的商店文案已同步并回读一致，最新状态为等待审核。GitHub Release 仅显示简体中文、繁体中文和英文；本地更新日志保留全部语言。GitHub Latest、内测可用和商店上架是不同状态，完整时序见 [发布记录索引](../docs/release-checks/README.md)。
 
 ## 版本记录
 
